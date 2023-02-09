@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  decrement,
-  increment,
-  incrementByAmount,
+  decrementOne,
+  incrementOne,
+  incrementByAmountNumber,
   incrementAsync,
-} from "./redux/slice";
+} from "./redux/actions";
 
 function App() {
   const { value } = useSelector((state) => state.counter);
@@ -19,7 +19,7 @@ function App() {
         <button
           className="border px-2 shadow-md rounded-md"
           aria-label="Increment value"
-          onClick={() => dispatch(increment())}
+          onClick={()=>dispatch(incrementOne())}
         >
           +
         </button>
@@ -27,7 +27,7 @@ function App() {
         <button
           className="border px-2 shadow-md rounded-md"
           aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
+          onClick={()=>dispatch(decrementOne())}
         >
           -
         </button>
@@ -42,7 +42,7 @@ function App() {
         <button
           className="border px-2 shadow-md rounded-md"
           onClick={() =>
-            dispatch(incrementByAmount(Number(incrementAmount) || 0))
+            dispatch(incrementByAmountNumber(Number(incrementAmount) || 0))
           }
         >
           Add Amount
