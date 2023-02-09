@@ -7,6 +7,10 @@ import axios from "axios";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 
+//hacemos la comprobacion si esta en dev o prod para configurar axios
+//con este comando podemos hacer las peticion con axios sin poner localhost...
+//podemos hacerlo directo directo axios('/review').then(etc...)
+
 import.meta.env.MODE === "development"
   ? (axios.defaults.baseURL = "http://localhost:3001")
   : (axios.defaults.baseURL = "url produccion");
