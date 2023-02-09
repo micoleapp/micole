@@ -5,13 +5,25 @@ import {
   incrementOne,
   incrementByAmountNumber,
   incrementAsync,
-} from "./redux/actions";
+} from "./redux/CounterActions";
 
 function App() {
   const { value } = useSelector((state) => state.counter);
   const dispatch = useDispatch();
   const [incrementAmount, setIncrementAmount] = useState("2");
+  const [progress, setProgress] = useState(0);
+  const handleAyncIncrement = () => {
+    dispatch(incrementAsync(Number(incrementAmount) || 0));
+    const intervalId = setInterval(() => {
+      setProgress((prevProgress) => prevProgress + 1);
+    }, 20);
 
+    setTimeout(() => {
+      clearInterval(intervalId);
+      setProgress(100);
+      setProgress(0)
+    }, 1100);
+  };
   return (
     <div className="flex flex-col gap-5">
       <h1 className="text-center text-2xl">Esto es un ejemplo de redux</h1>
@@ -19,7 +31,7 @@ function App() {
         <button
           className="border px-2 shadow-md rounded-md"
           aria-label="Increment value"
-          onClick={()=>dispatch(incrementOne())}
+          onClick={() => dispatch(incrementOne())}
         >
           +
         </button>
@@ -27,7 +39,7 @@ function App() {
         <button
           className="border px-2 shadow-md rounded-md"
           aria-label="Decrement value"
-          onClick={()=>dispatch(decrementOne())}
+          onClick={() => dispatch(decrementOne())}
         >
           -
         </button>
@@ -48,11 +60,16 @@ function App() {
           Add Amount
         </button>
         <button
+          disabled={progress !== 0}
           className="border px-2 shadow-md rounded-md"
-          onClick={() => dispatch(incrementAsync(Number(incrementAmount) || 0))}
+          onClick={handleAyncIncrement}
         >
           Add Async
         </button>
+        <progress max="50" value={progress}>
+          {" "}
+          {progress}%{" "}
+        </progress>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import {
   increment, decrement, incrementByAmount
-} from "./slice";
+} from "./CounterSlice";
 
 export const incrementOne = () => (dispatch) => {
   dispatch(increment())
