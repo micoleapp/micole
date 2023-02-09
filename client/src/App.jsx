@@ -24,6 +24,7 @@ function App() {
       setProgress(0)
     }, 1100);
   };
+  console.log("Hola")
   return (
     <div className="flex flex-col gap-5">
       <h1 className="text-center text-2xl">Esto es un ejemplo de redux</h1>
