@@ -1,10 +1,10 @@
-**La rama main es la master donde todo tiene que estar funcionando**<br/>
-**Las ramas devs son donde vamos a estar trabajando**<br/>
-**Se requiere la aprobacion de 3 integrantes para los pr**<br/>
-**Puerto del back 3001 / script -> npm start**<br/>
-**Puerto del front 5173 / script -> npm run dev**<br/>
-**Stack back express sequelize postgresql**<br/>
-**Stack front react tailwind redux vite**<br/>
+**-La rama main es la master donde todo tiene que estar funcionando**<br/>
+**-Las ramas devs son donde vamos a estar trabajando**<br/>
+**-Se requiere la aprobacion de 3 integrantes para los pr**<br/>
+**-Puerto del back 3001 / script -> npm start**<br/>
+**-Puerto del front 5173 / script -> npm run dev**<br/>
+**-Stack back express sequelize postgresql**<br/>
+**-Stack front react tailwind redux vite**<br/>
 <br/>
 **Formato .env**<br/>
 PORT=3001<br/>
