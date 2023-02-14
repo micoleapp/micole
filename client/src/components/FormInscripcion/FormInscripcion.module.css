@@ -4,7 +4,7 @@
   justify-content: space-evenly;
   height: 80vh;
 }
-.Form {
+.form {
   display: flex;
   flex-direction: row;
   gap: 50px;
@@ -15,14 +15,14 @@
   height: auto;
 }
 
-.Form input {
+.form input {
   height: 40px;
   width: 340px;
 
   outline: none;
   border-radius: 8px;
   border: 1px solid rgb(121, 119, 119);
-
+ }
 
 .divInputs {
   display: flex;
@@ -68,7 +68,7 @@
     color: rgb(49, 48, 48);
     padding-top: 0px;
   }
-  .Form {
+  .form {
     flex-direction: column;
     padding: 10px;
     gap: 0px;

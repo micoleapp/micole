@@ -25,7 +25,7 @@ function FormInscripcion() {
     <>
     
         <form onSubmit={handleSubmit(OnSubmit)}  className={style.formLayout}>
-        <div className={style.Form}>
+        <div className={style.form}>
         <div className={style.divInputs}>
             <label>Nombre</label>
             <input {...register("name", { required: true })} />
