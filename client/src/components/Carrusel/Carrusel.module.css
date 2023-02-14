@@ -1,0 +1,39 @@
+.slider_container{
+    padding: 2rem;
+    margin: 0 auto;
+    /* width: 40rem; */
+ overflow-x: hidden;
+
+}
+
+.slider{
+    display: flex;
+    cursor: grab;
+
+}
+
+.item{
+    height:15rem ;
+    width: 15rem;
+    padding: 1rem;
+}
+
+.item img{
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+    pointer-events: none;
+}
+
+
+@media (max-width: 500px) {
+    /* .slider_container{
+        width: 40rem;
+        overflow-x: hidden;
+    } */
+    .item{
+        height:11rem ;
+        width: 12rem;
+        padding: 1rem;
+    }
+}

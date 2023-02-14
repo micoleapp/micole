@@ -1,0 +1,236 @@
+.container {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 100px;
+  background-image: url("/src/assets/Home_img.png");
+  background-repeat:no-repeat;
+  background-size:cover;  
+  height: 600px;
+}
+/* .img {
+ max-height: 1000px;
+  object-fit: cover;
+  z-index: 1;
+} */
+.landingText {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  z-index: 2;
+  align-items: center;
+}
+
+.container_filtros{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: auto;
+  width: 100%;
+  z-index: 2;
+  align-items: center;
+}
+
+
+.h1 {
+  color: #fff;
+  font-weight: 600;
+  font-size: 30px;
+}
+.p {
+  color: #fff;
+  font-size: 20px;
+}
+
+.contentHome {
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  align-items: center;
+  flex-direction: column;
+  background: #ffff;
+  width: 100%;
+  overflow-x: hidden;
+  height: auto;
+  padding-top: 40px;
+}
+.LayoutContent {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-direction: row;
+  width: 100%;
+}
+.title {
+  font-family: Poppins;
+  font-size: 24px;
+  font-weight: 600;
+  color: #0d263b;
+}
+
+.CardContainer {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  gap: 20px;
+  background: #ffffff;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.212));
+  border-radius: 3px;
+  border: none;
+  flex-direction: column;
+  padding-top: 20px;
+  height: 300px;
+  width: 320px;
+}
+.CardContainer h1 {
+  margin: 0 auto;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #0d263b;
+}
+
+.CardContainer p {
+  margin: 0 auto;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+  color: #0d263b;
+}
+.container_categorias{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+
+
+
+.preFooter{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  height: 30vh;
+  width: 100%;
+  background-image:url("../../assets/decoracion.png");
+
+  background-color: #0061DF ;
+ 
+ 
+  gap: 8px;
+}
+.preFooter h1 {
+  font-family: Poppins;
+  font-size: 25px;
+  font-weight: 500;
+
+  color: #fff;
+}
+.preFooter p {
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+}
+.preFooter button{
+  font-size: 14px;
+color: #0061DF;
+  width: 150px;
+  font-weight: 600;
+  text-transform: uppercase;
+  height: 40px;
+  border-radius: 5px;
+  background: #fff;
+}
+
+@media (max-width: 800px) {
+  .landingText {
+    top: 30%;
+  }
+  .h1 {
+    font-size: 25px;
+  }
+  .CardContainer h1 {
+    font-size: 16px;
+  }
+  .CardContainer h1 {
+    font-size: 12px;
+  }
+  .CardContainer p {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 600px) {
+  .landingText {
+    top: 50px;
+  }
+  .title{
+    font-size: 14px;
+}
+  .h1 {
+    font-size: 16px;
+  }
+  .p {
+    font-size: 14px;
+  }
+  .CardContainer h1 {
+    font-size: 11px;
+  }
+  .CardContainer p {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+    .LayoutContent{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+       
+    }
+    .h1{
+      font-size: 12px;
+  }
+  .p{
+    font-size: 12px;
+}
+    .title{
+        font-size: 12px;
+    }
+    .CardContainer{
+      height: 100px;
+      justify-content: center;
+    }
+    .CardContainer{
+     flex-direction: column;
+    }
+    .CardContainer h1 {
+        font-size: 12px;
+      }
+      .CardContainer p {
+        font-size: 10px;
+      }
+
+      .preFooter h1 {
+      
+        font-size: 18px;
+    
+      }
+      .preFooter p {
+   
+        font-size: 12px;
+     
+      }
+      .preFooter button{
+        font-size: 12px;
+   
+      }
+}
