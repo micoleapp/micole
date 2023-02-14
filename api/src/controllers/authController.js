@@ -1,5 +1,6 @@
 const { Auth, User } = require('../db');
 const { generateToken } = require('../utils/generateToken');
+const mailer = require("../utils/sendMails/mailer");
 
 const signIn = async (req, res, next) => {
   const { email, password } = req.body;
@@ -46,12 +47,15 @@ const signUp = async (req, res, next) => {
     const newAuth = await Auth.create({ email, password });
     const idAuth = newAuth.id;
     if (school) {
+      // Aún en revisión Modelo Colegio
+      /*
       const newSchool = await User.create({ nombre, ruc, idAuth });
       const sanitizedSchool = {
         email: newAuth.email,
         nombre: newSchool.nombre,
         rol: newAuth.rol,
-      };
+      };*/
+      mailer.sendMailSignUp(sanitizedSchool, "Colegio"); //Enviamos el mail de Confirmación de Registro para el Usuario Colegio
       return res.status(201).send(sanitizedSchool);
     }
     const newUser = await User.create({ nombre, apellidos, dni, idAuth });
@@ -61,6 +65,7 @@ const signUp = async (req, res, next) => {
       rol: newAuth.rol,
       avatar: newUser.avatar,
     };
+    mailer.sendMailSignUp(sanitizedUser, "User"); //Enviamos el mail de Confirmación de Registro para el Usuario Normal
     return res.status(201).send(sanitizedUser);
   } catch (error) {
     return next(500);
