@@ -4,15 +4,19 @@ import fondoHome from "../../assets/Home_img.png";
 import Icon_directo from "./svg/Icon_directo";
 import Icon_recomendacion from "./svg/Icon_recomendacion";
 import Icon_school from "./svg/Icon_school";
+import CardsOne from "../../components/CardsOne";
+import GroupSchool from "../../assets/GroupSchool.png";
+import VectorPeople from "../../assets/VectorPeople.png";
+import VectorTalk from "../../assets/VectorTalk.png";
 import Carrusel from "../../components/Carrusel/Carrusel";
 import FiltrosHome from "../../components/FiltrosHome/FiltrosHome";
 import { useNavigate, Link } from "react-router-dom";
 function Home() {
   const navigate = useNavigate();
   useEffect(() => {
-    navigate('/')
-  }, [])
-  
+    navigate("/");
+  }, []);
+
   return (
     <>
       <div className={style.container}>
@@ -20,41 +24,41 @@ function Home() {
         <div className={style.landingText}>
           <h1 className={style.h1}> Tu búsqueda de colegios comienza aquí</h1>
           <p className={style.p}>¡Qué Emoción!</p>
-      
-        </div>  
-        <div className={style.container_filtros}>
-           <FiltrosHome/>
         </div>
-       
+        <div className={style.container_filtros}>
+          <FiltrosHome />
+        </div>
       </div>
       <div className={style.contentHome}>
-        <h1 className={style.title}>¿Por qué escoger MiCole.pe?</h1>
+    
 
-        <div className={style.LayoutContent}>
-          <div className={style.CardContainer}>
-            <Icon_school />
-            <h1>Cientos de alternativas para escoger</h1>
-            <p>
-              Encuentra una gran variedad de colegios que se acomoden a tus
-              necesidades
-            </p>
+     
+        <section className="bg-[#f7f8fa] p-10 gap-10 flex flex-col justify-around">
+          <h1 className="text-center text-3xl font-semibold">
+            ¿Por qué escoger MiCole?
+          </h1>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-5 text-black">
+            <CardsOne
+              img={GroupSchool}
+              title="Haz que tu colegio brille frente a las familias"
+              parrafe="Publica toda la información relevante sobre ti para las familias que están buscando colegios"
+            />
+            <CardsOne
+              img={VectorPeople}
+              title="Completa tus vacantes 
+disponibles"
+              parrafe="Gestiona todas las vacantes de inicial, primaria y secundaria que tengas en un solo lugar.
+"
+            />
+            <CardsOne
+              img={VectorTalk}
+              title="Cuenta con un proceso de 
+admisión simple y eficiente"
+              parrafe="Olvídate de tener que mandar correos y comunicaciones uno a uno, hazlo todo masivo."
+            />
           </div>
-          <div className={style.CardContainer}>
-            <Icon_directo />
-            <h1>Contacto directo con tu colegio de interés</h1>
-            <p>
-              Separa una cita directamente desde la plataforma con un solo click
-            </p>
-          </div>
-          <div className={style.CardContainer}>
-            <Icon_recomendacion />
-            <h1>Recomendaciones de nuestra comunidad</h1>
-            <p>
-              Verifica miles de opiniones de otros padres de familia sobre los
-              colegios de la plataforma
-            </p>
-          </div>
-        </div>
+        </section>
+
         <div className={style.container_categorias}>
           <h1 className={style.title}>
             Explora nuestras categorías de colegios
@@ -65,11 +69,8 @@ function Home() {
           <h1>Inscribe tu colegio en nuestra plataforma</h1>
           <p>Únete a la mayor comunidad de colegios en el Perú</p>
           <Link to={"/enroll"}>
-              <button>
-            Registrar
-          </button>
+            <button>Registrar</button>
           </Link>
-        
         </div>
       </div>
     </>

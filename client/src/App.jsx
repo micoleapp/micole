@@ -9,7 +9,7 @@ import SchoolDetail from "./pages/SchoolDetail";
 import InscripcionColegio from "./pages/Inscripcion/InscripcionColegio";
 import { useSelector } from "react-redux";
 import Error from "./pages/Error";
-
+import Payment from "./pages/Payment/Payment"
 function App() {
 
 
@@ -29,7 +29,7 @@ function App() {
           <Route path="/*" element={<Error />} />
           <Route path="*" element={<Error />} />
           <Route path="/inscripcion" element={<InscripcionColegio />} />
-         
+          <Route path="/payment" element={<Payment/>} />
         </Routes>
       )}
 
