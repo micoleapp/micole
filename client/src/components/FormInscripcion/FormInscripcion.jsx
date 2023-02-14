@@ -29,33 +29,38 @@ function FormInscripcion() {
         <div className={style.divInputs}>
             <label>Nombre</label>
             <input {...register("name", { required: true })} />
-            {errors.name && <p>Introduzca su nombre.</p>}
+
+            {errors.name && <p className={style.p}>Introduzca su nombre.</p>}
        
             <label>Email</label>
             <input {...register("email", { required: true })} />
-            {errors.email && <p>Introduzca su email.</p>}
+            {errors.email && <p  className={style.p}>Introduzca su email.</p>}
                 <label>RUC</label>
             <input {...register("ruc", { required: true })} />
-            {errors.lastname && <p>Introduzca su lastname.</p>}
+            {errors.lastname && <p  className={style.p}>Introduzca su RUC.</p>}
            
             <label>Distrito del Colegio</label>
             <input {...register("schoolDistrict", { required: true })} />
-            {errors.schoolDistrict && <p>Introduzca el distrito .</p>}
+            {errors.schoolDistrict && <p  className={style.p}>Introduzca el distrito .</p>}
          
           </div>
           <div className={style.divInputs}>
             <label>Apellido</label>
             <input {...register("lastname", { required: true })} />
-            {errors.ruc && <p>Introduzca su RUC.</p>}
+
+            {errors.ruc && <p  className={style.p}>Introduzca su apellido.</p>}
 
             <label>Telefono</label>
-            <input {...register("phone", { required: true })} />
-            {errors.phone && <p>Introduzca su telefono .</p>}
+            <input type="number" {...register("phone", { required: true })} />
+            {errors.phone && <p  className={style.p}>Introduzca su telefono .</p>}
+
 
             <label>Nombre del Colegio</label>
             <input {...register("schoolName", { required: true })} />
             {errors.schoolName && (
-              <p>Introduzca el nombre de su institución .</p>
+
+              <p  className={style.p}>Introduzca su institución .</p>
+
             )}
          
           </div>

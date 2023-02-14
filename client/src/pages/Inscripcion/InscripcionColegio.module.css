@@ -4,16 +4,21 @@
   height: 100vh;
   align-items: center;
   justify-content: center;
+
+  padding: 20px;
+
 }
 
 .container {
   padding-top: 10px;
   display: flex;
   flex-direction: column;
-  min-width: 800px;
+
+  max-width: 1200px;
   border-radius: 10px;
   height: auto;
-  background-color: aqua;
+  background-color: #fff;
+
 }
 .h1_div {
   display: flex;
@@ -26,3 +31,18 @@
   font-weight: 600;
   color: #0061df;
 }
+
+
+
+@media (max-width: 800px) {
+  .container {
+width: 400px;
+height: auto;
+  }
+  .layout{
+    height: auto;
+   
+    padding: 20px;
+  } 
+}
+

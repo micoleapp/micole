@@ -3,8 +3,8 @@
 **-Se requiere la aprobacion de 3 integrantes para los pr**<br/>
 **-Puerto del back 3001 / script -> npm start**<br/>
 **-Puerto del front 5173 / script -> npm run dev**<br/>
-**-Stack back express sequelize postgresql**<br/>
-**-Stack front react tailwind redux vite**<br/>
+**-Stack back: express - sequelize - postgresql**<br/>
+**-Stack front: react - tailwind - material ui - google maps api - redux - vite**<br/>
 <br/>
 **Formato .env**<br/>
 PORT=3001<br/>

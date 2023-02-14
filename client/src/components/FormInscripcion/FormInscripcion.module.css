@@ -8,7 +8,9 @@
   display: flex;
   flex-direction: row;
   gap: 50px;
-  padding: 50px;
+
+  padding-left: 40px;
+  padding-right: 50px;
   justify-content: space-evenly;
   height: auto;
 }
@@ -17,33 +19,63 @@
   height: 40px;
   width: 340px;
 
-  border-radius: 5px;
-  border: 1px solid red;
-}
+  outline: none;
+  border-radius: 8px;
+  border: 1px solid rgb(121, 119, 119);
+
 
 .divInputs {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+
+  gap: 10px;
 }
 .divInputs label {
   font-size: 16px;
+  color: rgb(49, 48, 48);
+
   padding-top: 10px;
   font-weight: 600;
 }
 .divButton {
   display: flex;
   justify-content: center;
-  padding-top: 10px;
+
+  padding: 20px;
   width: 100%;
 }
+.divButton button {
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  width: 200px;
+  border-radius: 8px;
+  height: 40px;
+  background-color: #0061df;
+}
+.p {
+  font-size: 14px;
+  color: #b10000;
+}
+@media (max-width: 800px) {
+  .divInputs input {
+    width: 200px;
+    height: 40px;
+    gap: 0px;
+  }
+  .divInputs label {
+    color: rgb(49, 48, 48);
+    padding-top: 0px;
+  }
+  .Form {
+    flex-direction: column;
+    padding: 10px;
+    gap: 0px;
+  }
+  .formLayout {
+    height: auto;
+    align-items: center;
+  }
 
-@media (max-width: 500px) {
-    .divInputs {
-width: 50px;
-    }
-    .Form {
-        flex-direction: column;
-        gap: 0px;
-    }
 }
