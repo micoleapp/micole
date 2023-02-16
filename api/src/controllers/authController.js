@@ -1,6 +1,6 @@
 const { Auth, User } = require('../db');
 const { generateToken } = require('../utils/generateToken');
-const mailer = require("../utils/sendMails/mailer");
+const mailer = require('../utils/sendMails/mailer');
 
 const signIn = async (req, res, next) => {
   const { email, password } = req.body;
@@ -22,13 +22,48 @@ const signIn = async (req, res, next) => {
         message: 'Error en las credenciales de acceso',
       });
     }
+    const dataUser = await User.findOne({
+      where: { idAuth: authInstance.id },
+    });
     const jwToken = generateToken(authInstance.id);
     const sanitizedLogIn = {
+      id: authInstance.id,
       email: authInstance.email,
+      nombre: dataUser.nombre,
+      apellidos: dataUser.apellidos,
+      dni: dataUser.dni,
+      telefono: dataUser.telefono,
       rol: authInstance.rol,
-      token: jwToken.token
     };
-    return res.status(200).send(sanitizedLogIn);
+    return res.status(200).send({user :sanitizedLogIn, token: jwToken.token});
+  } catch (error) {
+    return next(500);
+  }
+};
+
+const getAuthById = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const authInstance= await Auth.findByPk(id);
+    if (!authInstance) {
+      return next({
+        statusCode: 400,
+        message: 'El usuario no existe en la BD',
+      });
+    }
+    const dataUser = await User.findOne({
+      where: { idAuth: authInstance.id },
+    });
+    const sanitizedUser = {
+      id: authInstance.id,
+      email: authInstance.email,
+      nombre: dataUser.nombre,
+      apellidos: dataUser.apellidos,
+      dni: dataUser.dni,
+      telefono: dataUser.telefono,
+      rol: authInstance.rol,
+    };
+    return res.status(200).send({user :sanitizedUser});
   } catch (error) {
     return next(500);
   }
@@ -54,9 +89,9 @@ const signUp = async (req, res, next) => {
         email: newAuth.email,
         nombre: newSchool.nombre,
         rol: newAuth.rol,
-      };*/
-      mailer.sendMailSignUp(sanitizedSchool, "Colegio"); //Enviamos el mail de Confirmación de Registro para el Usuario Colegio
-      return res.status(201).send(sanitizedSchool);
+      };
+      mailer.sendMailSignUp(sanitizedSchool, 'Colegio'); //Enviamos el mail de Confirmación de Registro para el Usuario Colegio
+      return res.status(201).send(sanitizedSchool);*/
     }
     const newUser = await User.create({ nombre, apellidos, dni, idAuth });
     const sanitizedUser = {
@@ -65,7 +100,7 @@ const signUp = async (req, res, next) => {
       rol: newAuth.rol,
       avatar: newUser.avatar,
     };
-    mailer.sendMailSignUp(sanitizedUser, "User"); //Enviamos el mail de Confirmación de Registro para el Usuario Normal
+    mailer.sendMailSignUp(sanitizedUser, 'User'); //Enviamos el mail de Confirmación de Registro para el Usuario Normal
     return res.status(201).send(sanitizedUser);
   } catch (error) {
     return next(500);
@@ -75,4 +110,5 @@ const signUp = async (req, res, next) => {
 module.exports = {
   signIn,
   signUp,
+  getAuthById
 };
