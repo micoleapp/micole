@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const routes = require("./routes/index.js");
 const errorHandler = require("./middlewares/ErrorHandler");
+const { authenticate } = require("./middlewares/auth.js");
 require("./db.js");
 
 const server = express();
@@ -24,7 +25,7 @@ server.use((req, res, next) => {
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
   next();
 });
-
+server.use(authenticate(process.env.JWT_SECRET));
 server.use("/", routes);
 server.use(errorHandler);
 // Error catching endware.
