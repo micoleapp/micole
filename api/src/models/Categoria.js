@@ -4,16 +4,24 @@ const { DataTypes } = require("sequelize");
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define(
-    "Provincia",
+    "Categoria",
     {
       id: {
-        type: DataTypes.INTEGER, //alfanumerico random
-        allowNull: false, // allowNull = Permite un vacio ----> seteamos en falso
+        type: DataTypes.INTEGER,
+        allowNull: false,
         primaryKey: true,
       },
-      nombre_provincia: {
+      nombre_categoria: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      imagen_categoria: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      logo_categoria: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {

@@ -35,7 +35,7 @@ module.exports = (sequelize) => {
             msg: "El apellido solo puede contener letras",
           },
           len: {
-            args: [2, 50],
+            args: [2, 80],
             msg: "El apellido debe tener entre 2 y 50 letras",
           },
         },
@@ -49,10 +49,10 @@ module.exports = (sequelize) => {
       ruc: {
         type: DataTypes.BIGINT,
         allowNull: false,
-        validate: {
-          len: [12],
-          msg: "El RUC debe contener 12 caracteres",
-        },
+        // validate: {
+        //   len: [12],
+        //   msg: "El RUC debe contener 12 caracteres",
+        // },
       },
 
       numero_estudiantes: {
@@ -63,10 +63,10 @@ module.exports = (sequelize) => {
       fecha_fundacion: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        validate: {
-          len: [4, 4],
-          msg: "Debe colocar un año valido",
-        },
+        // validate: {
+        //   len: [4, 4],
+        //   msg: "Debe colocar un año valido",
+        // },
       },
 
       nombre_director: {
@@ -84,25 +84,27 @@ module.exports = (sequelize) => {
         },
       },
 
+      primera_imagen: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+
+      galeria_fotos: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+
+      video_url: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+
       area: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
 
-      cuota_ingreso: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-
-      pension: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-
-      matricula: {
-        type: DataTypes.BIGINT,
-        allowNull: false,
-      },
+      //HACER UNA RELACION CON VACANTE DE MUCHOS A MUCHOS
 
       ugel: {
         type: DataTypes.INTEGER,
@@ -117,17 +119,17 @@ module.exports = (sequelize) => {
         },
       },
 
-      telefono: {
-        type: DataTypes.BIGINT,
-        allowNull: true,
-        validate: {
-          len: [11],
-        },
-      },
-
       referencia_ubicacion: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+
+      telefono: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+        // validate: {
+        //   len: [11],
+        // },
       },
 
       propuesta_valor: {
@@ -135,19 +137,19 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
 
-      horas_idioma_extrangero: {
+      descripcion: {
         type: DataTypes.TEXT,
+        allowNull: false,
+      },
+
+      horas_idioma_extrangero: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
 
       rating: {
         type: DataTypes.FLOAT,
         allowNull: false,
-      },
-
-      video_url: {
-        type: DataTypes.STRING,
-        allowNull: true,
       },
       // isBanned: {
       //   type: DataTypes.BOOLEAN,
@@ -160,7 +162,7 @@ module.exports = (sequelize) => {
       // },
     },
     {
-      timestamps: true,
+      timestamps: false,
     }
   );
 };

@@ -1,12 +1,11 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   sequelize.define(
-    'Infraestructura',
+    "Infraestructura",
     {
       id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
         primaryKey: true,
       },
       nombre_infraestructura: {
@@ -15,7 +14,7 @@ module.exports = (sequelize) => {
         unique: true,
         validate: {
           notEmpty: {
-            msg: 'El campo nombre_infraestructura no puede estar vacío',
+            msg: "El campo nombre_infraestructura no puede estar vacío",
           },
         },
       },
@@ -25,7 +24,7 @@ module.exports = (sequelize) => {
         unique: true,
         validate: {
           notEmpty: {
-            msg: 'El campo slug no puede estar vacío',
+            msg: "El campo slug no puede estar vacío",
           },
         },
       },
@@ -33,13 +32,13 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         validate: {
           isUrl: {
-            msg: 'El campo imagen debe ser una URL válida de una imagen',
+            msg: "El campo imagen debe ser una URL válida de una imagen",
           },
         },
       },
     },
     {
-      timestamps: true,
+      timestamps: false,
     }
   );
 };
