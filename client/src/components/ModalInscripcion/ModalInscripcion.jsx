@@ -22,6 +22,8 @@ export default function ModalInscripcion({
     handleClosePayment({
       ...OpenPaymentPLan,
       state: false,
+      price:0,
+      plan:""
     });
   };
   return (
