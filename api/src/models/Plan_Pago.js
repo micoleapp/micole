@@ -4,15 +4,27 @@ const { DataTypes } = require("sequelize");
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define(
-    "Provincia",
+    "Plan_Pago",
     {
       id: {
-        type: DataTypes.INTEGER, //alfanumerico random
-        allowNull: false, // allowNull = Permite un vacio ----> seteamos en falso
+        type: DataTypes.INTEGER,
+        allowNull: false,
         primaryKey: true,
       },
-      nombre_provincia: {
+      nombre_plan_pago: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      cantidad_familias: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      cantidad_fotos: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      precio: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

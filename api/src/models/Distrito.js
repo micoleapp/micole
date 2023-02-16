@@ -7,9 +7,8 @@ module.exports = (sequelize) => {
     "Distrito",
     {
       id: {
-        type: DataTypes.UUID, //alfanumerico random
-        defaultValue: DataTypes.UUIDV4,
-        allowNull: false, // allowNull = Permite un vacio ----> seteamos en falso
+        type: DataTypes.INTEGER, 
+        allowNull: false, 
         primaryKey: true,
       },
       nombre_distrito: {
