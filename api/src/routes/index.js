@@ -1,4 +1,7 @@
 const { Router } = require("express");
+const pkg = require("../../package.json");
+
+const authRouter = require("./authRoutes");
 
 const colegioRouter = require("./colegio.js");
 const departamentoRouter = require("./departamento.js");
@@ -12,8 +15,9 @@ router.use("/departamentos", departamentoRouter);
 router.use("/provincias", provinciaRouter);
 router.use("/paises", paisRouter);
 
-router.use("/", (req, res) => {
-  res.send("MI COLE API");
-});
+router.get("/", (req, res) =>
+  res.json({ name: pkg.name, version: pkg.version })
+);
+router.use("/auth", authRouter);
 
 module.exports = router;
