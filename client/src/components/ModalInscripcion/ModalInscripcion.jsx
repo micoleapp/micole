@@ -13,9 +13,9 @@ export default function ModalInscripcion({
 
   const { isAuth } = useSelector((state) => state.auth);
   console.log(OpenPaymentPLan.price);
-  const [OpenPayment, setOpenPayment] = useState(true);
-  const [OpenLogin, setOpenLogin] = useState(false);
   const [OpenRegister, setOpenRegister] = useState(true);
+  const [OpenLogin, setOpenLogin] = useState(false);
+
 
   const toggleClose = () => {
     handleClose(false);
@@ -35,17 +35,17 @@ export default function ModalInscripcion({
               <CloseButton />
             </div>
           </div>
-          {OpenPayment === false &&
+          {
             OpenLogin === false &&
             isAuth === false &&
             OpenRegister === true && (
               <FormInscripcion
                 handlerOpenLogin={setOpenLogin}
-                handlerOpenPayment={setOpenPayment}
+              
               />
             )}
           <div>
-            {OpenPayment === true && (
+            {isAuth === true && (
               <Payment
                 plan={OpenPaymentPLan?.plan}
                 price={OpenPaymentPLan?.price}
