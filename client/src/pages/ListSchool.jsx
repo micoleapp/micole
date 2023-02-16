@@ -382,10 +382,11 @@ function ListSchool() {
                         <div className="flex flex-col gap-4">
                           <div className="flex flex-col w-fit gap-2">
                             <h1 className="font-semibold text-lg">
-                              {school.title}{" "}
+                              {school.nombre_escuela
+}{" "}
                             </h1>
                             <small className="text-gray-400">
-                              {school.category}{" "}
+                              {school.direccion}{" "}
                             </small>
                           </div>
                           <div className="flex w-fit gap-10">
@@ -396,7 +397,8 @@ function ListSchool() {
                                 icon={faUsers}
                               />
                               <span className="text-sm text-gray-400">
-                                368 Alumnos
+                                {school.numero_estudiantes
+} Alumnos
                               </span>
                             </div>
                             <div className="flex flex-col text-center">
@@ -423,7 +425,7 @@ function ListSchool() {
                           </div>
                         </div>
                         <div className="flex flex-col justify-between">
-                          <h1>Numero: +54123123123</h1>
+                          <h1>Numero: {school.telefono}</h1>
                           <Link
                             to={`/schooldetail/${school.id}`}
                             className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center font-semibold"
