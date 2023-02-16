@@ -2,7 +2,7 @@ require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME , DB_PORT} = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT } = process.env;
 
 const sequelize =
   process.env.NODE_ENV === "production"
@@ -64,18 +64,68 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-// const {
-//   Review,
-//   User
-// } = sequelize.models;
+const {
+  Auth,
+  Colegio,
+  Pais,
+  Departamento,
+  Provincia,
+  Plan_Pago,
+  Distrito,
+  Idioma,
+  Infraestructura,
+  Infraestructura_tipo,
+  Review,
+  User,
+} = sequelize.models;
 
 // Aca vendrian las relaciones
-// Product.hasMany(Reviews);
-// User.hasMany(Review);
-// Review.belongsTo(User);
+Colegio.belongsToMany(Idioma, { through: "Colegio_Idioma", timestamps: false });
+Idioma.belongsToMany(Colegio, { through: "Colegio_Idioma", timestamps: false });
 
-// User.belongsToMany(WareHouse, { through: "Favorites", timestamps: false });
-// WareHouse.belongsToMany(User, { through: "Favorites", timestamps: false });
+//------RELACION DE AUTENTICACION-----
+User.belongsTo(Auth, { foreignKey: 'idAuth', onDelete: 'CASCADE' });
+
+//------RELACIONES DE UBICACION------
+Pais.hasMany(Colegio, {
+  foreignKey: "PaisId",
+});
+Colegio.belongsTo(Pais);
+
+Departamento.hasMany(Colegio, {
+  foreignKey: "DepartamentoId",
+});
+Colegio.belongsTo(Departamento);
+
+Provincia.hasMany(Colegio, {
+  foreignKey: "ProvinciaId",
+});
+Colegio.belongsTo(Provincia);
+
+Departamento.hasMany(Provincia);
+Provincia.belongsTo(Departamento);
+
+Colegio.belongsToMany(Infraestructura, {
+  through: "Colegio_Infraestructura",
+  timestamps: false,
+});
+Infraestructura.belongsToMany(Colegio, {
+  through: "Colegio_Infraestructura",
+  timestamps: false,
+});
+
+//------RELACIONES ADMINISTRATIVAS------
+
+Plan_Pago.hasMany(Colegio, {
+  foreignKey: "id_plan_pago",
+});
+Colegio.belongsTo(Plan_Pago);
+
+Infraestructura_tipo.hasMany(Infraestructura);
+Infraestructura.belongsTo(Infraestructura_tipo);
+
+// Provincia.hasMany(Distrito);
+// Distrito.belongsTo(Provincia);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
