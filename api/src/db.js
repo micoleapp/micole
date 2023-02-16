@@ -67,7 +67,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 const { Colegio, Departamento, Provincia, Distrito, Idioma, Review, User, Auth } =
   sequelize.models;
 // Aca vendrian las relaciones
-User.belongsTo(Auth, { foreignKey: 'idAuth' });
+User.belongsTo(Auth, { foreignKey: 'idAuth', onDelete: 'CASCADE' });
 
 Colegio.belongsToMany(Idioma, { through: "Colegio_Idioma" });
 Idioma.belongsToMany(Colegio, { through: "Colegio_Idioma" });
