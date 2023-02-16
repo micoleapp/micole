@@ -35,8 +35,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers";
 
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 import { borderRadius } from "@mui/system";
 
 function srcset(image, size, rows = 1, cols = 1) {
@@ -48,23 +48,22 @@ function srcset(image, size, rows = 1, cols = 1) {
   };
 }
 
-function QuiltedImageList({setImage}) {
+function QuiltedImageList({ setImage }) {
   return (
     <ImageList
-      sx={{ width: "100%", height: 450, margin: 'auto' }}
+      sx={{ width: "100%", height: 450, margin: "auto" }}
       variant="quilted"
       cols={4}
       rowHeight={121}
     >
-      {itemData.map((item,index) => (
-        
+      {itemData.map((item, index) => (
         <ImageListItem key={item.img}>
           <img
             {...srcset(item.img, 121)}
             alt={item.title}
             loading="lazy"
             className="cursor-pointer z-25 object-cover rounded-md"
-            onClick={()=>setImage(item.img)}
+            onClick={() => setImage(item.img)}
           />
         </ImageListItem>
       ))}
@@ -74,53 +73,53 @@ function QuiltedImageList({setImage}) {
 
 const itemData = [
   {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Breakfast'
+    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
+    title: "Breakfast",
   },
   {
-    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    title: 'Burger',
+    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+    title: "Burger",
   },
   {
-    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    title: 'Camera',
+    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
+    title: "Camera",
   },
   {
-    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    title: 'Coffee'
+    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
+    title: "Coffee",
   },
   {
-    img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    title: 'Hats'
+    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
+    title: "Hats",
   },
   {
-    img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-    title: 'Honey',
-    author: '@arwinneil'
+    img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
+    title: "Honey",
+    author: "@arwinneil",
   },
   {
-    img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-    title: 'Basketball',
+    img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
+    title: "Basketball",
   },
   {
-    img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-    title: 'Fern',
+    img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
+    title: "Fern",
   },
   {
-    img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-    title: 'Mushrooms'
+    img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
+    title: "Mushrooms",
   },
   {
-    img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-    title: 'Tomato basil',
+    img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
+    title: "Tomato basil",
   },
   {
-    img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-    title: 'Sea star',
+    img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
+    title: "Sea star",
   },
   {
-    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-    title: 'Bike'
+    img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6",
+    title: "Bike",
   },
 ];
 function SchoolDetail() {
@@ -135,7 +134,7 @@ function SchoolDetail() {
     }
   };
 
-  const [image,setImage] = useState(null)
+  const [image, setImage] = useState(null);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -201,7 +200,6 @@ function SchoolDetail() {
       celular: e.target["cel"].value,
       correo: e.target["email"].value,
     });
-    console.log(cita);
   };
 
   const handleModo = () => {
@@ -212,7 +210,6 @@ function SchoolDetail() {
     });
   };
 
-
   return (
     <div className="bg-[#f6f7f8]">
       <img
@@ -222,11 +219,13 @@ function SchoolDetail() {
       />
       <div className="p-8 px-5 lg:px-[100px]">
         <div className="header drop-shadow-md">
-          <h1 className="text-2xl  font-semibold">Colegio Los Alamos</h1>
+          <h1 className="text-2xl  font-semibold">
+            {oneSchool.nombre_escuela}
+          </h1>
           <div>
             <div className="flex justify-between flex-col gap-5 lg:flex-row mt-2 lg:mt-0">
               <div className="flex gap-5 items-start lg:items-center flex-col lg:flex-row text-black/70">
-                <h2>Calle Estados Unidos 721, Jesus Maria</h2>
+                <h2>{oneSchool.direccion} </h2>
                 <div className="flex gap-5 items-center">
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
                     5 vacantes
@@ -272,7 +271,7 @@ function SchoolDetail() {
                   color="rgb(156 163 175)"
                   icon={faUsers}
                 />
-                <span className="text-sm text-gray-400">368 Alumnos</span>
+                <span className="text-sm text-gray-400">{oneSchool.numero_estudiantes} Alumnos</span>
               </div>
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
@@ -296,7 +295,7 @@ function SchoolDetail() {
                   color="rgb(156 163 175)"
                   icon={faCalendar}
                 />
-                <span className="text-sm text-gray-400">2 Salones</span>
+                <span className="text-sm text-gray-400">Fundación: {oneSchool.fecha_fundacion} </span>
               </div>
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
@@ -304,7 +303,7 @@ function SchoolDetail() {
                   color="rgb(156 163 175)"
                   icon={faSchool}
                 />
-                <span className="text-sm text-gray-400">2 Salones</span>
+                <span className="text-sm text-gray-400">UGEL: {oneSchool.ugel} </span>
               </div>
             </div>
             <div>
@@ -318,12 +317,7 @@ function SchoolDetail() {
             <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md">
               <h2 className="font-semibold text-xl">Descripcion</h2>
               <p className="text-black/60 text-base">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque
-                dolores dolorum facilis tempore ut, voluptatibus perferendis!
-                Nihil amet maiores mollitia est aspernatur consequatur placeat
-                velit quae dolorem ex vitae repellendus sunt quis numquam
-                corrupti minima nam, officiis totam odio repellat cupiditate
-                soluta adipisci nemo veniam.{" "}
+                {oneSchool.descripcion}
               </p>
             </div>
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
@@ -334,13 +328,13 @@ function SchoolDetail() {
                     <span className="font-semibold text-black ">
                       Direccion:{" "}
                     </span>
-                    329 Queensberry Street
+                    {oneSchool.direccion}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
                       Departamento:{" "}
                     </span>
-                    New Jersey State
+                    {oneSchool.Departamento.nombre_departamento}
                   </li>
                 </ul>
                 <ul className="flex flex-col gap-3">
@@ -376,17 +370,17 @@ function SchoolDetail() {
                 <ul className="flex flex-col gap-3">
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">RUC: </span>
-                    128380912879
+                    {oneSchool.ruc}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Area: </span>
-                    1560 Sq Ft
+                    {oneSchool.area}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
                       Fundacion:{" "}
                     </span>
-                    2021-09-14
+                    {oneSchool.fecha_fundacion}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Niveles: </span>
@@ -408,7 +402,7 @@ function SchoolDetail() {
                     <span className="font-semibold text-black ">
                       Director:{" "}
                     </span>
-                    Juan Perez
+                    {oneSchool.nombre_director}
                   </li>
                 </ul>
                 <ul className="flex flex-col gap-3">
@@ -436,12 +430,7 @@ function SchoolDetail() {
                 Propuesta Valor Educativo
               </h2>
               <p className="text-black/60 text-base">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque
-                dolores dolorum facilis tempore ut, voluptatibus perferendis!
-                Nihil amet maiores mollitia est aspernatur consequatur placeat
-                velit quae dolorem ex vitae repellendus sunt quis numquam
-                corrupti minima nam, officiis totam odio repellat cupiditate
-                soluta adipisci nemo veniam.{" "}
+                {oneSchool.propuesta_valor}
               </p>
             </div>
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
@@ -823,7 +812,6 @@ function SchoolDetail() {
                     onChange={handleChangeDate}
                     renderInput={(params) => <TextField {...params} />}
                     disablePast
-                    
                   />
                   <div className="flex flex-col gap-2">
                     <MobileTimePicker
@@ -835,9 +823,10 @@ function SchoolDetail() {
                       minutesStep={15}
                       minTime={dayjs("2014-08-18T08:00:00")}
                       maxTime={dayjs("2014-08-18T17:00:00")}
-                      
                     />
-                    <small className="text-black/50">08:00 - 17:00 / Intervalo 15 min</small>
+                    <small className="text-black/50">
+                      08:00 - 17:00 / Intervalo 15 min
+                    </small>
                   </div>
                 </div>
               </LocalizationProvider>
@@ -903,12 +892,25 @@ function SchoolDetail() {
               </p>
             </div>
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
-            <h2 className="font-semibold text-xl">Galeria</h2>
-            <QuiltedImageList setImage={setImage} />
-            <div className={`fixed top-0 left-0 z-50 bg-black/90 w-full h-full ${image ? "block" : "hidden"}`}>
-              <button onClick={()=>setImage(null)} className="absolute top-2 right-4 z-[100] text-white">Atras</button>
-              <img src={image} alt="" className="absolute border-4 top-1/2 left-1/2 -translate-x-1/2 rounded-md -translate-y-1/2 block max-w-[80%] max-h-[80%] object-cover "/>
-            </div>
+              <h2 className="font-semibold text-xl">Galeria</h2>
+              <QuiltedImageList setImage={setImage} />
+              <div
+                className={`fixed top-0 left-0 z-50 bg-black/90 w-full h-full ${
+                  image ? "block" : "hidden"
+                }`}
+              >
+                <button
+                  onClick={() => setImage(null)}
+                  className="absolute top-2 right-4 z-[100] text-white"
+                >
+                  Atras
+                </button>
+                <img
+                  src={image}
+                  alt=""
+                  className="absolute border-4 top-1/2 left-1/2 -translate-x-1/2 rounded-md -translate-y-1/2 block max-w-[80%] max-h-[80%] object-cover "
+                />
+              </div>
             </div>
           </section>
         </main>
