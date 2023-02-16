@@ -3,14 +3,15 @@ import {getSchools,getOneSchool,getError,isLoading} from './SchoolsSlice'
 
 export const getAllSchools = () => (dispatch) => {
   dispatch(isLoading())
-  axios.get("https://fakestoreapi.com/products")
-  .then(res=>dispatch(getSchools(res.data)))
+  axios.get("/colegios")
+  // .then(res=>dispatch(getSchools(res.data)))
+  .then(res=>console.log(res))
   .catch(err=>dispatch(getError(err.message)))
 }
 
 export const getSchoolDetail = (id) => (dispatch) => {
   dispatch(isLoading())
-  axios.get(`https://fakestoreapi.com/products/${id}`)
+  axios.get(`/colegios/${id}`)
   .then(res=>dispatch(getOneSchool(res.data)))
   .catch(err=>dispatch(getError(err.message)))
 }
