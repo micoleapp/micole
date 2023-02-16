@@ -39,3 +39,31 @@
     transform: scaleX(1);
     transform-origin: bottom left;
   }
+
+
+ *::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+  
+ *::-webkit-scrollbar:vertical {
+    width:8px;
+  }
+  
+ *::-webkit-scrollbar-button:increment,.contenedor::-webkit-scrollbar-button {
+    display: none;
+  } 
+  
+ *::-webkit-scrollbar:horizontal {
+    height: 5px;
+  }
+  
+ *::-webkit-scrollbar-thumb {
+    background-color: #dfdfdf;
+    border-radius: 10px;
+    border:0.5px solid #424242;
+  }
+  
+ *::-webkit-scrollbar-track {
+    border-radius: 10px;  
+  }
+  

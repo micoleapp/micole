@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CardsOne from "../components/CardsOne";
 import CardsTwo from "../components/CardsTwo";
 import VectorPeople from "../assets/VectorPeople.png";
@@ -6,7 +6,17 @@ import VectorTalk from "../assets/VectorTalk.png";
 import GroupSchool from "../assets/GroupSchool.png";
 import Logo from "../assets/logoblanco.png";
 import { Link } from "react-router-dom";
+import ModalInscripcion from "../components/ModalInscripcion/ModalInscripcion";
 function EnrollSchool() {
+  const [OpenRegister, setOpenRegister] = useState(false);
+  const [OpenPaymentPLan, setOpenPaymentPLan] = useState({
+    state: false,
+    plan: "",
+    price: 0,
+  });
+  const toggleInscripcion = () => {
+    setOpenRegister(true);
+  };
   return (
     <div>
       <header className="bg-[url('./assets/enroll.png')] h-[700px] flex justify-center items-center flex-col gap-10">
@@ -17,11 +27,12 @@ function EnrollSchool() {
         <h2 className="text-white text-center text-3xl font-bold">
           Todo en un solo lugar, de forma simple y a bajo costo
         </h2>
-        <Link to={"/inscripcion"}>
+        <div onClick={toggleInscripcion}>
           <button className="uppercase p-3 rounded-sm bg-[#0061dd] text-white font-semibold">
             inscribe tu colegio aquí
           </button>
-        </Link>
+        </div>
+        {OpenRegister && <ModalInscripcion handleClose={setOpenRegister}   OpenPaymentPLan={OpenPaymentPLan} />}
 
         <button className="px-4 py-1 rounded-md text-[#0061dd] bg-white font-semibold">
           ¡Quiero más información por el momento!
@@ -31,7 +42,7 @@ function EnrollSchool() {
         <h1 className="text-center text-3xl font-semibold">
           ¿Por qué escoger MiCole?
         </h1>
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-5 text-black">
+        <div className="flex flex-col lg:flex-row justify-center items-center gap-5 text-black">
           <CardsOne
             img={GroupSchool}
             title="Haz que tu colegio brille frente a las familias"
@@ -52,6 +63,7 @@ admisión simple y eficiente"
           />
         </div>
       </section>
+      {OpenPaymentPLan.state === true && <ModalInscripcion   OpenPaymentPLan={OpenPaymentPLan}  handleClose={setOpenRegister}  handleClosePayment={setOpenPaymentPLan} />}
       <section className="bg-[#0061dd] flex flex-col justify-around p-10 gap-10">
         <h1 className="text-center text-2xl font-semibold text-white">
           Elije el plan que más se acomode a tus necesidades
@@ -61,8 +73,10 @@ admisión simple y eficiente"
             title="Gratis"
             free={true}
             family={2}
+            price={0}
             photos={3}
-            plan={"gratis"}
+            plan="gratis"
+            handlerOpen={setOpenPaymentPLan}
           />
           <CardsTwo
             title="Básico"
@@ -70,7 +84,8 @@ admisión simple y eficiente"
             family={25}
             photos={15}
             price={50}
-            plan={"básico"}
+            plan="básico"
+            handlerOpen={setOpenPaymentPLan}
           />
           <CardsTwo
             price={80}
@@ -79,7 +94,8 @@ admisión simple y eficiente"
             free={false}
             family={50}
             photos={30}
-            plan={"estandar"}
+            plan="estandar"
+            handlerOpen={setOpenPaymentPLan}
           />
           <CardsTwo
             price={120}
@@ -87,9 +103,11 @@ admisión simple y eficiente"
             free={false}
             premium={true}
             photos={50}
-            plan={"exclusivo"}
+            plan="exclusivo"
+            handlerOpen={setOpenPaymentPLan}
           />
         </div>
+
         <button className="px-4 mx-auto py-3 rounded-lg text-[#0061dd] bg-white font-normal">
           ¿Prefieres usar otro medio de pago? Usa una billetera virtual
         </button>

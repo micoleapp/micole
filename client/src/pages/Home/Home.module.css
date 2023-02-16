@@ -32,6 +32,8 @@
   width: 100%;
   z-index: 2;
   align-items: center;
+  padding-left: 100px;
+  padding-right: 100px;
 }
 
 
@@ -48,14 +50,13 @@
 .contentHome {
   display: flex;
   justify-content: center;
-  gap: 100px;
+  gap: 50px;
   align-items: center;
   flex-direction: column;
   background: #ffff;
   width: 100%;
   overflow-x: hidden;
   height: auto;
-  padding-top: 40px;
 }
 .LayoutContent {
   display: flex;

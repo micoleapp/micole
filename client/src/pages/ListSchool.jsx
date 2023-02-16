@@ -189,7 +189,7 @@ function ListSchool() {
             }`}
           >
             <div>
-              <div className="flex items-center gap-5 z-50">
+              <div className="flex items-center gap-5 z-50 ">
                 <Typography id="input-slider" gutterBottom fontWeight="bold">
                   Distritos
                 </Typography>
@@ -201,7 +201,7 @@ function ListSchool() {
                   />
                 </button>
               </div>
-              <div className={toggleDistrits ? "block" : "hidden"}>
+              <div className={toggleDistrits ? "block h-[200px] overflow-y-scroll" : "hidden"}>
                 <FormGroup>
                   {distrits.map((distrit) => (
                     <FormControlLabel
@@ -231,7 +231,7 @@ function ListSchool() {
                   />
                 </button>
               </div>
-              <div className={toggleTypes ? "block" : "hidden"}>
+              <div className={toggleTypes ? "block h-[200px] overflow-y-scroll" : "hidden"}>
 
               <FormGroup>
                 {types.map((type) => (

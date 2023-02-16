@@ -23,8 +23,8 @@ export const schoolsSlice = createSlice({
       state.error = action.payload,
       state.loading = false
     },
-    isLoading: (state,action) => {
-      state.loading = action.payload
+    isLoading: (state) => {
+      state.loading = true
     }
   }
 })

@@ -1,20 +1,22 @@
 .filtros_container {
   display: flex;
-
-  align-items: center;
   border-radius: 5px;
-  width: 80%;
-  height: 80px;
+  width: 100%;
   background: #fff;
+  align-items: flex-start;
 }
-
+/* .select{
+  	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+} */
 .container_select {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  padding: 10px;
+  padding: 20px;
 }
 
 .container_select label {
@@ -55,6 +57,7 @@
 .select {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 .select p {
   padding-left: 3px;
