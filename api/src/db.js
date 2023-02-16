@@ -64,19 +64,69 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Colegio, Departamento, Provincia, Distrito, Idioma, Review, User, Auth } =
-  sequelize.models;
-// Aca vendrian las relaciones
-User.belongsTo(Auth, { foreignKey: 'idAuth' });
 
-Colegio.belongsToMany(Idioma, { through: "Colegio_Idioma" });
-Idioma.belongsToMany(Colegio, { through: "Colegio_Idioma" });
+const {
+  Auth,
+  Colegio,
+  Pais,
+  Departamento,
+  Provincia,
+  Plan_Pago,
+  Distrito,
+  Idioma,
+  Infraestructura,
+  Infraestructura_tipo,
+  Review,
+  User,
+} = sequelize.models;
+
+// Aca vendrian las relaciones
+Colegio.belongsToMany(Idioma, { through: "Colegio_Idioma", timestamps: false });
+Idioma.belongsToMany(Colegio, { through: "Colegio_Idioma", timestamps: false });
+
+//------RELACION DE AUTENTICACION-----
+User.belongsTo(Auth, { foreignKey: "idAuth" });
+
+//------RELACIONES DE UBICACION------
+Pais.hasMany(Colegio, {
+  foreignKey: "PaisId",
+});
+Colegio.belongsTo(Pais);
+
+Departamento.hasMany(Colegio, {
+  foreignKey: "DepartamentoId",
+});
+Colegio.belongsTo(Departamento);
+
+Provincia.hasMany(Colegio, {
+  foreignKey: "ProvinciaId",
+});
+Colegio.belongsTo(Provincia);
 
 Departamento.hasMany(Provincia);
 Provincia.belongsTo(Departamento);
 
-Provincia.hasMany(Distrito);
-Distrito.belongsTo(Provincia);
+Colegio.belongsToMany(Infraestructura, {
+  through: "Colegio_Infraestructura",
+  timestamps: false,
+});
+Infraestructura.belongsToMany(Colegio, {
+  through: "Colegio_Infraestructura",
+  timestamps: false,
+});
+
+//------RELACIONES ADMINISTRATIVAS------
+
+Plan_Pago.hasMany(Colegio, {
+  foreignKey: "id_plan_pago",
+});
+Colegio.belongsTo(Plan_Pago);
+
+Infraestructura_tipo.hasMany(Infraestructura);
+Infraestructura.belongsTo(Infraestructura_tipo);
+
+// Provincia.hasMany(Distrito);
+// Distrito.belongsTo(Provincia);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

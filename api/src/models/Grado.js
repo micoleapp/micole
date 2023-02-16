@@ -1,12 +1,11 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   sequelize.define(
-    'Grado',
+    "Grado",
     {
       id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
         primaryKey: true,
       },
       nombre_grado: {
@@ -15,7 +14,7 @@ module.exports = (sequelize) => {
         unique: true,
         validate: {
           notEmpty: {
-            msg: 'El campo nombre_grado no puede estar vacío',
+            msg: "El campo nombre_grado no puede estar vacío",
           },
         },
       },
