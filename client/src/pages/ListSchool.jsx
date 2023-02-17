@@ -25,25 +25,13 @@ import {
 import {
   getAllSchools,
   getAllDepartaments,
-  filterByDepartaments,
-  filterByRating,
+  getAllDistrits
 } from "../redux/SchoolsActions";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 
-const filtrarPorRating = (schools, rating) => {
-  return schools.filter((school) => school.rating >= rating);
-};
-
-const filtrarPorDep = (schools, dep) => {
-  return dep.length > 0
-    ? schools.filter((school) =>
-        dep.includes(school.Departamento.nombre_departamento)
-      )
-    : schools;
-};
 
 const pageSize = 5;
 const ITEM_HEIGHT = 48;
@@ -123,24 +111,21 @@ function ListSchool() {
   });
 
   const dispatch = useDispatch();
-  const { allschools, loading, departaments } = useSelector(
+  const { allschools, loading, departaments, distrits } = useSelector(
     (state) => state.schools
   );
-
-  useEffect(() => {
+    useEffect(() => {
     dispatch(getAllSchools());
-    dispatch(getAllDepartaments());
+    dispatch(getAllDepartaments())
+    dispatch(getAllDistrits())
   }, []);
-
-  
   const [disabledPage, setDisabledPage] = useState(false);
   
-  const [filtersSchools, setFiltersSchools] = useState([]);
 
   useEffect(() => {
-    const schools = filtersSchools.slice(pagination.from, pagination.to);
-    setPagination({ ...pagination, count: filtersSchools.length, data: schools });
-  }, [filtersSchools, pagination.from, pagination.to]);
+    const schools = allschools.slice(pagination.from, pagination.to);
+    setPagination({ ...pagination, count: allschools.length, data: schools });
+  }, [allschools, pagination.from, pagination.to]);
 
   const handlePageChange = (event, page) => {
     setDisabledPage(true);
@@ -159,17 +144,6 @@ function ListSchool() {
   const [toggleDistrits, setToggleDistrits] = useState(false);
   const [toggleTypes, setToggleTypes] = useState(false);
 
-  useEffect(() => {
-    setFiltersSchools(filtrarPorDep(allschools, distritName));
-  }, [distritName]);
-
-  useEffect(() => {
-    setFiltersSchools(filtrarPorRating(allschools, rating));
-  }, [rating]);
-
-  useEffect(() => {
-    setFiltersSchools(allschools);
-  },[allschools])
 
   return (
     <div className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] ">
@@ -218,7 +192,7 @@ function ListSchool() {
                 }
               >
                 <FormGroup>
-                  {departaments?.map((dep) => (
+                  {distrits?.map((distrit) => (
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -226,19 +200,19 @@ function ListSchool() {
                             if (target) {
                               setDistritName([
                                 ...distritName,
-                                dep.nombre_departamento,
+                                distrit.nombre_distrito,
                               ]);
                             } else {
                               setDistritName(
                                 distritName.filter(
-                                  (dist) => dist !== dep.nombre_departamento
+                                  (dist) => dist !== distrit.nombre_distrito
                                 )
                               );
                             }
                           }}
                         />
                       }
-                      label={dep.nombre_departamento}
+                      label={distrit.nombre_distrito}
                     />
                   ))}
                 </FormGroup>
@@ -388,7 +362,7 @@ function ListSchool() {
                     {" "}
                     <div className="relative">
                       <img
-                        src={school.image}
+                        src={school.primera_imagen}
                         alt={school.title}
                         className="w-[400px] h-64 object-cover"
                       />

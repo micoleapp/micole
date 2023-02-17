@@ -10,13 +10,14 @@ function Test() {
     let autocomplete;
     let id = "location";
 
-    /*autocomplete = new google.maps.places.Autocomplete((document.getElementById(id)),{types:['geocode']})
+    autocomplete = new google.maps.places.Autocomplete((document.getElementById(id)),{types:['geocode']})
     console.log(autocomplete)
     google.maps.event.addListener(autocomplete, 'place_changed', function(){
       let place = autocomplete.getPlace();
       document.getElementById("lat").value = place.geometry.location.lat();
       document.getElementById("long").value = place.geometry.location.lng();
-    })*/
+    })
+    
   }
   
   return (

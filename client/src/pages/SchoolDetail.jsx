@@ -48,7 +48,8 @@ function srcset(image, size, rows = 1, cols = 1) {
   };
 }
 
-function QuiltedImageList({ setImage }) {
+function QuiltedImageList({ gallery, setImage }) {
+  console.log(gallery)
   return (
     <ImageList
       sx={{ width: "100%", height: 450, margin: "auto" }}
@@ -56,14 +57,13 @@ function QuiltedImageList({ setImage }) {
       cols={4}
       rowHeight={121}
     >
-      {itemData.map((item, index) => (
-        <ImageListItem key={item.img}>
+      {gallery.map((item, index) => (
+        <ImageListItem key={index}>
           <img
-            {...srcset(item.img, 121)}
-            alt={item.title}
+            {...srcset(item, 121)}
             loading="lazy"
             className="cursor-pointer z-25 object-cover rounded-md"
-            onClick={() => setImage(item.img)}
+            onClick={() => setImage(item)}
           />
         </ImageListItem>
       ))}
@@ -334,7 +334,7 @@ function SchoolDetail() {
                     <span className="font-semibold text-black ">
                       Departamento:{" "}
                     </span>
-                    {oneSchool.Departamento.nombre_departamento}
+                    {oneSchool?.Departamento?.nombre_departamento}
                   </li>
                 </ul>
                 <ul className="flex flex-col gap-3">
@@ -342,7 +342,7 @@ function SchoolDetail() {
                     <span className="font-semibold text-black ">
                       Distrito:{" "}
                     </span>
-                    Jersey City
+                    {oneSchool?.Distrito?.nombre_distrito}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Zip: </span>
@@ -354,7 +354,7 @@ function SchoolDetail() {
                     <span className="font-semibold text-black ">
                       Provincia:{" "}
                     </span>
-                    Greenville
+                    {oneSchool?.Provincium?.nombre_provincia}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Pais: </span>
@@ -893,7 +893,7 @@ function SchoolDetail() {
             </div>
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Galeria</h2>
-              <QuiltedImageList setImage={setImage} />
+              {oneSchool.hasOwnProperty("galeria_fotos") && <QuiltedImageList gallery={JSON.parse(oneSchool.galeria_fotos)} setImage={setImage} />}  
               <div
                 className={`fixed top-0 left-0 z-50 bg-black/90 w-full h-full ${
                   image ? "block" : "hidden"
