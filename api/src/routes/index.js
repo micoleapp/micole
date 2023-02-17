@@ -5,6 +5,7 @@ const authRouter = require("./authRoutes");
 const colegioRouter = require("./colegio.js");
 const departamentoRouter = require("./departamento.js");
 const provinciaRouter = require("./provincia.js");
+const distritoRouter = require("./distritoRouter.js");
 const paisRouter = require("./pais.js");
 const userRouter = require("./userRoutes");
 
@@ -13,6 +14,7 @@ const router = Router();
 router.use("/colegios", colegioRouter);
 router.use("/departamentos", departamentoRouter);
 router.use("/provincias", provinciaRouter);
+router.use("/distritos", distritoRouter);
 router.use("/paises", paisRouter);
 
 router.get("/", (req, res) =>

@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
     let cole;
     cole = await Colegio.findAll({
       include: [
-        { model: Idioma, attributes: ["nombre_idoma", "id"] },
+        { model: Idioma, attributes: ["nombre_idioma", "id"] },
         {
           model: Departamento,
           attributes: ["nombre_departamento"],
@@ -35,18 +35,15 @@ router.get("/", async (req, res) => {
       ],
       attributes: [
         "id",
-        "nombre_escuela",
+        "nombre_colegio",
         "direccion",
         "ruc",
         "numero_estudiantes",
         "fecha_fundacion",
         "nombre_director",
-        // "cuota_ingreso",
-        // "pension",
-        // "matricula",
         "telefono",
         "rating",
-        "horas_idioma_extrangero",
+        "horas_idioma_extranjero",
       ],
     }); 
     response = cole;
@@ -79,16 +76,19 @@ router.get("/:Colegio_id", async (req, res) => {
       ],
       attributes: [
         "id",
-        "nombre_escuela",
+        "nombre_colegio",
         "direccion",
         "ruc",
         "numero_estudiantes",
         "fecha_fundacion",
         "nombre_director",
         "area",
+<<<<<<< HEAD
         // "cuota_ingreso",
         // "pension",
         // "matricula",
+=======
+>>>>>>> 241ce603bf32b15c01757622430d1417d6a6c3d1
         "ugel",
         "ubicacion",
         "telefono",
@@ -96,7 +96,7 @@ router.get("/:Colegio_id", async (req, res) => {
         "propuesta_valor",
         "descripcion",
         "rating",
-        "horas_idioma_extrangero",
+        "horas_idioma_extranjero",
       ],
     });
 

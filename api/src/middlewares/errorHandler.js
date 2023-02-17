@@ -18,7 +18,7 @@ const validateError = (err, req, res, next) => {
     console.error(statusCode, message);
   }
 
-  res.status(statusCode).json({ statusCode, message });
+  res.status(statusCode).json({ error: message });
   next();
 };
 

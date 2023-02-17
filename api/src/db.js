@@ -1,14 +1,14 @@
-require("dotenv").config();
-const { Sequelize } = require("sequelize");
-const fs = require("fs");
-const path = require("path");
+require('dotenv').config();
+const { Sequelize } = require('sequelize');
+const fs = require('fs');
+const path = require('path');
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT } = process.env;
 
 const sequelize =
-  process.env.NODE_ENV === "production"
+  process.env.NODE_ENV === 'production'
     ? new Sequelize({
         database: DB_NAME,
-        dialect: "postgres",
+        dialect: 'postgres',
         host: DB_HOST,
         port: DB_PORT,
         username: DB_USER,
@@ -43,13 +43,13 @@ const basename = path.basename(__filename);
 const modelDefiners = [];
 
 // Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
-fs.readdirSync(path.join(__dirname, "/models"))
+fs.readdirSync(path.join(__dirname, '/models'))
   .filter(
     (file) =>
-      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
+      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
   )
   .forEach((file) => {
-    modelDefiners.push(require(path.join(__dirname, "/models", file)));
+    modelDefiners.push(require(path.join(__dirname, '/models', file)));
   });
 
 // Injectamos la conexion (sequelize) a todos los modelos
@@ -80,52 +80,71 @@ const {
 } = sequelize.models;
 
 // Aca vendrian las relaciones
-Colegio.belongsToMany(Idioma, { through: "Colegio_Idioma", timestamps: false });
-Idioma.belongsToMany(Colegio, { through: "Colegio_Idioma", timestamps: false });
+Colegio.belongsToMany(Idioma, { through: 'Colegio_Idioma', timestamps: false });
+Idioma.belongsToMany(Colegio, { through: 'Colegio_Idioma', timestamps: false });
 
 //------RELACION DE AUTENTICACION-----
 User.belongsTo(Auth, { foreignKey: 'idAuth', onDelete: 'CASCADE' });
-
+Colegio.belongsTo(Auth, { foreignKey: 'idAuth', onDelete: 'CASCADE' });
 //------RELACIONES DE UBICACION------
 Pais.hasMany(Colegio, {
-  foreignKey: "PaisId",
+  foreignKey: 'PaisId',
 });
-Colegio.belongsTo(Pais);
+Colegio.belongsTo(Pais, {
+  foreignKey: 'PaisId',
+});
 
 Departamento.hasMany(Colegio, {
-  foreignKey: "DepartamentoId",
+  foreignKey: 'DepartamentoId',
 });
-Colegio.belongsTo(Departamento);
+Colegio.belongsTo(Departamento, {
+  foreignKey: 'DepartamentoId',
+});
 
 Provincia.hasMany(Colegio, {
-  foreignKey: "ProvinciaId",
+  foreignKey: 'ProvinciaId',
 });
-Colegio.belongsTo(Provincia);
+Colegio.belongsTo(Provincia, {
+  foreignKey: 'ProvinciaId',
+});
+
+Distrito.hasMany(Colegio, {
+  foreignKey: 'DistritoId',
+});
+Colegio.belongsTo(Distrito, {
+  foreignKey: 'DistritoId',
+});
 
 Departamento.hasMany(Provincia);
 Provincia.belongsTo(Departamento);
 
+Provincia.hasMany(Distrito, {
+  foreignKey: 'ProvinciaId',
+});
+Distrito.belongsTo(Provincia, {
+  foreignKey: 'ProvinciaId',
+});
+
 Colegio.belongsToMany(Infraestructura, {
-  through: "Colegio_Infraestructura",
+  through: 'Colegio_Infraestructura',
   timestamps: false,
 });
 Infraestructura.belongsToMany(Colegio, {
-  through: "Colegio_Infraestructura",
+  through: 'Colegio_Infraestructura',
   timestamps: false,
 });
 
 //------RELACIONES ADMINISTRATIVAS------
 
 Plan_Pago.hasMany(Colegio, {
-  foreignKey: "id_plan_pago",
+  foreignKey: 'PlanPagoId',
 });
-Colegio.belongsTo(Plan_Pago);
+Colegio.belongsTo(Plan_Pago, {
+  foreignKey: 'PlanPagoId',
+});
 
 Infraestructura_tipo.hasMany(Infraestructura);
 Infraestructura.belongsTo(Infraestructura_tipo);
-
-// Provincia.hasMany(Distrito);
-// Distrito.belongsTo(Provincia);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
