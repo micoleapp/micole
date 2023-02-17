@@ -83,12 +83,6 @@ router.get("/:Colegio_id", async (req, res) => {
         "fecha_fundacion",
         "nombre_director",
         "area",
-<<<<<<< HEAD
-        // "cuota_ingreso",
-        // "pension",
-        // "matricula",
-=======
->>>>>>> 241ce603bf32b15c01757622430d1417d6a6c3d1
         "ugel",
         "ubicacion",
         "telefono",
