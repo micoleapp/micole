@@ -28,7 +28,10 @@ const authenticate = (secret) => async (req, res, next) => {
     const decodedToken = await verifyToken(token, secret);
     const ifUserExists = await Auth.findByPk(decodedToken.uid);
     if (!ifUserExists) {
-      return next(404);
+      return next({
+        statusCode: 404,
+        message: 'El token brindado no es de un usuario registrado',
+      });
     }
     req.user = ifUserExists;
     return next();

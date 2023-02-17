@@ -1,0 +1,141 @@
+.filtros_container {
+  display: flex;
+  border-radius: 5px;
+  width: 100%;
+  background: #fff;
+  align-items: flex-start;
+}
+/* .select{
+  	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+} */
+.container_select {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  padding: 20px;
+}
+
+.container_select label {
+  font-size: 13px;
+  color: #000000c9;
+}
+.container_select p {
+  font-size: 12px;
+  color: #0d263b;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.masFiltros p {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: none;
+}
+.filtros_container button {
+  font-size: 13px;
+  color: #fff;
+  text-transform: uppercase;
+  background: #cc5040;
+  height: 40px;
+  width: 100px;
+}
+
+.masFiltros {
+  display: flex;
+  /* align-items: center; */
+  gap: 20px;
+  flex-direction: row;
+}
+
+.masFiltros p {
+  font-size: 13px;
+}
+
+.select {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.select p {
+  padding-left: 3px;
+
+}
+
+@media (max-width: 900px) {
+  .masFiltros {
+    display: flex;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .filtros_container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 5px;
+    width: 80%;
+    height: auto;
+    background: #fff;
+  }
+
+  .container_select label {
+    font-size: 10px;
+  }
+  .container_select p {
+    font-size: 10px;
+  }
+}
+@media (max-width: 800px) {
+  .masFiltros {
+    display: flex;
+    /* gap: 20px; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .filtros_container button {
+    height: 30px;
+    font-size: 12px;
+    width: 80px;
+  }
+  .filtros_container {
+    display: flex;
+    border-radius: 5px;
+    width: 200px;
+    height: auto;
+    background: #fff;
+    flex-direction: column;
+  }
+  .container_select {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    padding: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .container_button {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  .select {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .masFiltros {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+}

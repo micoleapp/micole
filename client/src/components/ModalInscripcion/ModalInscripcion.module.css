@@ -1,0 +1,74 @@
+.Overlay {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+    width:100vw;
+    height:100vh;
+    overflow-y: scroll;
+    position:fixed;
+    top:0;
+    left:0;
+    background:rgba(0,0,0,.5);
+    z-index:1;
+  }
+  .contenedorModal {
+    display:flex;
+
+   
+  flex-direction: column;
+  max-width: 1200px;
+  height:auto;
+  align-items: center;
+  background: #ffffff;
+  position: relative;
+  border-radius:10px;
+  z-index:2;
+  box-shadow: rgba(100,100,111,0.2) 0px 7px 29px 0px
+  }
+
+  .DivCloseButton{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 100%;
+    padding:20px ;
+  }
+
+    
+  .contenedorModal::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+  
+  .contenedorModal::-webkit-scrollbar:vertical {
+    width:8px;
+  }
+  
+  .contenedorModal::-webkit-scrollbar-button:increment,.contenedor::-webkit-scrollbar-button {
+    display: none;
+  } 
+  
+  .contenedorModal::-webkit-scrollbar:horizontal {
+    height: 5px;
+  }
+  
+  .contenedorModal::-webkit-scrollbar-thumb {
+    background-color: #dfdfdf;
+    border-radius: 10px;
+    border:0.5px solid #424242;
+  }
+  
+  .contenedorModal::-webkit-scrollbar-track {
+    border-radius: 10px;  
+  }
+
+  
+@media (max-width: 800px) {
+
+    .contenedorModal{
+      max-height:700px ;
+      overflow-y: scroll;
+    }
+
+  }
+  

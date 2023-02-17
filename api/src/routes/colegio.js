@@ -1,6 +1,13 @@
 const { Router } = require("express");
 const router = Router();
-const { Colegio, Idioma, Departamento, Provincia} = require("../db.js");
+const {
+  Colegio,
+  Idioma,
+  Departamento,
+  Provincia,
+  Plan_Pago,
+} = require("../db.js");
+
 // const getComponentData = require("../funciones/getComponentData.js");
 // const ratingProm = require("../funciones/ratingProm.js");
 
@@ -12,41 +19,35 @@ router.get("/", async (req, res) => {
     let cole;
     cole = await Colegio.findAll({
       include: [
-        { model: Idioma, attributes: ["nombre_idoma", "id"] },
+        { model: Idioma, attributes: ["nombre_idioma", "id"] },
         {
           model: Departamento,
           attributes: ["nombre_departamento"],
         },
-        // {
-        //   model: Provincia,
-        //   attributes: ["id"],
-        // },
+        {
+          model: Plan_Pago,
+          attributes: ["nombre_plan_pago"],
+        },
+        {
+          model: Provincia,
+          attributes: ["nombre_provincia"],
+        },
       ],
       attributes: [
         "id",
-        "nombre_escuela",
+        "nombre_colegio",
         "direccion",
         "ruc",
         "numero_estudiantes",
         "fecha_fundacion",
         "nombre_director",
-        "area",
-        "cuota_ingreso",
-        "pension",
-        "matricula",
-        "ugel",
-        "ubicacion",
         "telefono",
-        "referencia_ubicacion",
-        "propuesta_valor",
-        "descripcion",
         "rating",
-        "horas_idioma_extrangero",
+        "horas_idioma_extranjero",
       ],
-    });
-    console.log("jola");
+    }); 
     response = cole;
-    res.send(response);
+    res.json(response);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -64,23 +65,24 @@ router.get("/:Colegio_id", async (req, res) => {
           model: Departamento,
           attributes: ["nombre_departamento"],
         },
-        // {
-        //   model: Provincia,
-        //   attributes: ["id"],
-        // },
+        {
+          model: Plan_Pago,
+          attributes: ["nombre_plan_pago"],
+        },
+        {
+          model: Provincia,
+          attributes: ["id"],
+        },
       ],
       attributes: [
         "id",
-        "nombre_escuela",
+        "nombre_colegio",
         "direccion",
         "ruc",
         "numero_estudiantes",
         "fecha_fundacion",
         "nombre_director",
         "area",
-        "cuota_ingreso",
-        "pension",
-        "matricula",
         "ugel",
         "ubicacion",
         "telefono",
@@ -88,11 +90,11 @@ router.get("/:Colegio_id", async (req, res) => {
         "propuesta_valor",
         "descripcion",
         "rating",
-        "horas_idioma_extrangero",
+        "horas_idioma_extranjero",
       ],
     });
 
-   res.send(cole);
+    res.send(cole);
   } catch (err) {
     res.send({ error: err.message });
   }

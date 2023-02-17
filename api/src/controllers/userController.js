@@ -33,7 +33,7 @@ const getUsers = async (req, res, next) => {
       users,
     });
   } catch (error) {
-    return next(500);
+    return next(error);
   }
 };
 
@@ -54,7 +54,7 @@ const getUserbyId = async (req, res, next) => {
     }
     res.status(200).send(user);
   } catch (error) {
-    return next(500);
+    return next(error);
   }
 };
 
@@ -73,7 +73,7 @@ const deleteUserbyId = async (req, res, next) => {
     await Auth.destroy({ where: { id: idAuth } });
     res.status(200).send('El usuario ha sido eliminado con éxito');
   } catch (error) {
-    return next(500);
+    return next(error);
   }
 };
 
