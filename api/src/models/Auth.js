@@ -1,9 +1,9 @@
-const { DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
+const { DataTypes } = require("sequelize");
+const bcrypt = require("bcrypt");
 
 module.exports = (sequelize) => {
   const Auth = sequelize.define(
-    'Auth',
+    "Auth",
     {
       id: {
         type: DataTypes.UUID,
@@ -17,7 +17,7 @@ module.exports = (sequelize) => {
         validate: {
           isEmail: {
             args: true,
-            msg: 'Ingresa un email valido',
+            msg: "Ingresa un email valido",
           },
         },
       },
@@ -27,24 +27,23 @@ module.exports = (sequelize) => {
         validate: {
           len: {
             args: [6, 15],
-            msg: 'La contraseña debe tener entre 6 y 15 caracteres',
+            msg: "La contraseña debe tener entre 6 y 15 caracteres",
           },
           check: (value) => {
             const hasUppercase = /[A-Z]/.test(value);
             const hasSign = /[@$!%*#?&]/.test(value);
             if (!hasUppercase || !hasSign) {
               throw new Error(
-                'La contraseña debe tener al menos una letra mayúscula y un signo'
+                "La contraseña debe tener al menos una letra mayúscula y un signo"
               );
             }
           },
         },
       },
       rol: {
-        type: DataTypes.ENUM,
-        values: ['User', 'Colegio', 'Admin'],
+        type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 'User',
+        defaultValue: 0,
       },
       isBanned: {
         type: DataTypes.BOOLEAN,
@@ -58,7 +57,7 @@ module.exports = (sequelize) => {
           auth.password = await bcrypt.hash(auth.password, salt);
         },
         beforeUpdate: async (auth) => {
-          if (auth.changed('password')) {
+          if (auth.changed("password")) {
             auth.password = await bcrypt.hash(auth.password, 10);
           }
         },
@@ -70,6 +69,6 @@ module.exports = (sequelize) => {
   Auth.prototype.comparePassword = function (candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
   };
-  
+
   return Auth;
 };

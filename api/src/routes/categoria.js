@@ -2,7 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const { Categoria } = require("../db.js");
 
-//------- PEDIR TODOS LAS CATEGORIAS A LA BD--------
+//------- PEDIR TODOS LAS CATEGORIAS A LA BDatos--------
 router.get("/", async (req, res) => {
   let response = [];
   try {

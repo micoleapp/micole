@@ -1,8 +1,8 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   sequelize.define(
-    'Cita',
+    "Cita",
     {
       id: {
         type: DataTypes.UUID,
@@ -14,11 +14,13 @@ module.exports = (sequelize) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'El campo fecha_cita no puede estar vacío',
+            msg: "El campo fecha_cita no puede estar vacío",
           },
-          validarFecha: function(fecha) {
+          validarFecha: function (fecha) {
             if (fecha < new Date()) {
-              throw new Error("La fecha de la cita debe ser en días posteriores al actual");
+              throw new Error(
+                "La fecha de la cita debe ser en días posteriores al actual"
+              );
             }
           },
         },
@@ -28,20 +30,21 @@ module.exports = (sequelize) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'El campo hora_cita no puede estar vacío',
+            msg: "El campo hora_cita no puede estar vacío",
           },
-          validarHora: function(hora) {
-            if (hora < '00:00' || hora > '23:59') {
-              throw new Error("La hora de la cita debe estar entre 00:00 y 23:59");
+          validarHora: function (hora) {
+            if (hora < "00:00" || hora > "23:59") {
+              throw new Error(
+                "La hora de la cita debe estar entre 00:00 y 23:59"
+              );
             }
           },
         },
       },
       modalidad: {
-        type: DataTypes.ENUM,
-        values: ['Virtual', 'Presencial'],
+        type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 'Presencial',
+        defaultValue: 0,
       },
     },
     {
