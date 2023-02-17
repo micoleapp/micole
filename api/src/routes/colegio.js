@@ -1,13 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const {
-  Colegio,
-  Idioma,
-  Departamento,
-  Provincia,
-  Plan_Pago,
-} = require("../db.js");
-
+const { Colegio, Idioma, Departamento, Provincia} = require("../db.js");
 // const getComponentData = require("../funciones/getComponentData.js");
 // const ratingProm = require("../funciones/ratingProm.js");
 
@@ -24,14 +17,10 @@ router.get("/", async (req, res) => {
           model: Departamento,
           attributes: ["nombre_departamento"],
         },
-        {
-          model: Plan_Pago,
-          attributes: ["nombre_plan_pago"],
-        },
-        {
-          model: Provincia,
-          attributes: ["nombre_provincia"],
-        },
+        // {
+        //   model: Provincia,
+        //   attributes: ["id"],
+        // },
       ],
       attributes: [
         "id",
@@ -41,16 +30,23 @@ router.get("/", async (req, res) => {
         "numero_estudiantes",
         "fecha_fundacion",
         "nombre_director",
+        "area",
         "cuota_ingreso",
         "pension",
         "matricula",
+        "ugel",
+        "ubicacion",
         "telefono",
+        "referencia_ubicacion",
+        "propuesta_valor",
+        "descripcion",
         "rating",
         "horas_idioma_extrangero",
       ],
-    }); 
+    });
+    console.log("jola");
     response = cole;
-    res.json(response);
+    res.send(response);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -68,14 +64,10 @@ router.get("/:Colegio_id", async (req, res) => {
           model: Departamento,
           attributes: ["nombre_departamento"],
         },
-        {
-          model: Plan_Pago,
-          attributes: ["nombre_plan_pago"],
-        },
-        {
-          model: Provincia,
-          attributes: ["id"],
-        },
+        // {
+        //   model: Provincia,
+        //   attributes: ["id"],
+        // },
       ],
       attributes: [
         "id",
@@ -100,7 +92,7 @@ router.get("/:Colegio_id", async (req, res) => {
       ],
     });
 
-    res.send(cole);
+   res.send(cole);
   } catch (err) {
     res.send({ error: err.message });
   }
