@@ -171,6 +171,10 @@ module.exports = (sequelize) => {
         type: DataTypes.FLOAT,
         allowNull: true,
       },
+      isActive: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      }
       // isBanned: {
       //   type: DataTypes.BOOLEAN,
       //   defaultValue: false,
