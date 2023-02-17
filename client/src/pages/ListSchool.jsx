@@ -28,10 +28,14 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 
-const filtrarPorRating = (productos, rating) => {
-  return productos.filter((producto) => producto.rating >= rating);
+const filtrarPorRating = (schools, rating) => {
+  return schools.filter((school) => school.rating >= rating);
 };
 
+const filtrarPorDep = (schools, dep) => {
+  return dep.length > 0 ? schools.filter((school) => dep.includes(school.Departamento.nombre_departamento)) : schools;
+};
+  
 const pageSize = 5;
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -110,13 +114,12 @@ function ListSchool() {
   });
 
   const dispatch = useDispatch();
-  const { allschools, loading , departaments , rating: start } = useSelector((state) => state.schools);
+  const { allschools, loading , departaments } = useSelector((state) => state.schools);
 
   
 
   useEffect(() => {
     dispatch(getAllSchools());
-    dispatch(getAllDepartaments())
   }, []);
 
   useEffect(() => {
@@ -144,14 +147,10 @@ function ListSchool() {
   const [toggleTypes, setToggleTypes] = useState(false);
 
   useEffect(() => {
-    dispatch(filterByDepartaments(distritName))
-    if(distritName.length === 0){
-      dispatch(getAllSchools())
-    }
+    setPagination({...pagination,count:filtrarPorDep(allschools,distritName).length,data:filtrarPorDep(allschools,distritName).slice(pagination.from,pagination.to)})
   }, [distritName])
 
   useEffect(() => {
-    dispatch(filterByRating(rating));
     setPagination({...pagination,count:filtrarPorRating(allschools,rating).length,data:filtrarPorRating(allschools,rating).slice(pagination.from,pagination.to)})
   }, [rating])
   

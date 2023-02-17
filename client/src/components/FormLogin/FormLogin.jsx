@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import style from "./FormLogin.module.css";
 import Logo from "../../assets/logoPayment.png";
 import FB from "./svg/FB";
-import { loginUser } from "../../redux/AuthActions";
+import { login } from "../../redux/AuthActions";
 import Gmail from "./svg/Gmail";
 import { useDispatch } from "react-redux";
 export default function FormLogin() {
@@ -24,7 +24,7 @@ export default function FormLogin() {
 
   const OnSubmit = async (user) => {
     console.log(data);
-    dispatch(loginUser(user))  
+    dispatch(login(user))  
   };
 
   return (

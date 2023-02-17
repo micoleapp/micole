@@ -1,7 +1,7 @@
 import {getUser,registerUser,loginUser,logoutUser,getError,isLoading,updateUser} from './AuthSlice'
 import axios from 'axios'
 
-export const getUser = () => (dispatch) => {
+export const getOneUser = () => (dispatch) => {
   dispatch(isLoading())
   const id = localStorage.getItem('id')
   axios.get(`/auth/${id}`)
@@ -9,14 +9,14 @@ export const getUser = () => (dispatch) => {
   .catch(err=>dispatch(getError(err.message)))
 }
 
-export const registerUser = (user) => (dispatch) => {
+export const register = (user) => (dispatch) => {
   dispatch(isLoading())
   axios.post('/auth/signup',{user})
   .then(res=>{dispatch(registerUser())})
   .catch(err=>{dispatch(getError(err.message))})
 }
 
-export const loginUser = (user) => (dispatch) => {
+export const login = (user) => (dispatch) => {
   dispatch(isLoading())
   axios.post('/auth/signin',{user})
   .then(res=>{
@@ -27,7 +27,7 @@ export const loginUser = (user) => (dispatch) => {
   .catch(err=>dispatch(getError(err.message)))
 }
 
-export const updateUser = (user) => (dispatch) => {
+export const update = (user) => (dispatch) => {
   dispatch(isLoading())
   axios.put(`/auth/${user.email}`,{user})
   .then(res=>{
@@ -36,7 +36,7 @@ export const updateUser = (user) => (dispatch) => {
   .catch(err=>dispatch(getError(err.message)))
 }
 
-export const logoutUser = () => (dispatch) => {
+export const logout = () => (dispatch) => {
   dispatch(isLoading())
   try {
     dispatch(logoutUser())

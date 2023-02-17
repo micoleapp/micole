@@ -10,7 +10,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { InputLabel } from "@mui/material";
 import MockupDistritos from "../../MockupInfo/MockupDistritos";
 import { useDispatch } from "react-redux";
-import { registerUser } from "../../redux/AuthActions";
+import { register as registerUser } from "../../redux/AuthActions";
 function FormInscripcion({handlerOpenPayment,handlerOpenLogin}) {
   const dispatch = useDispatch();
   
