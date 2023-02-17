@@ -85,8 +85,8 @@ Colegio.belongsToMany(Idioma, { through: 'Colegio_Idioma', timestamps: false });
 Idioma.belongsToMany(Colegio, { through: 'Colegio_Idioma', timestamps: false });
 
 //------RELACION DE AUTENTICACION-----
-User.belongsTo(Auth, { foreignKey: 'idAuth', onDelete: 'CASCADE' });
-Colegio.belongsTo(Auth, { foreignKey: 'idAuth', onDelete: 'CASCADE' });
+User.belongsTo(Auth, { foreignKey: 'idAuth' });
+Colegio.belongsTo(Auth, { foreignKey: 'idAuth' });
 
 //------RELACIONES DE UBICACION------
 Pais.hasMany(Colegio, {
@@ -145,7 +145,7 @@ Colegio.belongsTo(Plan_Pago, {
   foreignKey: 'PlanPagoId',
 });
 Categoria.hasMany(Colegio, {
-  foreignKey: 'CategpriaId',
+  foreignKey: 'CategoriaId',
 });
 Colegio.belongsTo(Categoria, {
   foreignKey: 'CategoriaId',
