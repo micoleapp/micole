@@ -8,6 +8,7 @@ const provinciaRouter = require("./provincia.js");
 const distritoRouter = require("./distritoRouter.js");
 const paisRouter = require("./pais.js");
 const userRouter = require("./userRoutes");
+const categoriaRouter = require("./categoria.js");
 
 const router = Router();
 
@@ -16,6 +17,8 @@ router.use("/departamentos", departamentoRouter);
 router.use("/provincias", provinciaRouter);
 router.use("/distritos", distritoRouter);
 router.use("/paises", paisRouter);
+router.use("/categorias", categoriaRouter);
+
 
 router.get("/", (req, res) =>
   res.json({ name: pkg.name, version: pkg.version })

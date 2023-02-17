@@ -75,6 +75,7 @@ const {
   Idioma,
   Infraestructura,
   Infraestructura_tipo,
+  Categoria,
   Review,
   User,
 } = sequelize.models;
@@ -86,6 +87,7 @@ Idioma.belongsToMany(Colegio, { through: 'Colegio_Idioma', timestamps: false });
 //------RELACION DE AUTENTICACION-----
 User.belongsTo(Auth, { foreignKey: 'idAuth', onDelete: 'CASCADE' });
 Colegio.belongsTo(Auth, { foreignKey: 'idAuth', onDelete: 'CASCADE' });
+
 //------RELACIONES DE UBICACION------
 Pais.hasMany(Colegio, {
   foreignKey: 'PaisId',
@@ -141,6 +143,12 @@ Plan_Pago.hasMany(Colegio, {
 });
 Colegio.belongsTo(Plan_Pago, {
   foreignKey: 'PlanPagoId',
+});
+Categoria.hasMany(Colegio, {
+  foreignKey: 'CategpriaId',
+});
+Colegio.belongsTo(Categoria, {
+  foreignKey: 'CategoriaId',
 });
 
 Infraestructura_tipo.hasMany(Infraestructura);

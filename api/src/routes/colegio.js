@@ -6,6 +6,7 @@ const {
   Departamento,
   Provincia,
   Plan_Pago,
+  Distrito,
 } = require("../db.js");
 
 // const getComponentData = require("../funciones/getComponentData.js");
@@ -25,12 +26,16 @@ router.get("/", async (req, res) => {
           attributes: ["nombre_departamento"],
         },
         {
-          model: Plan_Pago,
-          attributes: ["nombre_plan_pago"],
-        },
-        {
           model: Provincia,
           attributes: ["nombre_provincia"],
+        },
+        {
+          model: Distrito,
+          attributes: ["nombre_distrito"],
+        },
+        {
+          model: Plan_Pago,
+          attributes: ["nombre_plan_pago"],
         },
       ],
       attributes: [
@@ -44,12 +49,13 @@ router.get("/", async (req, res) => {
         "telefono",
         "rating",
         "horas_idioma_extranjero",
+        "primera_imagen",
       ],
-    }); 
+    });
     response = cole;
     res.json(response);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.json({ err });
   }
 });
 
@@ -60,18 +66,22 @@ router.get("/:Colegio_id", async (req, res) => {
     const cole = await Colegio.findAll({
       where: { id: [Colegio_id] },
       include: [
-        { model: Idioma, attributes: ["nombre_idoma", "id"] },
+        { model: Idioma, attributes: ["nombre_idioma", "id"] },
         {
           model: Departamento,
           attributes: ["nombre_departamento"],
         },
         {
-          model: Plan_Pago,
-          attributes: ["nombre_plan_pago"],
+          model: Provincia,
+          attributes: ["nombre_provincia"],
         },
         {
-          model: Provincia,
-          attributes: ["id"],
+          model: Distrito,
+          attributes: ["nombre_distrito"],
+        },
+        {
+          model: Plan_Pago,
+          attributes: ["nombre_plan_pago"],
         },
       ],
       attributes: [
@@ -91,12 +101,15 @@ router.get("/:Colegio_id", async (req, res) => {
         "descripcion",
         "rating",
         "horas_idioma_extranjero",
+        "primera_imagen",
+        "galeria_fotos",
+        "video_url",
       ],
     });
 
-    res.send(cole);
+    res.json(cole);
   } catch (err) {
-    res.send({ error: err.message });
+    res.json({ err });
   }
 });
 // //---PEDIR TODOS LOS PRODUCTOS DE UN SELLER---
