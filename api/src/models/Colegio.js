@@ -11,39 +11,59 @@ module.exports = (sequelize) => {
         primaryKey: true,
       },
 
-      nombre_escuela: {
+      nombre_responsable: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           isAlpha: {
             args: true,
-            msg: "El nombre solo puede contener letras",
+            msg: "El nombre_responsable solo puede contener letras",
+          },
+        },
+      },
+      apellidos_responsable: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isAlpha: {
+            args: true,
+            msg: "El nombre_responsable solo puede contener letras",
+          },
+        },
+      },
+
+      nombre_colegio: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          is: {
+            args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+            msg: "El nombre solo puede contener letras, acentos, tildes y espacios",
           },
           len: {
             args: [2, 60],
-            msg: "El nombre debe tener entre 2 y 50 letras",
+            msg: "El nombre debe tener entre 2 y 60 letras",
           },
         },
       },
 
       slug: {
         type: DataTypes.STRING,
-        allowNull: false,
         validate: {
-          isAlpha: {
-            args: true,
-            msg: "El apellido solo puede contener letras",
+          is: {
+            args: /^[a-zA-Z-]+$/,
+            msg: "El slug solo puede contener letras y guiones",
           },
           len: {
-            args: [2, 80],
-            msg: "El apellido debe tener entre 2 y 50 letras",
+            args: [2, 60],
+            msg: "El slug debe tener entre 2 y 60 letras",
           },
         },
       },
 
       direccion: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
 
       ruc: {
@@ -57,12 +77,12 @@ module.exports = (sequelize) => {
 
       numero_estudiantes: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
 
       fecha_fundacion: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         // validate: {
         //   len: [4, 4],
         //   msg: "Debe colocar un año valido",
@@ -71,15 +91,15 @@ module.exports = (sequelize) => {
 
       nombre_director: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
-          isAlpha: {
-            args: true,
-            msg: "El nombre solo puede contener letras",
+          is: {
+            args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+            msg: "El nombre solo puede contener letras, acentos, tildes y espacios",
           },
           len: {
             args: [2, 60],
-            msg: "El nombre debe tener entre 2 y 50 letras",
+            msg: "El nombre debe tener entre 2 y 60 letras",
           },
         },
       },
@@ -101,7 +121,7 @@ module.exports = (sequelize) => {
 
       area: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
 
       //HACER UNA RELACION CON VACANTE DE MUCHOS A MUCHOS
@@ -113,7 +133,7 @@ module.exports = (sequelize) => {
 
       ubicacion: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
           len: [0, 200],
         },
@@ -134,22 +154,22 @@ module.exports = (sequelize) => {
 
       propuesta_valor: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
 
       descripcion: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
 
-      horas_idioma_extrangero: {
+      horas_idioma_extranjero: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
 
       rating: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: true,
       },
       // isBanned: {
       //   type: DataTypes.BOOLEAN,

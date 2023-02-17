@@ -1,4 +1,4 @@
-const { Auth, User } = require('../db');
+const { Auth, User, Colegio } = require('../db');
 const { generateToken } = require('../utils/generateToken');
 const mailer = require('../utils/sendMails/mailer');
 
@@ -12,7 +12,7 @@ const signIn = async (req, res, next) => {
     if (!authInstance) {
       return next({
         statusCode: 404,
-        message: 'No usuario ingresado no existe',
+        message: 'El usuario ingresado no existe',
       });
     }
     const validatePassword = await authInstance.comparePassword(password);
@@ -35,16 +35,16 @@ const signIn = async (req, res, next) => {
       telefono: dataUser.telefono,
       rol: authInstance.rol,
     };
-    return res.status(200).send({user :sanitizedLogIn, token: jwToken.token});
+    return res.status(200).send({ user: sanitizedLogIn, token: jwToken.token });
   } catch (error) {
-    return next(500);
+    return next(error);
   }
 };
 
 const getAuthById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const authInstance= await Auth.findByPk(id);
+    const authInstance = await Auth.findByPk(id);
     if (!authInstance) {
       return next({
         statusCode: 400,
@@ -63,14 +63,25 @@ const getAuthById = async (req, res, next) => {
       telefono: dataUser.telefono,
       rol: authInstance.rol,
     };
-    return res.status(200).send({user :sanitizedUser});
+    return res.status(200).send({ user: sanitizedUser });
   } catch (error) {
-    return next(500);
+    return next(error);
   }
 };
 
 const signUp = async (req, res, next) => {
-  const { email, password, nombre, apellidos, dni, ruc, school } = req.body;
+  const {
+    email,
+    password,
+    nombre,
+    apellidos,
+    nombre_colegio,
+    dni,
+    ruc,
+    telefono,
+    distrito,
+    esColegio,
+  } = req.body;
   try {
     const isUserRegistered = await Auth.findOne({ where: { email } });
     if (isUserRegistered) {
@@ -79,19 +90,24 @@ const signUp = async (req, res, next) => {
         message: 'El email de usuario ya está registrado',
       });
     }
-    const newAuth = await Auth.create({ email, password });
+    const newAuth = await Auth.create({ email, password, rol:"Colegio" });
     const idAuth = newAuth.id;
-    if (school) {
-      // Aún en revisión Modelo Colegio
-      /*
-      const newSchool = await User.create({ nombre, ruc, idAuth });
+    if (esColegio) {
+      const newSchool = await Colegio.create({
+        nombre_responsable: nombre,
+        apellidos_responsable: apellidos,
+        nombre_colegio,
+        telefono,
+        ruc,
+        idAuth,
+      });
       const sanitizedSchool = {
         email: newAuth.email,
-        nombre: newSchool.nombre,
+        nombre: newSchool.nombre_colegio,
         rol: newAuth.rol,
       };
       mailer.sendMailSignUp(sanitizedSchool, 'Colegio'); //Enviamos el mail de Confirmación de Registro para el Usuario Colegio
-      return res.status(201).send(sanitizedSchool);*/
+      return res.status(201).send(sanitizedSchool);
     }
     const newUser = await User.create({ nombre, apellidos, dni, idAuth });
     const sanitizedUser = {
@@ -103,12 +119,12 @@ const signUp = async (req, res, next) => {
     mailer.sendMailSignUp(sanitizedUser, 'User'); //Enviamos el mail de Confirmación de Registro para el Usuario Normal
     return res.status(201).send(sanitizedUser);
   } catch (error) {
-    return next(500);
+    return next(error);
   }
 };
 
 module.exports = {
   signIn,
   signUp,
-  getAuthById
+  getAuthById,
 };

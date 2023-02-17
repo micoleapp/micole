@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         primaryKey: true,
       },
-      nombre_idoma: {
+      nombre_idioma: {
         type: DataTypes.STRING,
       },
     },
