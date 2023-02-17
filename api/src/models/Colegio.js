@@ -110,7 +110,7 @@ module.exports = (sequelize) => {
       },
 
       galeria_fotos: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true,
       },
 

@@ -42,9 +42,18 @@ module.exports = (sequelize) => {
         },
       },
       modalidad: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: "Presencial",
+        validate: {
+          customValidator: (value) => {
+            const enums = ["Presencial", "Virtual"];
+            if (!enums.includes(value)) {
+              // Use Array.includes() to validate.
+              throw new Error("not a valid option");
+            }
+          },
+        },
       },
     },
     {

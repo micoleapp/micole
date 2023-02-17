@@ -41,10 +41,18 @@ module.exports = (sequelize) => {
         },
       },
       rol: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: "Usuario",
+        validate:{
+          customValidator:(value)=>{
+            const enums= ["Usuario","Colegio","Admin"]
+            if (!enums.includes(value)) { // Use Array.includes() to validate.
+            throw new Error('not a valid option')
+          }
+        }
       },
+    },
       isBanned: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
