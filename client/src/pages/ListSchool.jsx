@@ -22,7 +22,12 @@ import {
   faArrowDown,
   faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { getAllSchools , getAllDepartaments, filterByDepartaments , filterByRating } from "../redux/SchoolsActions";
+import {
+  getAllSchools,
+  getAllDepartaments,
+  filterByDepartaments,
+  filterByRating,
+} from "../redux/SchoolsActions";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -33,9 +38,13 @@ const filtrarPorRating = (schools, rating) => {
 };
 
 const filtrarPorDep = (schools, dep) => {
-  return dep.length > 0 ? schools.filter((school) => dep.includes(school.Departamento.nombre_departamento)) : schools;
+  return dep.length > 0
+    ? schools.filter((school) =>
+        dep.includes(school.Departamento.nombre_departamento)
+      )
+    : schools;
 };
-  
+
 const pageSize = 5;
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -114,20 +123,24 @@ function ListSchool() {
   });
 
   const dispatch = useDispatch();
-  const { allschools, loading , departaments } = useSelector((state) => state.schools);
-
-  
+  const { allschools, loading, departaments } = useSelector(
+    (state) => state.schools
+  );
 
   useEffect(() => {
     dispatch(getAllSchools());
+    dispatch(getAllDepartaments());
   }, []);
 
-  useEffect(() => {
-      const schools = allschools.slice(pagination.from, pagination.to);
-      setPagination({ ...pagination, count: allschools.length, data: schools });
-  }, [allschools, pagination.from, pagination.to]);
-
+  
   const [disabledPage, setDisabledPage] = useState(false);
+  
+  const [filtersSchools, setFiltersSchools] = useState([]);
+
+  useEffect(() => {
+    const schools = filtersSchools.slice(pagination.from, pagination.to);
+    setPagination({ ...pagination, count: filtersSchools.length, data: schools });
+  }, [filtersSchools, pagination.from, pagination.to]);
 
   const handlePageChange = (event, page) => {
     setDisabledPage(true);
@@ -147,13 +160,16 @@ function ListSchool() {
   const [toggleTypes, setToggleTypes] = useState(false);
 
   useEffect(() => {
-    setPagination({...pagination,count:filtrarPorDep(allschools,distritName).length,data:filtrarPorDep(allschools,distritName).slice(pagination.from,pagination.to)})
-  }, [distritName])
+    setFiltersSchools(filtrarPorDep(allschools, distritName));
+  }, [distritName]);
 
   useEffect(() => {
-    setPagination({...pagination,count:filtrarPorRating(allschools,rating).length,data:filtrarPorRating(allschools,rating).slice(pagination.from,pagination.to)})
-  }, [rating])
-  
+    setFiltersSchools(filtrarPorRating(allschools, rating));
+  }, [rating]);
+
+  useEffect(() => {
+    setFiltersSchools(allschools);
+  },[allschools])
 
   return (
     <div className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] ">
@@ -194,17 +210,30 @@ function ListSchool() {
                   />
                 </button>
               </div>
-              <div className={toggleDistrits ? "block h-[200px] overflow-y-scroll" : "hidden"}>
+              <div
+                className={
+                  toggleDistrits
+                    ? "block h-[200px] overflow-y-scroll"
+                    : "hidden"
+                }
+              >
                 <FormGroup>
                   {departaments?.map((dep) => (
                     <FormControlLabel
                       control={
                         <Checkbox
                           onChange={(event, target) => {
-                            if(target){
-                              setDistritName([...distritName, dep.nombre_departamento])
-                            }else{
-                              setDistritName(distritName.filter((dist) => dist !== dep.nombre_departamento))
+                            if (target) {
+                              setDistritName([
+                                ...distritName,
+                                dep.nombre_departamento,
+                              ]);
+                            } else {
+                              setDistritName(
+                                distritName.filter(
+                                  (dist) => dist !== dep.nombre_departamento
+                                )
+                              );
                             }
                           }}
                         />
@@ -228,13 +257,16 @@ function ListSchool() {
                   />
                 </button>
               </div>
-              <div className={toggleTypes ? "block h-[200px] overflow-y-scroll" : "hidden"}>
-
-              <FormGroup>
-                {types.map((type) => (
-                  <FormControlLabel control={<Checkbox />} label={type} />
-                ))}
-              </FormGroup>
+              <div
+                className={
+                  toggleTypes ? "block h-[200px] overflow-y-scroll" : "hidden"
+                }
+              >
+                <FormGroup>
+                  {types.map((type) => (
+                    <FormControlLabel control={<Checkbox />} label={type} />
+                  ))}
+                </FormGroup>
               </div>
             </div>
             <div className="drop-shadow-md">
@@ -318,14 +350,15 @@ function ListSchool() {
         <section className="lg:w-3/4 w-full lg:pl-10 lg:pr-10 lg:pb-10 p-0 flex flex-col gap-5">
           <div className="flex items-center justify-between drop-shadow-md">
             <small>
-              Mostrando <span className="font-semibold">{pagination?.data?.length}</span> de{" "}
-              <span className="font-semibold">{pagination?.count}</span>{" "}
+              Mostrando{" "}
+              <span className="font-semibold">{pagination?.data?.length}</span>{" "}
+              de <span className="font-semibold">{pagination?.count}</span>{" "}
               resultados{" "}
             </small>
             <FormControl
               variant="standard"
               style={{ width: "200px", height: "70px" }}
-              size='small'
+              size="small"
             >
               <InputLabel id="demo-simple-select-standard-label">
                 Ordenar por
@@ -381,8 +414,7 @@ function ListSchool() {
                         <div className="flex flex-col gap-4">
                           <div className="flex flex-col w-fit gap-2">
                             <h1 className="font-semibold text-lg">
-                              {school.nombre_escuela
-}{" "}
+                              {school.nombre_escuela}{" "}
                             </h1>
                             <small className="text-gray-400">
                               {school.direccion}{" "}
@@ -396,8 +428,7 @@ function ListSchool() {
                                 icon={faUsers}
                               />
                               <span className="text-sm text-gray-400">
-                                {school.numero_estudiantes
-} Alumnos
+                                {school.numero_estudiantes} Alumnos
                               </span>
                             </div>
                             <div className="flex flex-col text-center">

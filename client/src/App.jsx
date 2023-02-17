@@ -10,6 +10,7 @@ import InfoPlanes from "./components/FormPayment/utils/InfoPlanes";
 import { useSelector } from "react-redux";
 import Error from "./pages/Error";
 import Payment from "./pages/Payment/Payment"
+import Test from "./pages/Test";
 function App() {
 
 
@@ -28,6 +29,7 @@ function App() {
           <Route path="/schooldetail/:id" er element={<SchoolDetail />} />
           <Route path="/*" element={<Error />} />
           <Route path="*" element={<Error />} />
+          <Route path="/test" element={<Test />} />
          
          <Route path="/payment" element={<Payment/>} />
         </Routes>
