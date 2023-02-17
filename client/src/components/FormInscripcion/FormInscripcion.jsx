@@ -9,9 +9,11 @@ import Select from "@mui/material/Select";
 import ListItemText from "@mui/material/ListItemText";
 import { InputLabel } from "@mui/material";
 import MockupDistritos from "../../MockupInfo/MockupDistritos";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { register as registerUser } from "../../redux/AuthActions";
 function FormInscripcion({handlerOpenPayment,handlerOpenLogin}) {
+ 
+  console.log( distrits)
   const dispatch = useDispatch();
   
   const {

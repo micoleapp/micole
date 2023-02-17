@@ -201,6 +201,7 @@ function ListSchool() {
                               setDistritName([
                                 ...distritName,
                                 distrit.nombre_distrito,
+                               
                               ]);
                             } else {
                               setDistritName(
