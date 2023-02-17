@@ -123,7 +123,7 @@ function FiltrosHome() {
         </div>
 
         <div className={style.container_button}>
-          <Link to="/listschool?distrito=algundistrito">
+          <Link to="/listschool">
             <button>Buscar</button>
           </Link>
         </div>

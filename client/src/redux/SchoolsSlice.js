@@ -1,14 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const filtrarPorRating = (productos, rating) => {
+  return productos.filter((producto) => producto.rating >= rating);
+};
+
 export const schoolsSlice = createSlice({
   name: "schools",
   initialState: {
     allschools: [],
+    departaments: [],
     oneSchool: {},
     error: "",
+    rating: 10,
     loading: false
   },
   reducers : {
+    filterByRatings : (state,action) => {
+      state.rating = action.payload,
+      state.loading = false,
+      state.error = ""
+    },
+    filterByDepartament : (state,action) => {
+      state.allschools = action.payload.length > 0 ? state.allschools.filter((school)=>action.payload.includes(school.Departamento.nombre_departamento)) : state.allschools,
+      state.loading = false,
+      state.error = ""
+    },  
+    getDepartaments: (state,action) => {
+      state.departaments = action.payload,
+      state.loading = false,
+      state.error = ""
+    },
     getSchools: (state,action) => {
       state.allschools = action.payload,
       state.loading = false,
@@ -29,6 +50,6 @@ export const schoolsSlice = createSlice({
   }
 })
 
-export const {getSchools,getOneSchool,getError,isLoading} = schoolsSlice.actions
+export const {getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,filterByRatings} = schoolsSlice.actions
 
 export default schoolsSlice.reducer

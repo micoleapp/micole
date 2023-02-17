@@ -22,28 +22,20 @@ import {
   faArrowDown,
   faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { getAllSchools } from "../redux/SchoolsActions";
+import { getAllSchools , getAllDepartaments, filterByDepartaments , filterByRating } from "../redux/SchoolsActions";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 
+const filtrarPorRating = (productos, rating) => {
+  return productos.filter((producto) => producto.rating >= rating);
+};
+
 const pageSize = 5;
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
-const distrits = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
 const types = ["Religoso", "Hombres", "Mujeres", "Mixtos"];
 function valuetext(value) {
   return `${value}°C`;
@@ -69,15 +61,6 @@ function ListSchool() {
 
   const [distritName, setDistritName] = React.useState([]);
 
-  const handleChangeDistrit = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setDistritName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
-  };
   const [english, setEnglish] = React.useState(10);
 
   const handleChangeEnglish = (event, newValue) => {
@@ -88,7 +71,7 @@ function ListSchool() {
 
   const [value1, setValue1] = React.useState([20, 37]);
 
-  const [rating, setRating] = React.useState(2);
+  const [rating, setRating] = React.useState(10);
 
   const handleChange1 = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -127,20 +110,22 @@ function ListSchool() {
   });
 
   const dispatch = useDispatch();
-  const { allschools, loading } = useSelector((state) => state.schools);
+  const { allschools, loading , departaments , rating: start } = useSelector((state) => state.schools);
+
+  
 
   useEffect(() => {
     dispatch(getAllSchools());
+    dispatch(getAllDepartaments())
   }, []);
 
   useEffect(() => {
-    if (allschools.length > 0) {
       const schools = allschools.slice(pagination.from, pagination.to);
       setPagination({ ...pagination, count: allschools.length, data: schools });
-    }
   }, [allschools, pagination.from, pagination.to]);
 
   const [disabledPage, setDisabledPage] = useState(false);
+
   const handlePageChange = (event, page) => {
     setDisabledPage(true);
     setPagination({ data: {} });
@@ -151,16 +136,25 @@ function ListSchool() {
       setDisabledPage(false);
     }, 1000);
   };
-  const [checked, setChecked] = React.useState(true);
 
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
-  };
   const items = [1, 2, 3, 4, 5];
 
   const [toggle, setToggle] = useState(false);
   const [toggleDistrits, setToggleDistrits] = useState(false);
   const [toggleTypes, setToggleTypes] = useState(false);
+
+  useEffect(() => {
+    dispatch(filterByDepartaments(distritName))
+    if(distritName.length === 0){
+      dispatch(getAllSchools())
+    }
+  }, [distritName])
+
+  useEffect(() => {
+    dispatch(filterByRating(rating));
+    setPagination({...pagination,count:filtrarPorRating(allschools,rating).length,data:filtrarPorRating(allschools,rating).slice(pagination.from,pagination.to)})
+  }, [rating])
+  
 
   return (
     <div className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] ">
@@ -203,16 +197,20 @@ function ListSchool() {
               </div>
               <div className={toggleDistrits ? "block h-[200px] overflow-y-scroll" : "hidden"}>
                 <FormGroup>
-                  {distrits.map((distrit) => (
+                  {departaments?.map((dep) => (
                     <FormControlLabel
                       control={
                         <Checkbox
                           onChange={(event, target) => {
-                            console.log({ event, target });
+                            if(target){
+                              setDistritName([...distritName, dep.nombre_departamento])
+                            }else{
+                              setDistritName(distritName.filter((dist) => dist !== dep.nombre_departamento))
+                            }
                           }}
                         />
                       }
-                      label={distrit}
+                      label={dep.nombre_departamento}
                     />
                   ))}
                 </FormGroup>
@@ -289,6 +287,8 @@ function ListSchool() {
               <Rating
                 name="simple-controlled"
                 value={rating}
+                max={10}
+                precision={0.5}
                 onChange={(event, newValue) => {
                   setRating(newValue);
                 }}
@@ -319,7 +319,7 @@ function ListSchool() {
         <section className="lg:w-3/4 w-full lg:pl-10 lg:pr-10 lg:pb-10 p-0 flex flex-col gap-5">
           <div className="flex items-center justify-between drop-shadow-md">
             <small>
-              Mostrando <span className="font-semibold">{pageSize}</span> de{" "}
+              Mostrando <span className="font-semibold">{pagination?.data?.length}</span> de{" "}
               <span className="font-semibold">{pagination?.count}</span>{" "}
               resultados{" "}
             </small>
