@@ -13,6 +13,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { GoogleMap, useJsApiLoader, Marker , Autocomplete } from "@react-google-maps/api";
 
 const steps = [
   "Datos Principales",
@@ -38,13 +39,21 @@ import {
   getAllProvincias,
 } from "../redux/SchoolsActions";
 import { useState } from "react";
+import { useRef } from "react";
+
+const containerStyle = {
+  width: "100%",
+  height: "400px",
+};
 
 function DashboardSchool() {
   const [page, setPage] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const dispatch = useDispatch();
-  const { categories, provincias , distrits , departaments } = useSelector((state) => state.schools);
+  const { categories, provincias, distrits, departaments } = useSelector(
+    (state) => state.schools
+  );
 
   useEffect(() => {
     dispatch(getAllCategories());
@@ -108,23 +117,71 @@ function DashboardSchool() {
     setProvincia(event.target.value);
   };
 
-  
   const [distrito, setDistrito] = useState([]);
 
   const handleChangeDistrito = (event) => {
     setDistrito(event.target.value);
   };
 
-  
   const [departamento, setDepartamento] = useState([]);
 
   const handleChangeDepartamento = (event) => {
     setDepartamento(event.target.value);
   };
 
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyB9qHB47v8fOmLUiByTvWinUehYqALI6q4",
+    libraries: ['places']
+  });
+
+  const [center, setCenter] = React.useState({
+    lat: 0,
+    lng: 0,
+  });
+
+  const [map, setMap] = React.useState(null);
+  const onLoad = React.useCallback(function callback(map) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    const zoom = 18;
+    map.setZoom(zoom);
+    setMap(map);
+  }, []);
+
+  const onChange = React.useCallback(function callback(map) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    console.log(map);
+  }, []);
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null);
+  }, []);
+
+  const direccion = useRef()
+
+  const [autocomplete,setAutocomplete] = useState(null)
+
+  const onLoadPlace = (autocomplete) => {
+    setAutocomplete(autocomplete)
+  }
+
+  const onPlaceChanged = () => {
+    if (autocomplete !== null) {
+      const place = autocomplete.getPlace()
+      console.log(place)
+      console.log({direccion:place.address_components[1].long_name+" "+place.address_components[0].long_name})
+      console.log({nombre:place.name})
+      console.log({latitude:place.geometry.location.lat()})
+      console.log({longitud:place.geometry.location.lng()})
+      setCenter({lat:place.geometry.location.lat(),lng:place.geometry.location.lng()})
+    } else {
+      console.log("Autocomplete is not loaded yet!");
+    }
+  }
+
   return (
     <div className="flex">
-      <section className="leftshadow bg-white w-1/4 shadow-leftshadow flex justify-center z-50">
+      <section className="leftshadow min-h-screen bg-white w-1/4 shadow-leftshadow flex justify-center z-50">
         <ul className="flex flex-col gap-4 absolute top-48">
           <button
             className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
@@ -496,19 +553,33 @@ function DashboardSchool() {
                             </FormControl>
                           </div>
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col gap-5">
                           <label
                             htmlFor="direccion"
                             className="text-lg font-medium"
                           >
                             Dirección
                           </label>
+                          <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoadPlace}>
                           <input
                             type="text"
                             name="direccion"
                             id="direccion"
                             className="p-3 rounded-md border-2  outline-none"
+                            ref={direccion}
                           />
+                          </Autocomplete>
+                          {isLoaded && (
+                            <GoogleMap
+                              mapContainerStyle={containerStyle}
+                              center={center}
+                              onLoad={onLoad}
+                              onUnmount={onUnmount}
+                            >
+                              <Marker position={center}></Marker>
+                              <></>
+                            </GoogleMap>
+                          )}
                         </div>
                       </div>
                     </form>
