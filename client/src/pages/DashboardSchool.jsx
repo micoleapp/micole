@@ -6,9 +6,14 @@ import StepButton from "@mui/material/StepButton";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
-import FormGroup from "@mui/material/FormGroup";
+import ListItemText from "@mui/material/ListItemText";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+
 const steps = [
   "Datos Principales",
   "Infraestructura",
@@ -26,7 +31,12 @@ import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsPlusCircleDotted, BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useEffect } from "react";
-import { getAllCategories } from "../redux/SchoolsActions";
+import {
+  getAllCategories,
+  getAllDepartaments,
+  getAllDistrits,
+  getAllProvincias,
+} from "../redux/SchoolsActions";
 import { useState } from "react";
 
 function DashboardSchool() {
@@ -34,10 +44,13 @@ function DashboardSchool() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const dispatch = useDispatch();
-  const { categories } = useSelector((state) => state.schools);
+  const { categories, provincias , distrits , departaments } = useSelector((state) => state.schools);
 
   useEffect(() => {
     dispatch(getAllCategories());
+    dispatch(getAllDepartaments());
+    dispatch(getAllDistrits());
+    dispatch(getAllProvincias());
   }, []);
 
   const totalSteps = () => {
@@ -88,10 +101,31 @@ function DashboardSchool() {
 
   const [categoryName, setCategoryName] = useState([]);
   const [levelName, setLevelName] = useState([]);
+
+  const [provincia, setProvincia] = useState([]);
+
+  const handleChangeProvincia = (event) => {
+    setProvincia(event.target.value);
+  };
+
+  
+  const [distrito, setDistrito] = useState([]);
+
+  const handleChangeDistrito = (event) => {
+    setDistrito(event.target.value);
+  };
+
+  
+  const [departamento, setDepartamento] = useState([]);
+
+  const handleChangeDepartamento = (event) => {
+    setDepartamento(event.target.value);
+  };
+
   return (
     <div className="flex">
-      <section className="leftshadow bg-white w-1/4 shadow-leftshadow items-center flex justify-center z-50">
-        <ul className="flex flex-col gap-4">
+      <section className="leftshadow bg-white w-1/4 shadow-leftshadow flex justify-center z-50">
+        <ul className="flex flex-col gap-4 absolute top-48">
           <button
             className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
             onClick={() => setPage(0)}
@@ -167,7 +201,7 @@ function DashboardSchool() {
                   {activeStep === 0 && (
                     <form className="flex flex-col gap-7">
                       <div className="flex flex-col">
-                        <label htmlFor="name" className="text-lg">
+                        <label htmlFor="name" className="text-lg font-medium">
                           Nombre del Colegio
                         </label>
                         <input
@@ -178,7 +212,10 @@ function DashboardSchool() {
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="description" className="text-lg">
+                        <label
+                          htmlFor="description"
+                          className="text-lg font-medium"
+                        >
                           Descripcion
                         </label>
                         <textarea
@@ -189,7 +226,10 @@ function DashboardSchool() {
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="propuesta" className="text-lg">
+                        <label
+                          htmlFor="propuesta"
+                          className="text-lg font-medium"
+                        >
                           Propuesta de Valor Educativa
                         </label>
                         <textarea
@@ -201,7 +241,10 @@ function DashboardSchool() {
                       </div>
                       <div className="flex flex-col gap-2">
                         <div className="flex flex-col">
-                          <label htmlFor="categoria" className="text-lg">
+                          <label
+                            htmlFor="categoria"
+                            className="text-lg font-medium"
+                          >
                             Categoria
                           </label>
                           <small>Puede marcar mas de una opción</small>
@@ -234,7 +277,10 @@ function DashboardSchool() {
                         </div>
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="director" className="text-lg">
+                        <label
+                          htmlFor="director"
+                          className="text-lg font-medium"
+                        >
                           Nombre del Director
                         </label>
                         <input
@@ -246,7 +292,10 @@ function DashboardSchool() {
                       </div>
                       <div className="grid grid-cols-3 gap-5">
                         <div className="flex flex-col">
-                          <label htmlFor="fundacion" className="text-lg">
+                          <label
+                            htmlFor="fundacion"
+                            className="text-lg font-medium"
+                          >
                             Año de Fundación
                           </label>
                           <input
@@ -257,7 +306,7 @@ function DashboardSchool() {
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="ruc" className="text-lg">
+                          <label htmlFor="ruc" className="text-lg font-medium">
                             N° RUC
                           </label>
                           <input
@@ -268,7 +317,7 @@ function DashboardSchool() {
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="ugel" className="text-lg">
+                          <label htmlFor="ugel" className="text-lg font-medium">
                             UGEL
                           </label>
                           <input
@@ -279,7 +328,7 @@ function DashboardSchool() {
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="area" className="text-lg">
+                          <label htmlFor="area" className="text-lg font-medium">
                             Área del campus (m2)
                           </label>
                           <input
@@ -290,7 +339,10 @@ function DashboardSchool() {
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="ingles" className="text-lg">
+                          <label
+                            htmlFor="ingles"
+                            className="text-lg font-medium"
+                          >
                             Hr/Semana idioma Inglés
                           </label>
                           <input
@@ -301,7 +353,10 @@ function DashboardSchool() {
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="alumnos" className="text-lg">
+                          <label
+                            htmlFor="alumnos"
+                            className="text-lg font-medium"
+                          >
                             Cantidad de Alumnos
                           </label>
                           <input
@@ -312,27 +367,149 @@ function DashboardSchool() {
                           />
                         </div>
                       </div>
-                      <div className="flex gap-5">
-                        {levels?.map((level) => (
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                onChange={(event, target) => {
-                                  if (target) {
-                                    setLevelName([...levelName, level.nombre]);
-                                  } else {
-                                    setLevelName(
-                                      levelName.filter(
-                                        (lev) => lev !== level.nombre
-                                      )
-                                    );
-                                  }
-                                }}
-                              />
-                            }
-                            label={level.nombre}
+                      <div className="flex flex-col">
+                        <div className="flex flex-col">
+                          <label
+                            htmlFor="alumnos"
+                            className="text-lg font-medium"
+                          >
+                            Niveles
+                          </label>
+                          <small>Puede marcar mas de una opción</small>
+                        </div>
+                        <div>
+                          {levels?.map((level) => (
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  onChange={(event, target) => {
+                                    if (target) {
+                                      setLevelName([
+                                        ...levelName,
+                                        level.nombre,
+                                      ]);
+                                    } else {
+                                      setLevelName(
+                                        levelName.filter(
+                                          (lev) => lev !== level.nombre
+                                        )
+                                      );
+                                    }
+                                  }}
+                                />
+                              }
+                              label={level.nombre}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex w-full flex-col gap-5">
+                        <h1 className="text-2xl font-medium">Ubicación</h1>
+                        <div className="flex w-full gap-5">
+                          <div className="flex flex-col w-full gap-3">
+                            <label className="text-lg font-medium">
+                              Departamento
+                            </label>
+                            <FormControl size="medium" className="w-full">
+                              <InputLabel id="demo-simple-select-standard-label">
+                                Selecciona un Departamento
+                              </InputLabel>
+                              <Select
+                                labelId="demo-simple-select-standard-label"
+                                id="demo-type-select-standard"
+                                value={departamento}
+                                onChange={handleChangeDepartamento}
+                                label="Selecciona una Provincia"
+                                className="bg-white"
+                              >
+                                {departaments.map((type, index) => (
+                                  <MenuItem
+                                    value={type.nombre_departamento}
+                                    key={type.index}
+                                  >
+                                    <ListItemText
+                                      primary={type.nombre_departamento}
+                                    />
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </div>
+                          <div className="flex flex-col w-full gap-3">
+                            <label className="text-lg font-medium">
+                              Provincia
+                            </label>
+
+                            <FormControl size="medium" className="w-full">
+                              <InputLabel id="demo-simple-select-standard-label">
+                                Selecciona una Provincia
+                              </InputLabel>
+                              <Select
+                                labelId="demo-simple-select-standard-label"
+                                id="demo-type-select-standard"
+                                value={provincia}
+                                onChange={handleChangeProvincia}
+                                label="Selecciona una Provincia"
+                                className="bg-white"
+                              >
+                                {provincias.map((type, index) => (
+                                  <MenuItem
+                                    value={type.nombre_provincia}
+                                    key={type.index}
+                                  >
+                                    <ListItemText
+                                      primary={type.nombre_provincia}
+                                    />
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </div>
+                          <div className="flex flex-col w-full gap-3">
+                            <label className="text-lg font-medium">
+                              Distrito
+                            </label>
+
+                            <FormControl size="medium" className="w-full">
+                              <InputLabel id="demo-simple-select-standard-label">
+                                Selecciona un Distrito
+                              </InputLabel>
+                              <Select
+                                labelId="demo-simple-select-standard-label"
+                                id="demo-type-select-standard"
+                                value={distrito}
+                                onChange={handleChangeDistrito}
+                                label="Selecciona una Provincia"
+                                className="bg-white"
+                              >
+                                {distrits.map((type, index) => (
+                                  <MenuItem
+                                    value={type.nombre_distrito}
+                                    key={type.index}
+                                  >
+                                    <ListItemText
+                                      primary={type.nombre_distrito}
+                                    />
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </div>
+                        </div>
+                        <div className="flex flex-col">
+                          <label
+                            htmlFor="direccion"
+                            className="text-lg font-medium"
+                          >
+                            Dirección
+                          </label>
+                          <input
+                            type="text"
+                            name="direccion"
+                            id="direccion"
+                            className="p-3 rounded-md border-2  outline-none"
                           />
-                        ))}
+                        </div>
                       </div>
                     </form>
                   )}
