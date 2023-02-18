@@ -13,7 +13,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { GoogleMap, useJsApiLoader, Marker , Autocomplete } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, MarkerF , Autocomplete } from "@react-google-maps/api";
+import { LoadScript } from '@react-google-maps/api';
 
 const steps = [
   "Datos Principales",
@@ -560,6 +561,7 @@ function DashboardSchool() {
                           >
                             Dirección
                           </label>
+                          <LoadScript libraries={["places"]} googleMapsApiKey="AIzaSyB9qHB47v8fOmLUiByTvWinUehYqALI6q4" id="google-map-script">
                           <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoadPlace}>
                           <input
                             type="text"
@@ -576,10 +578,12 @@ function DashboardSchool() {
                               onLoad={onLoad}
                               onUnmount={onUnmount}
                             >
-                              <Marker position={center}></Marker>
+                              {center.lat !== 0 && center.lng !== 0 && ( <MarkerF position={center}></MarkerF>)}
+                             
                               <></>
                             </GoogleMap>
                           )}
+                          </LoadScript>
                         </div>
                       </div>
                     </form>
