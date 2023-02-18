@@ -165,19 +165,18 @@ function DashboardSchool() {
     setAutocomplete(autocomplete);
   };
 
+  const [direc,setDirec] = useState(null);
+  const [latitud,setLatitud] = useState(null);
+  const [longitud,setLongitud] = useState(null);
+
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
       const place = autocomplete.getPlace();
-      console.log(place);
-      console.log({
-        direccion:
-          place.address_components[1].long_name +
-          " " +
-          place.address_components[0].long_name,
-      });
-      console.log({ nombre: place.name });
-      console.log({ latitude: place.geometry.location.lat() });
-      console.log({ longitud: place.geometry.location.lng() });
+      setDirec(place.address_components[1].long_name +
+        " " +
+        place.address_components[0].long_name)
+      setLatitud(place.geometry.location.lat())
+      setLongitud(place.geometry.location.lng())
       setCenter({
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng(),
@@ -562,6 +561,7 @@ function DashboardSchool() {
                           </div>
                         </div>
                         <div className="flex flex-col gap-5">
+    
                           <label
                             htmlFor="direccion"
                             className="text-lg font-medium"
@@ -570,18 +570,45 @@ function DashboardSchool() {
                           </label>
                           {isLoaded && (
                             <>
+                                                    <div className="flex w-full gap-5">
                               <Autocomplete
                                 onPlaceChanged={onPlaceChanged}
                                 onLoad={onLoadPlace}
                               >
                                 <input
                                   type="text"
-                                  name="direccion"
-                                  id="direccion"
                                   className="p-3 rounded-md border-2  outline-none"
                                   ref={direccion}
                                 />
                               </Autocomplete>
+                          <input
+                            type="text"
+                            name="direccion"
+                            id="direccion"
+                            className="p-3 rounded-md border-2 bg-white outline-none"
+                            placeholder="Dirección"
+                            value={direc}
+                            disabled
+                          />
+                                                    <input
+                            type="text"
+                            name="lat"
+                            id="lat"
+                            className="p-3 rounded-md border-2 bg-white outline-none"
+                            placeholder="Latitud"
+                            value={latitud}
+                            disabled
+                          />
+                                                    <input
+                            type="text"
+                            name="lng"
+                            id="lng"
+                            className="p-3 rounded-md border-2 bg-white outline-none"
+                            placeholder="Longitud"
+                            value={longitud}
+                            disabled
+                          />
+                              </div>
                               <GoogleMap
                                 mapContainerStyle={containerStyle}
                                 center={center}

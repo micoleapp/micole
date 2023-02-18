@@ -18,7 +18,7 @@ function Maps() {
     lat: 0,
     lng: 0
   })
-  
+    
   React.useEffect(()=>{
     setCenter({  lat: -12.0939685,
       lng: -76.9501867})

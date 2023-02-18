@@ -8,7 +8,7 @@ import ContentLoader from "react-content-loader";
 import { Rating, Typography, Pagination, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   faCamera,
   faPlayCircle,
@@ -48,17 +48,13 @@ function valuetext2(value) {
 
 const minDistance = 10;
 function ListSchool() {
-  /*
- 
-  para agarrar los querys
+
 
   const location = useLocation();
 
   const params = new URLSearchParams(location.search);
 
-  console.log(params.get("distrito"));
-
-  */
+  const [distritParams, setDistritParams] = React.useState(params.get("distrito"))
 
   const [distritName, setDistritName] = React.useState([]);
 
@@ -196,14 +192,21 @@ function ListSchool() {
                     <FormControlLabel
                       control={
                         <Checkbox
+                        
+                        checked={
+                          Number(distritParams) === distrit.id ||
+                          distritName.includes(distrit.nombre_distrito)
+                        }
                           onChange={(event, target) => {
                             if (target) {
+                              setDistritParams(distrit.id);
                               setDistritName([
                                 ...distritName,
                                 distrit.nombre_distrito,
                                
                               ]);
                             } else {
+                              setDistritParams(null);
                               setDistritName(
                                 distritName.filter(
                                   (dist) => dist !== distrit.nombre_distrito
