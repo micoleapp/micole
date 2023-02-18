@@ -1,7 +1,9 @@
 const { Router } = require("express");
 const router = Router();
 const {
+  Pais,
   Colegio,
+  Categoria,
   Idioma,
   Departamento,
   Provincia,
@@ -22,20 +24,28 @@ router.get("/", async (req, res) => {
       include: [
         { model: Idioma, attributes: ["nombre_idioma", "id"] },
         {
+          model: Pais,
+          attributes: ["id", "nombre_pais"],
+        },
+        {
           model: Departamento,
-          attributes: ["nombre_departamento"],
+          attributes: ["id", "nombre_departamento"],
         },
         {
           model: Provincia,
-          attributes: ["nombre_provincia"],
+          attributes: ["id", "nombre_provincia"],
         },
         {
           model: Distrito,
-          attributes: ["nombre_distrito"],
+          attributes: ["id", "nombre_distrito"],
         },
         {
           model: Plan_Pago,
-          attributes: ["nombre_plan_pago"],
+          attributes: ["id", "nombre_plan_pago"],
+        },
+        {
+          model: Categoria,
+          attributes: ["id", "nombre_categoria"],
         },
       ],
       attributes: [
@@ -68,20 +78,28 @@ router.get("/:Colegio_id", async (req, res) => {
       include: [
         { model: Idioma, attributes: ["nombre_idioma", "id"] },
         {
+          model: Pais,
+          attributes: ["id", "nombre_pais"],
+        },
+        {
           model: Departamento,
           attributes: ["nombre_departamento"],
         },
         {
           model: Provincia,
-          attributes: ["nombre_provincia"],
+          attributes: ["id", "nombre_provincia"],
         },
         {
           model: Distrito,
-          attributes: ["nombre_distrito"],
+          attributes: ["id", "nombre_distrito"],
         },
         {
           model: Plan_Pago,
-          attributes: ["nombre_plan_pago"],
+          attributes: ["id", "nombre_plan_pago"],
+        },
+        {
+          model: Categoria,
+          attributes: ["id", "nombre_categoria"],
         },
       ],
       attributes: [
