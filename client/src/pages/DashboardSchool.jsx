@@ -13,8 +13,12 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { GoogleMap, useJsApiLoader, MarkerF , Autocomplete } from "@react-google-maps/api";
-import { LoadScript } from '@react-google-maps/api';
+import {
+  GoogleMap,
+  useJsApiLoader,
+  MarkerF,
+  Autocomplete,
+} from "@react-google-maps/api";
 
 const steps = [
   "Datos Principales",
@@ -133,12 +137,12 @@ function DashboardSchool() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyB9qHB47v8fOmLUiByTvWinUehYqALI6q4",
-    libraries: ['places']
+    libraries: ["places"],
   });
 
   const [center, setCenter] = React.useState({
-    lat: 0,
-    lng: 0,
+    lat: -12.046374,
+    lng: -77.042793,
   });
 
   const [map, setMap] = React.useState(null);
@@ -149,36 +153,39 @@ function DashboardSchool() {
     setMap(map);
   }, []);
 
-  const onChange = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    console.log(map);
-  }, []);
-
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null);
   }, []);
 
-  const direccion = useRef()
+  const direccion = useRef();
 
-  const [autocomplete,setAutocomplete] = useState(null)
+  const [autocomplete, setAutocomplete] = useState(null);
 
   const onLoadPlace = (autocomplete) => {
-    setAutocomplete(autocomplete)
-  }
+    setAutocomplete(autocomplete);
+  };
 
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
-      const place = autocomplete.getPlace()
-      console.log(place)
-      console.log({direccion:place.address_components[1].long_name+" "+place.address_components[0].long_name})
-      console.log({nombre:place.name})
-      console.log({latitude:place.geometry.location.lat()})
-      console.log({longitud:place.geometry.location.lng()})
-      setCenter({lat:place.geometry.location.lat(),lng:place.geometry.location.lng()})
+      const place = autocomplete.getPlace();
+      console.log(place);
+      console.log({
+        direccion:
+          place.address_components[1].long_name +
+          " " +
+          place.address_components[0].long_name,
+      });
+      console.log({ nombre: place.name });
+      console.log({ latitude: place.geometry.location.lat() });
+      console.log({ longitud: place.geometry.location.lng() });
+      setCenter({
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      });
     } else {
       console.log("Autocomplete is not loaded yet!");
     }
-  }
+  };
 
   return (
     <div className="flex">
@@ -561,29 +568,34 @@ function DashboardSchool() {
                           >
                             Dirección
                           </label>
-                          <LoadScript libraries={["places"]} googleMapsApiKey="AIzaSyB9qHB47v8fOmLUiByTvWinUehYqALI6q4" id="google-map-script">
-                          <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoadPlace}>
-                          <input
-                            type="text"
-                            name="direccion"
-                            id="direccion"
-                            className="p-3 rounded-md border-2  outline-none"
-                            ref={direccion}
-                          />
-                          </Autocomplete>
                           {isLoaded && (
-                            <GoogleMap
-                              mapContainerStyle={containerStyle}
-                              center={center}
-                              onLoad={onLoad}
-                              onUnmount={onUnmount}
-                            >
-                              {center.lat !== 0 && center.lng !== 0 && ( <MarkerF position={center}></MarkerF>)}
-                             
-                              <></>
-                            </GoogleMap>
+                            <>
+                              <Autocomplete
+                                onPlaceChanged={onPlaceChanged}
+                                onLoad={onLoadPlace}
+                              >
+                                <input
+                                  type="text"
+                                  name="direccion"
+                                  id="direccion"
+                                  className="p-3 rounded-md border-2  outline-none"
+                                  ref={direccion}
+                                />
+                              </Autocomplete>
+                              <GoogleMap
+                                mapContainerStyle={containerStyle}
+                                center={center}
+                                onLoad={onLoad}
+                                onUnmount={onUnmount}
+                              >
+                                {center.lat !== 0 && center.lng !== 0 && (
+                                  <MarkerF position={center}></MarkerF>
+                                )}
+
+                                <></>
+                              </GoogleMap>{" "}
+                            </>
                           )}
-                          </LoadScript>
                         </div>
                       </div>
                     </form>
