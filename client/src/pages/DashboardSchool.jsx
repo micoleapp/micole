@@ -20,6 +20,8 @@ import {
   Autocomplete,
 } from "@react-google-maps/api";
 
+const libraries = ["places"];
+
 const steps = [
   "Datos Principales",
   "Infraestructura",
@@ -134,10 +136,12 @@ function DashboardSchool() {
     setDepartamento(event.target.value);
   };
 
+  let libRef = React.useRef(libraries);
+
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyB9qHB47v8fOmLUiByTvWinUehYqALI6q4",
-    libraries: ["places"],
+    libraries: libRef.current,
   });
 
   const [center, setCenter] = React.useState({
@@ -165,26 +169,57 @@ function DashboardSchool() {
     setAutocomplete(autocomplete);
   };
 
-  const [direc,setDirec] = useState(null);
-  const [latitud,setLatitud] = useState(null);
-  const [longitud,setLongitud] = useState(null);
+  const [direc, setDirec] = useState(null);
+  const [latitud, setLatitud] = useState(null);
+  const [longitud, setLongitud] = useState(null);
 
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
       const place = autocomplete.getPlace();
-      setDirec(place.address_components[1].long_name +
-        " " +
-        place.address_components[0].long_name)
-      setLatitud(place.geometry.location.lat())
-      setLongitud(place.geometry.location.lng())
+      setDirec(
+        place.address_components[1].long_name +
+          " " +
+          place.address_components[0].long_name
+      );
+      setLatitud(place.geometry.location.lat());
+      setLongitud(place.geometry.location.lng());
       setCenter({
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng(),
       });
+      setDatosPrincipales({
+        ...datosPrincipales,
+        direccion: place.address_components[1].long_name + " " + place.address_components[0].long_name,
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      })
     } else {
       console.log("Autocomplete is not loaded yet!");
     }
   };
+
+  const [datosPrincipales, setDatosPrincipales] = useState({
+    nombreColegio: "",
+    descripcion: "",
+    propuesta: "",
+    categoria: [],
+    nombreDirector: "",
+    fundacion: null,
+    ruc: null,
+    ugel: null,
+    area: null,
+    ingles: null,
+    alumnos: null,
+    niveles: [],
+    departamento: {},
+    provincia: {},
+    distrito: {},
+    direccion: "",
+    lat: 0,
+    lng: 0,
+  });
+
+  console.log(datosPrincipales);
 
   return (
     <div className="flex">
@@ -265,28 +300,45 @@ function DashboardSchool() {
                   {activeStep === 0 && (
                     <form className="flex flex-col gap-7">
                       <div className="flex flex-col">
-                        <label htmlFor="name" className="text-lg font-medium">
+                        <label
+                          htmlFor="nombreColegio"
+                          className="text-lg font-medium"
+                        >
                           Nombre del Colegio
                         </label>
                         <input
                           type="text"
-                          name="name"
-                          id="name"
+                          name="nombreColegio"
+                          id="nombreColegio"
                           className="p-3 rounded-md border-2  outline-none"
+                          value={datosPrincipales.nombreColegio}
+                          onChange={(e) =>
+                            setDatosPrincipales({
+                              ...datosPrincipales,
+                              nombreColegio: e.target.value,
+                            })
+                          }
                         />
                       </div>
                       <div className="flex flex-col">
                         <label
-                          htmlFor="description"
+                          htmlFor="descripcion"
                           className="text-lg font-medium"
                         >
                           Descripcion
                         </label>
                         <textarea
-                          name="description"
-                          id="description"
+                          name="descripcion"
+                          id="descripcion"
                           className="p-3 rounded-md border-2 outline-none"
                           rows={5}
+                          onChange={(e) =>
+                            setDatosPrincipales({
+                              ...datosPrincipales,
+                              descripcion: e.target.value,
+                            })
+                          }
+                          value={datosPrincipales.descripcion}
                         />
                       </div>
                       <div className="flex flex-col">
@@ -301,6 +353,13 @@ function DashboardSchool() {
                           id="propuesta"
                           className="p-3 rounded-md border-2 outline-none"
                           rows={5}
+                          onChange={(e) =>
+                            setDatosPrincipales({
+                              ...datosPrincipales,
+                              propuesta: e.target.value,
+                            })
+                          }
+                          value={datosPrincipales.propuesta}
                         />
                       </div>
                       <div className="flex flex-col gap-2">
@@ -318,19 +377,18 @@ function DashboardSchool() {
                             <FormControlLabel
                               control={
                                 <Checkbox
+                                  checked={datosPrincipales.categoria.includes(category.nombre_categoria)}
                                   onChange={(event, target) => {
-                                    if (target) {
-                                      setCategoryName([
-                                        ...categoryName,
-                                        category.nombre_categoria,
-                                      ]);
-                                    } else {
-                                      setCategoryName(
-                                        categoryName.filter(
-                                          (cat) =>
-                                            cat !== category.nombre_categoria
-                                        )
-                                      );
+                                    if(target) {
+                                      setDatosPrincipales({
+                                        ...datosPrincipales,
+                                        categoria: [...datosPrincipales.categoria, category.nombre_categoria]
+                                      })
+                                    } else{
+                                      setDatosPrincipales({
+                                        ...datosPrincipales,
+                                        categoria: datosPrincipales.categoria.filter(cat => cat !== category.nombre_categoria)
+                                      })
                                     }
                                   }}
                                 />
@@ -352,6 +410,13 @@ function DashboardSchool() {
                           name="director"
                           id="director"
                           className="p-3 rounded-md border-2  outline-none"
+                          onChange={(e) =>
+                            setDatosPrincipales({
+                              ...datosPrincipales,
+                              nombreDirector: e.target.value,
+                            })
+                          }
+                          value={datosPrincipales.nombreDirector}
                         />
                       </div>
                       <div className="grid grid-cols-3 gap-5">
@@ -363,10 +428,19 @@ function DashboardSchool() {
                             Año de Fundación
                           </label>
                           <input
-                            type="text"
+                            type="number"
                             name="fundacion"
                             id="fundacion"
                             className="p-3 rounded-md border-2  outline-none"
+                            onChange={(e) =>
+                              setDatosPrincipales({
+                                ...datosPrincipales,
+                                fundacion: Number(e.target.value),
+                              })
+                            }
+                            value={datosPrincipales.fundacion}
+                            pattern="^(17|20)\d{2}$"
+                            title="Solo se permiten numeros, 4 caracteres y un año superior a 1700"
                           />
                         </div>
                         <div className="flex flex-col">
@@ -374,10 +448,19 @@ function DashboardSchool() {
                             N° RUC
                           </label>
                           <input
-                            type="text"
+                            type="number"
                             name="ruc"
                             id="ruc"
                             className="p-3 rounded-md border-2  outline-none"
+                            onChange={(e) =>
+                              setDatosPrincipales({
+                                ...datosPrincipales,
+                                ruc: Number(e.target.value),
+                              })
+                            }
+                            value={datosPrincipales.ruc}
+                            pattern="^[0-9]+"
+                            title="Solo se permiten numeros"
                           />
                         </div>
                         <div className="flex flex-col">
@@ -385,10 +468,19 @@ function DashboardSchool() {
                             UGEL
                           </label>
                           <input
-                            type="text"
+                            type="number"
                             name="ugel"
                             id="ugel"
                             className="p-3 rounded-md border-2  outline-none"
+                            onChange={(e) =>
+                              setDatosPrincipales({
+                                ...datosPrincipales,
+                                ugel: Number(e.target.value),
+                              })
+                            }
+                            value={datosPrincipales.ugel}
+                            pattern="^[0-9]+"
+                            title="Solo se permiten numeros"
                           />
                         </div>
                         <div className="flex flex-col">
@@ -396,10 +488,19 @@ function DashboardSchool() {
                             Área del campus (m2)
                           </label>
                           <input
-                            type="text"
+                            type="number"
                             name="area"
                             id="area"
                             className="p-3 rounded-md border-2  outline-none"
+                            pattern="^[0-9]+"
+                            title="Solo se permiten numeros"
+                            onChange={(e) =>
+                              setDatosPrincipales({
+                                ...datosPrincipales,
+                                area: Number(e.target.value),
+                              })
+                            }
+                            value={datosPrincipales.area}
                           />
                         </div>
                         <div className="flex flex-col">
@@ -410,10 +511,19 @@ function DashboardSchool() {
                             Hr/Semana idioma Inglés
                           </label>
                           <input
-                            type="text"
+                            type="number"
                             name="ingles"
                             id="ingles"
                             className="p-3 rounded-md border-2  outline-none"
+                            pattern="^[0-9]+"
+                            title="Solo se permiten numeros"
+                            onChange={(e) =>
+                              setDatosPrincipales({
+                                ...datosPrincipales,
+                                ingles: Number(e.target.value),
+                              })
+                            }
+                            value={datosPrincipales.ingles}
                           />
                         </div>
                         <div className="flex flex-col">
@@ -424,10 +534,19 @@ function DashboardSchool() {
                             Cantidad de Alumnos
                           </label>
                           <input
-                            type="text"
+                            type="number"
                             name="alumnos"
                             id="alumnos"
                             className="p-3 rounded-md border-2  outline-none"
+                            pattern="^[0-9]+"
+                            title="Solo se permiten numeros"
+                            onChange={(e) =>
+                              setDatosPrincipales({
+                                ...datosPrincipales,
+                                alumnos: Number(e.target.value),
+                              })
+                            }
+                            value={datosPrincipales.alumnos}
                           />
                         </div>
                       </div>
@@ -446,20 +565,19 @@ function DashboardSchool() {
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  onChange={(event, target) => {
-                                    if (target) {
-                                      setLevelName([
-                                        ...levelName,
-                                        level.nombre,
-                                      ]);
-                                    } else {
-                                      setLevelName(
-                                        levelName.filter(
-                                          (lev) => lev !== level.nombre
-                                        )
-                                      );
-                                    }
-                                  }}
+                                onChange={(event, target) => {
+                                  if(target) {
+                                    setDatosPrincipales({
+                                      ...datosPrincipales,
+                                      niveles: [...datosPrincipales.niveles, level.nombre]
+                                    })
+                                  } else{
+                                    setDatosPrincipales({
+                                      ...datosPrincipales,
+                                      niveles: datosPrincipales.niveles.filter(cat => cat !== level.nombre)
+                                    })
+                                  }
+                                }}
                                 />
                               }
                               label={level.nombre}
@@ -482,13 +600,20 @@ function DashboardSchool() {
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-type-select-standard"
                                 value={departamento}
-                                onChange={handleChangeDepartamento}
+                                onChange={(e)=>{
+                                  setDepartamento(e.target.value)
+                                  setDatosPrincipales({
+                                    ...datosPrincipales,
+                                    departamento: e.target.value
+                                  })
+                                }}
                                 label="Selecciona una Provincia"
                                 className="bg-white"
+                                defaultValue={""}
                               >
                                 {departaments.map((type, index) => (
                                   <MenuItem
-                                    value={type.nombre_departamento}
+                                    value={type}
                                     key={type.index}
                                   >
                                     <ListItemText
@@ -512,13 +637,20 @@ function DashboardSchool() {
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-type-select-standard"
                                 value={provincia}
-                                onChange={handleChangeProvincia}
+                                onChange={(e)=>{
+                                  setProvincia(e.target.value)
+                                  setDatosPrincipales({
+                                    ...datosPrincipales,
+                                    provincia: e.target.value
+                                  })
+                                }}
                                 label="Selecciona una Provincia"
                                 className="bg-white"
+                                defaultValue={""}
                               >
                                 {provincias.map((type, index) => (
                                   <MenuItem
-                                    value={type.nombre_provincia}
+                                    value={type}
                                     key={type.index}
                                   >
                                     <ListItemText
@@ -542,13 +674,20 @@ function DashboardSchool() {
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-type-select-standard"
                                 value={distrito}
-                                onChange={handleChangeDistrito}
+                                onChange={(e)=>{
+                                  setDistrito(e.target.value)
+                                  setDatosPrincipales({
+                                    ...datosPrincipales,
+                                    distrito: e.target.value
+                                  })
+                                }}
                                 label="Selecciona una Provincia"
                                 className="bg-white"
+                                defaultValue={""}
                               >
                                 {distrits.map((type, index) => (
                                   <MenuItem
-                                    value={type.nombre_distrito}
+                                    value={type}
                                     key={type.index}
                                   >
                                     <ListItemText
@@ -561,7 +700,6 @@ function DashboardSchool() {
                           </div>
                         </div>
                         <div className="flex flex-col gap-5">
-    
                           <label
                             htmlFor="direccion"
                             className="text-lg font-medium"
@@ -570,44 +708,62 @@ function DashboardSchool() {
                           </label>
                           {isLoaded && (
                             <>
-                                                    <div className="flex w-full gap-5">
-                              <Autocomplete
-                                onPlaceChanged={onPlaceChanged}
-                                onLoad={onLoadPlace}
-                              >
+                              <div className="flex w-full gap-5">
+                                <Autocomplete
+                                  onPlaceChanged={onPlaceChanged}
+                                  onLoad={onLoadPlace}
+                                >
+                                  <input
+                                    type="text"
+                                    className="p-3 rounded-md border-2  outline-none"
+                                    ref={direccion}
+                                  />
+                                </Autocomplete>
                                 <input
                                   type="text"
-                                  className="p-3 rounded-md border-2  outline-none"
-                                  ref={direccion}
+                                  name="direccion"
+                                  id="direccion"
+                                  className="p-3 rounded-md border-2 bg-white outline-none"
+                                  placeholder="Dirección"
+                                  value={direc}
+                                  disabled
+                                  onChange={(e) => {
+                                    setDatosPrincipales({
+                                      ...datosPrincipales,
+                                      direccion: e.target.value,
+                                    });
+                                  }}
                                 />
-                              </Autocomplete>
-                          <input
-                            type="text"
-                            name="direccion"
-                            id="direccion"
-                            className="p-3 rounded-md border-2 bg-white outline-none"
-                            placeholder="Dirección"
-                            value={direc}
-                            disabled
-                          />
-                                                    <input
-                            type="text"
-                            name="lat"
-                            id="lat"
-                            className="p-3 rounded-md border-2 bg-white outline-none"
-                            placeholder="Latitud"
-                            value={latitud}
-                            disabled
-                          />
-                                                    <input
-                            type="text"
-                            name="lng"
-                            id="lng"
-                            className="p-3 rounded-md border-2 bg-white outline-none"
-                            placeholder="Longitud"
-                            value={longitud}
-                            disabled
-                          />
+                                <input
+                                  type="text"
+                                  name="lat"
+                                  id="lat"
+                                  className="p-3 rounded-md border-2 bg-white outline-none"
+                                  placeholder="Latitud"
+                                  value={latitud}
+                                  disabled
+                                  onChange={(e) => {
+                                    setDatosPrincipales({
+                                      ...datosPrincipales,
+                                      lat: e.target.value,
+                                    });
+                                  }}
+                                />
+                                <input
+                                  type="text"
+                                  name="lng"
+                                  id="lng"
+                                  className="p-3 rounded-md border-2 bg-white outline-none"
+                                  placeholder="Longitud"
+                                  value={longitud}
+                                  disabled
+                                  onChange={(e) => {
+                                    setDatosPrincipales({
+                                      ...datosPrincipales,
+                                      lng: e.target.value,
+                                    });
+                                  }}
+                                />
                               </div>
                               <GoogleMap
                                 mapContainerStyle={containerStyle}
