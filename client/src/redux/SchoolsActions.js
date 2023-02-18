@@ -1,5 +1,12 @@
 import axios from 'axios'
-import {getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,filterByRatings,getDistrits} from './SchoolsSlice'
+import {getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,filterByRatings,getDistrits,getCategories} from './SchoolsSlice'
+
+export const getAllCategories = () => (dispatch) => {
+  dispatch(isLoading())
+  axios.get("/categorias")
+  .then(res=>dispatch(getCategories(res.data)))
+  .catch(err=>dispatch(getError(err.message)))
+}
 
 export const getAllDistrits = () => (dispatch) => {
   dispatch(isLoading())

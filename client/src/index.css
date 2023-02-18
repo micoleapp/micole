@@ -67,3 +67,8 @@
     border-radius: 10px;  
   }
   
+.leftshadow{
+  box-shadow: 3px 3px 19px -2px rgba(0,0,0,0.38);
+  -webkit-box-shadow: 2px 2px 15px -2px rgba(0,0,0,0.38);
+  -moz-box-shadow: 2px 2px 15px -2px rgba(0,0,0,0.38);
+}

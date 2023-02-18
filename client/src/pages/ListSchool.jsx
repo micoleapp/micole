@@ -375,11 +375,12 @@ function ListSchool() {
                       <div className="flex absolute gap-5 text-white bottom-3 left-3 bg-black/50 p-2 rounded-md">
                         <span className="flex hover:scale-110 duration-200 cursor-pointer items-center gap-2">
                           <FontAwesomeIcon size="lg" icon={faCamera} />
-                          22
+                          {/*{JSON.parse(school.galeria_imagenes).length}*/}
                         </span>
                         <span className="flex hover:scale-110 duration-200 cursor-pointer items-center gap-2">
                           {" "}
-                          <FontAwesomeIcon size="lg" icon={faPlayCircle} />9
+                          <FontAwesomeIcon size="lg" icon={faPlayCircle} />
+                          {/*{JSON.parse(school.video_url).length}*/}
                         </span>
                       </div>
                     </div>
@@ -388,7 +389,7 @@ function ListSchool() {
                         <div className="flex flex-col gap-4">
                           <div className="flex flex-col w-fit gap-2">
                             <h1 className="font-semibold text-lg">
-                              {school.nombre_escuela}{" "}
+                              {school.nombre_colegio}{" "}
                             </h1>
                             <small className="text-gray-400">
                               {school.direccion}{" "}

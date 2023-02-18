@@ -9,6 +9,7 @@ export const schoolsSlice = createSlice({
   initialState: {
     allschools: [],
     departaments: [],
+    categories: [],
     distrits: [],
     oneSchool: {},
     error: "",
@@ -16,6 +17,11 @@ export const schoolsSlice = createSlice({
     loading: false
   },
   reducers : {
+    getCategories : (state,action) => {
+      state.categories = action.payload,
+      state.loading = false,
+      state.error = ""
+    },
     filterByRatings : (state,action) => {
       state.rating = action.payload,
       state.loading = false,
@@ -56,6 +62,6 @@ export const schoolsSlice = createSlice({
   }
 })
 
-export const {getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,filterByRatings,getDistrits} = schoolsSlice.actions
+export const {getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,filterByRatings,getDistrits,getCategories} = schoolsSlice.actions
 
 export default schoolsSlice.reducer
