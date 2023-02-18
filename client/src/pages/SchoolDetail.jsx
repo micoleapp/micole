@@ -35,93 +35,29 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers";
 
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import { borderRadius } from "@mui/system";
-
-function srcset(image, size, rows = 1, cols = 1) {
-  return {
-    src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${
-      size * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
-  };
-}
-
-function QuiltedImageList({ gallery, setImage }) {
-  console.log(gallery)
+function QuiltedImageList({ firstImage, gallery, setImage }) {
+  console.log(gallery);
   return (
-    <ImageList
-      sx={{ width: "100%", height: 450, margin: "auto" }}
-      variant="quilted"
-      cols={4}
-      rowHeight={121}
-    >
-      {gallery.map((item, index) => (
-        <ImageListItem key={index}>
+    <div className="w-full px-4">
+      <img
+        src={firstImage}
+        alt=""
+        onClick={() => setImage(firstImage)}
+        className="cursor-pointer rounded-md"
+      />
+      <div className="flex gap-5 mt-2 overflow-x-scroll w-full pb-2">
+        {gallery.map((item, index) => (
           <img
-            {...srcset(item, 121)}
-            loading="lazy"
-            className="cursor-pointer z-25 object-cover rounded-md"
+            src={item}
+            className="cursor-pointer z-25 object-cover h-24 rounded-md"
             onClick={() => setImage(item)}
           />
-        </ImageListItem>
-      ))}
-    </ImageList>
+        ))}
+      </div>
+    </div>
   );
 }
 
-const itemData = [
-  {
-    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
-    title: "Camera",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
-    title: "Hats",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey",
-    author: "@arwinneil",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
-    title: "Basketball",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
-    title: "Fern",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
-    title: "Mushrooms",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
-    title: "Sea star",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6",
-    title: "Bike",
-  },
-];
 function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool } = useSelector((state) => state.schools);
@@ -210,6 +146,13 @@ function SchoolDetail() {
     });
   };
 
+  const [ratingNivel, setRatingNivel] = useState(0);
+  const [ratingAtencion, setRatingAtencion] = useState(0);
+  const [ratingInfraestructura, setRatingInfraestructura] = useState(0);
+  const [ratingUbicacion, setRatingUbicacion] = useState(0);
+  const [ratingLimpieza, setRatingLimpieza] = useState(0);
+  const [ratingPrecio, setRatingPrecio] = useState(0);
+
   return (
     <div className="bg-[#f6f7f8]">
       <img
@@ -271,7 +214,9 @@ function SchoolDetail() {
                   color="rgb(156 163 175)"
                   icon={faUsers}
                 />
-                <span className="text-sm text-gray-400">{oneSchool.numero_estudiantes} Alumnos</span>
+                <span className="text-sm text-gray-400">
+                  {oneSchool.numero_estudiantes} Alumnos
+                </span>
               </div>
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
@@ -295,7 +240,9 @@ function SchoolDetail() {
                   color="rgb(156 163 175)"
                   icon={faCalendar}
                 />
-                <span className="text-sm text-gray-400">Fundación: {oneSchool.fecha_fundacion} </span>
+                <span className="text-sm text-gray-400">
+                  Fundación: {oneSchool.fecha_fundacion}{" "}
+                </span>
               </div>
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
@@ -303,7 +250,9 @@ function SchoolDetail() {
                   color="rgb(156 163 175)"
                   icon={faSchool}
                 />
-                <span className="text-sm text-gray-400">UGEL: {oneSchool.ugel} </span>
+                <span className="text-sm text-gray-400">
+                  UGEL: {oneSchool.ugel}{" "}
+                </span>
               </div>
             </div>
             <div>
@@ -316,9 +265,7 @@ function SchoolDetail() {
           <section className="left mt-5 flex flex-col gap-8 w-full">
             <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md">
               <h2 className="font-semibold text-xl">Descripcion</h2>
-              <p className="text-black/60 text-base">
-                {oneSchool.descripcion}
-              </p>
+              <p className="text-black/60 text-base">{oneSchool.descripcion}</p>
             </div>
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
               <h2 className="font-semibold text-xl">Ubicacion</h2>
@@ -893,7 +840,13 @@ function SchoolDetail() {
             </div>
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Galeria</h2>
-              {oneSchool.hasOwnProperty("galeria_fotos") && <QuiltedImageList gallery={JSON.parse(oneSchool.galeria_fotos)} setImage={setImage} />}  
+              {oneSchool.hasOwnProperty("galeria_fotos") && (
+                <QuiltedImageList
+                  firstImage={oneSchool.primera_imagen}
+                  gallery={JSON.parse(oneSchool.galeria_fotos)}
+                  setImage={setImage}
+                />
+              )}
               <div
                 className={`fixed top-0 left-0 z-50 bg-black/90 w-full h-full ${
                   image ? "block" : "hidden"
@@ -912,6 +865,127 @@ function SchoolDetail() {
                 />
               </div>
             </div>
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
+              <h2 className="font-semibold text-xl">Video</h2>
+              <video width="750" height="500" controls className="rounded-md">
+                <source src={oneSchool.video_url} type="video/mp4" />
+              </video>
+            </div>
+            <form className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
+              <h2 className="font-semibold text-xl">Deja tu comentario</h2>
+              <div className="flex flex-col lg:grid grid-cols-2 text-black/70">
+                <div>
+                  <h2>Nivel de enseñanza</h2>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingNivel}
+                    max={10}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setRatingNivel(newValue);
+                    }}
+                  />
+                </div>
+                <div>
+                  <h2>Atención al cliente</h2>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingAtencion}
+                    max={10}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setRatingAtencion(newValue);
+                    }}
+                  />
+                </div>
+                <div>
+                  <h2>Infraestructura</h2>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingInfraestructura}
+                    max={10}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setRatingInfraestructura(newValue);
+                    }}
+                  />
+                </div>
+                <div>
+                  <h2>Ubicación</h2>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingUbicacion}
+                    max={10}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setRatingUbicacion(newValue);
+                    }}
+                  />
+                </div>
+                <div>
+                  <h2>Limpieza</h2>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingLimpieza}
+                    max={10}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setRatingLimpieza(newValue);
+                    }}
+                  />
+                </div>
+                <div>
+                  <h2>Precio</h2>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingPrecio}
+                    max={10}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setRatingPrecio(newValue);
+                    }}
+                  />
+                </div>
+              </div>
+                <div className="flex items-center">
+
+                <h2>Total: </h2>
+                <Rating
+                  name="simple-controlled"
+                  value={(ratingNivel + ratingAtencion + ratingInfraestructura + ratingUbicacion + ratingLimpieza + ratingPrecio)/6}
+                  max={10}
+                  precision={0.5}
+                  onChange={(event, newValue) => {
+                    setRatingPrecio(newValue);
+                  }}
+                />
+                
+                </div>
+                <div className="flex w-full gap-5 justify-between">
+                  <input
+                    name="name"
+                    type="text"
+                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    placeholder="Nombre"
+                  />
+                  <input
+                    name="email"
+                    type="email"
+                    pattern="[0-9]{8,12}"
+                    title="Solo se permiten numeros y entre 8 y 10 caracteres"
+                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    placeholder="Email"
+                  />
+                </div>
+                <textarea
+                  name="comentario"
+                  type="text"
+                  className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                  placeholder="Escribe tu comentario"
+                  rows={5}
+                />
+                <button type="submit" className="p-3 bg-[#0061dd] text-white rounded-md hover:bg-[#0759c3] duration-300">Enviar reseña</button>
+            </form>
           </section>
         </main>
       </div>
