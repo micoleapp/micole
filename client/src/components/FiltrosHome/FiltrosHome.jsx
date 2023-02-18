@@ -15,7 +15,7 @@ import { InputLabel } from "@mui/material";
 import { useSelector } from "react-redux";
 
 const Ingreso2 = ["2023", "2024", "2025"];
-//className="text-xs"
+
 function FiltrosHome() {
     const [OpenFilter, setOpenFilter] = useState(false);
     const [Ingreso, setIngreso] = useState(false);
