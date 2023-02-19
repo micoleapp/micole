@@ -78,6 +78,8 @@ const {
   Categoria,
   Review,
   User,
+  Vacante,
+  Grado
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -153,6 +155,20 @@ Categoria.belongsToMany(Colegio, {
   through: "Colegio_Categoria",
   timestamps: false,
 });
+
+Colegio.hasMany(Vacante, {
+  foreignKey: 'ColegioId',
+});
+Vacante.belongsTo(Colegio, {
+  foreignKey: 'ColegioId',
+});
+Grado.hasMany(Vacante, {
+  foreignKey: 'GradoId',
+});
+Vacante.belongsTo(Grado, {
+  foreignKey: 'GradoId',
+});
+
 
 Infraestructura_tipo.hasMany(Infraestructura);
 Infraestructura.belongsTo(Infraestructura_tipo);
