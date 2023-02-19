@@ -19,22 +19,16 @@ import {
   MarkerF,
   Autocomplete,
 } from "@react-google-maps/api";
+import {
+  Administrativa,
+  Artistica,
+  Deportiva,
+  Enseñanza,
+  Laboratorios,
+} from "../MockupInfo/Infraestructura";
+import { levels } from "../MockupInfo/Niveles";
+import { steps } from "../MockupInfo/Pasos";
 
-const libraries = ["places"];
-
-const steps = [
-  "Datos Principales",
-  "Infraestructura",
-  "Acreditaciones",
-  "Multimedia",
-];
-const levels = [
-  { nombre: "Preescolar" },
-  { nombre: "Primaria" },
-  { nombre: "Secundaria" },
-  { nombre: "Bachillerato" },
-  { nombre: "Universidad" },
-];
 import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsPlusCircleDotted, BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
@@ -47,6 +41,8 @@ import {
 } from "../redux/SchoolsActions";
 import { useState } from "react";
 import { useRef } from "react";
+
+const libraries = ["places"];
 
 const containerStyle = {
   width: "100%",
@@ -189,10 +185,13 @@ function DashboardSchool() {
       });
       setDatosPrincipales({
         ...datosPrincipales,
-        direccion: place.address_components[1].long_name + " " + place.address_components[0].long_name,
+        direccion:
+          place.address_components[1].long_name +
+          " " +
+          place.address_components[0].long_name,
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng(),
-      })
+      });
     } else {
       console.log("Autocomplete is not loaded yet!");
     }
@@ -219,8 +218,55 @@ function DashboardSchool() {
     lng: 0,
   });
 
-  console.log(datosPrincipales);
+  const datosPrincipalesCompleted = () => {
+    if (
+      datosPrincipales.nombreColegio !== "" &&
+      datosPrincipales.descripcion !== "" &&
+      datosPrincipales.propuesta !== "" &&
+      datosPrincipales.categoria.length !== 0 &&
+      datosPrincipales.nombreDirector !== "" &&
+      datosPrincipales.fundacion !== null &&
+      datosPrincipales.ruc !== null &&
+      datosPrincipales.ugel !== null &&
+      datosPrincipales.area !== null &&
+      datosPrincipales.ingles !== null &&
+      datosPrincipales.alumnos !== null &&
+      datosPrincipales.niveles.length !== 0 &&
+      datosPrincipales.departamento !== {} &&
+      datosPrincipales.provincia !== {} &&
+      datosPrincipales.distrito !== {} &&
+      datosPrincipales.direccion !== "" &&
+      datosPrincipales.lat !== 0 &&
+      datosPrincipales.lng !== 0
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
+  const [infraestructura, setInfraestructura] = useState({
+    laboratorio: [],
+    artistica: [],
+    deportiva: [],
+    administrativa: [],
+    enseñanza: [],
+  });
+
+  const infraestructuraCompleted = () => {
+    if (
+      infraestructura.laboratorio.length > 0 &&
+      infraestructura.artistica.length > 0 &&
+      infraestructura.deportiva.length > 0 &&
+      infraestructura.administrativa.length > 0 &&
+      infraestructura.enseñanza.length > 0
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  
   return (
     <div className="flex">
       <section className="leftshadow min-h-screen bg-white w-1/4 shadow-leftshadow flex justify-center z-50">
@@ -278,7 +324,11 @@ function DashboardSchool() {
             <Stepper nonLinear activeStep={activeStep}>
               {steps.map((label, index) => (
                 <Step key={label} completed={completed[index]}>
-                  <StepButton color="inherit" onClick={handleStep(index)}>
+                  <StepButton
+                    color="inherit"
+                    // disabled={!completed[index]}
+                    onClick={handleStep(index)}
+                  >
                     {label}
                   </StepButton>
                 </Step>
@@ -377,18 +427,27 @@ function DashboardSchool() {
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  checked={datosPrincipales.categoria.includes(category.nombre_categoria)}
+                                  checked={datosPrincipales.categoria.includes(
+                                    category.nombre_categoria
+                                  )}
                                   onChange={(event, target) => {
-                                    if(target) {
+                                    if (target) {
                                       setDatosPrincipales({
                                         ...datosPrincipales,
-                                        categoria: [...datosPrincipales.categoria, category.nombre_categoria]
-                                      })
-                                    } else{
+                                        categoria: [
+                                          ...datosPrincipales.categoria,
+                                          category.nombre_categoria,
+                                        ],
+                                      });
+                                    } else {
                                       setDatosPrincipales({
                                         ...datosPrincipales,
-                                        categoria: datosPrincipales.categoria.filter(cat => cat !== category.nombre_categoria)
-                                      })
+                                        categoria:
+                                          datosPrincipales.categoria.filter(
+                                            (cat) =>
+                                              cat !== category.nombre_categoria
+                                          ),
+                                      });
                                     }
                                   }}
                                 />
@@ -565,19 +624,25 @@ function DashboardSchool() {
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                onChange={(event, target) => {
-                                  if(target) {
-                                    setDatosPrincipales({
-                                      ...datosPrincipales,
-                                      niveles: [...datosPrincipales.niveles, level.nombre]
-                                    })
-                                  } else{
-                                    setDatosPrincipales({
-                                      ...datosPrincipales,
-                                      niveles: datosPrincipales.niveles.filter(cat => cat !== level.nombre)
-                                    })
-                                  }
-                                }}
+                                  onChange={(event, target) => {
+                                    if (target) {
+                                      setDatosPrincipales({
+                                        ...datosPrincipales,
+                                        niveles: [
+                                          ...datosPrincipales.niveles,
+                                          level.nombre,
+                                        ],
+                                      });
+                                    } else {
+                                      setDatosPrincipales({
+                                        ...datosPrincipales,
+                                        niveles:
+                                          datosPrincipales.niveles.filter(
+                                            (cat) => cat !== level.nombre
+                                          ),
+                                      });
+                                    }
+                                  }}
                                 />
                               }
                               label={level.nombre}
@@ -600,22 +665,19 @@ function DashboardSchool() {
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-type-select-standard"
                                 value={departamento}
-                                onChange={(e)=>{
-                                  setDepartamento(e.target.value)
+                                onChange={(e) => {
+                                  setDepartamento(e.target.value);
                                   setDatosPrincipales({
                                     ...datosPrincipales,
-                                    departamento: e.target.value
-                                  })
+                                    departamento: e.target.value,
+                                  });
                                 }}
                                 label="Selecciona una Provincia"
                                 className="bg-white"
                                 defaultValue={""}
                               >
                                 {departaments.map((type, index) => (
-                                  <MenuItem
-                                    value={type}
-                                    key={type.index}
-                                  >
+                                  <MenuItem value={type} key={type.index}>
                                     <ListItemText
                                       primary={type.nombre_departamento}
                                     />
@@ -637,22 +699,19 @@ function DashboardSchool() {
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-type-select-standard"
                                 value={provincia}
-                                onChange={(e)=>{
-                                  setProvincia(e.target.value)
+                                onChange={(e) => {
+                                  setProvincia(e.target.value);
                                   setDatosPrincipales({
                                     ...datosPrincipales,
-                                    provincia: e.target.value
-                                  })
+                                    provincia: e.target.value,
+                                  });
                                 }}
                                 label="Selecciona una Provincia"
                                 className="bg-white"
                                 defaultValue={""}
                               >
                                 {provincias.map((type, index) => (
-                                  <MenuItem
-                                    value={type}
-                                    key={type.index}
-                                  >
+                                  <MenuItem value={type} key={type.index}>
                                     <ListItemText
                                       primary={type.nombre_provincia}
                                     />
@@ -674,22 +733,19 @@ function DashboardSchool() {
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-type-select-standard"
                                 value={distrito}
-                                onChange={(e)=>{
-                                  setDistrito(e.target.value)
+                                onChange={(e) => {
+                                  setDistrito(e.target.value);
                                   setDatosPrincipales({
                                     ...datosPrincipales,
-                                    distrito: e.target.value
-                                  })
+                                    distrito: e.target.value,
+                                  });
                                 }}
                                 label="Selecciona una Provincia"
                                 className="bg-white"
                                 defaultValue={""}
                               >
                                 {distrits.map((type, index) => (
-                                  <MenuItem
-                                    value={type}
-                                    key={type.index}
-                                  >
+                                  <MenuItem value={type} key={type.index}>
                                     <ListItemText
                                       primary={type.nombre_distrito}
                                     />
@@ -781,10 +837,7 @@ function DashboardSchool() {
                           )}
                         </div>
                       </div>
-                    </form>
-                  )}
-
-                  <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                      <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                     <Button
                       color="inherit"
                       disabled={activeStep === 0}
@@ -794,10 +847,14 @@ function DashboardSchool() {
                       Back
                     </Button>
                     <Box sx={{ flex: "1 1 auto" }} />
-                    <Button onClick={handleNext} sx={{ mr: 1 }}>
+                    <Button
+                      onClick={handleComplete}
+                      sx={{ mr: 1 }}
+                      disabled={datosPrincipalesCompleted()}
+                    >
                       Next
                     </Button>
-                    {activeStep !== steps.length &&
+                    {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
                           variant="caption"
@@ -811,8 +868,273 @@ function DashboardSchool() {
                             ? "Finish"
                             : "Complete Step"}
                         </Button>
-                      ))}
+                      ))} */}
                   </Box>
+                    </form>
+                  )}
+                  {activeStep === 1 && (
+                    <div className="flex flex-col gap-5">
+                      <h1 className="text-2xl">Almenos una casilla de cada categoria debe ser seleccionada</h1>
+                      <div className="flex gap-5">
+                        <div>
+                          <div className="flex flex-col">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Laboratorio
+                            </label>
+                            <small>Puede marcar mas de una opción</small>
+                          </div>
+                          <div className="flex flex-col">
+                            {Laboratorios?.map((lab) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={infraestructura.laboratorio.includes(
+                                      lab
+                                    )}
+                                    onChange={(event, target) => {
+                                      if (target) {
+                                        setInfraestructura({
+                                          ...infraestructura,
+                                          laboratorio: [
+                                            ...infraestructura.laboratorio,
+                                            lab,
+                                          ],
+                                        });
+                                      } else {
+                                        setInfraestructura({
+                                          ...infraestructura,
+                                          laboratorio:
+                                            infraestructura.laboratorio.filter(
+                                              (cat) => cat !== lab
+                                            ),
+                                        });
+                                      }
+                                    }}
+                                  />
+                                }
+                                label={lab}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex flex-col">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Artistica
+                            </label>
+                            <small>Puede marcar mas de una opción</small>
+                          </div>
+                          <div className="flex flex-col">
+                            {Artistica?.map((art) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={infraestructura.artistica.includes(
+                                      art
+                                    )}
+                                    onChange={(event, target) => {
+                                      if (target) {
+                                        setInfraestructura({
+                                          ...infraestructura,
+                                          artistica: [
+                                            ...infraestructura.artistica,
+                                            art,
+                                          ],
+                                        });
+                                      } else {
+                                        setInfraestructura({
+                                          ...infraestructura,
+                                          artistica:
+                                            infraestructura.artistica.filter(
+                                              (cat) => cat !== art
+                                            ),
+                                        });
+                                      }
+                                    }}
+                                  />
+                                }
+                                label={art}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex flex-col">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Deportiva
+                            </label>
+                            <small>Puede marcar mas de una opción</small>
+                          </div>
+                          <div className="flex flex-col">
+                            {Deportiva?.map((dep) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={infraestructura.deportiva.includes(
+                                      dep
+                                    )}
+                                    onChange={(event, target) => {
+                                      if (target) {
+                                        setInfraestructura({
+                                          ...infraestructura,
+                                          deportiva: [
+                                            ...infraestructura.deportiva,
+                                            dep,
+                                          ],
+                                        });
+                                      } else {
+                                        setInfraestructura({
+                                          ...infraestructura,
+                                          deportiva:
+                                            infraestructura.deportiva.filter(
+                                              (cat) => cat !== dep
+                                            ),
+                                        });
+                                      }
+                                    }}
+                                  />
+                                }
+                                label={dep}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex flex-col">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Administrativa
+                            </label>
+                            <small>Puede marcar mas de una opción</small>
+                          </div>
+                          <div className="flex flex-col">
+                            {Administrativa?.map((adm) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={infraestructura.administrativa.includes(
+                                      adm
+                                    )}
+                                    onChange={(event, target) => {
+                                      if (target) {
+                                        setInfraestructura({
+                                          ...infraestructura,
+                                          administrativa: [
+                                            ...infraestructura.administrativa,
+                                            adm,
+                                          ],
+                                        });
+                                      } else {
+                                        setInfraestructura({
+                                          ...infraestructura,
+                                          administrativa:
+                                            infraestructura.administrativa.filter(
+                                              (cat) => cat !== adm
+                                            ),
+                                        });
+                                      }
+                                    }}
+                                  />
+                                }
+                                label={adm}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex flex-col">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Enseñanza
+                            </label>
+                            <small>Puede marcar mas de una opción</small>
+                          </div>
+                          <div className="flex flex-col">
+                            {Enseñanza?.map((ens) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={infraestructura.enseñanza.includes(
+                                      ens
+                                    )}
+                                    onChange={(event, target) => {
+                                      if (target) {
+                                        setInfraestructura({
+                                          ...infraestructura,
+                                          enseñanza: [
+                                            ...infraestructura.enseñanza,
+                                            ens,
+                                          ],
+                                        });
+                                      } else {
+                                        setInfraestructura({
+                                          ...infraestructura,
+                                          enseñanza:
+                                            infraestructura.enseñanza.filter(
+                                              (cat) => cat !== ens
+                                            ),
+                                        });
+                                      }
+                                    }}
+                                  />
+                                }
+                                label={ens}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                    <Button
+                      color="inherit"
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                      sx={{ mr: 1 }}
+                    >
+                      Back
+                    </Button>
+                    <Box sx={{ flex: "1 1 auto" }} />
+                    <Button
+                      onClick={handleComplete}
+                      sx={{ mr: 1 }}
+                      disabled={infraestructuraCompleted()}
+                    >
+                      Next
+                    </Button>
+                    {/* {activeStep !== steps.length &&
+                      (completed[activeStep] ? (
+                        <Typography
+                          variant="caption"
+                          sx={{ display: "inline-block" }}
+                        >
+                          Step {activeStep + 1} already completed
+                        </Typography>
+                      ) : (
+                        <Button onClick={handleComplete}>
+                          {completedSteps() === totalSteps() - 1
+                            ? "Finish"
+                            : "Complete Step"}
+                        </Button>
+                      ))} */}
+                  </Box>
+                    </div>
+                  )}
+                  {activeStep === 2 && (
+                    <div>Hola</div>
+                  )}
                 </React.Fragment>
               )}
             </div>

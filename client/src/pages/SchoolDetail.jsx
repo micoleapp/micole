@@ -173,7 +173,7 @@ function SchoolDetail() {
   return (
     <div className="bg-[#f6f7f8]">
       <img
-        src={banner}
+        src={oneSchool.primera_imagen}
         alt="banner"
         className="object-cover w-full h-[500px]"
       />
