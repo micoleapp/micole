@@ -36,7 +36,6 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers";
 
 function QuiltedImageList({ firstImage, gallery, setImage }) {
-  console.log(gallery);
   return (
     <div className="w-full px-4">
       <img
@@ -48,6 +47,7 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
       <div className="flex gap-5 mt-2 overflow-x-scroll w-full pb-2">
         {gallery.map((item, index) => (
           <img
+            key={index}
             src={item}
             className="cursor-pointer z-25 object-cover h-24 rounded-md"
             onClick={() => setImage(item)}
@@ -124,18 +124,13 @@ function SchoolDetail() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
-      e.target["name"].value === "" ||
+      e.target["nombre"].value === "" ||
       e.target["cel"].value === "" ||
       e.target["email"].value === ""
     ) {
       return alert("Llena todos los campos para poder continuar");
     }
-    setCita({
-      ...cita,
-      nombre: e.target["name"].value,
-      celular: e.target["cel"].value,
-      correo: e.target["email"].value,
-    });
+    return alert(JSON.stringify(cita))
   };
 
   const handleModo = () => {
@@ -152,6 +147,28 @@ function SchoolDetail() {
   const [ratingUbicacion, setRatingUbicacion] = useState(0);
   const [ratingLimpieza, setRatingLimpieza] = useState(0);
   const [ratingPrecio, setRatingPrecio] = useState(0);
+
+  const [comentario,setComentario] = useState({
+    rating: 0,
+    nombre: "",
+    email: "",
+    comentario: ""
+  });
+
+  useEffect(() => {
+    setComentario({
+      ...comentario,
+      rating: Number(((ratingNivel + ratingAtencion + ratingInfraestructura + ratingUbicacion + ratingLimpieza + ratingPrecio) / 6).toFixed(2))
+    })
+  },[ratingNivel , ratingAtencion , ratingInfraestructura , ratingUbicacion , ratingLimpieza ,ratingPrecio])
+
+  const comentarioSubmit = (e) => {
+    e.preventDefault();
+    if(e.target["name"].value === "" || e.target["email"].value === "" || e.target["comentario"].value === "" || comentario.rating === 0.00){
+      return alert("Llena todos los campos para poder continuar");
+    }
+    return alert(JSON.stringify(comentario))
+  }
 
   return (
     <div className="bg-[#f6f7f8]">
@@ -185,7 +202,7 @@ function SchoolDetail() {
                 <span className="flex items-center gap-2">
                   {" "}
                   <FontAwesomeIcon
-                    size="md"
+                    size="lg"
                     color="rgb(156 163 175)"
                     className="bg-white rounded-full p-3"
                     icon={faShare}
@@ -195,7 +212,7 @@ function SchoolDetail() {
                 <span className="flex items-center gap-2">
                   {" "}
                   <FontAwesomeIcon
-                    size="md"
+                    size="lg"
                     className="bg-white rounded-full p-3"
                     color="rgb(156 163 175)"
                     icon={faHeart}
@@ -803,18 +820,25 @@ function SchoolDetail() {
                 </div>
                 <div className="flex w-full gap-5 justify-between">
                   <input
-                    name="name"
+                    name="nombre"
                     type="text"
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Nombre"
+                    onChange={(e)=>{
+                      setCita({...cita, nombre: e.target.value})
+                    }}
+                    required
                   />
                   <input
                     name="cel"
-                    type="text"
-                    pattern="[0-9]{8,12}"
+                    type="number"
+                    pattern="[0-9]{8,15}" required
                     title="Solo se permiten numeros y entre 8 y 10 caracteres"
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Celular"
+                    onChange={(e)=>{
+                      setCita({...cita, celular: Number(e.target.value)})
+                    }}
                   />
                 </div>
                 <input
@@ -822,6 +846,10 @@ function SchoolDetail() {
                   type="email"
                   className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                   placeholder="Correo"
+                  onChange={(e)=>{
+                    setCita({...cita, correo: e.target.value})
+                  }}
+                  required
                 />
                 <button
                   type="submit"
@@ -871,7 +899,7 @@ function SchoolDetail() {
                 <source src={oneSchool.video_url} type="video/mp4" />
               </video>
             </div>
-            <form className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
+            <form className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full" onSubmit={comentarioSubmit}>
               <h2 className="font-semibold text-xl">Deja tu comentario</h2>
               <div className="flex flex-col lg:grid grid-cols-2 text-black/70">
                 <div>
@@ -951,13 +979,12 @@ function SchoolDetail() {
 
                 <h2>Total: </h2>
                 <Rating
+                  id="rating"
                   name="simple-controlled"
                   value={(ratingNivel + ratingAtencion + ratingInfraestructura + ratingUbicacion + ratingLimpieza + ratingPrecio)/6}
                   max={10}
                   precision={0.5}
-                  onChange={(event, newValue) => {
-                    setRatingPrecio(newValue);
-                  }}
+                  readOnly
                 />
                 
                 </div>
@@ -967,22 +994,41 @@ function SchoolDetail() {
                     type="text"
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Nombre"
+                    required
+                    onChange={(e) => {
+                      setComentario({
+                        ...comentario,
+                        nombre: e.target.value
+                      })
+                    }}
                   />
                   <input
                     name="email"
                     type="email"
-                    pattern="[0-9]{8,12}"
-                    title="Solo se permiten numeros y entre 8 y 10 caracteres"
+                    required
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Email"
+                    onChange={(e) => {
+                      setComentario({
+                        ...comentario,
+                        email: e.target.value
+                      })
+                    }}
                   />
                 </div>
                 <textarea
                   name="comentario"
                   type="text"
+                  required
                   className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                   placeholder="Escribe tu comentario"
                   rows={5}
+                  onChange={(e) => {
+                    setComentario({
+                      ...comentario,
+                      comentario: e.target.value
+                    })
+                  }}
                 />
                 <button type="submit" className="p-3 bg-[#0061dd] text-white rounded-md hover:bg-[#0759c3] duration-300">Enviar reseña</button>
             </form>

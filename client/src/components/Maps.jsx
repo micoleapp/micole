@@ -6,13 +6,17 @@ const containerStyle = {
   height: '400px'
 };
 
+const libraries = ["places"];
 
 
 function Maps() {
+  let libRef = React.useRef(libraries);
+
   const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyB9qHB47v8fOmLUiByTvWinUehYqALI6q4"
-  })
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyB9qHB47v8fOmLUiByTvWinUehYqALI6q4",
+    libraries: libRef.current,
+  });
 
   const [center,setCenter] = React.useState({
     lat: 0,
