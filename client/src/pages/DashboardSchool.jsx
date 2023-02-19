@@ -16,6 +16,9 @@ import Select from "@mui/material/Select";
 import { Squash as Hamburger } from "hamburger-react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import useWindowSize from 'react-use-window-size';
+import Logo from '../assets/logoPayment.png'
+import Confetti from "react-confetti";
 import {
   GoogleMap,
   useJsApiLoader,
@@ -60,12 +63,18 @@ const containerStyle = {
   height: "400px",
 };
 
-function StandardImageList({ list , setImage }) {
+function StandardImageList({ list, setImage }) {
   return (
     <ImageList sx={{ width: "100%", height: 450 }} cols={3} rowHeight={400}>
       {list.map((item) => (
         <ImageListItem key={item}>
-          <img src={item} alt={item} loading="lazy" onClick={() => setImage(item)} className="cursor-pointer"/>
+          <img
+            src={item}
+            alt={item}
+            loading="lazy"
+            onClick={() => setImage(item)}
+            className="cursor-pointer"
+          />
         </ImageListItem>
       ))}
     </ImageList>
@@ -73,6 +82,7 @@ function StandardImageList({ list , setImage }) {
 }
 
 function DashboardSchool() {
+  const { width, height } = useWindowSize();
   const [page, setPage] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
@@ -122,16 +132,44 @@ function DashboardSchool() {
     setActiveStep(step);
   };
 
-  const handleComplete = () => {
+  const handleCompleteDatosPrincipales = () => {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
+    setAllData({ ...allData, ...datosPrincipales });
+    handleNext();
+  };
+
+  const handleCompleteInfraestructura = () => {
+    const newCompleted = completed;
+    newCompleted[activeStep] = true;
+    setCompleted(newCompleted);
+    setAllData({ ...allData, infraestructura });
+    handleNext();
+  };
+
+  const handleCompleteAcreditaciones = () => {
+    const newCompleted = completed;
+    newCompleted[activeStep] = true;
+    setCompleted(newCompleted);
+    setAllData({ ...allData, acreditaciones });
+    handleNext();
+  };
+
+  const handleCompleteMultimedia = () => {
+    const newCompleted = completed;
+    newCompleted[activeStep] = true;
+    setCompleted(newCompleted);
+    setAllData({ ...allData, multimedia });
     handleNext();
   };
 
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
+    setDatosPrincipales(initialDatosPrincipales);
+    setInfraestructura(initialInfraestructura);
+    setAcreditaciones(initialAcreditaciones);
   };
 
   const [categoryName, setCategoryName] = useState([]);
@@ -220,7 +258,7 @@ function DashboardSchool() {
     }
   };
 
-  const [datosPrincipales, setDatosPrincipales] = useState({
+  const initialDatosPrincipales = {
     nombreColegio: "",
     descripcion: "",
     propuesta: "",
@@ -239,7 +277,11 @@ function DashboardSchool() {
     direccion: "",
     lat: 0,
     lng: 0,
-  });
+  };
+
+  const [datosPrincipales, setDatosPrincipales] = useState(
+    initialDatosPrincipales
+  );
 
   const datosPrincipalesCompleted = () => {
     if (
@@ -268,13 +310,17 @@ function DashboardSchool() {
     }
   };
 
-  const [infraestructura, setInfraestructura] = useState({
+  const initialInfraestructura = {
     laboratorio: [],
     artistica: [],
     deportiva: [],
     administrativa: [],
     enseñanza: [],
-  });
+  };
+
+  const [infraestructura, setInfraestructura] = useState(
+    initialInfraestructura
+  );
 
   const infraestructuraCompleted = () => {
     if (
@@ -290,19 +336,21 @@ function DashboardSchool() {
     }
   };
 
-  const [afiliaciones, setAfiliaciones] = useState({
-    acreditaciones: [],
+  const initialAcreditaciones = {
+    afiliaciones: [],
     alianzas: [],
     certificaciones: [],
     asociaciones: [],
-  });
+  };
 
-  const afiliacionesCompleted = () => {
+  const [acreditaciones, setAcreditaciones] = useState(initialAcreditaciones);
+
+  const acreditacionesCompleted = () => {
     if (
-      afiliaciones.acreditaciones.length > 0 &&
-      afiliaciones.alianzas.length > 0 &&
-      afiliaciones.certificaciones.length > 0 &&
-      afiliaciones.asociaciones.length > 0
+      acreditaciones.afiliaciones.length > 0 &&
+      acreditaciones.alianzas.length > 0 &&
+      acreditaciones.certificaciones.length > 0 &&
+      acreditaciones.asociaciones.length > 0
     ) {
       return false;
     } else {
@@ -318,18 +366,30 @@ function DashboardSchool() {
 
   function handleFilesSubmit(e) {
     e.preventDefault();
-    preview?.map(async (image) => {
+    preview?.map(async (image, index) => {
       const formData = new FormData();
       try {
         formData.append("file", image);
-        formData.append('upload_preset',"tcotxf16")
-        const res = await axios.post("https://api.cloudinary.com/v1_1/de4i6biay/image/upload", formData);
-        console.log(res.data.secure_url)
+        formData.append("upload_preset", "tcotxf16");
+        const res = await axios.post(
+          "https://api.cloudinary.com/v1_1/de4i6biay/image/upload",
+          formData
+        );
+        setMultimedia({
+          ...multimedia,
+          images: [...multimedia.images, res.data.secure_url],
+        });
+        alert(`Carga nro ${index + 1} exitosa`);
       } catch (error) {
         console.log(error);
       }
-    })
-  };
+    });
+  }
+
+  const [multimedia, setMultimedia] = useState({
+    images: [],
+    video_url: "",
+  });
 
   const [preview, setPreview] = useState([]);
 
@@ -346,6 +406,18 @@ function DashboardSchool() {
   }, [files]);
 
   const [image, setImage] = useState(null);
+
+  const multimediaCompleted = () => {
+    if (multimedia.images.length !== 0 && multimedia.video_url !== "") {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const [allData, setAllData] = useState({});
+
+  console.log(multimedia);
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -417,7 +489,7 @@ function DashboardSchool() {
             <Stepper
               nonLinear
               activeStep={activeStep}
-              orientation={windowSize.current > 700 ? "horizontal" : "vertical"}
+              orientation={width > 700 ? "horizontal" : "vertical"}
             >
               {steps.map((label, index) => (
                 <Step key={label} completed={completed[index]}>
@@ -434,13 +506,17 @@ function DashboardSchool() {
             <div className="mt-10">
               {allStepsCompleted() ? (
                 <React.Fragment>
-                  <Typography sx={{ mt: 2, mb: 1 }}>
-                    All steps completed - you&apos;re finished
-                  </Typography>
-                  <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                    <Box sx={{ flex: "1 1 auto" }} />
-                    <Button onClick={handleReset}>Reset</Button>
-                  </Box>
+                  <Confetti width={width-10} height={height} style={{zIndex:500}}  />
+                  <div className={`h-screen flex flex-col gap-10 justify-center`}>
+                    <h1 className="text-4xl text-center font-bold mt-5">Felicitaciones completaste todos los pasos</h1>
+                    <p className="text-center">Porfavor envia el formulario hacia nuestra base de datos para continuar</p>
+                    <img src={Logo} alt="" className="object-cover mx-auto"/>
+                    <button type="submit" className="bg-[#0061dd] text-white rounded-md mx-auto p-3">Enviar datos</button>
+                    <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                      <Box sx={{ flex: "1 1 auto" }} />
+                      <Button onClick={handleReset}>Reset</Button>
+                    </Box>
+                  </div>
                 </React.Fragment>
               ) : (
                 <React.Fragment>
@@ -955,7 +1031,7 @@ function DashboardSchool() {
                         </Button>
                         <Box sx={{ flex: "1 1 auto" }} />
                         <Button
-                          onClick={handleComplete}
+                          onClick={handleCompleteDatosPrincipales}
                           sx={{ mr: 1 }}
                           disabled={datosPrincipalesCompleted()}
                         >
@@ -1220,7 +1296,7 @@ function DashboardSchool() {
                         </Button>
                         <Box sx={{ flex: "1 1 auto" }} />
                         <Button
-                          onClick={handleComplete}
+                          onClick={handleCompleteInfraestructura}
                           sx={{ mr: 1 }}
                           disabled={infraestructuraCompleted()}
                         >
@@ -1258,7 +1334,7 @@ function DashboardSchool() {
                                 htmlFor="categoria"
                                 className="text-lg font-medium"
                               >
-                                Acreditaciones
+                                Afiliaciones
                               </label>
                               <small>Puede marcar mas de una opción</small>
                             </div>
@@ -1267,23 +1343,23 @@ function DashboardSchool() {
                                 <FormControlLabel
                                   control={
                                     <Checkbox
-                                      checked={afiliaciones.acreditaciones.includes(
+                                      checked={acreditaciones.afiliaciones.includes(
                                         acc
                                       )}
                                       onChange={(event, target) => {
                                         if (target) {
-                                          setAfiliaciones({
-                                            ...afiliaciones,
-                                            acreditaciones: [
-                                              ...afiliaciones.acreditaciones,
+                                          setAcreditaciones({
+                                            ...acreditaciones,
+                                            afiliaciones: [
+                                              ...acreditaciones.afiliaciones,
                                               acc,
                                             ],
                                           });
                                         } else {
-                                          setAfiliaciones({
-                                            ...afiliaciones,
-                                            acreditaciones:
-                                              afiliaciones.acreditaciones.filter(
+                                          setAcreditaciones({
+                                            ...acreditaciones,
+                                            afiliaciones:
+                                              acreditaciones.afiliaciones.filter(
                                                 (cat) => cat !== acc
                                               ),
                                           });
@@ -1311,23 +1387,23 @@ function DashboardSchool() {
                                 <FormControlLabel
                                   control={
                                     <Checkbox
-                                      checked={afiliaciones.alianzas.includes(
+                                      checked={acreditaciones.alianzas.includes(
                                         all
                                       )}
                                       onChange={(event, target) => {
                                         if (target) {
-                                          setAfiliaciones({
-                                            ...afiliaciones,
+                                          setAcreditaciones({
+                                            ...acreditaciones,
                                             alianzas: [
-                                              ...afiliaciones.alianzas,
+                                              ...acreditaciones.alianzas,
                                               all,
                                             ],
                                           });
                                         } else {
-                                          setAfiliaciones({
-                                            ...afiliaciones,
+                                          setAcreditaciones({
+                                            ...acreditaciones,
                                             alianzas:
-                                              afiliaciones.alianzas.filter(
+                                              acreditaciones.alianzas.filter(
                                                 (cat) => cat !== all
                                               ),
                                           });
@@ -1355,23 +1431,23 @@ function DashboardSchool() {
                                 <FormControlLabel
                                   control={
                                     <Checkbox
-                                      checked={afiliaciones.certificaciones.includes(
+                                      checked={acreditaciones.certificaciones.includes(
                                         cert
                                       )}
                                       onChange={(event, target) => {
                                         if (target) {
-                                          setAfiliaciones({
-                                            ...afiliaciones,
+                                          setAcreditaciones({
+                                            ...acreditaciones,
                                             certificaciones: [
-                                              ...afiliaciones.certificaciones,
+                                              ...acreditaciones.certificaciones,
                                               cert,
                                             ],
                                           });
                                         } else {
-                                          setAfiliaciones({
-                                            ...afiliaciones,
+                                          setAcreditaciones({
+                                            ...acreditaciones,
                                             certificaciones:
-                                              afiliaciones.certificaciones.filter(
+                                              acreditaciones.certificaciones.filter(
                                                 (cat) => cat !== cert
                                               ),
                                           });
@@ -1401,23 +1477,23 @@ function DashboardSchool() {
                               <FormControlLabel
                                 control={
                                   <Checkbox
-                                    checked={afiliaciones.asociaciones.includes(
+                                    checked={acreditaciones.asociaciones.includes(
                                       asc
                                     )}
                                     onChange={(event, target) => {
                                       if (target) {
-                                        setAfiliaciones({
-                                          ...afiliaciones,
+                                        setAcreditaciones({
+                                          ...acreditaciones,
                                           asociaciones: [
-                                            ...afiliaciones.asociaciones,
+                                            ...acreditaciones.asociaciones,
                                             asc,
                                           ],
                                         });
                                       } else {
-                                        setAfiliaciones({
-                                          ...afiliaciones,
+                                        setAcreditaciones({
+                                          ...acreditaciones,
                                           asociaciones:
-                                            afiliaciones.asociaciones.filter(
+                                            acreditaciones.asociaciones.filter(
                                               (cat) => cat !== asc
                                             ),
                                         });
@@ -1444,9 +1520,9 @@ function DashboardSchool() {
                         </Button>
                         <Box sx={{ flex: "1 1 auto" }} />
                         <Button
-                          onClick={handleComplete}
+                          onClick={handleCompleteAcreditaciones}
                           sx={{ mr: 1 }}
-                          disabled={afiliacionesCompleted()}
+                          disabled={acreditacionesCompleted()}
                         >
                           Next
                         </Button>
@@ -1471,6 +1547,11 @@ function DashboardSchool() {
                   {activeStep === 3 && (
                     <div className="flex flex-col gap-5">
                       <h1 className="text-2xl">Agregar imagenes</h1>
+                      <small>
+                        Deberas subir las imagenes con el boton{" "}
+                        <span className="font-bold">Upload</span> antes de
+                        proseguir
+                      </small>
                       <div className="flex flex-col lg:flex-row gap-5">
                         <form
                           onSubmit={handleFilesSubmit}
@@ -1479,7 +1560,7 @@ function DashboardSchool() {
                           <div className="file-select flex w-full">
                             <label
                               htmlFor="image"
-                              className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-md"
+                              className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-t-md"
                             >
                               <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
                               <span className="text-sm mx-auto text-center text-[#0061dd]">
@@ -1496,12 +1577,21 @@ function DashboardSchool() {
                               className="hidden"
                             />
                           </div>
-                          <button type="submit" disabled={files !== null ? false : true} >On Submit</button>
+                          <button
+                            type="submit"
+                            disabled={files !== null ? false : true}
+                            className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
+                          >
+                            Upload
+                          </button>
                         </form>
                         {files !== null && (
                           <>
                             <div className="border-2 rounded-md overflow-hidden p-2 bg-white">
-                              <StandardImageList setImage={setImage} list={preview} />
+                              <StandardImageList
+                                setImage={setImage}
+                                list={preview}
+                              />
                             </div>
                             <div
                               className={`fixed top-0 left-0 z-50 bg-black/90 w-full h-full ${
@@ -1523,6 +1613,27 @@ function DashboardSchool() {
                           </>
                         )}
                       </div>
+                      <div className="flex flex-col gap-3">
+                        <label
+                          htmlFor="nombreColegio"
+                          className="text-lg font-medium"
+                        >
+                          Video Url
+                        </label>
+                        <input
+                          type="url"
+                          name="video"
+                          id="video"
+                          className="p-3 rounded-md border-2  outline-none"
+                          value={multimedia.video_url}
+                          onChange={(e) =>
+                            setMultimedia({
+                              ...multimedia,
+                              video_url: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
@@ -1536,9 +1647,9 @@ function DashboardSchool() {
                         </Button>
                         <Box sx={{ flex: "1 1 auto" }} />
                         <Button
-                          onClick={handleComplete}
+                          onClick={handleCompleteMultimedia}
                           sx={{ mr: 1 }}
-                          disabled={afiliacionesCompleted()}
+                          disabled={multimediaCompleted()}
                         >
                           Next
                         </Button>
