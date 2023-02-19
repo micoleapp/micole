@@ -896,7 +896,7 @@ function SchoolDetail() {
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Video</h2>
               <video width="750" height="500" controls className="rounded-md">
-                <source src={oneSchool.video_url} type="video/mp4" />
+                <source src={oneSchool.video_url && oneSchool.video_url.trim()} type="video/mp4" />
               </video>
             </div>
             <form className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full" onSubmit={comentarioSubmit}>

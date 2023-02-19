@@ -13,6 +13,9 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { Squash as Hamburger } from "hamburger-react";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 import {
   GoogleMap,
   useJsApiLoader,
@@ -26,12 +29,19 @@ import {
   Enseñanza,
   Laboratorios,
 } from "../MockupInfo/Infraestructura";
+import {
+  Acreditaciones,
+  Alianzas,
+  Asociaciones,
+  Certificaciones,
+} from "../MockupInfo/Afiliaciones";
 import { levels } from "../MockupInfo/Niveles";
 import { steps } from "../MockupInfo/Pasos";
 
 import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsPlusCircleDotted, BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
+import { RiImageAddLine } from "react-icons/ri";
 import { useEffect } from "react";
 import {
   getAllCategories,
@@ -41,6 +51,7 @@ import {
 } from "../redux/SchoolsActions";
 import { useState } from "react";
 import { useRef } from "react";
+import axios from "axios";
 
 const libraries = ["places"];
 
@@ -48,6 +59,18 @@ const containerStyle = {
   width: "100%",
   height: "400px",
 };
+
+function StandardImageList({ list , setImage }) {
+  return (
+    <ImageList sx={{ width: "100%", height: 450 }} cols={3} rowHeight={400}>
+      {list.map((item) => (
+        <ImageListItem key={item}>
+          <img src={item} alt={item} loading="lazy" onClick={() => setImage(item)} className="cursor-pointer"/>
+        </ImageListItem>
+      ))}
+    </ImageList>
+  );
+}
 
 function DashboardSchool() {
   const [page, setPage] = React.useState(0);
@@ -265,12 +288,82 @@ function DashboardSchool() {
     } else {
       return true;
     }
-  }
-  
+  };
+
+  const [afiliaciones, setAfiliaciones] = useState({
+    acreditaciones: [],
+    alianzas: [],
+    certificaciones: [],
+    asociaciones: [],
+  });
+
+  const afiliacionesCompleted = () => {
+    if (
+      afiliaciones.acreditaciones.length > 0 &&
+      afiliaciones.alianzas.length > 0 &&
+      afiliaciones.certificaciones.length > 0 &&
+      afiliaciones.asociaciones.length > 0
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const [isOpen, setOpen] = useState(false);
+
+  const windowSize = useRef(window.innerWidth);
+
+  const [files, setFiles] = useState(null);
+
+  function handleFilesSubmit(e) {
+    e.preventDefault();
+    preview?.map(async (image) => {
+      const formData = new FormData();
+      try {
+        formData.append("file", image);
+        formData.append('upload_preset',"tcotxf16")
+        const res = await axios.post("https://api.cloudinary.com/v1_1/de4i6biay/image/upload", formData);
+        console.log(res.data.secure_url)
+      } catch (error) {
+        console.log(error);
+      }
+    })
+  };
+
+  const [preview, setPreview] = useState([]);
+
+  useEffect(() => {
+    if (files !== null) {
+      Object.values(files).map((file) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          setPreview((prev) => [...prev, reader.result]);
+        };
+      });
+    }
+  }, [files]);
+
+  const [image, setImage] = useState(null);
+
   return (
-    <div className="flex">
-      <section className="leftshadow min-h-screen bg-white w-1/4 shadow-leftshadow flex justify-center z-50">
-        <ul className="flex flex-col gap-4 absolute top-48">
+    <div className="flex lg:flex-row flex-col">
+      <section
+        className={`leftshadow ${
+          !isOpen
+            ? "h-[50px] lg:h-full lg:min-h-full"
+            : "h-[300px] lg:h-full lg:min-h-full"
+        } duration-300 overflow-hidden bg-white w-full lg:w-1/4 shadow-leftshadow flex justify-center z-50`}
+      >
+        <div className="absolute left-5 block lg:hidden">
+          <Hamburger toggled={isOpen} toggle={setOpen} color="#0061dd" />
+        </div>
+        <ul
+          className={`${
+            !isOpen ? "hidden" : "flex"
+          } lg:flex flex-col justify-center gap-4 static lg:absolute lg:top-48`}
+        >
           <button
             className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
             onClick={() => setPage(0)}
@@ -318,10 +411,14 @@ function DashboardSchool() {
           </button>
         </ul>
       </section>
-      <section className="right w-full bg-[#f6f7f8] px-32 py-12">
+      <section className="right w-full bg-[#f6f7f8] p-5 lg:px-32 lg:py-12">
         {page === 0 ? (
           <Box sx={{ width: "100%", height: "100%" }}>
-            <Stepper nonLinear activeStep={activeStep}>
+            <Stepper
+              nonLinear
+              activeStep={activeStep}
+              orientation={windowSize.current > 700 ? "horizontal" : "vertical"}
+            >
               {steps.map((label, index) => (
                 <Step key={label} completed={completed[index]}>
                   <StepButton
@@ -422,7 +519,7 @@ function DashboardSchool() {
                           </label>
                           <small>Puede marcar mas de una opción</small>
                         </div>
-                        <div className="grid grid-cols-3">
+                        <div className="flex flex-col lg:grid grid-cols-3">
                           {categories?.map((category) => (
                             <FormControlLabel
                               control={
@@ -478,7 +575,7 @@ function DashboardSchool() {
                           value={datosPrincipales.nombreDirector}
                         />
                       </div>
-                      <div className="grid grid-cols-3 gap-5">
+                      <div className="flex flex-col lg:grid grid-cols-3 gap-5">
                         <div className="flex flex-col">
                           <label
                             htmlFor="fundacion"
@@ -619,7 +716,7 @@ function DashboardSchool() {
                           </label>
                           <small>Puede marcar mas de una opción</small>
                         </div>
-                        <div>
+                        <div className="flex flex-col lg:grid grid-cols-2">
                           {levels?.map((level) => (
                             <FormControlLabel
                               control={
@@ -652,7 +749,7 @@ function DashboardSchool() {
                       </div>
                       <div className="flex w-full flex-col gap-5">
                         <h1 className="text-2xl font-medium">Ubicación</h1>
-                        <div className="flex w-full gap-5">
+                        <div className="flex w-full gap-5 flex-col lg:flex-row">
                           <div className="flex flex-col w-full gap-3">
                             <label className="text-lg font-medium">
                               Departamento
@@ -764,7 +861,7 @@ function DashboardSchool() {
                           </label>
                           {isLoaded && (
                             <>
-                              <div className="flex w-full gap-5">
+                              <div className="flex flex-col lg:flex-row w-full gap-5">
                                 <Autocomplete
                                   onPlaceChanged={onPlaceChanged}
                                   onLoad={onLoadPlace}
@@ -779,7 +876,9 @@ function DashboardSchool() {
                                   type="text"
                                   name="direccion"
                                   id="direccion"
-                                  className="p-3 rounded-md border-2 bg-white outline-none"
+                                  className={`p-3 rounded-md border-2 ${
+                                    direc === null ? "bg-inherit" : "bg-white"
+                                  }  outline-none`}
                                   placeholder="Dirección"
                                   value={direc}
                                   disabled
@@ -794,7 +893,9 @@ function DashboardSchool() {
                                   type="text"
                                   name="lat"
                                   id="lat"
-                                  className="p-3 rounded-md border-2 bg-white outline-none"
+                                  className={`p-3 rounded-md border-2 ${
+                                    latitud === null ? "bg-inherit" : "bg-white"
+                                  }  outline-none`}
                                   placeholder="Latitud"
                                   value={latitud}
                                   disabled
@@ -809,7 +910,11 @@ function DashboardSchool() {
                                   type="text"
                                   name="lng"
                                   id="lng"
-                                  className="p-3 rounded-md border-2 bg-white outline-none"
+                                  className={`p-3 rounded-md border-2 ${
+                                    longitud === null
+                                      ? "bg-inherit"
+                                      : "bg-white"
+                                  }  outline-none`}
                                   placeholder="Longitud"
                                   value={longitud}
                                   disabled
@@ -837,24 +942,26 @@ function DashboardSchool() {
                           )}
                         </div>
                       </div>
-                      <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                    <Button
-                      color="inherit"
-                      disabled={activeStep === 0}
-                      onClick={handleBack}
-                      sx={{ mr: 1 }}
-                    >
-                      Back
-                    </Button>
-                    <Box sx={{ flex: "1 1 auto" }} />
-                    <Button
-                      onClick={handleComplete}
-                      sx={{ mr: 1 }}
-                      disabled={datosPrincipalesCompleted()}
-                    >
-                      Next
-                    </Button>
-                    {/* {activeStep !== steps.length &&
+                      <Box
+                        sx={{ display: "flex", flexDirection: "row", pt: 2 }}
+                      >
+                        <Button
+                          color="inherit"
+                          disabled={activeStep === 0}
+                          onClick={handleBack}
+                          sx={{ mr: 1 }}
+                        >
+                          Back
+                        </Button>
+                        <Box sx={{ flex: "1 1 auto" }} />
+                        <Button
+                          onClick={handleComplete}
+                          sx={{ mr: 1 }}
+                          disabled={datosPrincipalesCompleted()}
+                        >
+                          Next
+                        </Button>
+                        {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
                           variant="caption"
@@ -869,13 +976,16 @@ function DashboardSchool() {
                             : "Complete Step"}
                         </Button>
                       ))} */}
-                  </Box>
+                      </Box>
                     </form>
                   )}
                   {activeStep === 1 && (
                     <div className="flex flex-col gap-5">
-                      <h1 className="text-2xl">Almenos una casilla de cada categoria debe ser seleccionada</h1>
-                      <div className="flex gap-5">
+                      <h1 className="text-2xl">
+                        Almenos una casilla de cada categoria debe ser
+                        seleccionada
+                      </h1>
+                      <div className="flex flex-col lg:flex-row gap-5">
                         <div>
                           <div className="flex flex-col">
                             <label
@@ -1097,24 +1207,26 @@ function DashboardSchool() {
                           </div>
                         </div>
                       </div>
-                      <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                    <Button
-                      color="inherit"
-                      disabled={activeStep === 0}
-                      onClick={handleBack}
-                      sx={{ mr: 1 }}
-                    >
-                      Back
-                    </Button>
-                    <Box sx={{ flex: "1 1 auto" }} />
-                    <Button
-                      onClick={handleComplete}
-                      sx={{ mr: 1 }}
-                      disabled={infraestructuraCompleted()}
-                    >
-                      Next
-                    </Button>
-                    {/* {activeStep !== steps.length &&
+                      <Box
+                        sx={{ display: "flex", flexDirection: "row", pt: 2 }}
+                      >
+                        <Button
+                          color="inherit"
+                          disabled={activeStep === 0}
+                          onClick={handleBack}
+                          sx={{ mr: 1 }}
+                        >
+                          Back
+                        </Button>
+                        <Box sx={{ flex: "1 1 auto" }} />
+                        <Button
+                          onClick={handleComplete}
+                          sx={{ mr: 1 }}
+                          disabled={infraestructuraCompleted()}
+                        >
+                          Next
+                        </Button>
+                        {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
                           variant="caption"
@@ -1129,11 +1241,324 @@ function DashboardSchool() {
                             : "Complete Step"}
                         </Button>
                       ))} */}
-                  </Box>
+                      </Box>
                     </div>
                   )}
                   {activeStep === 2 && (
-                    <div>Hola</div>
+                    <div className="flex flex-col gap-5">
+                      <h1 className="text-2xl">
+                        Almenos una casilla de cada categoria debe ser
+                        seleccionada
+                      </h1>
+                      <div className="flex flex-col lg:flex-row gap-5">
+                        <div className="flex flex-col gap-7">
+                          <div>
+                            <div className="flex flex-col">
+                              <label
+                                htmlFor="categoria"
+                                className="text-lg font-medium"
+                              >
+                                Acreditaciones
+                              </label>
+                              <small>Puede marcar mas de una opción</small>
+                            </div>
+                            <div className="flex flex-col">
+                              {Acreditaciones?.map((acc) => (
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={afiliaciones.acreditaciones.includes(
+                                        acc
+                                      )}
+                                      onChange={(event, target) => {
+                                        if (target) {
+                                          setAfiliaciones({
+                                            ...afiliaciones,
+                                            acreditaciones: [
+                                              ...afiliaciones.acreditaciones,
+                                              acc,
+                                            ],
+                                          });
+                                        } else {
+                                          setAfiliaciones({
+                                            ...afiliaciones,
+                                            acreditaciones:
+                                              afiliaciones.acreditaciones.filter(
+                                                (cat) => cat !== acc
+                                              ),
+                                          });
+                                        }
+                                      }}
+                                    />
+                                  }
+                                  label={acc}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="flex flex-col">
+                              <label
+                                htmlFor="categoria"
+                                className="text-lg font-medium"
+                              >
+                                Alianzas
+                              </label>
+                              <small>Puede marcar mas de una opción</small>
+                            </div>
+                            <div className="flex flex-col">
+                              {Alianzas?.map((all) => (
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={afiliaciones.alianzas.includes(
+                                        all
+                                      )}
+                                      onChange={(event, target) => {
+                                        if (target) {
+                                          setAfiliaciones({
+                                            ...afiliaciones,
+                                            alianzas: [
+                                              ...afiliaciones.alianzas,
+                                              all,
+                                            ],
+                                          });
+                                        } else {
+                                          setAfiliaciones({
+                                            ...afiliaciones,
+                                            alianzas:
+                                              afiliaciones.alianzas.filter(
+                                                (cat) => cat !== all
+                                              ),
+                                          });
+                                        }
+                                      }}
+                                    />
+                                  }
+                                  label={all}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="flex flex-col">
+                              <label
+                                htmlFor="categoria"
+                                className="text-lg font-medium"
+                              >
+                                Certificaciones
+                              </label>
+                              <small>Puede marcar mas de una opción</small>
+                            </div>
+                            <div className="flex flex-col">
+                              {Certificaciones?.map((cert) => (
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={afiliaciones.certificaciones.includes(
+                                        cert
+                                      )}
+                                      onChange={(event, target) => {
+                                        if (target) {
+                                          setAfiliaciones({
+                                            ...afiliaciones,
+                                            certificaciones: [
+                                              ...afiliaciones.certificaciones,
+                                              cert,
+                                            ],
+                                          });
+                                        } else {
+                                          setAfiliaciones({
+                                            ...afiliaciones,
+                                            certificaciones:
+                                              afiliaciones.certificaciones.filter(
+                                                (cat) => cat !== cert
+                                              ),
+                                          });
+                                        }
+                                      }}
+                                    />
+                                  }
+                                  label={cert}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex flex-col">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Asociaciones
+                            </label>
+                            <small>Puede marcar mas de una opción</small>
+                          </div>
+                          <div className="flex flex-col">
+                            {Asociaciones?.map((asc) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={afiliaciones.asociaciones.includes(
+                                      asc
+                                    )}
+                                    onChange={(event, target) => {
+                                      if (target) {
+                                        setAfiliaciones({
+                                          ...afiliaciones,
+                                          asociaciones: [
+                                            ...afiliaciones.asociaciones,
+                                            asc,
+                                          ],
+                                        });
+                                      } else {
+                                        setAfiliaciones({
+                                          ...afiliaciones,
+                                          asociaciones:
+                                            afiliaciones.asociaciones.filter(
+                                              (cat) => cat !== asc
+                                            ),
+                                        });
+                                      }
+                                    }}
+                                  />
+                                }
+                                label={asc}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <Box
+                        sx={{ display: "flex", flexDirection: "row", pt: 2 }}
+                      >
+                        <Button
+                          color="inherit"
+                          disabled={activeStep === 0}
+                          onClick={handleBack}
+                          sx={{ mr: 1 }}
+                        >
+                          Back
+                        </Button>
+                        <Box sx={{ flex: "1 1 auto" }} />
+                        <Button
+                          onClick={handleComplete}
+                          sx={{ mr: 1 }}
+                          disabled={afiliacionesCompleted()}
+                        >
+                          Next
+                        </Button>
+                        {/* {activeStep !== steps.length &&
+                                        (completed[activeStep] ? (
+                                          <Typography
+                                            variant="caption"
+                                            sx={{ display: "inline-block" }}
+                                          >
+                                            Step {activeStep + 1} already completed
+                                          </Typography>
+                                        ) : (
+                                          <Button onClick={handleComplete}>
+                                            {completedSteps() === totalSteps() - 1
+                                              ? "Finish"
+                                              : "Complete Step"}
+                                          </Button>
+                                        ))} */}
+                      </Box>
+                    </div>
+                  )}
+                  {activeStep === 3 && (
+                    <div className="flex flex-col gap-5">
+                      <h1 className="text-2xl">Agregar imagenes</h1>
+                      <div className="flex flex-col lg:flex-row gap-5">
+                        <form
+                          onSubmit={handleFilesSubmit}
+                          className="flex flex-col"
+                        >
+                          <div className="file-select flex w-full">
+                            <label
+                              htmlFor="image"
+                              className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-md"
+                            >
+                              <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
+                              <span className="text-sm mx-auto text-center text-[#0061dd]">
+                                Agregar imagenes
+                              </span>{" "}
+                            </label>
+                            <input
+                              type="file"
+                              id="image"
+                              name="image"
+                              accept="image/png,image/jpeg"
+                              onChange={(e) => setFiles(e.target.files)}
+                              multiple
+                              className="hidden"
+                            />
+                          </div>
+                          <button type="submit" disabled={files !== null ? false : true} >On Submit</button>
+                        </form>
+                        {files !== null && (
+                          <>
+                            <div className="border-2 rounded-md overflow-hidden p-2 bg-white">
+                              <StandardImageList setImage={setImage} list={preview} />
+                            </div>
+                            <div
+                              className={`fixed top-0 left-0 z-50 bg-black/90 w-full h-full ${
+                                image ? "block" : "hidden"
+                              }`}
+                            >
+                              <button
+                                onClick={() => setImage(null)}
+                                className="absolute top-2 right-4 z-[100] text-white"
+                              >
+                                Atras
+                              </button>
+                              <img
+                                src={image}
+                                alt=""
+                                className="absolute border-4 top-1/2 left-1/2 -translate-x-1/2 rounded-md -translate-y-1/2 block max-w-[80%] max-h-[80%] object-cover "
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <Box
+                        sx={{ display: "flex", flexDirection: "row", pt: 2 }}
+                      >
+                        <Button
+                          color="inherit"
+                          disabled={activeStep === 0}
+                          onClick={handleBack}
+                          sx={{ mr: 1 }}
+                        >
+                          Back
+                        </Button>
+                        <Box sx={{ flex: "1 1 auto" }} />
+                        <Button
+                          onClick={handleComplete}
+                          sx={{ mr: 1 }}
+                          disabled={afiliacionesCompleted()}
+                        >
+                          Next
+                        </Button>
+                        {/* {activeStep !== steps.length &&
+                                        (completed[activeStep] ? (
+                                          <Typography
+                                            variant="caption"
+                                            sx={{ display: "inline-block" }}
+                                          >
+                                            Step {activeStep + 1} already completed
+                                          </Typography>
+                                        ) : (
+                                          <Button onClick={handleComplete}>
+                                            {completedSteps() === totalSteps() - 1
+                                              ? "Finish"
+                                              : "Complete Step"}
+                                          </Button>
+                                        ))} */}
+                      </Box>
+                    </div>
                   )}
                 </React.Fragment>
               )}
