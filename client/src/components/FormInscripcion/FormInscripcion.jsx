@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { register as registerUser } from "../../redux/AuthActions";
 function FormInscripcion({handlerOpenPayment,handlerOpenLogin}) {
  
-  console.log( distrits)
+ 
   const dispatch = useDispatch();
   
   const {
@@ -30,6 +30,7 @@ function FormInscripcion({handlerOpenPayment,handlerOpenLogin}) {
       phone: "",
       schoolDistrict: "",
       schoolName: "",
+      password:"colegio123"
     },
     mode: "onChange",
   });
@@ -38,7 +39,7 @@ function FormInscripcion({handlerOpenPayment,handlerOpenLogin}) {
     handlerOpenLogin(true)
   };
   const OnSubmit = (user) => {
-    handlerOpenPayment(true)
+  console.log(user)
    dispatch(registerUser(user))
   };
 
