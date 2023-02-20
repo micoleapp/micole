@@ -4,11 +4,9 @@ import { Droppable } from "react-beautiful-dnd";
 
 const Column = ({ column, tasks }) => {
 
-  console.log(tasks)
-
   return (
-    <div className="rounded-md bg-white shadow-md border w-[400px] h-[640px] flex flex-col">
-      <div className="flex items-center h-[60px] bg-[#0061dd] rounded-t-md px-2 mb-2">
+    <div className="rounded-md bg-white shadow-md border h-min w-full flex flex-col">
+      <div className="flex items-center bg-[#0061dd] py-2 rounded-t-md px-2 mb-2">
         <h1 className="text-2xl text-white">{column.title}</h1>
       </div>
       <Droppable droppableId={column.id}>

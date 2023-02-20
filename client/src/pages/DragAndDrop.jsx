@@ -109,17 +109,16 @@ function DragAndDrop() {
 
     setState(newState);
 
-    alert(`Moviste la tarea ${removed} desde ${sourceCol.title} hacia ${destinationCol.title}!`)
-
+    alert(`Moviste la tarea ${removed} desde ${sourceCol.title} hacia ${destinationCol.title}! \nTu tarea es ${JSON.stringify(state.tasks[removed])}`)
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex flex-col py-2 w-full gap-5 min-h-screen mb-6 bg-[#f6f7f8] text-[#0061dd]">
+      <div className="flex flex-col py-2 w-full gap-5 duration-300  mb-6 bg-[#f6f7f8] text-[#0061dd]">
         <div className="flex items-center flex-col my-5 ">
           <h1 className="font-extrabold text-transparent text-4xl bg-clip-text bg-gradient-to-r from-sky-300 to-blue-600">Drag and drop</h1>
         </div>
-        <div className="flex justify-between px-4">
+        <div className="flex flex-col lg:flex-row justify-between gap-5 px-4">
           {state.columnOrder.map((columnId) => {
             const column = state.columns[columnId];
             const tasks = column.taskIds.map((taskId) => state.tasks[taskId]);
