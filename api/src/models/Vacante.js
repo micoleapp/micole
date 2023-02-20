@@ -42,7 +42,7 @@ module.exports = (sequelize) => {
         },
       },
       cuota_pension: {
-        type: DataTypes.DECIMAL(2),
+        type: DataTypes.DECIMAL(10,2),
         allowNull: false,
         validate: {
           notEmpty: {
@@ -58,7 +58,7 @@ module.exports = (sequelize) => {
         },
       },
       cuota_ingreso: {
-        type: DataTypes.DECIMAL(2),
+        type: DataTypes.DECIMAL(10,2),
         allowNull: false,
         validate: {
           notEmpty: {
