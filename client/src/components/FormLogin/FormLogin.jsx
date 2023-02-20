@@ -40,6 +40,7 @@ export default function FormLogin() {
           required: true,
           maxLength: 100,
         })}
+        className="shadow-md"
       />
       {errors.email?.type === "required" && (
         <p className={style.p}>Campo requerido</p>
@@ -52,11 +53,12 @@ export default function FormLogin() {
           required: true,
           maxLength: 100,
         })}
+        className="shadow-md"
       />
       {errors.password?.type === "required" && (
         <p className={style.p}>Campo requerido</p>
       )}
-      <button>INGRESAR</button>
+      <button className="hover:shadow-lg shadow-black duration-300">INGRESAR</button>
 
     </form>
     <div className={style.recuperar}>
