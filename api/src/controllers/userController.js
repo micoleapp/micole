@@ -11,7 +11,7 @@ const getUsers = async (req, res, next) => {
     if (totalUsers === 0) {
       return next({
         statusCode: 404,
-        message: 'No hay usuarios en la DB',
+        message: 'No hay registros en la DB',
       });
     }
     const pagination = getPagination(url, page, limit, totalUsers);
