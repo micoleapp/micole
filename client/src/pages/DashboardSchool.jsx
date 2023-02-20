@@ -233,6 +233,7 @@ function DashboardSchool() {
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
       const place = autocomplete.getPlace();
+      console.log(place)
       setDirec(
         place.address_components[1].long_name +
           " " +
@@ -416,8 +417,6 @@ function DashboardSchool() {
   };
 
   const [allData, setAllData] = useState({});
-
-  console.log(multimedia);
 
   return (
     <div className="flex lg:flex-row flex-col">

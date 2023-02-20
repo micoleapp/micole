@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import Error from "./pages/Error";
 import Payment from "./pages/Payment/Payment"
 import DashboardSchool from "./pages/DashboardSchool";
+import DragAndDrop from "./pages/DragAndDrop";
 function App() {
 
 
@@ -30,6 +31,7 @@ function App() {
           <Route path="/*" element={<Error />} />
           <Route path="*" element={<Error />} />
           <Route path="/dashboardschool" element={<DashboardSchool />} />
+          <Route path="/dnd" element={<DragAndDrop />} />
          <Route path="/payment" element={<Payment/>} />
         </Routes>
       )}
