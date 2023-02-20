@@ -130,147 +130,107 @@ router.get("/:Colegio_id", async (req, res) => {
     res.json({ err });
   }
 });
-// //---PEDIR TODOS LOS PRODUCTOS DE UN SELLER---
-// router.get("/seller/:SellerId", async (req, res) => {
-//   const { SellerId } = req.params;
 
-//   try {
-//     const products = await WareHouse.findAll({
-//       where: { SellerId: [SellerId] },
-//       include: [
-//         { model: Seller,
-//           attributes: ["store_name", "adress", "id", "email", "adress"],
-//         },
-//         { model: Product,
-//           attributes: [ "id", "categories", "name", "image", "id_table"],
-//         },
-//         { model: Review,
-//           attributes: ["id", "comment", "rating", "UserId"],
-//         },
-//       ],
-//       attributes: ["precio", "cantidad", "id", "ratingProm", "quantity"],
-//     });
+//------- POST A COLEGIOS--------
+router.post("/", async (req, res) => {
+  const {
+    nombre_responsable,
+    apellidos_responsable,
+    email,
+    telefono,
+    ruc,
+    nombre_colegio,
+    departamento,
+  } = req.body;
+  try {
+    const [colegio, creado] = await Colegio.findOrCreate({
+      where: {
+        Nombre_colegio: nombre_colegio,
+      },
+    });
+    if (creado) {
+      console.log("Colegio creado exitosamente");
+      id, (colegio.nombre_responsable = nombre_responsable);
+      colegio.apellidos_responsable = apellidos_responsable;
+      colegio.email = email;
+      colegio.telefono = telefono;
+      colegio.ruc = ruc;
+      colegio.departamento = departamento;
+      colegio.save();
+      res.status(200).json(colegio);
+    } else {
+      res.status(500).json([{ error: "Colegio existente" }]);
+    }
+  } catch (err) {
+    res.status(500).json({ err });
+  }
+});
 
-//     products.forEach(async p => {
-//       p.ratingProm = ratingProm(p.Reviews);
-//       await p.save()
-//     });
-
-//     res.send(products);
-//   } catch (err) {
-//     res.send({ error: err.message });
-//   }
-// });
-
-// router.get("/seller/:SellerId", async (req, res) => {
-//   const { SellerId } = req.params;
-
-//   try {
-//     const products = await WareHouse.findAll({
-//       where: { SellerId: [SellerId] },
-//       include: [
-//         { model: Seller,
-//           attributes: ["store_name", "adress", "id", "email", "adress"],
-//         },
-//         { model: Product,
-//           attributes: [ "id", "categories", "name", "image", "id_table"],
-//         },
-//         { model: Review,
-//           attributes: ["id", "comment", "rating", "UserId"],
-//         },
-//       ],
-//       attributes: ["precio", "cantidad", "id", "ratingProm", "quantity"],
-//     });
-
-//     products.forEach(async p => {
-//       p.ratingProm = ratingProm(p.Reviews);
-//       await p.save()
-//     });
-
-//     res.send(products);
-//   } catch (err) {
-//     res.send({ error: err.message });
-//   }
-// });
-
-// router.get("/:id", async (req, res) => {
-//   const { id } = req.params;
-
-//   try {
-//     const product = await WareHouse.findByPk(id, {
-//       include: [
-//         { model: Seller,
-//           attributes: ["store_name", "adress", "id", "email", "adress"],
-//         },
-//         { model: Product,
-//           attributes: [ "id", "categories", "name", "image", "id_table"],
-//         },
-//         { model: Review,
-//           include: {
-//             model: User,
-//             attributes: ["email"]
-//           },
-//           attributes: ["id", "comment", "rating", "UserId"],
-//         },
-//       ],
-//       attributes: ["precio", "cantidad", "id", "ratingProm", "quantity"],
-//     });
-
-//     product.ratingProm = ratingProm(product.Reviews);
-//     product.save();
-
-//     const componentData = await getComponentData(product.Product.categories, product.Product.id_table);
-
-//     res.send({...product.dataValues, componentData});
-//   } catch (err) {
-//     res.status(500).send({ error: err.message });
-//   }
-// });
-
-// router.get("/");
-
-// //------- POST A ALMACEN--------
-// router.post("/", async (req, res) => {
-//   const { precio, cantidad, id_vendedor, id_producto } = req.body;
-//   try {
-//     const [product, created] = await WareHouse.findOrCreate({
-//       where: {
-//         SellerId: id_vendedor,
-//         ProductId: id_producto,
-//       },
-//     });
-//     if (created) {
-//       console.log("Product created successfully");
-//       product.cantidad = cantidad;
-//       product.precio = precio;
-//       product.save()
-//       res.status(200).json(product);
-//     } else {
-//       res.status(500).json([{ error: "Producto existente" }]);
-//     }
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
-
-// //--------------------PUT  UN PRODUCTO DEL ALMACEN--------------------
-// router.put("/:id", async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { cantidad, precio } = req.body;
-//     const editedProduct = await WareHouse.update(
-//       {
-//         cantidad: cantidad,
-//         precio: precio,
-//       },
-//       { where: { id: id } }
-//     );
-//     res.json(editedProduct);
-//   } catch (err) {
-//     res.status(500).send({
-//       message: err.message,
-//     });
-//   }
-// });
+//--------------------PUT  UN PRODUCTO DEL ALMACEN--------------------
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      direccion,
+      numero_estudiantes,
+      fecha_fundacion,
+      nombre_director,
+      primera_iamgen,
+      galeria_fotos,
+      video_url,
+      area,
+      ugel,
+      ubicacion,
+      referencia_ubicacion,
+      telefono,
+      propuesta_valor,
+      descripcion,
+      horas_idioma_exstranjero,
+      rating,
+      idAuth,
+      PaisId,
+      DepartamentoId,
+      ProvinciaId,
+      DistritoId,
+      PlanPagoId,
+      isActive,
+      CategoriaId,
+    } = req.body;
+    const editedColegio = await Colegio.update(
+      {
+        direccion: direccion,
+        numero_estudiantes: numero_estudiantes,
+        fecha_fundacion: fecha_fundacion,
+        nombre_director: nombre_director,
+        primera_iamgen: primera_iamgen,
+        galeria_fotos: galeria_fotos,
+        video_url: video_url,
+        area: area,
+        ugel: ugel,
+        ubicacion: ubicacion,
+        referencia_ubicacion: referencia_ubicacion,
+        telefono: telefono,
+        propuesta_valor: propuesta_valor,
+        descripcion: descripcion,
+        horas_idioma_exstranjero: horas_idioma_exstranjero,
+        rating: rating,
+        idAuth: idAuth,
+        PaisId: PaisId,
+        DepartamentoId: DepartamentoId,
+        ProvinciaId: ProvinciaId,
+        DistritoId: DistritoId,
+        PlanPagoId: PlanPagoId,
+        isActive: isActive,
+        CategoriaId: CategoriaId,
+      },
+      { where: { id: id } }
+    );
+    res.json(editedColegio);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message,
+    });
+  }
+});
 
 module.exports = router;

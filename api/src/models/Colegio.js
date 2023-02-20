@@ -31,7 +31,17 @@ module.exports = (sequelize) => {
           },
         },
       },
-
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: {
+            args: true,
+            msg: "Ingresa un email valido",
+          },
+        },
+      },
       nombre_colegio: {
         type: DataTypes.STRING,
         allowNull: false,
