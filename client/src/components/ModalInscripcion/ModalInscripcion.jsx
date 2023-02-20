@@ -44,7 +44,7 @@ export default function ModalInscripcion({
               />
             )}
           </div>
-          <div>{OpenLogin === true && <FormLogin />}</div>
+          <div>{OpenLogin === true && isAuth === false && <FormLogin />}</div>
         </div>
       </div>
     </div>
