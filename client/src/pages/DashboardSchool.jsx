@@ -63,11 +63,12 @@ const containerStyle = {
   height: "400px",
 };
 
-function StandardImageList({ list, setImage }) {
+function StandardImageList({ list, setImage,eliminarImagenDePreview }) {
   return (
     <ImageList sx={{ width: "100%", height: 450 }} cols={3} rowHeight={400}>
       {list.map((item) => (
         <ImageListItem key={item}>
+          <button onClick={()=>eliminarImagenDePreview(item)} className="absolute bg-[#0061dd]/30 right-2 top-2 text-white hover:bg-[#0061dd] p-2 rounded-md duration-300">Quitar</button>
           <img
             src={item}
             alt={item}
@@ -406,6 +407,10 @@ function DashboardSchool() {
     }
   }, [files]);
 
+  const eliminarImagenDePreview = (img) => {
+    setPreview(preview.filter((image) => image !== img));
+  }
+
   const [image, setImage] = useState(null);
 
   const multimediaCompleted = () => {
@@ -505,7 +510,7 @@ function DashboardSchool() {
             <div className="mt-10">
               {allStepsCompleted() ? (
                 <React.Fragment>
-                  <Confetti width={width-10} height={height} style={{zIndex:500}}  />
+                  <Confetti width={width-10} height={width > 900 ? height+155 : height} style={{zIndex:500,position: "fixed"}}  />
                   <div className={`h-screen flex flex-col gap-10 justify-center`}>
                     <h1 className="text-4xl text-center font-bold mt-5">Felicitaciones completaste todos los pasos</h1>
                     <p className="text-center">Porfavor envia el formulario hacia nuestra base de datos para continuar</p>
@@ -1578,16 +1583,17 @@ function DashboardSchool() {
                           </div>
                           <button
                             type="submit"
-                            disabled={files !== null ? false : true}
+                            disabled={files !== null && preview.length !== 0 ? false : true}
                             className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
                           >
                             Upload
                           </button>
                         </form>
-                        {files !== null && (
+                        {files !== null && preview.length !== 0 && (
                           <>
                             <div className="border-2 rounded-md overflow-hidden p-2 bg-white">
                               <StandardImageList
+                                eliminarImagenDePreview={eliminarImagenDePreview}
                                 setImage={setImage}
                                 list={preview}
                               />
