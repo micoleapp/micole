@@ -379,15 +379,14 @@ function DashboardSchool() {
           formData
         );
         arrayImages.push(res.data.secure_url)
+        setMultimedia({
+          ...multimedia,
+          images: arrayImages,
+        });
       } catch (error) {
         console.log(error);
       }
-      setMultimedia({
-        ...multimedia,
-        images: arrayImages,
-      });
     });
-
   }
 
   const [multimedia, setMultimedia] = useState({
@@ -957,7 +956,7 @@ function DashboardSchool() {
                                 >
                                   <input
                                     type="text"
-                                    className="p-3 rounded-md border-2  outline-none"
+                                    className={`p-3 rounded-md border-2 ${width > 900 ? "w-[400px]" : " w-full"}  outline-none`}
                                     ref={direccion}
                                   />
                                 </Autocomplete>
@@ -967,7 +966,7 @@ function DashboardSchool() {
                                   id="direccion"
                                   className={`p-3 rounded-md border-2 ${
                                     direc === null ? "bg-inherit" : "bg-white"
-                                  }  outline-none`}
+                                  }  outline-none w-full`}
                                   placeholder="Dirección"
                                   value={direc}
                                   disabled
@@ -984,7 +983,7 @@ function DashboardSchool() {
                                   id="lat"
                                   className={`p-3 rounded-md border-2 ${
                                     latitud === null ? "bg-inherit" : "bg-white"
-                                  }  outline-none`}
+                                  }  outline-none hidden`}
                                   placeholder="Latitud"
                                   value={latitud}
                                   disabled
@@ -1003,7 +1002,7 @@ function DashboardSchool() {
                                     longitud === null
                                       ? "bg-inherit"
                                       : "bg-white"
-                                  }  outline-none`}
+                                  }  outline-none hidden`}
                                   placeholder="Longitud"
                                   value={longitud}
                                   disabled
