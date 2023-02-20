@@ -22,20 +22,32 @@ const signIn = async (req, res, next) => {
         message: 'Error en las credenciales de acceso',
       });
     }
-    const dataUser = await User.findOne({
-      where: { idAuth: authInstance.id },
-    });
+    const promises = [
+      User.findOne({ where: { idAuth: authInstance.id } }),
+      Colegio.findOne({ where: { idAuth: authInstance.id } }),
+    ];
+    const [dataUser, dataColegio] = await Promise.all(promises);
     const jwToken = generateToken(authInstance.id);
-    const sanitizedLogIn = {
-      id: authInstance.id,
-      email: authInstance.email,
-      nombre: dataUser.nombre,
-      apellidos: dataUser.apellidos,
-      dni: dataUser.dni,
-      telefono: dataUser.telefono,
-      rol: authInstance.rol,
-    };
-    return res.status(200).send({ user: sanitizedLogIn, token: jwToken.token });
+    const user = dataColegio
+      ? {
+          id: authInstance.id,
+          email: authInstance.email,
+          nombre_responsable: dataColegio.nombre_responsable,
+          apellidos_responsable: dataColegio.apellidos_responsable,
+          ruc: dataColegio.ruc,
+          telefono: dataColegio.telefono,
+          rol: authInstance.rol,
+        }
+      : {
+          id: authInstance.id,
+          email: authInstance.email,
+          nombre: dataUser.nombre,
+          apellidos: dataUser.apellidos,
+          dni: dataUser.dni,
+          telefono: dataUser.telefono,
+          rol: authInstance.rol,
+        };
+    return res.status(200).send({ user, token: jwToken.token });
   } catch (error) {
     return next(error);
   }
@@ -51,19 +63,32 @@ const getAuthById = async (req, res, next) => {
         message: 'El usuario no existe en la BD',
       });
     }
-    const dataUser = await User.findOne({
-      where: { idAuth: authInstance.id },
-    });
-    const sanitizedUser = {
-      id: authInstance.id,
-      email: authInstance.email,
-      nombre: dataUser.nombre,
-      apellidos: dataUser.apellidos,
-      dni: dataUser.dni,
-      telefono: dataUser.telefono,
-      rol: authInstance.rol,
-    };
-    return res.status(200).send({ user: sanitizedUser });
+    const promises = [
+      User.findOne({ where: { idAuth: authInstance.id } }),
+      Colegio.findOne({ where: { idAuth: authInstance.id } }),
+    ];
+    const [dataUser, dataColegio] = await Promise.all(promises);
+    const user = dataColegio
+      ? {
+          id: authInstance.id,
+          email: authInstance.email,
+          nombre_responsable: dataColegio.nombre_responsable,
+          apellidos_responsable: dataColegio.apellidos_responsable,
+          ruc: dataColegio.ruc,
+          telefono: dataColegio.telefono,
+          rol: authInstance.rol,
+        }
+      : {
+          id: authInstance.id,
+          email: authInstance.email,
+          nombre: dataUser.nombre,
+          apellidos: dataUser.apellidos,
+          dni: dataUser.dni,
+          telefono: dataUser.telefono,
+          rol: authInstance.rol,
+        };
+
+    return res.status(200).send({ user });
   } catch (error) {
     return next(error);
   }
@@ -79,7 +104,7 @@ const signUp = async (req, res, next) => {
     dni,
     ruc,
     telefono,
-    distrito,
+    DistritoId,
     esColegio,
   } = req.body;
   try {
@@ -90,20 +115,23 @@ const signUp = async (req, res, next) => {
         message: 'El email de usuario ya está registrado',
       });
     }
-    const newAuth = await Auth.create({ email, password, rol:"Colegio" });
+    const newAuth = await Auth.create({ email, password, rol: esColegio ? 'Colegio' : 'Usuario' });
     const idAuth = newAuth.id;
     if (esColegio) {
-      const newSchool = await Colegio.create({
+      const newColegio = await Colegio.create({
         nombre_responsable: nombre,
         apellidos_responsable: apellidos,
         nombre_colegio,
         telefono,
         ruc,
+        DistritoId,
         idAuth,
       });
       const sanitizedSchool = {
         email: newAuth.email,
-        nombre: newSchool.nombre_colegio,
+        nombre_responsable: newColegio.nombre_responsable,
+        apellidos_responsable: newColegio.apellidos_responsable,
+        nombre: newColegio.nombre_colegio,
         rol: newAuth.rol,
       };
       mailer.sendMailSignUp(sanitizedSchool, 'Colegio'); //Enviamos el mail de Confirmación de Registro para el Usuario Colegio

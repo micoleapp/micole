@@ -114,7 +114,7 @@ function DragAndDrop() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex flex-col py-2 w-full gap-5 duration-300  mb-6 bg-[#f6f7f8] text-[#0061dd]">
+      <div className="flex flex-col py-2 w-full min-h-screen gap-5 duration-300  mb-6 bg-[#f6f7f8] text-[#0061dd]">
         <div className="flex items-center flex-col my-5 ">
           <h1 className="font-extrabold text-transparent text-4xl bg-clip-text bg-gradient-to-r from-sky-300 to-blue-600">Drag and drop</h1>
         </div>
