@@ -8,7 +8,7 @@ import ContentLoader from "react-content-loader";
 import { Rating, Typography, Pagination, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   faCamera,
   faPlayCircle,
@@ -22,28 +22,21 @@ import {
   faArrowDown,
   faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { getAllSchools } from "../redux/SchoolsActions";
+import {
+  getAllSchools,
+  getAllDepartaments,
+  getAllDistrits
+} from "../redux/SchoolsActions";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 
+
 const pageSize = 5;
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
-const distrits = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
 const types = ["Religoso", "Hombres", "Mujeres", "Mixtos"];
 function valuetext(value) {
   return `${value}°C`;
@@ -55,29 +48,16 @@ function valuetext2(value) {
 
 const minDistance = 10;
 function ListSchool() {
-  /*
- 
-  para agarrar los querys
+
 
   const location = useLocation();
 
   const params = new URLSearchParams(location.search);
 
-  console.log(params.get("distrito"));
-
-  */
+  const [distritParams, setDistritParams] = React.useState(params.get("distrito"))
 
   const [distritName, setDistritName] = React.useState([]);
 
-  const handleChangeDistrit = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setDistritName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
-  };
   const [english, setEnglish] = React.useState(10);
 
   const handleChangeEnglish = (event, newValue) => {
@@ -88,7 +68,7 @@ function ListSchool() {
 
   const [value1, setValue1] = React.useState([20, 37]);
 
-  const [rating, setRating] = React.useState(2);
+  const [rating, setRating] = React.useState(10);
 
   const handleChange1 = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -127,20 +107,22 @@ function ListSchool() {
   });
 
   const dispatch = useDispatch();
-  const { allschools, loading } = useSelector((state) => state.schools);
-
-  useEffect(() => {
+  const { allschools, loading, departaments, distrits } = useSelector(
+    (state) => state.schools
+  );
+    useEffect(() => {
     dispatch(getAllSchools());
+    dispatch(getAllDepartaments())
+    dispatch(getAllDistrits())
   }, []);
+  const [disabledPage, setDisabledPage] = useState(false);
+  
 
   useEffect(() => {
-    if (allschools.length > 0) {
-      const schools = allschools.slice(pagination.from, pagination.to);
-      setPagination({ ...pagination, count: allschools.length, data: schools });
-    }
+    const schools = allschools.slice(pagination.from, pagination.to);
+    setPagination({ ...pagination, count: allschools.length, data: schools });
   }, [allschools, pagination.from, pagination.to]);
 
-  const [disabledPage, setDisabledPage] = useState(false);
   const handlePageChange = (event, page) => {
     setDisabledPage(true);
     setPagination({ data: {} });
@@ -151,16 +133,13 @@ function ListSchool() {
       setDisabledPage(false);
     }, 1000);
   };
-  const [checked, setChecked] = React.useState(true);
 
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
-  };
   const items = [1, 2, 3, 4, 5];
 
   const [toggle, setToggle] = useState(false);
   const [toggleDistrits, setToggleDistrits] = useState(false);
   const [toggleTypes, setToggleTypes] = useState(false);
+
 
   return (
     <div className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] ">
@@ -201,18 +180,43 @@ function ListSchool() {
                   />
                 </button>
               </div>
-              <div className={toggleDistrits ? "block h-[200px] overflow-y-scroll" : "hidden"}>
+              <div
+                className={
+                  toggleDistrits
+                    ? "block h-[200px] overflow-y-scroll"
+                    : "hidden"
+                }
+              >
                 <FormGroup>
-                  {distrits.map((distrit) => (
+                  {distrits?.map((distrit) => (
                     <FormControlLabel
                       control={
                         <Checkbox
+                        
+                        checked={
+                          Number(distritParams) === distrit.id ||
+                          distritName.includes(distrit.nombre_distrito)
+                        }
                           onChange={(event, target) => {
-                            console.log({ event, target });
+                            if (target) {
+                              setDistritParams(distrit.id);
+                              setDistritName([
+                                ...distritName,
+                                distrit.nombre_distrito,
+                               
+                              ]);
+                            } else {
+                              setDistritParams(null);
+                              setDistritName(
+                                distritName.filter(
+                                  (dist) => dist !== distrit.nombre_distrito
+                                )
+                              );
+                            }
                           }}
                         />
                       }
-                      label={distrit}
+                      label={distrit.nombre_distrito}
                     />
                   ))}
                 </FormGroup>
@@ -231,13 +235,16 @@ function ListSchool() {
                   />
                 </button>
               </div>
-              <div className={toggleTypes ? "block h-[200px] overflow-y-scroll" : "hidden"}>
-
-              <FormGroup>
-                {types.map((type) => (
-                  <FormControlLabel control={<Checkbox />} label={type} />
-                ))}
-              </FormGroup>
+              <div
+                className={
+                  toggleTypes ? "block h-[200px] overflow-y-scroll" : "hidden"
+                }
+              >
+                <FormGroup>
+                  {types.map((type) => (
+                    <FormControlLabel control={<Checkbox />} label={type} />
+                  ))}
+                </FormGroup>
               </div>
             </div>
             <div className="drop-shadow-md">
@@ -289,6 +296,8 @@ function ListSchool() {
               <Rating
                 name="simple-controlled"
                 value={rating}
+                max={10}
+                precision={0.5}
                 onChange={(event, newValue) => {
                   setRating(newValue);
                 }}
@@ -319,14 +328,15 @@ function ListSchool() {
         <section className="lg:w-3/4 w-full lg:pl-10 lg:pr-10 lg:pb-10 p-0 flex flex-col gap-5">
           <div className="flex items-center justify-between drop-shadow-md">
             <small>
-              Mostrando <span className="font-semibold">{pageSize}</span> de{" "}
-              <span className="font-semibold">{pagination?.count}</span>{" "}
+              Mostrando{" "}
+              <span className="font-semibold">{pagination?.data?.length}</span>{" "}
+              de <span className="font-semibold">{pagination?.count}</span>{" "}
               resultados{" "}
             </small>
             <FormControl
               variant="standard"
               style={{ width: "200px", height: "70px" }}
-              size='small'
+              size="small"
             >
               <InputLabel id="demo-simple-select-standard-label">
                 Ordenar por
@@ -356,7 +366,7 @@ function ListSchool() {
                     {" "}
                     <div className="relative">
                       <img
-                        src={school.image}
+                        src={school.primera_imagen}
                         alt={school.title}
                         className="w-[400px] h-64 object-cover"
                       />
@@ -369,11 +379,12 @@ function ListSchool() {
                       <div className="flex absolute gap-5 text-white bottom-3 left-3 bg-black/50 p-2 rounded-md">
                         <span className="flex hover:scale-110 duration-200 cursor-pointer items-center gap-2">
                           <FontAwesomeIcon size="lg" icon={faCamera} />
-                          22
+                          {/*{JSON.parse(school.galeria_imagenes).length}*/}
                         </span>
                         <span className="flex hover:scale-110 duration-200 cursor-pointer items-center gap-2">
                           {" "}
-                          <FontAwesomeIcon size="lg" icon={faPlayCircle} />9
+                          <FontAwesomeIcon size="lg" icon={faPlayCircle} />
+                          {/*{JSON.parse(school.video_url).length}*/}
                         </span>
                       </div>
                     </div>
@@ -382,10 +393,10 @@ function ListSchool() {
                         <div className="flex flex-col gap-4">
                           <div className="flex flex-col w-fit gap-2">
                             <h1 className="font-semibold text-lg">
-                              {school.title}{" "}
+                              {school.nombre_colegio}{" "}
                             </h1>
                             <small className="text-gray-400">
-                              {school.category}{" "}
+                              {school.direccion}{" "}
                             </small>
                           </div>
                           <div className="flex w-fit gap-10">
@@ -396,7 +407,7 @@ function ListSchool() {
                                 icon={faUsers}
                               />
                               <span className="text-sm text-gray-400">
-                                368 Alumnos
+                                {school.numero_estudiantes} Alumnos
                               </span>
                             </div>
                             <div className="flex flex-col text-center">
@@ -423,7 +434,7 @@ function ListSchool() {
                           </div>
                         </div>
                         <div className="flex flex-col justify-between">
-                          <h1>Numero: +54123123123</h1>
+                          <h1>Numero: {school.telefono}</h1>
                           <Link
                             to={`/schooldetail/${school.id}`}
                             className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center font-semibold"

@@ -8,14 +8,11 @@ gap: 20px;
 
 .Form input{
     border: 1px solid #999999;
-    border-radius: 10px;
+    border-radius: 5px;
     width: 340px;
     height: 50px;
     outline-color: #0061dfab;
-}
-.Form input::placeholder{
-
-    padding-left: 10px;
+    padding: 5px;
 }
 
 .img_div {

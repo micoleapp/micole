@@ -3,8 +3,12 @@ import { useForm } from "react-hook-form";
 import style from "./FormLogin.module.css";
 import Logo from "../../assets/logoPayment.png";
 import FB from "./svg/FB";
+import { login } from "../../redux/AuthActions";
 import Gmail from "./svg/Gmail";
+import { useDispatch } from "react-redux";
 export default function FormLogin() {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -18,8 +22,9 @@ export default function FormLogin() {
     mode: "onChange",
   });
 
-  const OnSubmit = async (data) => {
+  const OnSubmit = async (user) => {
     console.log(data);
+    dispatch(login(user))  
   };
 
   return (
@@ -35,6 +40,7 @@ export default function FormLogin() {
           required: true,
           maxLength: 100,
         })}
+        className="shadow-md"
       />
       {errors.email?.type === "required" && (
         <p className={style.p}>Campo requerido</p>
@@ -47,11 +53,12 @@ export default function FormLogin() {
           required: true,
           maxLength: 100,
         })}
+        className="shadow-md"
       />
       {errors.password?.type === "required" && (
         <p className={style.p}>Campo requerido</p>
       )}
-      <button>INGRESAR</button>
+      <button className="hover:shadow-lg shadow-black duration-300">INGRESAR</button>
 
     </form>
     <div className={style.recuperar}>

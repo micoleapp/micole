@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardsOne from "../components/CardsOne";
 import CardsTwo from "../components/CardsTwo";
 import VectorPeople from "../assets/VectorPeople.png";
@@ -6,7 +6,9 @@ import VectorTalk from "../assets/VectorTalk.png";
 import GroupSchool from "../assets/GroupSchool.png";
 import Logo from "../assets/logoblanco.png";
 import { Link } from "react-router-dom";
+import {  getAllDistrits} from "../redux/SchoolsActions";
 import ModalInscripcion from "../components/ModalInscripcion/ModalInscripcion";
+import { useDispatch } from "react-redux";
 function EnrollSchool() {
   const [OpenRegister, setOpenRegister] = useState(false);
   const [OpenPaymentPLan, setOpenPaymentPLan] = useState({
@@ -17,6 +19,12 @@ function EnrollSchool() {
   const toggleInscripcion = () => {
     setOpenRegister(true);
   };
+const dispatch =useDispatch()
+
+  useEffect(() => {
+    dispatch(getAllDistrits())
+  }, []);
+
   return (
     <div>
       <header className="bg-[url('./assets/enroll.png')] h-[700px] flex justify-center items-center flex-col gap-10">

@@ -11,10 +11,16 @@ import VectorTalk from "../../assets/VectorTalk.png";
 import Carrusel from "../../components/Carrusel/Carrusel";
 import FiltrosHome from "../../components/FiltrosHome/FiltrosHome";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllDepartaments, getAllDistrits, getAllSchools } from "../../redux/SchoolsActions";
 function Home() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     navigate("/");
+    dispatch(getAllSchools());
+    dispatch(getAllDepartaments())
+    dispatch(getAllDistrits())
   }, []);
 
   return (

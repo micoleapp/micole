@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import style from "./FormInscripcion.module.css";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -10,7 +10,16 @@ import ListItemText from "@mui/material/ListItemText";
 import { InputLabel } from "@mui/material";
 import MockupDistritos from "../../MockupInfo/MockupDistritos";
 
-function FormInscripcion({handlerOpenPayment,handlerOpenLogin}) {
+import { useDispatch, useSelector } from "react-redux";
+import { register as registerUser } from "../../redux/AuthActions";
+function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
+  const [Distrito, setDistrito] = useState(false);
+  const { distrits } = useSelector((state) => state.schools);
+  const dispatch = useDispatch();
+  const handleValueDistrito = (event) => {
+    console.log(event.target.value);
+    setDistrito(event.target.value);
+  };
   const {
     register,
     handleSubmit,
@@ -19,22 +28,39 @@ function FormInscripcion({handlerOpenPayment,handlerOpenLogin}) {
   } = useForm({
     defaultValues: {
       name: "",
-      email: "",
+      mail: "",
       ruc: "",
       lastname: "",
       phone: "",
-      schoolDistrict: "",
+     
       schoolName: "",
+      password: "Colegio#",
+      esColegio: true,
     },
     mode: "onChange",
   });
   const navigate = useNavigate();
   const handlerLogin = () => {
-    handlerOpenLogin(true)
+    handlerOpenLogin(true);
   };
-  const OnSubmit = () => {
-    handlerOpenPayment(true)
+  const OnSubmit = (user) => {
+    const data = {
+      esColegio: true,
+      lastname: user.lastname,
+      email: user.mail,
+      name: user.name,
+      password: user.password,
+      phone: user.phone,
+      ruc: user.ruc,
+      schoolDistrict: user.schoolDistrict,
+      schoolName: user.schoolName,
+      schoolDistrict:  Distrito,
+    };
+    console.log(data);
+    dispatch(registerUser(data));
   };
+
+  console.log(distrits);
 
   return (
     <>
@@ -58,20 +84,20 @@ function FormInscripcion({handlerOpenPayment,handlerOpenLogin}) {
 
             <label className={style.label}>Email</label>
             <input
-              {...register("email", {
+              {...register("mail", {
                 required: true,
 
                 maxLength: 100,
                 pattern: /\S+@\S+\.\S+/,
               })}
             />
-            {errors.email?.type === "required" && (
-              <p className={style.p}>Introduzca su email.</p>
+            {errors.mail?.type === "required" && (
+              <p className={style.p}>Introduzca su mail.</p>
             )}
-            {errors.email?.type === "pattern" && (
+            {errors.mail?.type === "pattern" && (
               <p className={style.p}>El formato es examp@sds.com</p>
             )}
-            {errors.email?.type === "maxLength" && (
+            {errors.mail?.type === "maxLength" && (
               <p className={style.p}>Demasiados caracteres.</p>
             )}
             <label className={style.label}>RUC</label>
@@ -93,12 +119,12 @@ function FormInscripcion({handlerOpenPayment,handlerOpenLogin}) {
                   labelId="demo-simple-select-standard-label"
                   id="demo-type-select-standard"
                   // value={type}
-                  // onChange={handleChangeDistric}
+                  onChange={handleValueDistrito}
                   label="Tipo de colegio"
                 >
-                  {MockupDistritos.map((type) => (
-                    <MenuItem value={type} key={type}>
-                      <ListItemText primary={type} />
+                  {distrits.map((dis) => (
+                    <MenuItem value={dis.id} key={dis.id}>
+                      <ListItemText primary={dis.nombre_distrito} />
                     </MenuItem>
                   ))}
                 </Select>
@@ -146,9 +172,8 @@ function FormInscripcion({handlerOpenPayment,handlerOpenLogin}) {
           <div className={style.divSingIn}>
             <p>Ya tienes cuenta ? </p>
             <div onClick={handlerLogin}>
-               <p style={{ color: "blue", cursor:"pointer" }}>Inicia Sesión </p>
+              <p style={{ color: "blue", cursor: "pointer" }}>Inicia Sesión </p>
             </div>
-           
           </div>
         </div>
       </form>

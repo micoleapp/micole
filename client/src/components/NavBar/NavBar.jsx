@@ -5,8 +5,9 @@ import style from "./NavBar.module.css";
 import Categoria from "./Categoria/Categoria";
 import Contacto from "./Contacto/Contacto";
 import { Link } from "react-router-dom";
+import ModalLogin from "../ModalLogin/ModalLogin";
 function NavBar() {
- 
+  const [OpenLogin, setOpenLogin] = useState(false);
   const [OpenCategory, setOpenCategory] = useState(false);
   const [ OpenContact , setOpenContact ] = useState(false);
   const ToggleCategory = () => {
@@ -17,6 +18,11 @@ function NavBar() {
     setOpenContact(!OpenContact);
     setOpenCategory(false);
   };
+
+const handlerLogin =()=>{
+  setOpenLogin(true)
+}
+
   return (
     <div className={style.layout}>
   <Link to={"/"}>
@@ -38,7 +44,7 @@ function NavBar() {
           <Burguer />
         </div>
         <div className={style.buttonContainer}>
-          <button className={style.SesionButtom}>Iniciar sesion</button>
+          <button  onClick={handlerLogin} className={style.SesionButtom}>Iniciar sesion</button>
 
           <Link to={"/enroll"}>
             <button className={style.SesionButtom}>Inscribe tu colegio</button>
@@ -47,7 +53,7 @@ function NavBar() {
       </div>
       {OpenCategory && <div className={style.divCategory}> <Categoria />  </div> }
       {OpenContact &&<div className={style.divContact}>  <Contacto /> </div>}
-      
+      {  OpenLogin && <ModalLogin handlerClose={setOpenLogin} />}
     </div>
   );
 }
