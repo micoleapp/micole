@@ -26,7 +26,7 @@ export default function ModalInscripcion({
   };
   return (
     <div className={style.Overlay}>
-      <div style={{ paddingTop: "40px", marginBottom: "20px" }}>
+      <div>
         <div className={style.contenedorModal}>
           <div className={style.DivCloseButton}>
             <div onClick={toggleClose}>

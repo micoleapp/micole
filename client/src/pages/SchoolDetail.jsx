@@ -891,7 +891,7 @@ function SchoolDetail() {
                 <img
                   src={image}
                   alt=""
-                  className="absolute border-4 top-1/2 left-1/2 -translate-x-1/2 rounded-md -translate-y-1/2 block max-w-[80%] max-h-[80%] object-cover "
+                  className="absolute border-4 top-1/2 left-1/2 -translate-x-1/2 rounded-md -translate-y-1/2 block max-w-[80%] max-h-[80%] object-cover"
                 />
               </div>
             </div>
