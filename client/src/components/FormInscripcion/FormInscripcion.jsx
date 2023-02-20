@@ -32,9 +32,9 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
       ruc: "",
       lastname: "",
       phone: "",
-     
+
       schoolName: "",
-      password: "Colegio#",
+      password: "",
       esColegio: true,
     },
     mode: "onChange",
@@ -46,15 +46,16 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
   const OnSubmit = (user) => {
     const data = {
       esColegio: true,
-      lastname: user.lastname,
+      apellidos: user.lastname,
       email: user.mail,
-      name: user.name,
+      nombre: user.name,
       password: user.password,
-      phone: user.phone,
+      telefono: user.phone,
+      nombre_colegio: user.schoolNam,
       ruc: user.ruc,
-      schoolDistrict: user.schoolDistrict,
-      schoolName: user.schoolName,
-      schoolDistrict:  Distrito,
+
+      nombre_colegio: user.schoolName,
+      DistritoId: Distrito,
     };
     console.log(data);
     dispatch(registerUser(data));
@@ -151,7 +152,19 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
             {errors.phone && (
               <p className={style.p}>Introduzca su telefono .</p>
             )}
-
+            <label className={style.label}>Contraseña</label>
+            <input
+              placeholder="Contraseña"
+              type="password"
+              {...register("password", {
+                required: true,
+                maxLength: 100,
+              })}
+              className="shadow-md"
+            />
+            {errors.password?.type === "required" && (
+              <p className={style.p}>Campo requerido</p>
+            )}
             <label className={style.label}>Nombre del Colegio</label>
             <input
               {...register("schoolName", {

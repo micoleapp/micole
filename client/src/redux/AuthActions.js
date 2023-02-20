@@ -21,37 +21,41 @@ export const getOneUser = () => (dispatch) => {
 export const register = (user) => (dispatch) => {
   const {
     esColegio,
-    lastname,
     email,
-    name,
     password,
-    phone,
+    nombre,
+    apellidos,
+    nombre_colegio,
     ruc,
-    schoolDistrict,
-    schoolName,
+    telefono,
+    DistritoId,
+   
   } = user;
 
-  console.log(    esColegio,
-    lastname,
+  console.log(
+    esColegio,
     email,
-    name,
     password,
-    phone,
+    nombre,
+    apellidos,
+    nombre_colegio,
     ruc,
-    schoolDistrict,
-    schoolName,)
+    telefono,
+    DistritoId,
+
+  );
   dispatch(isLoading());
   axios
     .post("/auth/signup", {
       esColegio,
-      lastname,
       email,
-      name,
       password,
-      phone,
+      nombre,
+      apellidos,
+      nombre_colegio,
       ruc,
-      schoolDistrict,
-      schoolName,
+      telefono,
+      DistritoId,
     })
     .then((res) => {
       dispatch(registerUser());
@@ -62,9 +66,11 @@ export const register = (user) => (dispatch) => {
 };
 
 export const login = (user) => (dispatch) => {
+  const { email, password } = user;
+  console.log(user);
   dispatch(isLoading());
   axios
-    .post("/auth/signin", { user })
+    .post("/auth/signin", { email, password })
     .then((res) => {
       dispatch(loginUser(res.data.user));
       localStorage.setItem("token", res.data.token);

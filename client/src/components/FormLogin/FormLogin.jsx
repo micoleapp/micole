@@ -23,7 +23,7 @@ export default function FormLogin() {
   });
 
   const OnSubmit = async (user) => {
-    console.log(data);
+    
     dispatch(login(user))  
   };
 
