@@ -57,11 +57,11 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
       nombre_colegio: user.schoolName,
       DistritoId: Distrito,
     };
-    console.log(data);
+
     dispatch(registerUser(data));
   };
 
-  console.log(distrits);
+
 
   return (
     <>
@@ -74,6 +74,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
           <div className={style.divInputs}>
             <label className={style.label}>Nombre</label>
             <input
+             placeholder="Introduzca su nombre "
               {...register("name", {
                 required: true,
 
@@ -85,6 +86,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
 
             <label className={style.label}>Email</label>
             <input
+             placeholder="Introduzca su correo electronico "
               {...register("mail", {
                 required: true,
 
@@ -102,7 +104,9 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
               <p className={style.p}>Demasiados caracteres.</p>
             )}
             <label className={style.label}>RUC</label>
-            <input type="number" {...register("ruc", { required: true })} />
+            <input 
+             placeholder="Introduzca su nro de RUC"
+            type="number" {...register("ruc", { required: true })} />
             {errors.ruc && <p className={style.p}>Introduzca su numero RUC.</p>}
 
             <label className={style.label}>Distrito del Colegio</label>
@@ -135,6 +139,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
           <div className={style.divInputs}>
             <label className={style.label}>Apellido</label>
             <input
+             placeholder="Introduzca su apellido "
               {...register("lastname", {
                 required: true,
                 maxLength: 100,
@@ -148,7 +153,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
               <p className={style.p}>Demasiados caracteres.</p>
             )}
             <label className={style.label}>Telefono</label>
-            <input type="number" {...register("phone", { required: true })} />
+            <input type="number"placeholder="Introduzca numero de telefono" {...register("phone", { required: true })} />
             {errors.phone && (
               <p className={style.p}>Introduzca su telefono .</p>
             )}
@@ -167,6 +172,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
             )}
             <label className={style.label}>Nombre del Colegio</label>
             <input
+             placeholder="Introduzca el nombre de su colegio"
               {...register("schoolName", {
                 required: true,
                 maxLength: 100,

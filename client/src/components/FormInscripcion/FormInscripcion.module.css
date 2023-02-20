@@ -37,7 +37,9 @@
   border-radius: 8px;
   border: 1px solid rgb(121, 119, 119);
 }
-
+.form input::placeholder{
+  padding: 10px;
+}
 .divInputs {
   display: flex;
   flex-direction: column;
