@@ -368,6 +368,7 @@ function DashboardSchool() {
 
   function handleFilesSubmit(e) {
     e.preventDefault();
+    let arrayImages = []
     preview?.map(async (image, index) => {
       const formData = new FormData();
       try {
@@ -377,15 +378,16 @@ function DashboardSchool() {
           "https://api.cloudinary.com/v1_1/de4i6biay/image/upload",
           formData
         );
-        setMultimedia({
-          ...multimedia,
-          images: [...multimedia.images, res.data.secure_url],
-        });
-        alert(`Carga nro ${index + 1} exitosa`);
+        arrayImages.push(res.data.secure_url)
       } catch (error) {
         console.log(error);
       }
+      setMultimedia({
+        ...multimedia,
+        images: arrayImages,
+      });
     });
+
   }
 
   const [multimedia, setMultimedia] = useState({
@@ -422,6 +424,13 @@ function DashboardSchool() {
   };
 
   const [allData, setAllData] = useState({});
+
+  const handleSubmitFormComplete = (e) => {
+    e.preventDefault();
+    console.log(allData)
+  }
+
+  console.log(multimedia)
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -515,7 +524,7 @@ function DashboardSchool() {
                     <h1 className="text-4xl text-center font-bold mt-5">Felicitaciones completaste todos los pasos</h1>
                     <p className="text-center">Porfavor envia el formulario hacia nuestra base de datos para continuar</p>
                     <img src={Logo} alt="" className="object-cover mx-auto"/>
-                    <button type="submit" className="bg-[#0061dd] text-white rounded-md mx-auto p-3">Enviar datos</button>
+                    <button type="submit" className="bg-[#0061dd] text-white rounded-md mx-auto p-3" onClick={handleSubmitFormComplete}>Enviar datos</button>
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       <Box sx={{ flex: "1 1 auto" }} />
                       <Button onClick={handleReset}>Reset</Button>

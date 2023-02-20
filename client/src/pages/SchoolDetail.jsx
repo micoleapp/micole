@@ -170,7 +170,7 @@ function SchoolDetail() {
     return alert(JSON.stringify(comentario))
   }
 
-  console.log(cita)
+  console.log(comentario)
 
   return (
     <div className="bg-[#f6f7f8]">
