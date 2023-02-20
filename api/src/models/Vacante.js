@@ -41,38 +41,38 @@ module.exports = (sequelize) => {
           },
         },
       },
-      cuota_pension: {
-        type: DataTypes.DECIMAL(2),
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: 'El campo cuota_pension no puede estar vacío',
-          },
-          isDecimal: {
-            msg: 'El campo cuota_pension debe ser un número decimal',
-          },
-          min: {
-            args: [0],
-            msg: 'El campo cuota_pension debe ser un número decimal positivo',
-          },
-        },
-      },
-      cuota_ingreso: {
-        type: DataTypes.DECIMAL(2),
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: 'El campo cuota_ingreso no puede estar vacío',
-          },
-          isDecimal: {
-            msg: 'El campo cuota_pension debe ser un número decimal',
-          },
-          min: {
-            args: [0],
-            msg: 'El campo cuota_pension debe ser un número decimal positivo',
-          },
-        },
-      },
+      // cuota_pension: {
+      //   type: DataTypes.DECIMAL(2),
+      //   allowNull: false,
+      //   validate: {
+      //     notEmpty: {
+      //       msg: 'El campo cuota_pension no puede estar vacío',
+      //     },
+      //     isDecimal: {
+      //       msg: 'El campo cuota_pension debe ser un número decimal',
+      //     },
+      //     min: {
+      //       args: [0],
+      //       msg: 'El campo cuota_pension debe ser un número decimal positivo',
+      //     },
+      //   },
+      // },
+      // cuota_ingreso: {
+      //   type: DataTypes.DECIMAL(2),
+      //   allowNull: false,
+      //   validate: {
+      //     notEmpty: {
+      //       msg: 'El campo cuota_ingreso no puede estar vacío',
+      //     },
+      //     isDecimal: {
+      //       msg: 'El campo cuota_pension debe ser un número decimal',
+      //     },
+      //     min: {
+      //       args: [0],
+      //       msg: 'El campo cuota_pension debe ser un número decimal positivo',
+      //     },
+      //   },
+      // },
       tamaño_grupo: {
         type: DataTypes.INTEGER,
         allowNull: false,
