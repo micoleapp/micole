@@ -61,7 +61,6 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
       nombre: user.name,
       password: user.password,
       telefono: user.phone,
-      nombre_colegio: user.schoolNam,
       ruc: user.ruc,
 
       nombre_colegio: user.schoolName,
@@ -228,7 +227,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
           </div>
         </div>
         <div className={style.divButton}>
-          <button>REGISTRARSE</button>
+          <button type="submit">REGISTRARSE</button>
           <div className={style.divSingIn}>
             <p>Ya tienes cuenta ? </p>
             <div onClick={handlerLogin}>

@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "back" : "json-server --watch fakedb/db.json --port 3000"
+    "back": "json-server --watch fakedb/db.json --port 3000"
   },
   "dependencies": {
     "@date-io/dayjs": "^2.16.0",

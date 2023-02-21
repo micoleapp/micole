@@ -38,7 +38,7 @@ export default function ModalLogin({ handlerClose }) {
             
             </>
           ) : (
-            <FormLogin />
+            <FormLogin handlerClose={handlerClose} />
           )}
         </div>
       </div>

@@ -87,7 +87,7 @@ function NavBar() {
           <Contacto />{" "}
         </div>
       )}
-      {OpenLogin && <ModalLogin handlerClose={setOpenLogin} />}
+      {OpenLogin && <ModalLogin handlerClose={setOpenLogin} OpenLogin={OpenLogin} />}
     </div>
   );
 }

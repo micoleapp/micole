@@ -179,7 +179,7 @@ function SchoolDetail() {
         alt="banner"
         className="object-cover w-full h-[500px]"
       />
-      <div className="p-8 px-5 lg:px-[100px]">
+      <div className="p-8 px-5 lg:px-[100px]"  data-aos="fade-up" data-aos-duration='1000'>
         <div className="header drop-shadow-md">
           <h1 className="text-2xl  font-semibold">
             {oneSchool.nombre_escuela}
@@ -282,11 +282,11 @@ function SchoolDetail() {
         </div>
         <main className="flex gap-5 flex-col lg:flex-row">
           <section className="left mt-5 flex flex-col gap-8 w-full">
-            <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md">
+            <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md"  data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}                >
               <h2 className="font-semibold text-xl">Descripcion</h2>
               <p className="text-black/60 text-base">{oneSchool.descripcion}</p>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"    data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}               >
               <h2 className="font-semibold text-xl">Ubicacion</h2>
               <div className="flex text-xs w-full justify-between">
                 <ul className="flex flex-col gap-3">
@@ -330,7 +330,7 @@ function SchoolDetail() {
               </div>
               <Maps />
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"   data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}               >
               <h2 className="font-semibold text-xl">Detalles del Colegio</h2>
               <div className="flex text-xs w-full flex-col lg:flex-row gap-3 justify-between">
                 <ul className="flex flex-col gap-3">
@@ -391,7 +391,7 @@ function SchoolDetail() {
                 </ul>
               </div>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md">
+            <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md"   data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}                >
               <h2 className="font-semibold text-xl">
                 Propuesta Valor Educativo
               </h2>
@@ -399,7 +399,7 @@ function SchoolDetail() {
                 {oneSchool.propuesta_valor}
               </p>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"     data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}              >
               <h2 className="font-semibold text-xl">Infraestructura</h2>
               <Tabs
                 value={value}
@@ -637,7 +637,7 @@ function SchoolDetail() {
                 </TabPanel>
               </div>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"    data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}             >
               <h2 className="font-semibold text-xl">
                 Acreditaciones / Certificaciones / Asosiaciones
               </h2>
@@ -672,7 +672,7 @@ function SchoolDetail() {
                 </ul>
               </div>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"   data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}               >
               <h2 className="font-semibold text-xl">Lugares cercanos</h2>
               <h3 className="font-medium text-lg flex items-center gap-2">
                 {" "}
@@ -767,7 +767,7 @@ function SchoolDetail() {
             </div>
           </section>
           <section className="right mt-5  flex flex-col gap-8 w-full">
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"     data-aos="zoom-in-left" data-aos-duration='1500'  data-aos-mirror={false}              >
               <h2 className="font-semibold text-xl">Solicitar una visita</h2>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <div className="flex w-full justify-between flex-col gap-4 lg:flex-row">
@@ -868,7 +868,7 @@ function SchoolDetail() {
                 </Link>
               </p>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full" data-aos="zoom-in-left" data-aos-duration='1500'  data-aos-mirror={false}>
               <h2 className="font-semibold text-xl">Galeria</h2>
               {oneSchool.hasOwnProperty("galeria_fotos") && (
                 <QuiltedImageList
@@ -895,13 +895,13 @@ function SchoolDetail() {
                 />
               </div>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full" data-aos="zoom-in-left" data-aos-duration='1500'  data-aos-mirror={false}>
               <h2 className="font-semibold text-xl">Video</h2>
               <video width="750" height="500" controls className="rounded-md">
                 <source src={oneSchool.video_url && oneSchool.video_url.trim()} type="video/mp4" />
               </video>
             </div>
-            <form className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full" onSubmit={comentarioSubmit}>
+            <form className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full" onSubmit={comentarioSubmit} data-aos="zoom-in-left" data-aos-duration='1500'  data-aos-mirror={false}>
               <h2 className="font-semibold text-xl">Deja tu comentario</h2>
               <div className="flex flex-col lg:grid grid-cols-2 text-black/70">
                 <div>

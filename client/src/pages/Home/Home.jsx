@@ -49,19 +49,21 @@ function Home() {
               title="Cientos de alternativas 
               para escoger"
               parrafe="Encuentra una gran variedad de colegios que se acomoden a tus necesidades"
+              duration={"0"}
             />
             <CardsOne
               img={VectorPeople}
               title="Contacto directo 
               con tu colegio de interés"
               parrafe="Separa una cita directamente desde la plataforma con un solo click"
-
+              duration={"200"}
             />
             <CardsOne
               img={VectorTalk}
               title="Revisa recomendaciones 
               de nuestra comunidad"
               parrafe="Verifica miles de opiniones de otros padres de familia sobre los colegios de la plataforma."
+              duration={"400"}
             />
           </div>
         </section>

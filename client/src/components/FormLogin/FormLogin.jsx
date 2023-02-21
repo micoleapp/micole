@@ -8,7 +8,8 @@ import Gmail from "./svg/Gmail";
 import { useDispatch } from "react-redux";
 import { BsEye } from "react-icons/bs";
 import { BsEyeSlash } from "react-icons/bs";
-export default function FormLogin() {
+import {Link} from 'react-router-dom'
+export default function FormLogin({handlerClose}) {
   const dispatch = useDispatch();
 
   const ToggleSeePass = () => {
@@ -75,9 +76,15 @@ export default function FormLogin() {
       <button className="hover:shadow-lg shadow-black duration-300">INGRESAR</button>
 
     </form>
-    <div className={style.recuperar}>
-        <h1>¿Has olvidado tu contraseña?</h1>
-        <p>Recuperar contraseña</p>
+    <div className="text-center mb-3">
+        <p>¿Has olvidado tu contraseña?</p>
+        <p className="text-[#0061dd]">Recuperar contraseña</p>
+    </div>
+    <div className="text-center mb-3">
+        <p>¿No tienes una cuenta?</p>
+        <Link to={"/enroll"} state={{register: true}} className="text-[#0061dd]" onClick={()=>handlerClose(false)}>
+        Registrate Aqui
+          </Link>
     </div>
     <div className={style.socialMedia}>
         <p>Prefiero iniciar sesion con:</p>

@@ -22,6 +22,7 @@ function EnrollSchool() {
   };
   const dispatch =useDispatch()
   useState(()=>{
+    window.scrollTo(0, 0);
     dispatch(getAllDistrits())
     if(location.state !== null && location.state.register === true){
       setOpenRegister(true)
@@ -40,14 +41,14 @@ function EnrollSchool() {
         un proceso de admisión simple y eficiente
       </marquee>
       <header className="bg-[url('./assets/enroll.png')] h-[700px] flex justify-center items-center flex-col gap-10">
-        <h1 className="text-white text-center text-4xl font-bold">
+        <h1 className="text-white text-center text-4xl font-bold" data-aos="fade-up" data-aos-delay="0"  data-aos-mirror={false}>
           Publica tu colegio. Concreta citas con familias interesadas. <br />
           Gestiona todo en línea. Obtén nuevos estudiantes
         </h1>
-        <h2 className="text-white text-center text-3xl font-bold">
+        <h2 className="text-white text-center text-3xl font-bold" data-aos="fade-up" data-aos-delay="100"  data-aos-mirror={false}>
           Todo en un solo lugar, de forma simple y a bajo costo
         </h2>
-        <div onClick={toggleInscripcion}>
+        <div onClick={toggleInscripcion} data-aos="fade-up"  data-aos-mirror={false} data-aos-delay="200">
           <button className="uppercase p-3 rounded-sm bg-[#0061dd] text-white font-semibold">
             inscribe tu colegio aquí
           </button>
@@ -59,7 +60,7 @@ function EnrollSchool() {
           />
         )}
 
-        <button className="px-4 py-1 rounded-md text-[#0061dd] bg-white font-semibold">
+        <button className="px-4 py-1 rounded-md text-[#0061dd] bg-white font-semibold" data-aos="fade-up" data-aos-delay="300"   data-aos-mirror={false}>
           ¡Quiero más información por el momento!
         </button>
       </header>
@@ -72,19 +73,21 @@ function EnrollSchool() {
             img={GroupSchool}
             title="Haz que tu colegio brille frente a las familias"
             parrafe="Publica toda la información relevante sobre ti para las familias que están buscando colegios"
+            duration={"0"}
           />
           <CardsOne
             img={VectorPeople}
             title="Completa tus vacantes 
 disponibles"
             parrafe="Gestiona todas las vacantes de inicial, primaria y secundaria que tengas en un solo lugar.
-"
+"                        duration={"200"}
           />
           <CardsOne
             img={VectorTalk}
             title="Cuenta con un proceso de 
 admisión simple y eficiente"
             parrafe="Olvídate de tener que mandar correos y comunicaciones uno a uno, hazlo todo masivo."
+            duration={"400"}
           />
         </div>
       </section>
@@ -108,6 +111,7 @@ admisión simple y eficiente"
             photos={3}
             plan="gratis"
             handlerOpen={setOpenPaymentPLan}
+            duration={"0"}
           />
           <CardsTwo
             title="Básico"
@@ -117,6 +121,7 @@ admisión simple y eficiente"
             price={50}
             plan="básico"
             handlerOpen={setOpenPaymentPLan}
+            duration={"200"}
           />
           <CardsTwo
             price={80}
@@ -127,6 +132,7 @@ admisión simple y eficiente"
             photos={30}
             plan="estandar"
             handlerOpen={setOpenPaymentPLan}
+            duration={"400"}
           />
           <CardsTwo
             price={120}
@@ -136,15 +142,16 @@ admisión simple y eficiente"
             photos={50}
             plan="exclusivo"
             handlerOpen={setOpenPaymentPLan}
+            duration={"600"}
           />
         </div>
 
-        <button className="px-4 mx-auto py-3 rounded-lg text-[#0061dd] bg-white font-normal">
+        <button className="px-4 mx-auto py-3 rounded-lg text-[#0061dd] bg-white font-normal" data-aos="zoom-in" data-aos-delay="200" data-aos-mirror={false}>
           ¿Prefieres usar otro medio de pago? Usa una billetera virtual
         </button>
       </section>
       <section className="bg-[url('./assets/enroll2.png')] flex justify-center items-center text-center">
-        <form className="flex flex-col bg-white m-14 h-[500px] p-5 w-[400px] justify-evenly items-center rounded-md">
+        <form className="flex flex-col bg-white m-14 h-[500px] p-5 w-[400px] justify-evenly items-center rounded-md"  data-aos="zoom-in" data-aos-delay="600" data-aos-mirror={false}>
           <img src={Logo} alt="logoblanco" className="object-cover w-40" />
           <h1 className="text-[#037dda] font-bold text-xl">
             Completa tus datos
