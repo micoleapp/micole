@@ -1,0 +1,113 @@
+{
+  "schools": [
+    {
+      "nombreColegio": "Fede",
+      "descripcion": "Loremipsum",
+      "propuesta": "muchasssss",
+      "categoria": [
+        "Religioso",
+        "Mixto",
+        "Mujeres",
+        "Militar"
+      ],
+      "nombreDirector": "Marquez",
+      "fundacion": 123,
+      "ruc": 123,
+      "ugel": 123,
+      "area": 123,
+      "ingles": 123,
+      "alumnos": 123,
+      "niveles": [
+        "Secundaria",
+        "Primaria"
+      ],
+      "departamento": {
+        "id": 8,
+        "nombre_departamento": "Cusco"
+      },
+      "provincia": {
+        "id": 3,
+        "nombre_provincia": "Acomayo"
+      },
+      "distrito": {
+        "id": 14,
+        "nombre_distrito": "La molina",
+        "ProvinciaId": 180
+      },
+      "direccion": "Hipólito Yrigoyen 767",
+      "lat": -34.4580858,
+      "lng": -58.9155022,
+      "infraestructura": {
+        "laboratorio": [
+          "Fisica",
+          "Ingles",
+          "Quimica"
+        ],
+        "artistica": [
+          "Ceramica",
+          "Coro",
+          "Cajón Peruano"
+        ],
+        "deportiva": [
+          "Baloncesto",
+          "Futbol",
+          "Karate"
+        ],
+        "administrativa": [
+          "Auditorio"
+        ],
+        "enseñanza": [
+          "Aula de musica",
+          "Aula de computacion"
+        ]
+      },
+      "acreditaciones": {
+        "afiliaciones": [
+          "SACE (Sistema de ACreditacion de Calidad Educativa)"
+        ],
+        "alianzas": [
+          "Cibertec",
+          "INFOPUCP"
+        ],
+        "certificaciones": [
+          "GPTS (Graet Place to Study)",
+          "CIS (Council of International Schools)"
+        ],
+        "asociaciones": [
+          "The International Baccalaureate Organization",
+          "LAHC (Latin America Heads Conference)"
+        ]
+      },
+      "multimedia": {
+        "images": [
+          "https://res.cloudinary.com/de4i6biay/image/upload/v1676992948/micole/smlnljdkfd5z7wftopkt.jpg",
+          "https://res.cloudinary.com/de4i6biay/image/upload/v1676992948/micole/blaasabbnuw4q601y4rf.jpg",
+          "https://res.cloudinary.com/de4i6biay/image/upload/v1676992948/micole/wwehdlyehql8sonhvxln.jpg",
+          "https://res.cloudinary.com/de4i6biay/image/upload/v1676992948/micole/wad5xblqyfhwwrojxto9.jpg"
+        ],
+        "video_url": "video urll"
+      }
+    }
+  ],
+  "users": [],
+  "citas": [
+    {
+      "date": "24/02/2023",
+      "time": "12:30",
+      "modo": "Virtual",
+      "nombre": "Fede",
+      "celular": 123123123,
+      "correo": "nanomarqueztres@gmail.com",
+      "id": 1
+    }
+  ],
+  "review": [
+    {
+      "rating": 5.92,
+      "nombre": "Fede",
+      "email": "nanomarqueztres@gmail.com",
+      "comentario": "Muy buena escuela",
+      "id": 1
+    }
+  ]
+}

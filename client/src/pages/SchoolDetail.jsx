@@ -34,6 +34,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers";
+import axios from "axios";
 
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
@@ -130,7 +131,7 @@ function SchoolDetail() {
     ) {
       return alert("Llena todos los campos para poder continuar");
     }
-    return alert(JSON.stringify(cita))
+    axios.post('http://localhost:3000/citas', cita)
   };
 
   const handleModo = () => {
@@ -167,10 +168,9 @@ function SchoolDetail() {
     if(e.target["name"].value === "" || e.target["email"].value === "" || e.target["comentario"].value === "" || comentario.rating === 0.00){
       return alert("Llena todos los campos para poder continuar");
     }
-    return alert(JSON.stringify(comentario))
+    axios.post('http://localhost:3000/review', comentario)
   }
 
-  console.log(comentario)
 
   return (
     <div className="bg-[#f6f7f8]">

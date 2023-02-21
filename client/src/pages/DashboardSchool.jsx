@@ -426,7 +426,8 @@ function DashboardSchool() {
 
   const handleSubmitFormComplete = (e) => {
     e.preventDefault();
-    console.log(allData)
+    //api falsa de json-server
+    axios.post('http://localhost:3000/schools',{allData})
   }
 
   return (
