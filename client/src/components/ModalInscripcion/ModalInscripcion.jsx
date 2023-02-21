@@ -27,7 +27,7 @@ export default function ModalInscripcion({
   return (
     <div className={style.Overlay}>
       <div>
-        <div className={style.contenedorModal}>
+        <div data-aos="fade-down" className={style.contenedorModal}>
           <div className={style.DivCloseButton}>
             <div onClick={toggleClose}>
               <CloseButton />

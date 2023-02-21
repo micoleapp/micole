@@ -36,7 +36,7 @@ export default function FormLogin() {
   return (
     <>
     
-        <form onSubmit={handleSubmit(OnSubmit)} className={style.Form}>
+        <form  onSubmit={handleSubmit(OnSubmit)} className={style.Form}>
       <div className={style.img_div}>
         <img src={Logo} />
       </div>

@@ -88,6 +88,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
 
                 maxLength: 100,
               })}
+              className="shadow-md"
             />
 
             {errors.name && <p className={style.p}>Introduzca su nombre.</p>}
@@ -101,6 +102,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
                 maxLength: 100,
                 pattern: /\S+@\S+\.\S+/,
               })}
+              className="shadow-md"
             />
             {errors.mail?.type === "required" && (
               <p className={style.p}>Introduzca su mail.</p>
@@ -119,6 +121,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
                 required: true,
                 minLength: 11,
               })}
+              className="shadow-md"
             />
             {errors.ruc?.type === "required" && (
               <p className={style.p}>Introduzca su numero RUC.</p>
@@ -162,6 +165,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
                 required: true,
                 maxLength: 100,
               })}
+              className="shadow-md"
             />
 
             {errors.lastname?.type === "required" && (
@@ -175,6 +179,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
               type="number"
               placeholder="Introduzca numero de telefono"
               {...register("phone", { required: true })}
+              className="shadow-md"
             />
             {errors.phone && (
               <p className={style.p}>Introduzca su telefono .</p>
@@ -212,6 +217,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
                 required: true,
                 maxLength: 100,
               })}
+              className="shadow-md"
             />
             {errors.schoolName?.type === "required" && (
               <p className={style.p}>Introduzca su institución .</p>

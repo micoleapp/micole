@@ -358,8 +358,10 @@ function ListSchool() {
           </div>
           <div className="flex flex-col gap-5">
             {!loading
-              ? pagination?.data?.map((school) => (
+              ? pagination?.data?.map((school , index) => (
                   <div
+                  data-aos-duration={`1${index*5}${index*5}0`}
+                  data-aos="fade-left"
                     key={school.id}
                     className="flex border rounded-md shadow-md bg-white p-2 items-center gap-2 flex-col md:flex-row"
                   >
