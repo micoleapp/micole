@@ -46,21 +46,22 @@ function Home() {
           <div className="flex flex-col lg:flex-row justify-center items-center gap-5 text-black">
             <CardsOne
               img={GroupSchool}
-              title="Haz que tu colegio brille frente a las familias"
-              parrafe="Publica toda la información relevante sobre ti para las familias que están buscando colegios"
+              title="Cientos de alternativas 
+              para escoger"
+              parrafe="Encuentra una gran variedad de colegios que se acomoden a tus necesidades"
             />
             <CardsOne
               img={VectorPeople}
-              title="Completa tus vacantes 
-disponibles"
-              parrafe="Gestiona todas las vacantes de inicial, primaria y secundaria que tengas en un solo lugar.
-"
+              title="Contacto directo 
+              con tu colegio de interés"
+              parrafe="Separa una cita directamente desde la plataforma con un solo click"
+
             />
             <CardsOne
               img={VectorTalk}
-              title="Cuenta con un proceso de 
-admisión simple y eficiente"
-              parrafe="Olvídate de tener que mandar correos y comunicaciones uno a uno, hazlo todo masivo."
+              title="Revisa recomendaciones 
+              de nuestra comunidad"
+              parrafe="Verifica miles de opiniones de otros padres de familia sobre los colegios de la plataforma."
             />
           </div>
         </section>

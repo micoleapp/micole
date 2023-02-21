@@ -100,16 +100,7 @@ const handleValueAño =(event)=>{
               ))}
             </Select>
           </FormControl>
-          {/* <select className="text-xs">
-            <option>Selecciona un grado</option>
-            {MockupGrados.map((distrito) => {
-              return (
-                <>
-                  <option className={style.option}>{distrito}</option>
-                </>
-              );
-            })}
-          </select> */}
+
         </div>
         <div className={style.select}>
           <p>Ingreso</p>

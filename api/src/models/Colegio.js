@@ -31,7 +31,7 @@ module.exports = (sequelize) => {
           },
         },
       },
-
+  
       nombre_colegio: {
         type: DataTypes.STRING,
         allowNull: false,

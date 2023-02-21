@@ -60,8 +60,48 @@
   .contenedorModal::-webkit-scrollbar-track {
     border-radius: 10px;  
   }
-
+  .content_div{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+  }
   
+  .img_div {
+    display: flex;
+    width: 100%;
+   justify-content: center;
+    padding-top: 30px;
+  }
+  .img_div img {
+    width: 200px;
+    height: 50px;
+  }
+  .content_div h1 {
+   font-size: 24px;
+   font-weight: 700;
+   color: #0061DF;
+  }
+
+  .content_div button {
+
+   font-weight: 600;
+    color: #fff;
+    width: 340px;
+    height: 50px;
+    border-radius: 8px;
+    background-color: #0061DF;  
+   }
+   .content_div p {
+    font-size: 18px;
+    font-weight: 400;
+   }
+
+
+
 @media (max-width: 800px) {
 
     .contenedorModal{

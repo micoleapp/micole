@@ -69,3 +69,12 @@ gap: 20px;
     font-weight: 600;
     color: #0061DF;
   }
+
+  .DivPass{
+    position: relative;
+  }
+  .Password{
+  position: absolute;
+  top: 19px;
+  right: 20px;
+  }

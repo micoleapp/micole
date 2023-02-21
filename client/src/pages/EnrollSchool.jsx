@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardsOne from "../components/CardsOne";
 import CardsTwo from "../components/CardsTwo";
 import VectorPeople from "../assets/VectorPeople.png";
@@ -6,7 +6,9 @@ import VectorTalk from "../assets/VectorTalk.png";
 import GroupSchool from "../assets/GroupSchool.png";
 import Logo from "../assets/logoblanco.png";
 import { Link, useLocation } from "react-router-dom";
+import {  getAllDistrits} from "../redux/SchoolsActions";
 import ModalInscripcion from "../components/ModalInscripcion/ModalInscripcion";
+import { useDispatch } from "react-redux";
 function EnrollSchool() {
   const location = useLocation();
   const [OpenRegister, setOpenRegister] = useState(false);
@@ -18,15 +20,14 @@ function EnrollSchool() {
   const toggleInscripcion = () => {
     setOpenRegister(true);
   };
-
+  const dispatch =useDispatch()
   useState(()=>{
+    dispatch(getAllDistrits())
     if(location.state !== null && location.state.register === true){
       setOpenRegister(true)
-    }else{
-      return
     }
   },[])
-
+  
   return (
     <div>
       <marquee
