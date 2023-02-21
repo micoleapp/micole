@@ -5,9 +5,10 @@ import VectorPeople from "../assets/VectorPeople.png";
 import VectorTalk from "../assets/VectorTalk.png";
 import GroupSchool from "../assets/GroupSchool.png";
 import Logo from "../assets/logoblanco.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ModalInscripcion from "../components/ModalInscripcion/ModalInscripcion";
 function EnrollSchool() {
+  const location = useLocation();
   const [OpenRegister, setOpenRegister] = useState(false);
   const [OpenPaymentPLan, setOpenPaymentPLan] = useState({
     state: false,
@@ -17,8 +18,26 @@ function EnrollSchool() {
   const toggleInscripcion = () => {
     setOpenRegister(true);
   };
+
+  useState(()=>{
+    if(location.state !== null && location.state.register === true){
+      setOpenRegister(true)
+    }else{
+      return
+    }
+  },[])
+
   return (
     <div>
+      <marquee
+        scrollamount={10}
+        direction=""
+        className="flex bg-transparent absolute text-white"
+      >
+        Tenemos los mejores planes para ofrecerte - Haz que tu colegio brille
+        frente a las familias - Completa tus vacantes disponibles - Cuenta con
+        un proceso de admisión simple y eficiente
+      </marquee>
       <header className="bg-[url('./assets/enroll.png')] h-[700px] flex justify-center items-center flex-col gap-10">
         <h1 className="text-white text-center text-4xl font-bold">
           Publica tu colegio. Concreta citas con familias interesadas. <br />
@@ -32,7 +51,12 @@ function EnrollSchool() {
             inscribe tu colegio aquí
           </button>
         </div>
-        {OpenRegister && <ModalInscripcion handleClose={setOpenRegister}   OpenPaymentPLan={OpenPaymentPLan} />}
+        {OpenRegister && (
+          <ModalInscripcion
+            handleClose={setOpenRegister}
+            OpenPaymentPLan={OpenPaymentPLan}
+          />
+        )}
 
         <button className="px-4 py-1 rounded-md text-[#0061dd] bg-white font-semibold">
           ¡Quiero más información por el momento!
@@ -63,7 +87,13 @@ admisión simple y eficiente"
           />
         </div>
       </section>
-      {OpenPaymentPLan.state === true && <ModalInscripcion   OpenPaymentPLan={OpenPaymentPLan}  handleClose={setOpenRegister}  handleClosePayment={setOpenPaymentPLan} />}
+      {OpenPaymentPLan.state === true && (
+        <ModalInscripcion
+          OpenPaymentPLan={OpenPaymentPLan}
+          handleClose={setOpenRegister}
+          handleClosePayment={setOpenPaymentPLan}
+        />
+      )}
       <section className="bg-[#0061dd] flex flex-col justify-around p-10 gap-10">
         <h1 className="text-center text-2xl font-semibold text-white">
           Elije el plan que más se acomode a tus necesidades

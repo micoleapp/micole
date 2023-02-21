@@ -13,7 +13,7 @@ export default function ModalLogin({handlerClose}) {
   return (
     <div className={style.Overlay}>
       <div>
-        <div className={style.contenedorModal}>
+        <div className={`${style.contenedorModal}`}>
           <div className={style.DivCloseButton}>
             <div style={{cursor:'pointer'}}  onClick={toggleClose}>
               <CloseButton />
