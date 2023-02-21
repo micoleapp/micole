@@ -116,6 +116,15 @@ flex-direction: column;
 }
 
 
+.DivPass{
+  position: relative;
+}
+.Password{
+position: absolute;
+top: 12px;
+right: 20px;
+}
+
 @media (max-width: 800px) {
   .divInputs input {
     width: 200px;

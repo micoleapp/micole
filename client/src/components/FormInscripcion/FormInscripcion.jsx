@@ -12,10 +12,20 @@ import MockupDistritos from "../../MockupInfo/MockupDistritos";
 
 import { useDispatch, useSelector } from "react-redux";
 import { register as registerUser } from "../../redux/AuthActions";
+import { BsEye } from "react-icons/bs";
+import { BsEyeSlash } from "react-icons/bs";
+
 function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
   const [Distrito, setDistrito] = useState(false);
+  const [seePassword, setseePassword] = useState(false);
+
   const { distrits } = useSelector((state) => state.schools);
   const dispatch = useDispatch();
+
+  const ToggleSeePass = () => {
+    setseePassword(!seePassword);
+  };
+
   const handleValueDistrito = (event) => {
     console.log(event.target.value);
     setDistrito(event.target.value);
@@ -61,8 +71,6 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
     dispatch(registerUser(data));
   };
 
-
-
   return (
     <>
       <div className={style.h1_div}>
@@ -74,7 +82,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
           <div className={style.divInputs}>
             <label className={style.label}>Nombre</label>
             <input
-             placeholder="Introduzca su nombre "
+              placeholder="Introduzca su nombre "
               {...register("name", {
                 required: true,
 
@@ -86,7 +94,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
 
             <label className={style.label}>Email</label>
             <input
-             placeholder="Introduzca su correo electronico "
+              placeholder="Introduzca su correo electronico "
               {...register("mail", {
                 required: true,
 
@@ -104,10 +112,20 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
               <p className={style.p}>Demasiados caracteres.</p>
             )}
             <label className={style.label}>RUC</label>
-            <input 
-             placeholder="Introduzca su nro de RUC"
-            type="number" {...register("ruc", { required: true })} />
-            {errors.ruc && <p className={style.p}>Introduzca su numero RUC.</p>}
+            <input
+              placeholder="Introduzca su nro de RUC"
+              type="number"
+              {...register("ruc", {
+                required: true,
+                minLength: 11,
+              })}
+            />
+            {errors.ruc?.type === "required" && (
+              <p className={style.p}>Introduzca su numero RUC.</p>
+            )}
+            {errors.ruc?.type === "minLength" && (
+              <p className={style.p}>Su RUC debe tener 11 caracteres.</p>
+            )}
 
             <label className={style.label}>Distrito del Colegio</label>
             <div>
@@ -139,7 +157,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
           <div className={style.divInputs}>
             <label className={style.label}>Apellido</label>
             <input
-             placeholder="Introduzca su apellido "
+              placeholder="Introduzca su apellido "
               {...register("lastname", {
                 required: true,
                 maxLength: 100,
@@ -153,26 +171,43 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
               <p className={style.p}>Demasiados caracteres.</p>
             )}
             <label className={style.label}>Telefono</label>
-            <input type="number"placeholder="Introduzca numero de telefono" {...register("phone", { required: true })} />
+            <input
+              type="number"
+              placeholder="Introduzca numero de telefono"
+              {...register("phone", { required: true })}
+            />
             {errors.phone && (
               <p className={style.p}>Introduzca su telefono .</p>
             )}
+
             <label className={style.label}>Contraseña</label>
-            <input
-              placeholder="Contraseña"
-              type="password"
-              {...register("password", {
-                required: true,
-                maxLength: 100,
-              })}
-              className="shadow-md"
-            />
+            <div className={style.DivPass}>
+              {seePassword === true ? (
+                <BsEye onClick={ToggleSeePass} className={style.Password} />
+              ) : (
+                <BsEyeSlash
+                  onClick={ToggleSeePass}
+                  className={style.Password}
+                />
+              )}
+
+              <input
+                placeholder="Contraseña"
+                type={ seePassword === true ? "text" :"password"}
+                {...register("password", {
+                  required: true,
+                  maxLength: 100,
+                })}
+                className="shadow-md"
+              />
+            </div>
+
             {errors.password?.type === "required" && (
               <p className={style.p}>Campo requerido</p>
             )}
             <label className={style.label}>Nombre del Colegio</label>
             <input
-             placeholder="Introduzca el nombre de su colegio"
+              placeholder="Introduzca el nombre de su colegio"
               {...register("schoolName", {
                 required: true,
                 maxLength: 100,
