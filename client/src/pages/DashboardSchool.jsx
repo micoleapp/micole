@@ -429,8 +429,6 @@ function DashboardSchool() {
     console.log(allData)
   }
 
-  console.log(multimedia)
-
   return (
     <div className="flex lg:flex-row flex-col">
       <section

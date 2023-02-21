@@ -76,3 +76,11 @@
 .file-select input[type="file"] {
   visibility: hidden;
 }
+
+[data-aos="fade-left"] {
+  opacity: 0;
+  transition-property: opacity;
+}
+[data-aos="fade-left"].aos-animate {
+  opacity: 0;
+}
