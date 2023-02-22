@@ -9,6 +9,7 @@ const {
   Provincia,
   Plan_Pago,
   Distrito,
+  Infraestructura,
 } = require("../db.js");
 
 // const getComponentData = require("../funciones/getComponentData.js");
@@ -100,6 +101,10 @@ router.get("/:Colegio_id", async (req, res) => {
         {
           model: Categoria,
           attributes: ["id", "nombre_categoria"],
+        },
+        {
+          model: Infraestructura,
+          attributes: ["nombre_infraestructura","InfraestructuraTipoId"],
         },
       ],
       attributes: [
