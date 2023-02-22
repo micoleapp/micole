@@ -11,11 +11,13 @@ import axios from "axios";
 
 export const getOneUser = () => (dispatch) => {
   dispatch(isLoading());
-  const id = localStorage.getItem("id");
-  axios
-    .get(`/auth/${id}`)
-    .then((res) => dispatch(getUser(res.data.user)))
-    .catch((err) => dispatch(getError(err.message)));
+  const token = localStorage.getItem("token");
+  if(token){
+    axios
+      .get(`/auth`,{headers: {'Authorization': `Bearer ${token}`}})
+      .then((res) => dispatch(loginUser(res.data.user)))
+      .catch((err) => dispatch(getError(err.response.data.error)));
+  }
 };
 
 export const register = (user) => (dispatch) => {
@@ -29,7 +31,6 @@ export const register = (user) => (dispatch) => {
     ruc,
     telefono,
     DistritoId,
-   
   } = user;
 
   console.log(
@@ -61,7 +62,7 @@ export const register = (user) => (dispatch) => {
       dispatch(registerUser());
     })
     .catch((err) => {
-      dispatch(getError(err.message));
+      dispatch(getError(err.response.data.error));
     });
 };
 
@@ -72,11 +73,11 @@ export const login = (user) => (dispatch) => {
   axios
     .post("/auth/signin", { email, password })
     .then((res) => {
-      dispatch(loginUser(res.data.user));
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("id", res.data.user.id);
+      dispatch(loginUser(res.data.user));
     })
-    .catch((err) => dispatch(getError(err.message)));
+    .catch((err) => dispatch(getError(err.response.data.error)));
 };
 
 export const update = (user) => (dispatch) => {
@@ -86,7 +87,7 @@ export const update = (user) => (dispatch) => {
     .then((res) => {
       dispatch(updateUser(res.data.user));
     })
-    .catch((err) => dispatch(getError(err.message)));
+    .catch((err) => dispatch(getError(err.response.data.error)));
 };
 
 export const logout = () => (dispatch) => {
@@ -96,6 +97,6 @@ export const logout = () => (dispatch) => {
     localStorage.removeItem("token");
     localStorage.removeItem("id");
   } catch (err) {
-    dispatch(getError(err.message));
+    dispatch(getError(err.response.data.error));
   }
 };
