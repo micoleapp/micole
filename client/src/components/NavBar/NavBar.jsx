@@ -68,7 +68,10 @@ function NavBar() {
         <div onClick={toggleBurguerMenu} className={style.Burguer}>
           <Burguer />
         </div>
-         {BurguerMen && <BurguerMenuU handlerClose={setBurguerMen}/> }
+        <div className={style.burguerMenu}>
+            {BurguerMen && <BurguerMenuU handlerClose={setBurguerMen}/> }
+        </div>
+       
 
         <div className={style.buttonContainer}>
           {isAuth === true ? (

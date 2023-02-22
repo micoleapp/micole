@@ -55,7 +55,17 @@
   cursor: pointer;
 }
 
+
+.burguerMenu{
+  display: none;
+}
+
+
 @media (max-width: 800px) {
+
+  .burguerMenu{
+    display: flex;
+  }
   .layout {
     justify-content: center;
   }
