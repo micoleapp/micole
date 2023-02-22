@@ -15,12 +15,12 @@ import DragAndDrop from "./pages/DragAndDrop";
 function App() {
 
 
-  const { error } = useSelector((state) => state.schools);
- 
+  const { error : errorSchool } = useSelector((state) => state.schools);
+
   return (
     <>
       <NavBar />
-      {error ? (
+      {errorSchool ? (
         <Error />
       ) : (
         <Routes>

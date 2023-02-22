@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useRef } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -9,6 +9,7 @@ import { Rating, Typography, Pagination, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import { useInView } from "framer-motion"
 import {
   faCamera,
   faPlayCircle,
@@ -140,14 +141,13 @@ function ListSchool() {
   const [toggleDistrits, setToggleDistrits] = useState(false);
   const [toggleTypes, setToggleTypes] = useState(false);
 
-
   return (
-    <div className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] ">
+    <div className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "                 data-aos="fade-up" data-aos-duration='1000'>
       <h1 className="text-center mt-2 text-2xl font-semibold drop-shadow-md">
         Encuentra el colegio ideal
       </h1>
       <div className="flex flex-col lg:flex-row p-5 gap-10 m-5 ">
-        <section className="lg:w-1/4 w-full flex flex-col gap-5 rounded-md h-min bg-white shadow-lg p-10 ">
+        <section className={`lg:w-1/4 w-full flex flex-col gap-5 rounded-md relative ${!toggle ? "h-[110px] " : "h-[770px] "} duration-300 lg:h-min bg-white shadow-lg p-10 `}>
           <h2 className="font-semibold text-2xl drop-shadow-md">Filtros</h2>
           <button
             className="absolute block lg:hidden left-0 right-0"
@@ -356,13 +356,18 @@ function ListSchool() {
               </Select>
             </FormControl>
           </div>
+
           <div className="flex flex-col gap-5">
             {!loading
-              ? pagination?.data?.map((school) => (
+              ? pagination?.data?.map((school , index) => {
+                
+                return (
                   <div
+                  data-aos="zoom-in-left"
                     key={school.id}
-                    className="flex border rounded-md shadow-md bg-white p-2 items-center gap-2 flex-col md:flex-row"
+                    className={`flex border rounded-md shadow-md bg-white p-2 items-center gap-2 flex-col md:flex-row`}
                   >
+
                     {" "}
                     <div className="relative">
                       <img
@@ -371,7 +376,7 @@ function ListSchool() {
                         className="w-[400px] h-64 object-cover"
                       />
                       <span className="absolute bg-[#0061dd] text-white p-1 px-2 rounded-md top-3 left-3">
-                        DESTACADO
+                        DESTACADOs
                       </span>
                       <span className="absolute animate-bounce bg-black/80 text-white p-1 px-2 rounded-md top-14 xl:top-3 xl:right-3 ml-3 w-fit">
                         9 VACANTES
@@ -473,7 +478,8 @@ function ListSchool() {
                       </div>
                     </div>
                   </div>
-                ))
+                )
+                })
               : items.map((item, key) => (
                   <ContentLoader
                     key={key}

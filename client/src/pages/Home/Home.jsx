@@ -13,6 +13,7 @@ import FiltrosHome from "../../components/FiltrosHome/FiltrosHome";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllDepartaments, getAllDistrits, getAllSchools } from "../../redux/SchoolsActions";
+import {getOneUser } from "../../redux/AuthActions";
 function Home() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ function Home() {
     dispatch(getAllSchools());
     dispatch(getAllDepartaments())
     dispatch(getAllDistrits())
+    dispatch(getOneUser())
   }, []);
 
   return (
@@ -46,21 +48,24 @@ function Home() {
           <div className="flex flex-col lg:flex-row justify-center items-center gap-5 text-black">
             <CardsOne
               img={GroupSchool}
-              title="Haz que tu colegio brille frente a las familias"
-              parrafe="Publica toda la información relevante sobre ti para las familias que están buscando colegios"
+              title="Cientos de alternativas 
+              para escoger"
+              parrafe="Encuentra una gran variedad de colegios que se acomoden a tus necesidades"
+              duration={"0"}
             />
             <CardsOne
               img={VectorPeople}
-              title="Completa tus vacantes 
-disponibles"
-              parrafe="Gestiona todas las vacantes de inicial, primaria y secundaria que tengas en un solo lugar.
-"
+              title="Contacto directo 
+              con tu colegio de interés"
+              parrafe="Separa una cita directamente desde la plataforma con un solo click"
+              duration={"200"}
             />
             <CardsOne
               img={VectorTalk}
-              title="Cuenta con un proceso de 
-admisión simple y eficiente"
-              parrafe="Olvídate de tener que mandar correos y comunicaciones uno a uno, hazlo todo masivo."
+              title="Revisa recomendaciones 
+              de nuestra comunidad"
+              parrafe="Verifica miles de opiniones de otros padres de familia sobre los colegios de la plataforma."
+              duration={"400"}
             />
           </div>
         </section>
@@ -74,8 +79,8 @@ admisión simple y eficiente"
         <div className={style.preFooter}>
           <h1>Inscribe tu colegio en nuestra plataforma</h1>
           <p>Únete a la mayor comunidad de colegios en el Perú</p>
-          <Link to={"/enroll"}>
-            <button>Registrar</button>
+          <Link to={"/enroll"} state={{register: true}} className="p-2 bg-white text-[#0061dd] px-4 rounded-md">
+            Registrar
           </Link>
         </div>
       </div>

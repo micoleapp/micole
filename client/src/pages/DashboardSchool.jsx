@@ -4,7 +4,6 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import ListItemText from "@mui/material/ListItemText";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -299,9 +298,9 @@ function DashboardSchool() {
       datosPrincipales.ingles !== null &&
       datosPrincipales.alumnos !== null &&
       datosPrincipales.niveles.length !== 0 &&
-      datosPrincipales.departamento !== {} &&
-      datosPrincipales.provincia !== {} &&
-      datosPrincipales.distrito !== {} &&
+      Object.keys(datosPrincipales.departamento).length !== 0 &&
+      Object.keys(datosPrincipales.provincia).length !== 0 &&
+      Object.keys(datosPrincipales.distrito).length !== 0 &&
       datosPrincipales.direccion !== "" &&
       datosPrincipales.lat !== 0 &&
       datosPrincipales.lng !== 0
@@ -387,6 +386,7 @@ function DashboardSchool() {
         console.log(error);
       }
     });
+    alert(`Imagenes subidas correctamente`);
   }
 
   const [multimedia, setMultimedia] = useState({
@@ -426,10 +426,13 @@ function DashboardSchool() {
 
   const handleSubmitFormComplete = (e) => {
     e.preventDefault();
-    console.log(allData)
+    //api falsa de json-server
+    axios.post('http://localhost:3000/schools',{allData})
+    handleReset()
+    setPage(1)
   }
 
-  console.log(multimedia)
+  console.log(allData)
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -553,6 +556,7 @@ function DashboardSchool() {
                               nombreColegio: e.target.value,
                             })
                           }
+                          placeholder="Ingresa el nombre del colegio"
                         />
                       </div>
                       <div className="flex flex-col">
@@ -574,6 +578,7 @@ function DashboardSchool() {
                             })
                           }
                           value={datosPrincipales.descripcion}
+                          placeholder="Ingresa la descripción de tu colegio"
                         />
                       </div>
                       <div className="flex flex-col">
@@ -595,6 +600,7 @@ function DashboardSchool() {
                             })
                           }
                           value={datosPrincipales.propuesta}
+                          placeholder="Ingresa la propuesta de valor educativa de tu colegio"
                         />
                       </div>
                       <div className="flex flex-col gap-2">
@@ -660,6 +666,7 @@ function DashboardSchool() {
                               nombreDirector: e.target.value,
                             })
                           }
+                          placeholder="Ingresa el nombre del director"
                           value={datosPrincipales.nombreDirector}
                         />
                       </div>
@@ -681,9 +688,10 @@ function DashboardSchool() {
                                 ...datosPrincipales,
                                 fundacion: Number(e.target.value),
                               })
+                              
                             }
+                            pattern="\d{4}" placeholder="Ingresa un año"
                             value={datosPrincipales.fundacion}
-                            pattern="^(17|20)\d{2}$"
                             title="Solo se permiten numeros, 4 caracteres y un año superior a 1700"
                           />
                         </div>
@@ -694,6 +702,7 @@ function DashboardSchool() {
                           <input
                             type="number"
                             name="ruc"
+                            placeholder="Ingresa el RUC"
                             id="ruc"
                             className="p-3 rounded-md border-2  outline-none"
                             onChange={(e) =>
@@ -714,6 +723,7 @@ function DashboardSchool() {
                           <input
                             type="number"
                             name="ugel"
+                            placeholder="Ingresa el UGEL"
                             id="ugel"
                             className="p-3 rounded-md border-2  outline-none"
                             onChange={(e) =>
@@ -735,6 +745,7 @@ function DashboardSchool() {
                             type="number"
                             name="area"
                             id="area"
+                            placeholder="Ingresa el area del campus"
                             className="p-3 rounded-md border-2  outline-none"
                             pattern="^[0-9]+"
                             title="Solo se permiten numeros"
@@ -758,6 +769,7 @@ function DashboardSchool() {
                             type="number"
                             name="ingles"
                             id="ingles"
+                            placeholder="Ingresa las horas de ingles"
                             className="p-3 rounded-md border-2  outline-none"
                             pattern="^[0-9]+"
                             title="Solo se permiten numeros"
@@ -781,6 +793,7 @@ function DashboardSchool() {
                             type="number"
                             name="alumnos"
                             id="alumnos"
+                            placeholder="Ingresa la cantidad de alumnos"
                             className="p-3 rounded-md border-2  outline-none"
                             pattern="^[0-9]+"
                             title="Solo se permiten numeros"

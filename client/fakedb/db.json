@@ -1,0 +1,102 @@
+{
+  "schools": [
+    {
+      "allData": {
+        "nombreColegio": "Instituto Modelo de Pilar",
+        "descripcion": "Gran colegio",
+        "propuesta": "Enseñar mucho",
+        "categoria": [
+          "Inclusivo",
+          "Hombres"
+        ],
+        "nombreDirector": "Fede",
+        "fundacion": 1231,
+        "ruc": 123123,
+        "ugel": 123123,
+        "area": 123123,
+        "ingles": 123123,
+        "alumnos": 123123,
+        "niveles": [
+          "Secundaria"
+        ],
+        "departamento": {
+          "id": 11,
+          "nombre_departamento": "Ica"
+        },
+        "provincia": {
+          "id": 4,
+          "nombre_provincia": "Aija"
+        },
+        "distrito": {
+          "id": 12,
+          "nombre_distrito": "Independencia",
+          "ProvinciaId": 180
+        },
+        "direccion": "Western Road 2-20",
+        "lat": 51.5286337,
+        "lng": -0.2700984,
+        "infraestructura": {
+          "laboratorio": [
+            "Ingles"
+          ],
+          "artistica": [
+            "Instrumentos de Viento"
+          ],
+          "deportiva": [
+            "Boxeo"
+          ],
+          "administrativa": [
+            "Cafeteria"
+          ],
+          "enseñanza": [
+            "Aula de teatro"
+          ]
+        },
+        "acreditaciones": {
+          "afiliaciones": [
+            "SINEACE (Sistema Nacional de Evaluación y Acreditación de la Calidad Educativa)"
+          ],
+          "alianzas": [
+            "Britanico"
+          ],
+          "certificaciones": [
+            "Apple Distinguished Schools"
+          ],
+          "asociaciones": [
+            "LAHC (Latin America Heads Conference)"
+          ]
+        },
+        "multimedia": {
+          "images": [
+            "https://res.cloudinary.com/de4i6biay/image/upload/v1677011050/micole/ctmytxjcj8xkcgcefqtt.jpg",
+            "https://res.cloudinary.com/de4i6biay/image/upload/v1677011050/micole/l4rflwbtpkwxdgsipcmj.jpg",
+            "https://res.cloudinary.com/de4i6biay/image/upload/v1677011051/micole/eudrjcctx4b3ofc4yqvo.jpg"
+          ],
+          "video_url": "video url"
+        }
+      },
+      "id": 1
+    }
+  ],
+  "users": [],
+  "citas": [
+    {
+      "date": "24/02/2023",
+      "time": "12:30",
+      "modo": "Virtual",
+      "nombre": "Fede",
+      "celular": 123123123,
+      "correo": "nanomarqueztres@gmail.com",
+      "id": 1
+    }
+  ],
+  "review": [
+    {
+      "rating": 5.92,
+      "nombre": "Fede",
+      "email": "nanomarqueztres@gmail.com",
+      "comentario": "Muy buena escuela",
+      "id": 1
+    }
+  ]
+}
