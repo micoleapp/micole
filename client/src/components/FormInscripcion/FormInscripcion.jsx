@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import style from "./FormInscripcion.module.css";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import FormControl from "@mui/material/FormControl";
 import { MenuItem, toggleButtonClasses } from "@mui/material";
 import Select from "@mui/material/Select";
 import ListItemText from "@mui/material/ListItemText";
 import { InputLabel } from "@mui/material";
-import MockupDistritos from "../../MockupInfo/MockupDistritos";
 
 import { useDispatch, useSelector } from "react-redux";
 import { register as registerUser } from "../../redux/AuthActions";
 import { BsEye } from "react-icons/bs";
 import { BsEyeSlash } from "react-icons/bs";
-
 function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
+
+  const {error} = useSelector(state=>state.auth)
+
   const [Distrito, setDistrito] = useState(false);
   const [seePassword, setseePassword] = useState(false);
 
@@ -126,7 +126,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
               <p className={style.p}>Introduzca su numero RUC.</p>
             )}
             {errors.ruc?.type === "minLength" && (
-              <p className={style.p}>Su RUC debe tener 11 caracteres.</p>
+              <p className={`${style.p} text-xs`}>Su RUC debe tener 11 caracteres.</p>
             )}
 
             <label className={style.label}>Distrito del Colegio</label>
@@ -205,7 +205,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
                 className="shadow-md"
               />
             </div>
-
+            {error !== "" && <p className="text-red-600 text-xs text-center break-words max-w-[200px] ">La contraseña debe tener al menos una letra mayúscula y un signo. <br /> La contraseña debe tener entre 6 y 15 caracteres </p>}
             {errors.password?.type === "required" && (
               <p className={style.p}>Campo requerido</p>
             )}

@@ -61,7 +61,7 @@ export const register = (user) => (dispatch) => {
       dispatch(registerUser());
     })
     .catch((err) => {
-      dispatch(getError(err));
+      dispatch(getError(err.message));
     });
 };
 
