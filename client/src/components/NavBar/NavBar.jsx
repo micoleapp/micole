@@ -8,17 +8,26 @@ import { Link } from "react-router-dom";
 import ModalLogin from "../ModalLogin/ModalLogin";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/AuthActions";
+import BurguerMenuU from "./BurguerMenu/BurguerMenu";
 
 function NavBar() {
   const dispatch = useDispatch();
   const { isAuth } = useSelector((state) => state.auth);
   const [OpenLogin, setOpenLogin] = useState(false);
+  const [BurguerMen, setBurguerMen] = useState(false);
   const [OpenCategory, setOpenCategory] = useState(false);
   const [OpenContact, setOpenContact] = useState(false);
+ 
+  const toggleBurguerMenu = () => {
+    setBurguerMen(true)
+  };
   const ToggleCategory = () => {
     setOpenCategory(!OpenCategory);
     setOpenContact(false);
   };
+
+
+
   const ToggleContact = () => {
     setOpenContact(!OpenContact);
     setOpenCategory(false);
@@ -56,9 +65,11 @@ function NavBar() {
           </p>
         </div>
 
-        <div className={style.Burguer}>
+        <div onClick={toggleBurguerMenu} className={style.Burguer}>
           <Burguer />
         </div>
+         {BurguerMen && <BurguerMenuU handlerClose={setBurguerMen}/> }
+
         <div className={style.buttonContainer}>
           {isAuth === true ? (
             <button onClick={handlerLogout} className={style.SesionButtom}>
