@@ -38,7 +38,7 @@ module.exports = (sequelize) => {
         validate: {
           is: {
             args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-            msg: "El nombre solo puede contener letras, acentos, tildes y espacios",
+            msg: "El nombre del colegio solo puede contener letras, acentos, tildes y espacios",
           },
           len: {
             args: [2, 60],
@@ -95,7 +95,7 @@ module.exports = (sequelize) => {
         validate: {
           is: {
             args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-            msg: "El nombre solo puede contener letras, acentos, tildes y espacios",
+            msg: "El nombre del director solo puede contener letras, acentos, tildes y espacios",
           },
           len: {
             args: [2, 60],

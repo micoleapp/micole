@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FormLogin from "../FormLogin/FormLogin";
+import FormInscripcion from "../FormInscripcion/FormInscripcion";
 import style from "./ModaLogin.module.css";
 import CloseButton from "../ModalInscripcion/svg/CloseButton";
 import { useSelector } from "react-redux";
@@ -7,12 +8,16 @@ import Logo from "../../assets/logoPayment.png";
 
 export default function ModalLogin({ handlerClose }) {
   const { isAuth } = useSelector((state) => state.auth);
-  //   const [Open, setOpen] = useState(false);
+  const [OpenLogin, setOpenLogin] = useState(false);
   const toggleClose = () => {
     handlerClose(false);
   };
 
-  useEffect(() => {}, [isAuth]);
+  useEffect(() => {
+    if(isAuth){
+      handlerClose(false)
+    }
+  },[isAuth]);
 
   return (
     <div  className={style.Overlay}>
@@ -23,23 +28,7 @@ export default function ModalLogin({ handlerClose }) {
               <CloseButton />
             </div>
           </div>
-          {isAuth === true ? (
-            <>
-              <div style={{display:'flex', flexDirection:'column'}}>
-                <div className={style.img_div}>
-                  <img src={Logo} alt="logo" />
-                  </div>
-                  <div className={style.content_div}>
-                    <h1>Bienvenido a MiCole </h1>
-                    <p>El inicio de sesion ha sido exitoso!</p>
-                    <button onClick={toggleClose}>Continuar</button>
-                  </div>
-                </div>
-            
-            </>
-          ) : (
-            <FormLogin handlerClose={handlerClose} />
-          )}
+     {OpenLogin ? <FormInscripcion handlerOpenLogin={setOpenLogin} OpenLogin={OpenLogin} /> : <FormLogin OpenLogin={OpenLogin} setOpenLogin={setOpenLogin} handlerClose={handlerClose} /> }
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { BsEye } from "react-icons/bs";
 import { BsEyeSlash } from "react-icons/bs";
 import {Link} from 'react-router-dom'
-export default function FormLogin({handlerClose}) {
+export default function FormLogin({handlerClose,OpenLogin,setOpenLogin}) {
   const dispatch = useDispatch();
 
   const ToggleSeePass = () => {
@@ -82,9 +82,9 @@ export default function FormLogin({handlerClose}) {
     </div>
     <div className="text-center mb-3">
         <p>¿No tienes una cuenta?</p>
-        <Link to={"/enroll"} state={{register: true}} className="text-[#0061dd]" onClick={()=>handlerClose(false)}>
+        <p className="text-[#0061dd] cursor-pointer" onClick={()=>setOpenLogin(!OpenLogin)}>
         Registrate Aqui
-          </Link>
+          </p>
     </div>
     <div className={style.socialMedia}>
         <p>Prefiero iniciar sesion con:</p>

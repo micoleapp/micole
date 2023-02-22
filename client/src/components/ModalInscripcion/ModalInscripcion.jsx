@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./ModalInscripcion.module.css";
 import CloseButton from "./svg/CloseButton";
 import FormInscripcion from "../FormInscripcion/FormInscripcion";
@@ -10,7 +10,7 @@ export default function ModalInscripcion({
   handleClosePayment,
   OpenPaymentPLan,
 }) {
-  const { isAuth } = useSelector((state) => state.auth);
+  const { isAuth , success } = useSelector((state) => state.auth);
   console.log(OpenPaymentPLan.price);
   const [OpenRegister, setOpenRegister] = useState(true);
   const [OpenLogin, setOpenLogin] = useState(false);
@@ -24,9 +24,10 @@ export default function ModalInscripcion({
       plan: "",
     });
   };
+  
   return (
     <div className={style.Overlay}>
-      <div className="w-[80%] h-[80%] ">
+      <div className="">
         <div data-aos="fade-down" className={style.contenedorModal}>
           <div className={style.DivCloseButton}>
             <div onClick={toggleClose}>
@@ -44,7 +45,7 @@ export default function ModalInscripcion({
               />
             )}
           </div>
-          <div>{OpenLogin === true && isAuth === false && <FormLogin />}</div>
+          <div>{OpenLogin === true && isAuth === false && <FormLogin setOpenLogin={setOpenLogin} OpenLogin={OpenLogin} />}</div>
         </div>
       </div>
     </div>

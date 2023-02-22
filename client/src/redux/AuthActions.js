@@ -8,7 +8,7 @@ import {
   updateUser,
 } from "./AuthSlice";
 import axios from "axios";
-
+import Swal from 'sweetalert2'
 export const getOneUser = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
@@ -16,7 +16,13 @@ export const getOneUser = () => (dispatch) => {
     axios
       .get(`/auth`,{headers: {'Authorization': `Bearer ${token}`}})
       .then((res) => dispatch(loginUser(res.data.user)))
-      .catch((err) => dispatch(getError(err.response.data.error)));
+      .catch((err) => {
+        dispatch(getError(err.response.data.error)) 
+        Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err.response.data.error
+      })});
   }
 };
 
@@ -60,9 +66,19 @@ export const register = (user) => (dispatch) => {
     })
     .then((res) => {
       dispatch(registerUser());
+      Swal.fire({
+        icon: 'success',
+        title: "Usuario creado!",
+        text: 'Revisa tu email para continuar'
+      })
     })
     .catch((err) => {
       dispatch(getError(err.response.data.error));
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err.response.data.error
+      })
     });
 };
 
@@ -76,8 +92,19 @@ export const login = (user) => (dispatch) => {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("id", res.data.user.id);
       dispatch(loginUser(res.data.user));
+      Swal.fire({
+        icon: 'success',
+        title: "Bienvenido a MiCole",
+        text: 'Inicio de sesion exitoso'
+      })
+
     })
-    .catch((err) => dispatch(getError(err.response.data.error)));
+    .catch((err) => {dispatch(getError(err.response.data.error))
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err.response.data.error
+      })});
 };
 
 export const update = (user) => (dispatch) => {
@@ -96,6 +123,11 @@ export const logout = () => (dispatch) => {
     dispatch(logoutUser());
     localStorage.removeItem("token");
     localStorage.removeItem("id");
+    Swal.fire({
+      icon: 'success',
+      title: "Cerrando sesión!",
+      text: 'Hasta pronto!!'
+    })
   } catch (err) {
     dispatch(getError(err.response.data.error));
   }

@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { register as registerUser } from "../../redux/AuthActions";
 import { BsEye } from "react-icons/bs";
 import { BsEyeSlash } from "react-icons/bs";
-function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
+function FormInscripcion({ handlerOpenPayment, handlerOpenLogin , OpenLogin }) {
 
   const {error} = useSelector(state=>state.auth)
 
@@ -52,6 +52,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
   const navigate = useNavigate();
   const handlerLogin = () => {
     handlerOpenLogin(true);
+    handlerOpenLogin(!OpenLogin)
   };
   const OnSubmit = (user) => {
     const data = {
@@ -205,7 +206,6 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin }) {
                 className="shadow-md"
               />
             </div>
-            {error !== "" && <p className="text-red-600 text-xs text-center break-words max-w-[200px] ">La contraseña debe tener al menos una letra mayúscula y un signo. <br /> La contraseña debe tener entre 6 y 15 caracteres </p>}
             {errors.password?.type === "required" && (
               <p className={style.p}>Campo requerido</p>
             )}
