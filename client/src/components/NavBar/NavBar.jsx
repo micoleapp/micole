@@ -80,10 +80,14 @@ function NavBar() {
               Iniciar sesion
             </button>
           )}
+          {isAuth === true ? (
+          <Link to={"/dashboardschool"}>
+          <button className={style.SesionButtom}>Ver Perfil</button>
+        </Link>
+          ) : (          <Link to={"/enroll"}>
+          <button className={style.SesionButtom}>Inscribe tu colegio</button>
+        </Link>)}
 
-          <Link to={"/enroll"}>
-            <button className={style.SesionButtom}>Inscribe tu colegio</button>
-          </Link>
         </div>
       </div>
       {OpenCategory && (

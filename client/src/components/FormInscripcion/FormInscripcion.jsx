@@ -228,7 +228,7 @@ function FormInscripcion({ handlerOpenPayment, handlerOpenLogin , OpenLogin }) {
         </div>
         <div className={style.divButton}>
           <button type="submit">REGISTRARSE</button>
-          <div className={style.divSingIn}>
+          <div className={`${style.divButton}`}>
             <p>Ya tienes cuenta ? </p>
             <div onClick={handlerLogin}>
               <p style={{ color: "blue", cursor: "pointer" }}>Inicia Sesión </p>
