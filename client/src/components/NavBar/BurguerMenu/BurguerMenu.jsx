@@ -8,7 +8,7 @@ export default function BurguerMenuU({ handlerClose }) {
   };
 
   return (
-    <div className={style.layout}>
+    <div className={style.layout}  data-aos="zoom-out">
       <div className={style.CloseButton} onClick={ToggleClose}>
         <CloseButton />
       </div>
@@ -28,9 +28,7 @@ export default function BurguerMenuU({ handlerClose }) {
         <div className={style.divPages}>
           <p className={style.Pages}>Contacto</p>
         </div>
-        <div className={style.divPages}>
-          <p className={style.Pages}>Configuracion</p>
-        </div>
+      
       </div>
     </div>
   );
