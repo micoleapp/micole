@@ -15,7 +15,7 @@ export const getUserByToken = () => (dispatch) => {
   const token = localStorage.getItem("token");
   if(token){
     axios
-      .get(`/auth`,{headers:{Authorization: `Bearer ${token}`}})
+      .get(`/auth`,{headers:{'Authorization': `Bearer ${token}`}})
       .then((res) => dispatch(loginUser(res.data.user)))
       .catch((err) => {
         dispatch(getError(err.response.data.error)) 
