@@ -19,7 +19,7 @@ function App() {
   const { error : errorSchool } = useSelector((state) => state.schools);
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(getUserById())
+    // dispatch(getUserById())
     dispatch(getUserByToken())
   }, [])
   

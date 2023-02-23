@@ -15,15 +15,17 @@ export const getUserByToken = () => (dispatch) => {
   const token = localStorage.getItem("token");
   if(token){
     axios
-      .get(`/auth`,{headers: {'Authorization': `Bearer ${token}`}})
+      .get(`/auth`,{headers:{Authorization: `Bearer ${token}`}})
       .then((res) => dispatch(loginUser(res.data.user)))
       .catch((err) => {
-        dispatch(getError(err)) 
+        dispatch(getError(err.response.data.error)) 
         Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: err.response.data.error
       })});
+  }else{
+    dispatch(logoutUser())
   }
 };
 

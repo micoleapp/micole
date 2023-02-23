@@ -28,13 +28,13 @@ export const authSlice = createSlice({
       state.loading = false,
       state.success = true,
       state.user = action.payload,
-      state.error = ""
+      state.error = ""  
       state.token = localStorage.getItem('token')
     },
     logoutUser: (state) => {
       state.isAuth = false,
       state.loading = false,
-      state.success = true,
+      state.success = null,
       state.user = null,
       state.error = ""
       state.token = ""

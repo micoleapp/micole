@@ -46,6 +46,7 @@ const signIn = async (req, res, next) => {
       }
     } else {
       if (!email || !password) {
+        console.log("hola")
         return next(400);
       }
       const authInstance = await Auth.findOne({ where: { email } });
