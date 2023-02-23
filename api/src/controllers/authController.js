@@ -5,7 +5,7 @@ const mailer = require('../utils/sendMails/mailer');
 const getResponse = (from, auth, data) => {
   return from === 'Colegio'
     ? {
-        id: auth.id,
+        id: data.id,
         email: auth.email,
         nombre_responsable: data.nombre_responsable,
         apellidos_responsable: data.apellidos_responsable,
@@ -14,7 +14,7 @@ const getResponse = (from, auth, data) => {
         rol: auth.rol,
       }
     : {
-        id: auth.id,
+        id: data.id,
         email: auth.email,
         nombre: data.nombre,
         apellidos: data.apellidos,
@@ -24,58 +24,70 @@ const getResponse = (from, auth, data) => {
       };
 };
 
+const getAuth = async (req, res, next) => {
+  const tokenUser = req.user;
+  if (!tokenUser) {
+    return next(401);
+  }
+  try {
+    if (tokenUser.rol === 'Colegio') {
+      const dataColegio = await Colegio.findOne({
+        where: { idAuth: tokenUser.id },
+      });
+      return res
+        .status(200)
+        .send({ user: getResponse('Colegio', tokenUser, dataColegio) });
+    } else {
+      const dataUser = await User.findOne({
+        where: { idAuth: tokenUser.id },
+      });
+      return res
+        .status(200)
+        .send({ user: getResponse('Usuario', tokenUser, dataUser) });
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const signIn = async (req, res, next) => {
   const { email, password } = req.body;
-  const tokenUser = req.user;
+  if (!email || !password) {
+    return next(400);
+  }
   try {
-    if (tokenUser) {
-      if (tokenUser.rol === 'Colegio') {
-        const dataColegio = await Colegio.findOne({
-          where: { idAuth: tokenUser.id },
-        });
-        return res
-          .status(200)
-          .send({ user: getResponse('Colegio', tokenUser, dataColegio) });
-      } else {
-        const dataUser = await User.findOne({
-          where: { idAuth: tokenUser.id },
-        });
-        return res
-          .status(200)
-          .send({ user: getResponse('Usuario', tokenUser, dataUser) });
-      }
+    const authInstance = await Auth.findOne({ where: { email } });
+    if (!authInstance) {
+      return next({
+        statusCode: 404,
+        message: 'El usuario ingresado no existe',
+      });
+    }
+    const validatePassword = await authInstance.comparePassword(password);
+    if (!validatePassword) {
+      return next({
+        statusCode: 403,
+        message: 'Error en las credenciales de acceso',
+      });
+    }
+    if (authInstance.rol === 'Colegio') {
+      const dataColegio = await Colegio.findOne({
+        where: { idAuth: authInstance.id },
+      });
+      const jwToken = generateToken(authInstance.id);
+      return res.status(200).send({
+        user: getResponse('Colegio', authInstance, dataColegio),
+        token: jwToken.token,
+      });
     } else {
-      if (!email || !password) {
-        console.log("hola")
-        return next(400);
-      }
-      const authInstance = await Auth.findOne({ where: { email } });
-      if (!authInstance) {
-        return next({
-          statusCode: 404,
-          message: 'El usuario ingresado no existe',
-        });
-      }
-      const validatePassword = await authInstance.comparePassword(password);
-      if (!validatePassword) {
-        return next({
-          statusCode: 403,
-          message: 'Error en las credenciales de acceso',
-        });
-      }
-      if (authInstance.rol === 'Colegio') {
-        const dataColegio = await Colegio.findOne({
-          where: { idAuth: authInstance.id },
-        });
-        const jwToken = generateToken(authInstance.id);
-        return res.status(200).send({ user: getResponse("Colegio", authInstance, dataColegio), token: jwToken.token });
-      } else {
-        const dataUser = await User.findOne({
-          where: { idAuth: authInstance.id },
-        });
-        const jwToken = generateToken(authInstance.id);
-        return res.status(200).send({ user: getResponse("Usuario", authInstance, dataUser), token: jwToken.token });
-      }
+      const dataUser = await User.findOne({
+        where: { idAuth: authInstance.id },
+      });
+      const jwToken = generateToken(authInstance.id);
+      return res.status(200).send({
+        user: getResponse('Usuario', authInstance, dataUser),
+        token: jwToken.token,
+      });
     }
   } catch (error) {
     return next(error);
@@ -209,4 +221,5 @@ module.exports = {
   signIn,
   signUp,
   getAuthById,
+  getAuth
 };
