@@ -36,7 +36,10 @@ const authenticate = (secret) => async (req, res, next) => {
     req.user = ifUserExists;
     return next();
   } catch (err) {
-    return next(403);
+    return next({
+      statusCode: 403,
+      message: 'Token Inválido o Vencido',
+    });
   }
 };
 
