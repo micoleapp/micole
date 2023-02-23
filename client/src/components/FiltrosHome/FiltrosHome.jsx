@@ -12,13 +12,36 @@ import FormControl from "@mui/material/FormControl";
 import { MenuItem } from "@mui/material";
 
 import { InputLabel } from "@mui/material";
-const Ingreso = ["2023", "2024", "2025"];
-//className="text-xs"
+import { useSelector } from "react-redux";
+
+const Ingreso2 = ["2023", "2024", "2025"];
+
 function FiltrosHome() {
-  const [OpenFilter, setOpenFilter] = useState(false);
+    const [OpenFilter, setOpenFilter] = useState(false);
+    const [Ingreso, setIngreso] = useState(false);
+    const [Grado, setGrado] = useState(false);
+    const [Distrito, setDistrito] = useState(false);
+  const { allschools, loading, departaments, distrits } = useSelector(
+    (state) => state.schools
+  );
+  console.log(distrits)
+
   const toggleFilters = () => {
     setOpenFilter(!OpenFilter);
   };
+
+const handleValueDistrito =(event)=>{
+  console.log(event.target.value)
+  setDistrito(event.target.value)
+}
+const handleValueGrado =(event)=>{
+console.log(event.target.value)
+setGrado(event.target.value)
+}
+const handleValueAño =(event)=>{
+  console.log(event.target.value)
+  setIngreso(event.target.value)
+}
   return (
     <div className={style.filtros_container}>
       <div className={style.container_select}>
@@ -39,12 +62,12 @@ function FiltrosHome() {
               labelId="demo-simple-select-standard-label"
               id="demo-type-select-standard"
               // value={type}
-              // onChange={handleChangeType}
+              onChange={handleValueDistrito}
               label="Tipo de colegio"
             >
-              {MockupDistritos.map((type) => (
-                <MenuItem value={type} key={type}>
-                  <ListItemText primary={type} />
+              {distrits.map((dis) => (
+                <MenuItem value={dis.id} key={dis.id}>
+                  <ListItemText primary={ dis.nombre_distrito} />
                 </MenuItem>
               ))}
             </Select>
@@ -67,7 +90,7 @@ function FiltrosHome() {
               labelId="demo-simple-select-standard-label"
               id="demo-type-select-standard"
               // value={type}
-              // onChange={handleChangeType}
+              onChange={handleValueGrado}
               label="Tipo de colegio"
             >
               {MockupGrados.map((type) => (
@@ -77,16 +100,7 @@ function FiltrosHome() {
               ))}
             </Select>
           </FormControl>
-          {/* <select className="text-xs">
-            <option>Selecciona un grado</option>
-            {MockupGrados.map((distrito) => {
-              return (
-                <>
-                  <option className={style.option}>{distrito}</option>
-                </>
-              );
-            })}
-          </select> */}
+
         </div>
         <div className={style.select}>
           <p>Ingreso</p>
@@ -105,10 +119,10 @@ function FiltrosHome() {
               labelId="demo-simple-select-standard-label"
               id="demo-type-select-standard"
               // value={type}
-              // onChange={handleChangeType}
+              onChange={handleValueAño}
               label="Tipo de colegio"
             >
-              {Ingreso.map((type) => (
+              {Ingreso2.map((type) => (
                 <MenuItem value={type} key={type}>
                   <ListItemText primary={type} />
                 </MenuItem>
@@ -123,7 +137,7 @@ function FiltrosHome() {
         </div>
 
         <div className={style.container_button}>
-          <Link to="/listschool?distrito=algundistrito">
+          <Link to={`/listschool?distrito=${Distrito}&grado=${Grado}&ingreso=${Ingreso}`}>
             <button>Buscar</button>
           </Link>
         </div>
