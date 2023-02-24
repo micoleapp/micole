@@ -46,7 +46,7 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
         className="cursor-pointer rounded-md"
       />
       <div className="flex gap-5 mt-2 overflow-x-scroll w-full pb-2">
-        {gallery.map((item, index) => (
+        {gallery?.map((item, index) => (
           <img
             key={index}
             src={item}
