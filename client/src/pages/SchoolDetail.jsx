@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getSchoolDetail } from "../redux/SchoolsActions";
+import { clannDetailid, getSchoolDetail } from "../redux/SchoolsActions";
 import banner from "../assets/ejemplobanner.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logo from "../assets/premium.png";
@@ -79,7 +79,7 @@ function SchoolDetail() {
   useEffect(() => {
     dispatch(getSchoolDetail(id));
     return () => {
-      // dispatch(clannDetailid());
+      dispatch(clannDetailid());
     }
   }, []);
   const [value, setValue] = React.useState(0);

@@ -57,12 +57,12 @@ export const getSchoolDetail = (id) => (dispatch) => {
 
 
 
-// export const clannDetailid= () => (dispatch) => {
-//   dispatch(isLoading());
-//   try {
-//     dispatch(cleanOneSchool());
+export const clannDetailid= () => (dispatch) => {
+  dispatch(isLoading());
+  try {
+    dispatch(cleanOneSchool());
    
-//   } catch (err) {
-//     dispatch(getError(err.response.data.error));
-//   }
-// };
+  } catch (err) {
+    dispatch(getError(err.response.data.error));
+  }
+};
