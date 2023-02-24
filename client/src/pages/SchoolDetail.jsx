@@ -170,10 +170,10 @@ function SchoolDetail() {
     }
     axios.post('http://localhost:3000/review', comentario)
   }
+
   const disableWeekends = (date) => {
     return date.day() === 0 || date.day() === 6;
   };
-
 
   return (
     <div className="bg-[#f6f7f8]">
