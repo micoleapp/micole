@@ -109,6 +109,7 @@ function DashboardSchool() {
     (state) => state.schools
   );
   const { isAuth, user } = useSelector((state) => state.auth);
+  const [allData, setAllData] = useState({});
 
   useEffect(() => {
     if (!isAuth) return navigate("/");
@@ -125,10 +126,10 @@ function DashboardSchool() {
   }, [])
 
   useEffect(() => {
-    dispatch(getSchoolDetail(user.id))
+    if(user){
+      dispatch(getSchoolDetail(user.id))
+    }
   }, [allData])
-  
-  
 
   const totalSteps = () => {
     return steps.length;
@@ -163,6 +164,8 @@ function DashboardSchool() {
   const handleStep = (step) => () => {
     setActiveStep(step);
   };
+
+
 
   const handleCompleteDatosPrincipales = () => {
     const newCompleted = completed;
@@ -465,7 +468,6 @@ function DashboardSchool() {
     }
   };
 
-  const [allData, setAllData] = useState({});
 
   const handleSubmitFormComplete = (e) => {
     e.preventDefault();
@@ -536,10 +538,7 @@ function DashboardSchool() {
 
   const handleSubmitCitas = (e) => {
     e.preventDefault();
-    const newDaysWithTime = daysWithTime.filter((days) => {
-      return days[Object.keys(days)[0]][2] === true;
-    });
-    const newDays = newDaysWithTime.map((day) => ({
+    const newDays = daysWithTime.map((day) => ({
       [Object.keys(day)[0]]: [
         stringyDate(day[Object.keys(day)][0]["$H"])
           .toString()
@@ -548,7 +547,7 @@ function DashboardSchool() {
         stringyDate(day[Object.keys(day)][1]["$H"])
           .toString()
           .concat(":")
-          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
+          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),day[Object.keys(day)][2]
       ],
     }));
     Swal.fire({
@@ -558,6 +557,9 @@ function DashboardSchool() {
     });
     console.log(newDays);
   };
+
+
+
 
   console.log(allData)
 
