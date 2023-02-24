@@ -45,7 +45,7 @@ import { levels } from "../MockupInfo/Niveles";
 import { steps } from "../MockupInfo/Pasos";
 
 import { CiUser, CiClock1 } from "react-icons/ci";
-import { BsPlusCircleDotted, BsWindowDock } from "react-icons/bs";
+import { BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
 import { RiImageAddLine } from "react-icons/ri";
 import { useEffect } from "react";
@@ -112,15 +112,27 @@ function DashboardSchool() {
 
   useEffect(() => {
     if (!isAuth) return navigate("/");
+  }, [isAuth]);
+
+  useEffect(() => {
     dispatch(getAllCategories());
     dispatch(getAllDepartaments());
     dispatch(getAllDistrits());
     dispatch(getAllProvincias());
-  }, [isAuth]);
+    if(isAuth && user){
+      dispatch(getSchoolDetail(user.id))
+    }
+  }, [])
+
+  useEffect(() => {
+    dispatch(getSchoolDetail(user.id))
+  }, [allData])
+  
+  
 
   const totalSteps = () => {
     return steps.length;
-  };
+};
 
   const completedSteps = () => {
     return Object.keys(completed).length;
@@ -160,6 +172,13 @@ function DashboardSchool() {
     handleNext();
   };
 
+  const handleCompleteVacantes = () => {
+    const newCompleted = completed;
+    newCompleted[activeStep] = true;
+    setCompleted(newCompleted);
+    handleNext();
+  };
+
   const handleCompleteInfraestructura = () => {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
@@ -190,10 +209,9 @@ function DashboardSchool() {
     setDatosPrincipales(initialDatosPrincipales);
     setInfraestructura(initialInfraestructura);
     setAcreditaciones(initialAcreditaciones);
+    setPreview([])
+    setMultimedia(initialMultimedia);
   };
-
-  const [categoryName, setCategoryName] = useState([]);
-  const [levelName, setLevelName] = useState([]);
 
   const [provincia, setProvincia] = useState([]);
 
@@ -253,7 +271,6 @@ function DashboardSchool() {
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
       const place = autocomplete.getPlace();
-      console.log(place);
       setDirec(
         place.address_components[1].long_name +
           " " +
@@ -280,24 +297,24 @@ function DashboardSchool() {
   };
 
   const initialDatosPrincipales = {
-    nombreColegio: "",
-    descripcion: "",
-    propuesta: "",
-    categoria: [],
-    nombreDirector: "",
-    fundacion: null,
-    ruc: null,
-    ugel: null,
-    area: null,
-    ingles: null,
-    alumnos: null,
-    niveles: [],
-    departamento: {},
-    provincia: {},
-    distrito: {},
-    direccion: "",
-    lat: 0,
-    lng: 0,
+    nombreColegio: oneSchool.nombre_colegio ? oneSchool.nombre_colegio : "",
+    descripcion: oneSchool.descripcion ? oneSchool.descripcion : "",
+    propuesta: oneSchool.propuesta_valor ? oneSchool.propuesta_valor : "",
+    categoria: oneSchool.Categoria ? oneSchool.Categoria : "",
+    nombreDirector: oneSchool.nombre_director ? oneSchool.nombre_director : "",
+    fundacion: oneSchool.fecha_fundacion ? Number(oneSchool.fecha_fundacion) : null,
+    ruc: oneSchool.ruc ? Number(oneSchool.ruc) : null,
+    ugel: oneSchool.ugel ? Number(oneSchool.ugel) : null,
+    area: oneSchool.area ? Number(oneSchool.area) : null,
+    ingles: oneSchool.horas_idioma_extranjero ? Number(oneSchool.horas_idioma_extranjero) : null,
+    alumnos: oneSchool.numero_estudiantes ? Number(oneSchool.numero_estudiantes) : null,
+    niveles: oneSchool.niveles ? oneSchool.niveles : [],
+    departamento: oneSchool.Departamento ? oneSchool.Departamento : {},
+    provincia: oneSchool.Provincium ? oneSchool.Provincium : {},
+    distrito: oneSchool.Distrito ? oneSchool.Distrito : {},
+    direccion: oneSchool.direccion ? oneSchool.direccion : "",
+    lat: oneSchool.lat ? oneSchool.lat : 0,
+    lng: oneSchool.lng ? oneSchool.lng : 0,
   };
 
   const [datosPrincipales, setDatosPrincipales] = useState(
@@ -406,13 +423,19 @@ function DashboardSchool() {
         console.log(error);
       }
     });
-    alert(`Imagenes subidas correctamente`);
+    Swal.fire({
+      icon: "success",
+      title: "Imagenes subidas correctamente",
+
+    });
   }
 
-  const [multimedia, setMultimedia] = useState({
+  const initialMultimedia = {
     images: [],
     video_url: "",
-  });
+  }
+
+  const [multimedia, setMultimedia] = useState(initialMultimedia);
 
   const [preview, setPreview] = useState([]);
 
@@ -446,12 +469,25 @@ function DashboardSchool() {
 
   const handleSubmitFormComplete = (e) => {
     e.preventDefault();
-    //api falsa de json-server
-    axios.post("http://localhost:3000/schools", allData);
-    handleReset();
-    setPage(1);
+    axios.put(`http://localhost:3001/colegios/${user.id}`,allData )
+    .then(res=>{
+      Swal.fire({
+        icon: "success",
+        title: "Felicidades ya estas a un paso de publicar tu colegio",
+        text: "Continua completando el horario para tus citas",
+      });
+      setPage(1);
+    })
+    .catch(err=>{
+      console.log(err.response.data.message)
+      Swal.fire({
+        icon: "error",
+        title: "Lo sentimos algo salio mal",
+        text: err.message,
+      });
+    })
   };
-
+  
   const [vacantes, setVacantes] = useState(0);
 
   const initialDaysWithTime = [
@@ -522,6 +558,8 @@ function DashboardSchool() {
     });
     console.log(newDays);
   };
+
+  console.log(allData)
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -1037,9 +1075,8 @@ function DashboardSchool() {
                               <Select
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-type-select-standard"
-                                value={distrito}
+                                value={datosPrincipales.distrito}
                                 onChange={(e) => {
-                                  setDistrito(e.target.value);
                                   setDatosPrincipales({
                                     ...datosPrincipales,
                                     distrito: e.target.value,
@@ -1047,9 +1084,10 @@ function DashboardSchool() {
                                 }}
                                 label="Selecciona una Provincia"
                                 className="bg-white"
-                                defaultValue={""}
+                                defaultValue={datosPrincipales.distrito}
                               >
-                                {distrits.map((type, index) => (
+                                <MenuItem value={datosPrincipales.distrito}>{datosPrincipales.distrito.nombre_distrito}</MenuItem>
+                                {distrits.filter(distrit=>distrit.nombre_distrito !== datosPrincipales.distrito.nombre_distrito).map((type, index) => (
                                   <MenuItem value={type} key={type.index}>
                                     <ListItemText
                                       primary={type.nombre_distrito}
@@ -1165,6 +1203,7 @@ function DashboardSchool() {
                         </Button>
                         <Box sx={{ flex: "1 1 auto" }} />
                         <Button
+                          type="submit"
                           onClick={handleCompleteDatosPrincipales}
                           sx={{ mr: 1 }}
                           disabled={datosPrincipalesCompleted()}
@@ -1679,6 +1718,7 @@ function DashboardSchool() {
                     </div>
                   )}
                   {activeStep === 3 && (
+                    <>
                     <div className="w-full min-h-screen gap-2 flex flex-col">
                       <h1 className="text-2xl">Vacantes disponibles</h1>
                       <button
@@ -1724,6 +1764,41 @@ function DashboardSchool() {
                       </button>
                       {vacantes === 2 && <GridVacantes />}
                     </div>
+                    <Box
+                        sx={{ display: "flex", flexDirection: "row", pt: 2 }}
+                      >
+                        <Button
+                          color="inherit"
+                          disabled={activeStep === 0}
+                          onClick={handleBack}
+                          sx={{ mr: 1 }}
+                        >
+                          Back
+                        </Button>
+                        <Box sx={{ flex: "1 1 auto" }} />
+                        <Button
+                          onClick={handleCompleteVacantes}
+                          sx={{ mr: 1 }}
+                        >
+                          Next
+                        </Button>
+                        {/* {activeStep !== steps.length &&
+                      (completed[activeStep] ? (
+                        <Typography
+                          variant="caption"
+                          sx={{ display: "inline-block" }}
+                        >
+                          Step {activeStep + 1} already completed
+                        </Typography>
+                      ) : (
+                        <Button onClick={handleComplete}>
+                          {completedSteps() === totalSteps() - 1
+                            ? "Finish"
+                            : "Complete Step"}
+                        </Button>
+                      ))} */}
+                      </Box>
+                    </>
                   )}
                   {activeStep === 4 && (
                     <div className="flex flex-col gap-5">
@@ -1810,6 +1885,8 @@ function DashboardSchool() {
                         </label>
                         <input
                           type="url"
+                          pattern="^((https?|ftp):\/\/)?([a-z0-9]+(\.[a-z0-9]+)+([\/?#][^#\s]*)?)$
+                          "
                           name="video"
                           id="video"
                           className="p-3 rounded-md border-2  outline-none"

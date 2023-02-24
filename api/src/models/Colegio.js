@@ -135,7 +135,7 @@ module.exports = (sequelize) => {
       //HACER UNA RELACION CON VACANTE DE MUCHOS A MUCHOS
 
       ugel: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: true,
       },
 
