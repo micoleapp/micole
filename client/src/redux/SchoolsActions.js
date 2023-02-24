@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,filterByRatings,getDistrits,getCategories,getProvincias} from './SchoolsSlice'
+import { cleanOneSchool,getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,filterByRatings,getDistrits,getCategories,getProvincias} from './SchoolsSlice'
 
 export const getAllProvincias = () => (dispatch) => {
   dispatch(isLoading())
@@ -52,3 +52,17 @@ export const getSchoolDetail = (id) => (dispatch) => {
   .then(res=>dispatch(getOneSchool(res.data[0])))
   .catch(err=>dispatch(getError(err.message)))
 }
+
+
+
+
+
+// export const clannDetailid= () => (dispatch) => {
+//   dispatch(isLoading());
+//   try {
+//     dispatch(cleanOneSchool());
+   
+//   } catch (err) {
+//     dispatch(getError(err.response.data.error));
+//   }
+// };

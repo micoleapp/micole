@@ -73,9 +73,14 @@ function SchoolDetail() {
 
   const [image, setImage] = useState(null);
 
+
+  
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getSchoolDetail(id));
+    return () => {
+      // dispatch(clannDetailid());
+    }
   }, []);
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {

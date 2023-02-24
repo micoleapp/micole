@@ -58,6 +58,12 @@ export const schoolsSlice = createSlice({
       state.loading = false,
       state.error = ""
     },
+
+   cleanOneSchool: (state,action) => {
+      state.oneSchool = []
+      state.loading = false,
+      state.error = ""
+    },
     getError: (state,action) => {
       state.error = action.payload,
       state.loading = false
@@ -68,6 +74,6 @@ export const schoolsSlice = createSlice({
   }
 })
 
-export const {getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,filterByRatings,getDistrits,getCategories,getProvincias} = schoolsSlice.actions
+export const { cleanOneSchool,getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,filterByRatings,getDistrits,getCategories,getProvincias} = schoolsSlice.actions
 
 export default schoolsSlice.reducer
