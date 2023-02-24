@@ -1,4 +1,4 @@
-const { Auth, User, Colegio } = require('../db');
+const { Auth, User, Colegio, Provincia, Distrito } = require('../db');
 const { generateToken } = require('../utils/generateToken');
 const mailer = require('../utils/sendMails/mailer');
 
@@ -184,6 +184,8 @@ const signUp = async (req, res, next) => {
     });
     const idAuth = newAuth.id;
     if (esColegio) {
+      const { ProvinciaId } = await Distrito.findByPk(DistritoId);
+      const { DepartamentoId } = await Provincia.findByPk(ProvinciaId);
       const newColegio = await Colegio.create({
         nombre_responsable: nombre,
         apellidos_responsable: apellidos,
@@ -191,6 +193,8 @@ const signUp = async (req, res, next) => {
         telefono,
         ruc,
         DistritoId,
+        ProvinciaId,
+        DepartamentoId,
         idAuth,
       });
       const sanitizedSchool = {
@@ -221,5 +225,5 @@ module.exports = {
   signIn,
   signUp,
   getAuthById,
-  getAuth
+  getAuth,
 };
