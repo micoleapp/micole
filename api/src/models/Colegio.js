@@ -1,9 +1,9 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 // Exportamos una funcion que define el modelo y le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define(
-    "Colegio",
+    'Colegio',
     {
       id: {
         type: DataTypes.UUID,
@@ -15,9 +15,13 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          isAlpha: {
-            args: true,
-            msg: "El nombre_responsable solo puede contener letras",
+          is: {
+            args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+            msg: 'El nombre solo puede contener letras, acentos, tildes y espacios',
+          },
+          len: {
+            args: [3, 60],
+            msg: 'El apellido debe tener entre 3 y 60 letras',
           },
         },
       },
@@ -25,9 +29,13 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          isAlpha: {
-            args: true,
-            msg: "El nombre_responsable solo puede contener letras",
+          is: {
+            args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+            msg: 'El apellido solo puede contener letras, acentos, tildes y espacios',
+          },
+          len: {
+            args: [6, 60],
+            msg: 'El apellido debe tener entre 6 y 60 letras',
           },
         },
       },
@@ -38,11 +46,11 @@ module.exports = (sequelize) => {
         validate: {
           is: {
             args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-            msg: "El nombre del colegio solo puede contener letras, acentos, tildes y espacios",
+            msg: 'El nombre solo puede contener letras, acentos, tildes y espacios',
           },
           len: {
             args: [2, 60],
-            msg: "El nombre debe tener entre 2 y 60 letras",
+            msg: 'El nombre debe tener entre 2 y 60 letras',
           },
         },
       },
@@ -52,11 +60,11 @@ module.exports = (sequelize) => {
         validate: {
           is: {
             args: /^[a-zA-Z-]+$/,
-            msg: "El slug solo puede contener letras y guiones",
+            msg: 'El slug solo puede contener letras y guiones',
           },
           len: {
             args: [2, 60],
-            msg: "El slug debe tener entre 2 y 60 letras",
+            msg: 'El slug debe tener entre 2 y 60 letras',
           },
         },
       },
@@ -95,11 +103,11 @@ module.exports = (sequelize) => {
         validate: {
           is: {
             args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-            msg: "El nombre del director solo puede contener letras, acentos, tildes y espacios",
+            msg: 'El nombre solo puede contener letras, acentos, tildes y espacios',
           },
           len: {
             args: [2, 60],
-            msg: "El nombre debe tener entre 2 y 60 letras",
+            msg: 'El nombre debe tener entre 2 y 60 letras',
           },
         },
       },
@@ -174,7 +182,7 @@ module.exports = (sequelize) => {
       isActive: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
-      }
+      },
       // isBanned: {
       //   type: DataTypes.BOOLEAN,
       //   defaultValue: false,
