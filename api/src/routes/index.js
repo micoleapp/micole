@@ -10,6 +10,7 @@ const paisRouter = require("./pais.js");
 const userRouter = require("./userRoutes.js");
 const categoriaRouter = require("./categoria.js");
 const vacanteRouter = require("./vacanteRouter.js");
+const disponibilidadRouter = require("./disponibilidadRoutes.js");
 
 const router = Router();
 
@@ -20,6 +21,7 @@ router.use("/distritos", distritoRouter);
 router.use("/paises", paisRouter);
 router.use("/categorias", categoriaRouter);
 router.use("/vacantes", vacanteRouter);
+router.use("/disponibilidad", disponibilidadRouter);
 
 router.get("/", (req, res) =>
   res.json({ name: pkg.name, version: pkg.version })
