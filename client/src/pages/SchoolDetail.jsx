@@ -170,6 +170,9 @@ function SchoolDetail() {
     }
     axios.post('http://localhost:3000/review', comentario)
   }
+  const disableWeekends = (date) => {
+    return date.day() === 0 || date.day() === 6;
+  };
 
 
   return (
@@ -179,7 +182,7 @@ function SchoolDetail() {
         alt="banner"
         className="object-cover w-full h-[500px]"
       />
-      <div className="p-8 px-5 lg:px-[100px]"  data-aos="fade-up" data-aos-duration='1000'>
+      <div className="p-8 px-5 lg:px-[100px]" data-aos-mirror={false} data-aos="fade-up" data-aos-duration='1000'>
         <div className="header drop-shadow-md">
           <h1 className="text-2xl  font-semibold">
             {oneSchool.nombre_escuela}
@@ -775,6 +778,7 @@ function SchoolDetail() {
                     label="Elejir fecha"
                     inputFormat="DD/MM/YYYY"
                     value={date}
+                    shouldDisableDate={disableWeekends}
                     onChange={handleChangeDate}
                     renderInput={(params) => <TextField {...params} />}
                     disablePast
@@ -787,6 +791,7 @@ function SchoolDetail() {
                       renderInput={(params) => <TextField {...params} />}
                       ampm={false}
                       minutesStep={15}
+
                       minTime={dayjs("2014-08-18T08:00:00")}
                       maxTime={dayjs("2014-08-18T17:00:00")}
                     />

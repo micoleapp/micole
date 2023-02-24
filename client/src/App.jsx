@@ -7,15 +7,22 @@ import EnrollSchool from "./pages/EnrollSchool";
 import ListSchool from "./pages/ListSchool";
 import SchoolDetail from "./pages/SchoolDetail";
 import InfoPlanes from "./components/FormPayment/utils/InfoPlanes";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Error from "./pages/Error";
 import Payment from "./pages/Payment/Payment"
 import DashboardSchool from "./pages/DashboardSchool";
-import DragAndDrop from "./pages/DragAndDrop";
+import { getUserByToken,getUserById } from "./redux/AuthActions";
+
 function App() {
 
 
   const { error : errorSchool } = useSelector((state) => state.schools);
+  const dispatch = useDispatch()
+  useEffect(() => {
+    // dispatch(getUserById())
+    dispatch(getUserByToken())
+  }, [])
+  
 
   return (
     <>
@@ -31,7 +38,6 @@ function App() {
           <Route path="/*" element={<Error />} />
           <Route path="*" element={<Error />} />
           <Route path="/dashboardschool" element={<DashboardSchool />} />
-          <Route path="/dnd" element={<DragAndDrop />} />
          <Route path="/payment" element={<Payment/>} />
         </Routes>
       )}

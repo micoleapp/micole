@@ -13,7 +13,7 @@ import FiltrosHome from "../../components/FiltrosHome/FiltrosHome";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllDepartaments, getAllDistrits, getAllSchools } from "../../redux/SchoolsActions";
-import {getOneUser } from "../../redux/AuthActions";
+
 function Home() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -22,7 +22,6 @@ function Home() {
     dispatch(getAllSchools());
     dispatch(getAllDepartaments())
     dispatch(getAllDistrits())
-    dispatch(getOneUser())
   }, []);
 
   return (

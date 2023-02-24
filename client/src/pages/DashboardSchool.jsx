@@ -15,9 +15,13 @@ import Select from "@mui/material/Select";
 import { Squash as Hamburger } from "hamburger-react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import useWindowSize from 'react-use-window-size';
-import Logo from '../assets/logoPayment.png'
+import useWindowSize from "react-use-window-size";
+import Logo from "../assets/logoPayment.png";
 import Confetti from "react-confetti";
+import DragAndDrop from "../components/DragAndDrop";
+import GridVacantes from "../components/GridVacantes";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import {
   GoogleMap,
   useJsApiLoader,
@@ -50,11 +54,19 @@ import {
   getAllDepartaments,
   getAllDistrits,
   getAllProvincias,
+  getSchoolDetail
 } from "../redux/SchoolsActions";
+import { logout } from "../redux/AuthActions";
 import { useState } from "react";
 import { useRef } from "react";
 import axios from "axios";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { MobileTimePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TextField } from "@mui/material";
 const libraries = ["places"];
 
 const containerStyle = {
@@ -62,12 +74,17 @@ const containerStyle = {
   height: "400px",
 };
 
-function StandardImageList({ list, setImage,eliminarImagenDePreview }) {
+function StandardImageList({ list, setImage, eliminarImagenDePreview }) {
   return (
     <ImageList sx={{ width: "100%", height: 450 }} cols={3} rowHeight={400}>
       {list.map((item) => (
         <ImageListItem key={item}>
-          <button onClick={()=>eliminarImagenDePreview(item)} className="absolute bg-[#0061dd]/30 right-2 top-2 text-white hover:bg-[#0061dd] p-2 rounded-md duration-300">Quitar</button>
+          <button
+            onClick={() => eliminarImagenDePreview(item)}
+            className="absolute bg-[#0061dd]/30 right-2 top-2 text-white hover:bg-[#0061dd] p-2 rounded-md duration-300"
+          >
+            Quitar
+          </button>
           <img
             src={item}
             alt={item}
@@ -87,16 +104,19 @@ function DashboardSchool() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const dispatch = useDispatch();
-  const { categories, provincias, distrits, departaments } = useSelector(
+  const navigate = useNavigate();
+  const { categories, provincias, distrits, departaments , oneSchool } = useSelector(
     (state) => state.schools
   );
+  const { isAuth, user } = useSelector((state) => state.auth);
 
   useEffect(() => {
+    if (!isAuth) return navigate("/");
     dispatch(getAllCategories());
     dispatch(getAllDepartaments());
     dispatch(getAllDistrits());
     dispatch(getAllProvincias());
-  }, []);
+  }, [isAuth]);
 
   const totalSteps = () => {
     return steps.length;
@@ -233,7 +253,7 @@ function DashboardSchool() {
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
       const place = autocomplete.getPlace();
-      console.log(place)
+      console.log(place);
       setDirec(
         place.address_components[1].long_name +
           " " +
@@ -367,7 +387,7 @@ function DashboardSchool() {
 
   function handleFilesSubmit(e) {
     e.preventDefault();
-    let arrayImages = []
+    let arrayImages = [];
     preview?.map(async (image, index) => {
       const formData = new FormData();
       try {
@@ -377,7 +397,7 @@ function DashboardSchool() {
           "https://api.cloudinary.com/v1_1/de4i6biay/image/upload",
           formData
         );
-        arrayImages.push(res.data.secure_url)
+        arrayImages.push(res.data.secure_url);
         setMultimedia({
           ...multimedia,
           images: arrayImages,
@@ -410,7 +430,7 @@ function DashboardSchool() {
 
   const eliminarImagenDePreview = (img) => {
     setPreview(preview.filter((image) => image !== img));
-  }
+  };
 
   const [image, setImage] = useState(null);
 
@@ -427,12 +447,81 @@ function DashboardSchool() {
   const handleSubmitFormComplete = (e) => {
     e.preventDefault();
     //api falsa de json-server
-    axios.post('http://localhost:3000/schools',{allData})
-    handleReset()
-    setPage(1)
-  }
+    axios.post("http://localhost:3000/schools", allData);
+    handleReset();
+    setPage(1);
+  };
 
-  console.log(allData)
+  const [vacantes, setVacantes] = useState(0);
+
+  const initialDaysWithTime = [
+    {
+      Lunes: [dayjs("2014-08-18T08:00:00"), dayjs("2014-08-18T17:00:00"), true],
+    },
+    {
+      Martes: [
+        dayjs("2014-08-18T08:00:00"),
+        dayjs("2014-08-18T17:00:00"),
+        true,
+      ],
+    },
+    {
+      Miercoles: [
+        dayjs("2014-08-18T08:00:00"),
+        dayjs("2014-08-18T17:00:00"),
+        true,
+      ],
+    },
+    {
+      Jueves: [
+        dayjs("2014-08-18T08:00:00"),
+        dayjs("2014-08-18T17:00:00"),
+        true,
+      ],
+    },
+    {
+      Viernes: [
+        dayjs("2014-08-18T08:00:00"),
+        dayjs("2014-08-18T17:00:00"),
+        true,
+      ],
+    },
+  ]
+
+  const [daysWithTime, setDaysWithTime] = React.useState(initialDaysWithTime);
+
+  const stringyDate = (date) => {
+    if (date.toString().length === 1) {
+      return "0" + date++;
+    } else {
+      return date;
+    }
+  };
+
+  const handleSubmitCitas = (e) => {
+    e.preventDefault();
+    const newDaysWithTime = daysWithTime.filter((days) => {
+      return days[Object.keys(days)[0]][2] === true;
+    });
+    const newDays = newDaysWithTime.map((day) => ({
+      [Object.keys(day)[0]]: [
+        stringyDate(day[Object.keys(day)][0]["$H"])
+          .toString()
+          .concat(":")
+          .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
+        stringyDate(day[Object.keys(day)][1]["$H"])
+          .toString()
+          .concat(":")
+          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
+      ],
+    }));
+    Swal.fire({
+      icon: "success",
+      title: "Horarios actualizados exitosamente!",
+      text: "Cambios guardados",
+    });
+    console.log(newDays);
+  };
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -452,26 +541,27 @@ function DashboardSchool() {
           } lg:flex flex-col justify-center gap-4 static lg:absolute lg:top-48`}
         >
           <button
-            className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
+            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+              page == 0 ? "bg-[#0061dd] text-white" : null
+            } `}
             onClick={() => setPage(0)}
           >
-            <CiUser className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
-            <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
+            <CiUser
+              className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                page == 0 ? "text-white" : null
+              }`}
+            />
+            <span
+              className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                page == 0 ? "text-white" : null
+              }`}
+            >
               Perfil del colegio
             </span>
           </button>
           <button
             className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
             onClick={() => setPage(1)}
-          >
-            <BsPlusCircleDotted className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
-            <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
-              Vacantes disponibles
-            </span>
-          </button>
-          <button
-            className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
-            onClick={() => setPage(2)}
           >
             <CiClock1 className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
             <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
@@ -480,7 +570,7 @@ function DashboardSchool() {
           </button>
           <button
             className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
-            onClick={() => setPage(3)}
+            onClick={() => setPage(2)}
           >
             <BsWindowDock className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
             <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
@@ -489,7 +579,7 @@ function DashboardSchool() {
           </button>
           <button
             className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
-            onClick={() => setPage(4)}
+            onClick={() => dispatch(logout())}
           >
             <AiOutlineLogout className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
             <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
@@ -521,12 +611,29 @@ function DashboardSchool() {
             <div className="mt-10">
               {allStepsCompleted() ? (
                 <React.Fragment>
-                  <Confetti width={width-10} height={width > 900 ? height+155 : height} style={{zIndex:500,position: "fixed"}}  />
-                  <div className={`h-screen flex flex-col gap-10 justify-center`}>
-                    <h1 className="text-4xl text-center font-bold mt-5">Felicitaciones completaste todos los pasos</h1>
-                    <p className="text-center">Porfavor envia el formulario hacia nuestra base de datos para continuar</p>
-                    <img src={Logo} alt="" className="object-cover mx-auto"/>
-                    <button type="submit" className="bg-[#0061dd] text-white rounded-md mx-auto p-3" onClick={handleSubmitFormComplete}>Enviar datos</button>
+                  <Confetti
+                    width={width - 10}
+                    height={width > 900 ? height + 155 : height}
+                    style={{ zIndex: 500, position: "fixed" }}
+                  />
+                  <div
+                    className={`h-screen flex flex-col gap-10 justify-center`}
+                  >
+                    <h1 className="text-4xl text-center font-bold mt-5">
+                      Felicitaciones completaste todos los pasos
+                    </h1>
+                    <p className="text-center">
+                      Porfavor envia el formulario hacia nuestra base de datos
+                      para continuar
+                    </p>
+                    <img src={Logo} alt="" className="object-cover mx-auto" />
+                    <button
+                      type="submit"
+                      className="bg-[#0061dd] text-white rounded-md mx-auto p-3"
+                      onClick={handleSubmitFormComplete}
+                    >
+                      Enviar datos
+                    </button>
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       <Box sx={{ flex: "1 1 auto" }} />
                       <Button onClick={handleReset}>Reset</Button>
@@ -688,9 +795,9 @@ function DashboardSchool() {
                                 ...datosPrincipales,
                                 fundacion: Number(e.target.value),
                               })
-                              
                             }
-                            pattern="\d{4}" placeholder="Ingresa un año"
+                            pattern="\d{4}"
+                            placeholder="Ingresa un año"
                             value={datosPrincipales.fundacion}
                             title="Solo se permiten numeros, 4 caracteres y un año superior a 1700"
                           />
@@ -817,7 +924,7 @@ function DashboardSchool() {
                           </label>
                           <small>Puede marcar mas de una opción</small>
                         </div>
-                        <div className="flex flex-col lg:grid grid-cols-2">
+                        <div className="flex flex-col lg:grid grid-cols-3">
                           {levels?.map((level) => (
                             <FormControlLabel
                               control={
@@ -969,7 +1076,9 @@ function DashboardSchool() {
                                 >
                                   <input
                                     type="text"
-                                    className={`p-3 rounded-md border-2 ${width > 900 ? "w-[400px]" : " w-full"}  outline-none`}
+                                    className={`p-3 rounded-md border-2 ${
+                                      width > 900 ? "w-[400px]" : " w-full"
+                                    }  outline-none`}
                                     ref={direccion}
                                   />
                                 </Autocomplete>
@@ -1570,6 +1679,53 @@ function DashboardSchool() {
                     </div>
                   )}
                   {activeStep === 3 && (
+                    <div className="w-full min-h-screen gap-2 flex flex-col">
+                      <h1 className="text-2xl">Vacantes disponibles</h1>
+                      <button
+                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                        onClick={() =>
+                          vacantes === 0 ? setVacantes(null) : setVacantes(0)
+                        }
+                      >
+                        {" "}
+                        <span>2023</span>{" "}
+                        <FontAwesomeIcon
+                          size="lg"
+                          icon={vacantes === 0 ? faArrowUp : faArrowDown}
+                        />{" "}
+                      </button>
+                      {vacantes === 0 && <GridVacantes />}
+                      <button
+                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                        onClick={() =>
+                          vacantes === 1 ? setVacantes(null) : setVacantes(1)
+                        }
+                      >
+                        {" "}
+                        <span>2024</span>{" "}
+                        <FontAwesomeIcon
+                          size="lg"
+                          icon={vacantes === 1 ? faArrowUp : faArrowDown}
+                        />{" "}
+                      </button>
+                      {vacantes === 1 && <GridVacantes />}
+                      <button
+                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                        onClick={() =>
+                          vacantes === 2 ? setVacantes(null) : setVacantes(2)
+                        }
+                      >
+                        {" "}
+                        <span>2025</span>{" "}
+                        <FontAwesomeIcon
+                          size="lg"
+                          icon={vacantes === 2 ? faArrowUp : faArrowDown}
+                        />{" "}
+                      </button>
+                      {vacantes === 2 && <GridVacantes />}
+                    </div>
+                  )}
+                  {activeStep === 4 && (
                     <div className="flex flex-col gap-5">
                       <h1 className="text-2xl">Agregar imagenes</h1>
                       <small>
@@ -1604,7 +1760,11 @@ function DashboardSchool() {
                           </div>
                           <button
                             type="submit"
-                            disabled={files !== null && preview.length !== 0 ? false : true}
+                            disabled={
+                              files !== null && preview.length !== 0
+                                ? false
+                                : true
+                            }
                             className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
                           >
                             Upload
@@ -1614,7 +1774,9 @@ function DashboardSchool() {
                           <>
                             <div className="border-2 rounded-md overflow-hidden p-2 bg-white">
                               <StandardImageList
-                                eliminarImagenDePreview={eliminarImagenDePreview}
+                                eliminarImagenDePreview={
+                                  eliminarImagenDePreview
+                                }
                                 setImage={setImage}
                                 list={preview}
                               />
@@ -1702,13 +1864,131 @@ function DashboardSchool() {
             </div>
           </Box>
         ) : page === 1 ? (
-          <div>1</div>
+          <div>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <div className="grid lg:grid-cols-3 w-full grid-cols-2">
+                {daysWithTime.map((day, index) => (
+                  <div className="my-3">
+                    <FormControlLabel
+                      label={Object.keys(day)}
+                      control={
+                        <Checkbox
+                          checked={day[Object.keys(day)][2]}
+                          onChange={(event, target) => {
+                            if (target) {
+                              setDaysWithTime([
+                                ...daysWithTime.slice(0, index),
+                                {
+                                  [Object.keys(day)]: [
+                                    day[Object.keys(day)][0],
+                                    day[Object.keys(day)][1],
+                                    true,
+                                  ],
+                                },
+                                ...daysWithTime.slice(index + 1),
+                              ]);
+                            } else {
+                              setDaysWithTime([
+                                ...daysWithTime.slice(0, index),
+                                {
+                                  [Object.keys(day)]: [
+                                    day[Object.keys(day)][0],
+                                    day[Object.keys(day)][1],
+                                    false,
+                                  ],
+                                },
+                                ...daysWithTime.slice(index + 1),
+                              ]);
+                            }
+                          }}
+                        />
+                      }
+                    />
+                    <div className="flex flex-col gap-3">
+                      <small className="font-semibold">
+                        {[
+                          stringyDate(
+                            day[Object.keys(day)][0]["$H"]
+                          ).toString(),
+                          stringyDate(
+                            day[Object.keys(day)][0]["$m"]
+                          ).toString(),
+                        ].join(":")}{" "}
+                        -{" "}
+                        {[
+                          stringyDate(
+                            day[Object.keys(day)][1]["$H"]
+                          ).toString(),
+                          stringyDate(
+                            day[Object.keys(day)][1]["$m"]
+                          ).toString(),
+                        ].join(":")}{" "}
+                      </small>
+                      <div className="flex gap-10">
+                        <MobileTimePicker
+                          label="Desde"
+                          disabled={!day[Object.keys(day)][2]}
+                          className="w-[70px]"
+                          value={day[Object.keys(day)][0]}
+                          renderInput={(params) => <TextField {...params} />}
+                          ampm={false}
+                          onChange={(newValue) => {
+                            setDaysWithTime([
+                              ...daysWithTime.slice(0, index),
+                              {
+                                [Object.keys(day)]: [
+                                  newValue,
+                                  day[Object.keys(day)][1],
+                                  true,
+                                ],
+                              },
+                              ...daysWithTime.slice(index + 1),
+                            ]);
+                          }}
+                          minutesStep={60}
+                          minTime={dayjs("2014-08-18T08:00:00")}
+                          maxTime={day[Object.keys(day)][1]}
+                        />
+                        <MobileTimePicker
+                          label="Hasta"
+                          disabled={!day[Object.keys(day)][2]}
+                          className="w-[70px] "
+                          onChange={(newValue) => {
+                            setDaysWithTime([
+                              ...daysWithTime.slice(0, index),
+                              {
+                                [Object.keys(day)]: [
+                                  day[Object.keys(day)][0],
+                                  newValue,
+                                  true,
+                                ],
+                              },
+                              ...daysWithTime.slice(index + 1),
+                            ]);
+                          }}
+                          value={day[Object.keys(day)][1]}
+                          renderInput={(params) => <TextField {...params} />}
+                          ampm={false}
+                          minutesStep={60}
+                          minTime={day[Object.keys(day)][0]}
+                          maxTime={dayjs("2014-08-18T17:00:00")}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </LocalizationProvider>
+            <button
+              onClick={handleSubmitCitas}
+              className="flex mx-auto my-5 bg-[#0061dd] text-white p-2 rounded-md shadow-md"
+            >
+              Guardar Cambios
+            </button>
+            <DragAndDrop />
+          </div>
         ) : page === 2 ? (
-          <div>2</div>
-        ) : page === 3 ? (
-          <div>3</div>
-        ) : page === 4 ? (
-          <div>4</div>
+          <div>Plan</div>
         ) : null}
       </section>
     </div>

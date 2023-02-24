@@ -9,12 +9,13 @@ import {
 } from "./AuthSlice";
 import axios from "axios";
 import Swal from 'sweetalert2'
-export const getOneUser = () => (dispatch) => {
+
+export const getUserByToken = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
   if(token){
     axios
-      .get(`/auth`,{headers: {'Authorization': `Bearer ${token}`}})
+      .get(`/auth`,{headers:{'Authorization': `Bearer ${token}`}})
       .then((res) => dispatch(loginUser(res.data.user)))
       .catch((err) => {
         dispatch(getError(err.response.data.error)) 
@@ -23,8 +24,20 @@ export const getOneUser = () => (dispatch) => {
         title: 'Oops...',
         text: err.response.data.error
       })});
+  }else{
+    dispatch(logoutUser())
   }
 };
+
+export const getUserById = () => (dispatch) => {
+  dispatch(isLoading());
+  const id = localStorage.getItem("id");
+  if(id){
+    axios.get(`/auth/${id}`)
+    .then(res=>dispatch(getUser(res.data.user)))
+    .catch(err=>dispatch(getError(err.response.data.error)))
+  }
+}
 
 export const register = (user) => (dispatch) => {
   const {
@@ -65,11 +78,18 @@ export const register = (user) => (dispatch) => {
       DistritoId,
     })
     .then((res) => {
+
       dispatch(registerUser());
-      Swal.fire({
-        icon: 'success',
-        title: "Usuario creado!",
-        text: 'Revisa tu email para continuar'
+      axios.post("/auth/signin", { email, password })
+      .then(res=>{
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("id", res.data.user.id);
+        dispatch(loginUser(res.data.user));
+        Swal.fire({
+          icon: 'success',
+          title: "Bienvenido a MiCole",
+          text: 'Usuario creado exitosamente!'
+        })
       })
     })
     .catch((err) => {
