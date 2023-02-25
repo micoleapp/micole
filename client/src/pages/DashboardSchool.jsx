@@ -103,6 +103,8 @@ function DashboardSchool() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [allData, setAllData] = useState({});
+  const [InputVacante, setInputVacante] = useState('');
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { categories, provincias, distrits, departaments } = useSelector(
@@ -198,7 +200,11 @@ function DashboardSchool() {
     setPreview([]);
     setMultimedia(initialMultimedia);
   };
+  const handlerVacanteInput = (e) => {
+ setInputVacante(e.target.value)
+  };
 
+  
   const [provincia, setProvincia] = useState([]);
 
   const handleChangeProvincia = (event) => {
@@ -550,6 +556,7 @@ function DashboardSchool() {
 
     const newDays = daysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
+      vacantesDispo: InputVacante,
       horarios: {
         desde: stringyDate(day[Object.keys(day)][0]["$H"])
           .toString()
@@ -559,7 +566,8 @@ function DashboardSchool() {
           .toString()
           .concat(":")
           .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
-      },
+     
+        },
     }));
     Swal.fire({
       icon: "success",
@@ -2070,8 +2078,10 @@ function DashboardSchool() {
                           Vacante
                           className="w-[70px]"
                           id="outlined-number"
-                          label="Vacante"
+                          label="Vacantes"
                           type="number"
+                          onChange={handlerVacanteInput}
+                          // value={InputVacante}
                           InputLabelProps={{
                             shrink: true,
                           }}
