@@ -14,6 +14,7 @@ const disponibilidadRouter = require("./disponibilidadRoutes.js");
 const infraestructuraRouter = require("./infraestructura.js");
 const gradoRouter = require("./grado.js");
 const nivelRouter = require("./nivel.js");
+const afiliacionRouter = require("./afiliacionRoutes.js");
 
 const router = Router();
 
@@ -28,6 +29,7 @@ router.use("/disponibilidad", disponibilidadRouter);
 router.use("/infraestructuras", infraestructuraRouter);
 router.use("/grados", gradoRouter);
 router.use("/niveles", nivelRouter);
+router.use("/afiliaciones", afiliacionRouter);
 
 router.get("/", (req, res) =>
   res.json({ name: pkg.name, version: pkg.version })
