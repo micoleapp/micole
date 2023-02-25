@@ -35,7 +35,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers";
 import axios from "axios";
-
+import { fontSize } from "@mui/system";
+import style from "./SchoolD.module.css";
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
     <div className="w-full px-4">
@@ -59,6 +60,50 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
   );
 }
 
+const ArrHorariosMockQuevaALBack = [
+  { Lunes: ["08:30", "13:00", true] },
+  { Martes: ["10:30", "13:00", true] },
+  { Miercoles: ["09:30", "13:00", true] },
+  { Jueves: ["07:30", "13:00", false] },
+  { Viernes: ["11:30", "13:00", false] },
+];
+const ArrHorariosMockFormateado = [
+  {
+    dia: "Lunes",
+    horarios: { desde: "08:30", hasta: "13:00" },
+    disponibilidad: true,
+    vacantesDispo:2,
+    vacantes: "20",
+  },
+  {
+    dia: "Martes",
+    horarios: { desde: "10:30", hasta: "13:00" },
+    disponibilidad: true,
+    vacantesDispo:3,
+    vacantes: "5",
+  },
+  {
+    dia: "Miercoles",
+    horarios: { desde: "09:30", hasta: "13:00" },
+    disponibilidad: true,
+    vacantesDispo:1,
+    vacantes: "3",
+  },
+  {
+    dia: "Jueves",
+    horarios: { desde: "11:30", hasta: "13:00" },
+    disponibilidad: false,
+    vacantesDispo:0,
+    vacantes: "6",
+  },
+  {
+    dia: "Viernes",
+    horarios: { desde: "08:30", hasta: "13:00" },
+    disponibilidad: false,
+    vacantesDispo:0,
+    vacantes: "10",
+  },
+];
 function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool } = useSelector((state) => state.schools);
@@ -73,14 +118,12 @@ function SchoolDetail() {
 
   const [image, setImage] = useState(null);
 
-
-  
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getSchoolDetail(id));
     return () => {
       dispatch(clannDetailid());
-    }
+    };
   }, []);
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -136,7 +179,7 @@ function SchoolDetail() {
     ) {
       return alert("Llena todos los campos para poder continuar");
     }
-    axios.post('http://localhost:3000/citas', cita)
+    axios.post("http://localhost:3000/citas", cita);
   };
 
   const handleModo = () => {
@@ -154,27 +197,49 @@ function SchoolDetail() {
   const [ratingLimpieza, setRatingLimpieza] = useState(0);
   const [ratingPrecio, setRatingPrecio] = useState(0);
 
-  const [comentario,setComentario] = useState({
+  const [comentario, setComentario] = useState({
     rating: 0,
     nombre: "",
     email: "",
-    comentario: ""
+    comentario: "",
   });
 
   useEffect(() => {
     setComentario({
       ...comentario,
-      rating: Number(((ratingNivel + ratingAtencion + ratingInfraestructura + ratingUbicacion + ratingLimpieza + ratingPrecio) / 6).toFixed(2))
-    })
-  },[ratingNivel , ratingAtencion , ratingInfraestructura , ratingUbicacion , ratingLimpieza ,ratingPrecio])
+      rating: Number(
+        (
+          (ratingNivel +
+            ratingAtencion +
+            ratingInfraestructura +
+            ratingUbicacion +
+            ratingLimpieza +
+            ratingPrecio) /
+          6
+        ).toFixed(2)
+      ),
+    });
+  }, [
+    ratingNivel,
+    ratingAtencion,
+    ratingInfraestructura,
+    ratingUbicacion,
+    ratingLimpieza,
+    ratingPrecio,
+  ]);
 
   const comentarioSubmit = (e) => {
     e.preventDefault();
-    if(e.target["name"].value === "" || e.target["email"].value === "" || e.target["comentario"].value === "" || comentario.rating === 0.00){
+    if (
+      e.target["name"].value === "" ||
+      e.target["email"].value === "" ||
+      e.target["comentario"].value === "" ||
+      comentario.rating === 0.0
+    ) {
       return alert("Llena todos los campos para poder continuar");
     }
-    axios.post('http://localhost:3000/review', comentario)
-  }
+    axios.post("http://localhost:3000/review", comentario);
+  };
 
   const disableWeekends = (date) => {
     return date.day() === 0 || date.day() === 6;
@@ -187,7 +252,12 @@ function SchoolDetail() {
         alt="banner"
         className="object-cover w-full h-[500px]"
       />
-      <div className="p-8 px-5 lg:px-[100px]" data-aos-mirror={false} data-aos="fade-up" data-aos-duration='1000'>
+      <div
+        className="p-8 px-5 lg:px-[100px]"
+        data-aos-mirror={false}
+        data-aos="fade-up"
+        data-aos-duration="1000"
+      >
         <div className="header drop-shadow-md">
           <h1 className="text-2xl  font-semibold">
             {oneSchool.nombre_escuela}
@@ -290,11 +360,21 @@ function SchoolDetail() {
         </div>
         <main className="flex gap-5 flex-col lg:flex-row">
           <section className="left mt-5 flex flex-col gap-8 w-full">
-            <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md"  data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}                >
+            <div
+              className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Descripcion</h2>
               <p className="text-black/60 text-base">{oneSchool.descripcion}</p>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"    data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}               >
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Ubicacion</h2>
               <div className="flex text-xs w-full justify-between">
                 <ul className="flex flex-col gap-3">
@@ -338,7 +418,12 @@ function SchoolDetail() {
               </div>
               <Maps />
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"   data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}               >
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Detalles del Colegio</h2>
               <div className="flex text-xs w-full flex-col lg:flex-row gap-3 justify-between">
                 <ul className="flex flex-col gap-3">
@@ -399,7 +484,12 @@ function SchoolDetail() {
                 </ul>
               </div>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md"   data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}                >
+            <div
+              className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">
                 Propuesta Valor Educativo
               </h2>
@@ -407,7 +497,12 @@ function SchoolDetail() {
                 {oneSchool.propuesta_valor}
               </p>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"     data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}              >
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Infraestructura</h2>
               <Tabs
                 value={value}
@@ -645,7 +740,12 @@ function SchoolDetail() {
                 </TabPanel>
               </div>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"    data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}             >
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">
                 Acreditaciones / Certificaciones / Asosiaciones
               </h2>
@@ -680,7 +780,12 @@ function SchoolDetail() {
                 </ul>
               </div>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"   data-aos="zoom-in-right" data-aos-duration='1500' data-aos-mirror={false}               >
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Lugares cercanos</h2>
               <h3 className="font-medium text-lg flex items-center gap-2">
                 {" "}
@@ -775,8 +880,68 @@ function SchoolDetail() {
             </div>
           </section>
           <section className="right mt-5  flex flex-col gap-8 w-full">
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"     data-aos="zoom-in-left" data-aos-duration='1500'  data-aos-mirror={false}              >
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
+              data-aos="zoom-in-left"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Solicitar una visita</h2>
+              <p>La disponibilidad de este colegio es de : </p>
+              <div className={style.Layout}>
+                <div className={style.tableHead}>
+                  <div className={style.tableTitleDiv}>
+                    <p className={style.tableTitle}>Dia</p>
+                  </div>
+                  <div className={style.tableTitleDiv}>
+                    <p className={style.tableTitle}>Desde</p>
+                  </div>
+                  <div className={style.tableTitleDiv}>
+                    <p className={style.tableTitle}>Hasta</p>
+                  </div>
+                  <div className={style.tableTitleDiv}>
+                    <p className={style.tableTitle}>Vacantes</p>
+                  </div>
+                  <div className={style.tableTitleDiv}>
+                    <p className={style.tableTitle}>Disponible</p>
+                  </div>
+                </div>
+                {ArrHorariosMockFormateado.map((ele) => {
+                  return (
+                    <>
+                      <div className={style.cardTable}>
+                        <div className={style.cardTable}>
+                          <div className={style.itemTable}>
+                           
+                            {ele.disponibilidad === true ?` ${ele.dia} `: <p style={{ fontSize: "12px",color:'grey' }}> {ele.dia} </p>}
+                          </div>
+                          <div className={style.itemTable}>
+                            <p style={{ fontSize: "12px" }}>
+                            {ele.disponibilidad === true ?` ${ele.horarios.desde} `: <p style={{ fontSize: "12px",color:'grey' }}> {ele.horarios.desde} </p>}
+                             
+                            </p>
+                          </div>
+                          <div className={style.itemTable}>
+                            <p style={{ fontSize: "12px" }}>
+                            {ele.disponibilidad === true ?` ${ele.horarios.hasta} `: <p style={{ fontSize: "12px",color:'grey' }}>{ele.horarios.hasta} </p>}
+                            
+                            </p>
+                          </div>
+                          <div className={style.itemTable}>
+                          {ele.disponibilidad === true ?` ${ele.vacantes} `: <p style={{ fontSize: "12px",color:'grey' }}>{ele.vacantes} </p>}
+                          
+                          </div>
+
+                          <div className={style.itemTable}>
+                          {ele.disponibilidad === true ?` ${ele.vacantesDispo} `: <p style={{ fontSize: "12px",color:'grey' }}>No disponible </p>}
+                           
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })}
+              </div>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <div className="flex w-full justify-between flex-col gap-4 lg:flex-row">
                   <MobileDatePicker
@@ -796,7 +961,6 @@ function SchoolDetail() {
                       renderInput={(params) => <TextField {...params} />}
                       ampm={false}
                       minutesStep={15}
-
                       minTime={dayjs("2014-08-18T08:00:00")}
                       maxTime={dayjs("2014-08-18T17:00:00")}
                     />
@@ -836,20 +1000,21 @@ function SchoolDetail() {
                     type="text"
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Nombre"
-                    onChange={(e)=>{
-                      setCita({...cita, nombre: e.target.value})
+                    onChange={(e) => {
+                      setCita({ ...cita, nombre: e.target.value });
                     }}
                     required
                   />
                   <input
                     name="cel"
                     type="number"
-                    pattern="[0-9]{8,15}" required
+                    pattern="[0-9]{8,15}"
+                    required
                     title="Solo se permiten numeros y entre 8 y 10 caracteres"
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Celular"
-                    onChange={(e)=>{
-                      setCita({...cita, celular: Number(e.target.value)})
+                    onChange={(e) => {
+                      setCita({ ...cita, celular: Number(e.target.value) });
                     }}
                   />
                 </div>
@@ -858,8 +1023,8 @@ function SchoolDetail() {
                   type="email"
                   className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                   placeholder="Correo"
-                  onChange={(e)=>{
-                    setCita({...cita, correo: e.target.value})
+                  onChange={(e) => {
+                    setCita({ ...cita, correo: e.target.value });
                   }}
                   required
                 />
@@ -878,7 +1043,12 @@ function SchoolDetail() {
                 </Link>
               </p>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full" data-aos="zoom-in-left" data-aos-duration='1500'  data-aos-mirror={false}>
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
+              data-aos="zoom-in-left"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Galeria</h2>
               {oneSchool.hasOwnProperty("galeria_fotos") && (
                 <QuiltedImageList
@@ -905,13 +1075,27 @@ function SchoolDetail() {
                 />
               </div>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full" data-aos="zoom-in-left" data-aos-duration='1500'  data-aos-mirror={false}>
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
+              data-aos="zoom-in-left"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Video</h2>
               <video width="750" height="500" controls className="rounded-md">
-                <source src={oneSchool.video_url && oneSchool.video_url.trim()} type="video/mp4" />
+                <source
+                  src={oneSchool.video_url && oneSchool.video_url.trim()}
+                  type="video/mp4"
+                />
               </video>
             </div>
-            <form className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full" onSubmit={comentarioSubmit} data-aos="zoom-in-left" data-aos-duration='1500'  data-aos-mirror={false}>
+            <form
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
+              onSubmit={comentarioSubmit}
+              data-aos="zoom-in-left"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Deja tu comentario</h2>
               <div className="flex flex-col lg:grid grid-cols-2 text-black/70">
                 <div>
@@ -987,62 +1171,73 @@ function SchoolDetail() {
                   />
                 </div>
               </div>
-                <div className="flex items-center">
-
+              <div className="flex items-center">
                 <h2>Total: </h2>
                 <Rating
                   id="rating"
                   name="simple-controlled"
-                  value={(ratingNivel + ratingAtencion + ratingInfraestructura + ratingUbicacion + ratingLimpieza + ratingPrecio)/6}
+                  value={
+                    (ratingNivel +
+                      ratingAtencion +
+                      ratingInfraestructura +
+                      ratingUbicacion +
+                      ratingLimpieza +
+                      ratingPrecio) /
+                    6
+                  }
                   max={10}
                   precision={0.5}
                   readOnly
                 />
-                
-                </div>
-                <div className="flex w-full gap-5 justify-between">
-                  <input
-                    name="name"
-                    type="text"
-                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                    placeholder="Nombre"
-                    required
-                    onChange={(e) => {
-                      setComentario({
-                        ...comentario,
-                        nombre: e.target.value
-                      })
-                    }}
-                  />
-                  <input
-                    name="email"
-                    type="email"
-                    required
-                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                    placeholder="Email"
-                    onChange={(e) => {
-                      setComentario({
-                        ...comentario,
-                        email: e.target.value
-                      })
-                    }}
-                  />
-                </div>
-                <textarea
-                  name="comentario"
+              </div>
+              <div className="flex w-full gap-5 justify-between">
+                <input
+                  name="name"
                   type="text"
-                  required
                   className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                  placeholder="Escribe tu comentario"
-                  rows={5}
+                  placeholder="Nombre"
+                  required
                   onChange={(e) => {
                     setComentario({
                       ...comentario,
-                      comentario: e.target.value
-                    })
+                      nombre: e.target.value,
+                    });
                   }}
                 />
-                <button type="submit" className="p-3 bg-[#0061dd] text-white rounded-md hover:bg-[#0759c3] duration-300">Enviar reseña</button>
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                  placeholder="Email"
+                  onChange={(e) => {
+                    setComentario({
+                      ...comentario,
+                      email: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <textarea
+                name="comentario"
+                type="text"
+                required
+                className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                placeholder="Escribe tu comentario"
+                rows={5}
+                onChange={(e) => {
+                  setComentario({
+                    ...comentario,
+                    comentario: e.target.value,
+                  });
+                }}
+              />
+              <button
+                type="submit"
+                className="p-3 bg-[#0061dd] text-white rounded-md hover:bg-[#0759c3] duration-300"
+              >
+                Enviar reseña
+              </button>
             </form>
           </section>
         </main>
