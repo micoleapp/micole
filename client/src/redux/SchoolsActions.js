@@ -1,10 +1,17 @@
 import axios from 'axios'
-import { cleanOneSchool,getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,getDistrits,getCategories,getProvincias,getInfraestructura,getPaises} from './SchoolsSlice'
+import {getNiveles, cleanOneSchool,getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,getDistrits,getCategories,getProvincias,getInfraestructura,getPaises} from './SchoolsSlice'
 
 export const getAllProvincias = () => (dispatch) => {
   dispatch(isLoading())
   axios.get("/provincias")
   .then(res=>dispatch(getProvincias(res.data)))
+  .catch(err=>dispatch(getError(err.message)))
+}
+
+export const getAllNiveles = () => (dispatch) => {
+  dispatch(isLoading())
+  axios.get("/niveles")
+  .then(res=>dispatch(getNiveles(res.data)))
   .catch(err=>dispatch(getError(err.message)))
 }
 

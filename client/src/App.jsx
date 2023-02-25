@@ -20,6 +20,7 @@ import {
   getAllProvincias,
   getAllInfraestructura,
   getAllPaises,
+  getAllNiveles
 } from "./redux/SchoolsActions";
 import RequireAuth from "./components/RequireAuth";
 
@@ -35,6 +36,7 @@ function App() {
     dispatch(getAllProvincias());
     dispatch(getAllInfraestructura());
     dispatch(getAllPaises());
+    dispatch(getAllNiveles());
     dispatch(getUserByToken());
   }, []);
 

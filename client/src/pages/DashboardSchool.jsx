@@ -20,7 +20,6 @@ import Logo from "../assets/logoPayment.png";
 import Confetti from "react-confetti";
 import DragAndDrop from "../components/DragAndDrop";
 import GridVacantes from "../components/GridVacantes";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
   GoogleMap,
@@ -49,12 +48,6 @@ import { BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
 import { RiImageAddLine } from "react-icons/ri";
 import { useEffect } from "react";
-import {
-  getAllCategories,
-  getAllDepartaments,
-  getAllDistrits,
-  getAllProvincias,
-} from "../redux/SchoolsActions";
 import { logout, getSchoolDetail } from "../redux/AuthActions";
 import { useState } from "react";
 import { useRef } from "react";
@@ -106,10 +99,14 @@ function DashboardSchool() {
   const [InputVacante, setInputVacante] = useState('');
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { categories, provincias, distrits, departaments } = useSelector(
-    (state) => state.schools
-  );
+  const {
+    categories,
+    provincias,
+    distrits,
+    departaments,
+    niveles,
+    infraestructura: infraState,
+  } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -263,11 +260,6 @@ function DashboardSchool() {
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
       const place = autocomplete.getPlace();
-      setDirec(
-        place.address_components[1].long_name +
-          " " +
-          place.address_components[0].long_name
-      );
       setLatitud(place.geometry.location.lat());
       setLongitud(place.geometry.location.lng());
       setCenter({
@@ -313,6 +305,9 @@ function DashboardSchool() {
     direccion: oneSchool.direccion ? oneSchool.direccion : "",
     lat: oneSchool.lat ? oneSchool.lat : 0,
     lng: oneSchool.lng ? oneSchool.lng : 0,
+    infraestructura: oneSchool.Infraestructuras
+      ? oneSchool.Infraestructuras
+      : [],
   };
 
   const [datosPrincipales, setDatosPrincipales] = useState(
@@ -345,6 +340,8 @@ function DashboardSchool() {
       return true;
     }
   };
+
+  console.log(datosPrincipales);
 
   const initialInfraestructura = {
     laboratorio: [],
@@ -782,7 +779,7 @@ function DashboardSchool() {
                               control={
                                 <Checkbox
                                   checked={datosPrincipales.categoria.includes(
-                                    category.nombre_categoria
+                                    category
                                   )}
                                   onChange={(event, target) => {
                                     if (target) {
@@ -790,7 +787,7 @@ function DashboardSchool() {
                                         ...datosPrincipales,
                                         categoria: [
                                           ...datosPrincipales.categoria,
-                                          category.nombre_categoria,
+                                          category,
                                         ],
                                       });
                                     } else {
@@ -798,8 +795,7 @@ function DashboardSchool() {
                                         ...datosPrincipales,
                                         categoria:
                                           datosPrincipales.categoria.filter(
-                                            (cat) =>
-                                              cat !== category.nombre_categoria
+                                            (cat) => cat !== category
                                           ),
                                       });
                                     }
@@ -981,17 +977,20 @@ function DashboardSchool() {
                           <small>Puede marcar mas de una opción</small>
                         </div>
                         <div className="flex flex-col lg:grid grid-cols-3">
-                          {levels?.map((level) => (
+                          {niveles?.map((level) => (
                             <FormControlLabel
                               control={
                                 <Checkbox
+                                  checked={datosPrincipales.niveles.includes(
+                                    level
+                                  )}
                                   onChange={(event, target) => {
                                     if (target) {
                                       setDatosPrincipales({
                                         ...datosPrincipales,
                                         niveles: [
                                           ...datosPrincipales.niveles,
-                                          level.nombre,
+                                          level,
                                         ],
                                       });
                                     } else {
@@ -999,14 +998,14 @@ function DashboardSchool() {
                                         ...datosPrincipales,
                                         niveles:
                                           datosPrincipales.niveles.filter(
-                                            (cat) => cat !== level.nombre
+                                            (cat) => cat !== level
                                           ),
                                       });
                                     }
                                   }}
                                 />
                               }
-                              label={level.nombre}
+                              label={level.nombre_nivel}
                             />
                           ))}
                         </div>
@@ -1025,9 +1024,8 @@ function DashboardSchool() {
                               <Select
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-type-select-standard"
-                                value={departamento}
+                                value={datosPrincipales.departamento}
                                 onChange={(e) => {
-                                  setDepartamento(e.target.value);
                                   setDatosPrincipales({
                                     ...datosPrincipales,
                                     departamento: e.target.value,
@@ -1035,15 +1033,28 @@ function DashboardSchool() {
                                 }}
                                 label="Selecciona una Provincia"
                                 className="bg-white"
-                                defaultValue={""}
+                                defaultValue={datosPrincipales.departamento}
                               >
-                                {departaments.map((type, index) => (
-                                  <MenuItem value={type} key={type.index}>
-                                    <ListItemText
-                                      primary={type.nombre_departamento}
-                                    />
-                                  </MenuItem>
-                                ))}
+                                <MenuItem value={datosPrincipales.departamento}>
+                                  {
+                                    datosPrincipales.departamento
+                                      .nombre_departamento
+                                  }
+                                </MenuItem>
+                                {departaments
+                                  .filter(
+                                    (dep) =>
+                                      dep.nombre_departamento !==
+                                      datosPrincipales.departamento
+                                        .nombre_departamento
+                                  )
+                                  .map((type, index) => (
+                                    <MenuItem value={type} key={type.index}>
+                                      <ListItemText
+                                        primary={type.nombre_departamento}
+                                      />
+                                    </MenuItem>
+                                  ))}
                               </Select>
                             </FormControl>
                           </div>
@@ -1059,9 +1070,8 @@ function DashboardSchool() {
                               <Select
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-type-select-standard"
-                                value={provincia}
+                                value={datosPrincipales.provincia}
                                 onChange={(e) => {
-                                  setProvincia(e.target.value);
                                   setDatosPrincipales({
                                     ...datosPrincipales,
                                     provincia: e.target.value,
@@ -1069,15 +1079,25 @@ function DashboardSchool() {
                                 }}
                                 label="Selecciona una Provincia"
                                 className="bg-white"
-                                defaultValue={""}
+                                defaultValue={datosPrincipales.provincia}
                               >
-                                {provincias.map((type, index) => (
-                                  <MenuItem value={type} key={type.index}>
-                                    <ListItemText
-                                      primary={type.nombre_provincia}
-                                    />
-                                  </MenuItem>
-                                ))}
+                                <MenuItem value={datosPrincipales.provincia}>
+                                  {datosPrincipales.provincia.nombre_provincia}
+                                </MenuItem>
+                                {provincias
+                                  .filter(
+                                    (prov) =>
+                                      prov.nombre_provincia !==
+                                      datosPrincipales.provincia
+                                        .nombre_provincia
+                                  )
+                                  .map((type, index) => (
+                                    <MenuItem value={type} key={type.index}>
+                                      <ListItemText
+                                        primary={type.nombre_provincia}
+                                      />
+                                    </MenuItem>
+                                  ))}
                               </Select>
                             </FormControl>
                           </div>
@@ -1154,7 +1174,7 @@ function DashboardSchool() {
                                     direc === null ? "bg-inherit" : "bg-white"
                                   }  outline-none w-full`}
                                   placeholder="Dirección"
-                                  value={direc}
+                                  value={datosPrincipales.direccion}
                                   disabled
                                   onChange={(e) => {
                                     setDatosPrincipales({
@@ -1261,225 +1281,51 @@ function DashboardSchool() {
                         seleccionada
                       </h1>
                       <div className="flex flex-col lg:flex-row gap-5">
-                        <div>
-                          <div className="flex flex-col">
-                            <label
-                              htmlFor="categoria"
-                              className="text-lg font-medium"
-                            >
-                              Laboratorio
-                            </label>
-                            <small>Puede marcar mas de una opción</small>
-                          </div>
-                          <div className="flex flex-col">
-                            {Laboratorios?.map((lab) => (
+                        <div className="grid grid-cols-3">
+                          {infraState.map((infra) => (
+                            <>
+                              <div className="flex flex-col">
+                                <label
+                                  htmlFor="categoria"
+                                  className="text-lg font-medium"
+                                >
+                                  {infra.nombre_infraestructura}
+                                </label>
+                                <small>Puede marcar mas de una opción</small>
+                              </div>
+                              <div className="flex flex-col">
                               <FormControlLabel
                                 control={
                                   <Checkbox
-                                    checked={infraestructura.laboratorio.includes(
-                                      lab
+                                    checked={datosPrincipales.infraestructura.includes(
+                                      infra
                                     )}
                                     onChange={(event, target) => {
                                       if (target) {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          laboratorio: [
-                                            ...infraestructura.laboratorio,
-                                            lab,
+                                        setDatosPrincipales({
+                                          ...datosPrincipales,
+                                          infraestructura: [
+                                            ...datosPrincipales.infraestructura,
+                                            infra,
                                           ],
                                         });
                                       } else {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          laboratorio:
-                                            infraestructura.laboratorio.filter(
-                                              (cat) => cat !== lab
+                                        setDatosPrincipales({
+                                          ...datosPrincipales,
+                                          infraestructura:
+                                            datosPrincipales.infraestructura.filter(
+                                              (inf) => inf !== infra
                                             ),
                                         });
                                       }
                                     }}
                                   />
                                 }
-                                label={lab}
+                                label={infra.nombre_infraestructura}
                               />
-                            ))}
                           </div>
-                        </div>
-                        <div>
-                          <div className="flex flex-col">
-                            <label
-                              htmlFor="categoria"
-                              className="text-lg font-medium"
-                            >
-                              Artistica
-                            </label>
-                            <small>Puede marcar mas de una opción</small>
-                          </div>
-                          <div className="flex flex-col">
-                            {Artistica?.map((art) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={infraestructura.artistica.includes(
-                                      art
-                                    )}
-                                    onChange={(event, target) => {
-                                      if (target) {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          artistica: [
-                                            ...infraestructura.artistica,
-                                            art,
-                                          ],
-                                        });
-                                      } else {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          artistica:
-                                            infraestructura.artistica.filter(
-                                              (cat) => cat !== art
-                                            ),
-                                        });
-                                      }
-                                    }}
-                                  />
-                                }
-                                label={art}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex flex-col">
-                            <label
-                              htmlFor="categoria"
-                              className="text-lg font-medium"
-                            >
-                              Deportiva
-                            </label>
-                            <small>Puede marcar mas de una opción</small>
-                          </div>
-                          <div className="flex flex-col">
-                            {Deportiva?.map((dep) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={infraestructura.deportiva.includes(
-                                      dep
-                                    )}
-                                    onChange={(event, target) => {
-                                      if (target) {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          deportiva: [
-                                            ...infraestructura.deportiva,
-                                            dep,
-                                          ],
-                                        });
-                                      } else {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          deportiva:
-                                            infraestructura.deportiva.filter(
-                                              (cat) => cat !== dep
-                                            ),
-                                        });
-                                      }
-                                    }}
-                                  />
-                                }
-                                label={dep}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex flex-col">
-                            <label
-                              htmlFor="categoria"
-                              className="text-lg font-medium"
-                            >
-                              Administrativa
-                            </label>
-                            <small>Puede marcar mas de una opción</small>
-                          </div>
-                          <div className="flex flex-col">
-                            {Administrativa?.map((adm) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={infraestructura.administrativa.includes(
-                                      adm
-                                    )}
-                                    onChange={(event, target) => {
-                                      if (target) {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          administrativa: [
-                                            ...infraestructura.administrativa,
-                                            adm,
-                                          ],
-                                        });
-                                      } else {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          administrativa:
-                                            infraestructura.administrativa.filter(
-                                              (cat) => cat !== adm
-                                            ),
-                                        });
-                                      }
-                                    }}
-                                  />
-                                }
-                                label={adm}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex flex-col">
-                            <label
-                              htmlFor="categoria"
-                              className="text-lg font-medium"
-                            >
-                              Enseñanza
-                            </label>
-                            <small>Puede marcar mas de una opción</small>
-                          </div>
-                          <div className="flex flex-col">
-                            {Enseñanza?.map((ens) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={infraestructura.enseñanza.includes(
-                                      ens
-                                    )}
-                                    onChange={(event, target) => {
-                                      if (target) {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          enseñanza: [
-                                            ...infraestructura.enseñanza,
-                                            ens,
-                                          ],
-                                        });
-                                      } else {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          enseñanza:
-                                            infraestructura.enseñanza.filter(
-                                              (cat) => cat !== ens
-                                            ),
-                                        });
-                                      }
-                                    }}
-                                  />
-                                }
-                                label={ens}
-                              />
-                            ))}
-                          </div>
+                            </>
+                          ))}
                         </div>
                       </div>
                       <Box
