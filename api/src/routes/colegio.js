@@ -183,8 +183,8 @@ router.put("/:id", async (req, res) => {
       infraestructura,
     } = req.body;
     let video_url = multimedia.video_url;
-    let primera_imagen = multimedia.images[0];
-    let galeria_fotos = JSON.stringify(multimedia.images.slice(1));
+    let primera_imagen = multimedia.image
+    let galeria_fotos = JSON.stringify(multimedia.images);
     const ubicacion = { lat, lng };
     const editedColegio = await Colegio.update(
       {
@@ -204,7 +204,6 @@ router.put("/:id", async (req, res) => {
         propuesta_valor: propuesta,
         descripcion: descripcion,
         horas_idioma_extranjero: ingles,
-        categoria: categoria,
         DepartamentoId: departamento.id,
         provincia: provincia,
       },
@@ -215,8 +214,8 @@ router.put("/:id", async (req, res) => {
     if (colegio === null) {
       console.log("Not found!");
     } else {
-      await colegio.setInfraestructuras(infraestructura);
-      await colegio.setCategoria(categoria);
+      await colegio.setInfraestructuras(infraestructura.map((i) => i.id));
+      await colegio.setCategoria(categoria.map((c) => c.id));
     }
 
     res.json(editedColegio);
