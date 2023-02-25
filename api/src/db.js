@@ -80,6 +80,7 @@ const {
   User,
   Vacante,
   Grado,
+  Nivel,
   Disponibilidad
 } = sequelize.models;
 
