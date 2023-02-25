@@ -66,28 +66,45 @@ const containerStyle = {
   height: "400px",
 };
 
-function StandardImageList({ list, setImage, eliminarImagenDePreview }) {
-  return (
-    <ImageList sx={{ width: "100%", height: 450 }} cols={3} rowHeight={400}>
-      {list.map((item) => (
-        <ImageListItem key={item}>
-          <button
-            onClick={() => eliminarImagenDePreview(item)}
-            className="absolute bg-[#0061dd]/30 right-2 top-2 text-white hover:bg-[#0061dd] p-2 rounded-md duration-300"
-          >
-            Quitar
-          </button>
-          <img
-            src={item}
-            alt={item}
-            loading="lazy"
-            onClick={() => setImage(item)}
-            className="cursor-pointer"
-          />
-        </ImageListItem>
-      ))}
-    </ImageList>
-  );
+function StandardImageList({ one, list, setImage, eliminarImagenDePreview }) {
+  {
+   return one ? 
+      <div className="flex justify-center items-center relative">
+            <button
+              onClick={() => eliminarImagenDePreview(list)}
+              className="absolute bg-[#0061dd]/30 right-2 top-2 text-white hover:bg-[#0061dd] p-2 rounded-md duration-300"
+            >
+              Quitar
+            </button>
+            <img
+              src={list}
+              alt={list}
+              loading="lazy"
+              onClick={() => setImage(list)}
+              className="cursor-pointer object-cover w-[400px] "
+            />
+      </div>
+    :  
+      <ImageList sx={{ width: "100%", height: 450 }} cols={3} rowHeight={400}>
+        {list.map((item) => (
+          <ImageListItem key={item}>
+            <button
+              onClick={() => eliminarImagenDePreview(item)}
+              className="absolute bg-[#0061dd]/30 right-2 top-2 text-white hover:bg-[#0061dd] p-2 rounded-md duration-300"
+            >
+              Quitar
+            </button>
+            <img
+              src={item}
+              alt={item}
+              loading="lazy"
+              onClick={() => setImage(item)}
+              className="cursor-pointer min-h-[200px] "
+            />
+          </ImageListItem>
+        ))}
+      </ImageList>
+  }
 }
 
 function DashboardSchool() {
@@ -166,7 +183,7 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    setAllData({ ...allData, infraestructura });
+    setAllData({ ...allData, ...datosPrincipales });
     handleNext();
   };
 
@@ -247,7 +264,6 @@ function DashboardSchool() {
     setAutocomplete(autocomplete);
   };
 
-  const [direc, setDirec] = useState(null);
   const [latitud, setLatitud] = useState(null);
   const [longitud, setLongitud] = useState(null);
 
@@ -337,26 +353,8 @@ function DashboardSchool() {
 
   console.log(datosPrincipales);
 
-  const initialInfraestructura = {
-    laboratorio: [],
-    artistica: [],
-    deportiva: [],
-    administrativa: [],
-    enseñanza: [],
-  };
-
-  const [infraestructura, setInfraestructura] = useState(
-    initialInfraestructura
-  );
-
   const infraestructuraCompleted = () => {
-    if (
-      infraestructura.laboratorio.length > 0 &&
-      infraestructura.artistica.length > 0 &&
-      infraestructura.deportiva.length > 0 &&
-      infraestructura.administrativa.length > 0 &&
-      infraestructura.enseñanza.length > 0
-    ) {
+    if (datosPrincipales.infraestructura.length !== 0) {
       return false;
     } else {
       return true;
@@ -389,7 +387,33 @@ function DashboardSchool() {
 
   const windowSize = useRef(window.innerWidth);
 
+  const [file, setFile] = useState(null);
+
   const [files, setFiles] = useState(null);
+
+  const handleFilesSubmitOne = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    try {
+      formData.append('file',previewOne);
+      formData.append('upload_preset','tcotxf16');
+      const res = await axios.post('https://api.cloudinary.com/v1_1/de4i6biay/image/upload',formData);
+      setMultimedia({...multimedia,image:res.data.secure_url})
+    } catch (error) {
+      console.log(error)
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: "Intenta nuevamente"
+      });
+    }
+    Swal.fire({
+      icon: "success",
+      title: "Imagen subida correctamente",
+    });
+    setSpanOne(false)
+    setActiveUpOne(false)
+  };
 
   function handleFilesSubmit(e) {
     e.preventDefault();
@@ -409,16 +433,24 @@ function DashboardSchool() {
           images: arrayImages,
         });
       } catch (error) {
-        console.log(error);
+        console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "Algo salio mal",
+          text: "Intenta nuevamente"
+        });
       }
     });
     Swal.fire({
       icon: "success",
       title: "Imagenes subidas correctamente",
     });
+    setSpanTwo(false)
+    setActiveUpTwo(false)
   }
 
   const initialMultimedia = {
+    image: "",
     images: [],
     video_url: "",
   };
@@ -426,6 +458,7 @@ function DashboardSchool() {
   const [multimedia, setMultimedia] = useState(initialMultimedia);
 
   const [preview, setPreview] = useState([]);
+  const [previewOne, setPreviewOne] = useState([]);
 
   useEffect(() => {
     if (files !== null) {
@@ -439,14 +472,27 @@ function DashboardSchool() {
     }
   }, [files]);
 
+  useEffect(() => {
+    if (file !== null) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setPreviewOne(reader.result);
+      };
+    }
+  }, [file]);
+
   const eliminarImagenDePreview = (img) => {
     setPreview(preview.filter((image) => image !== img));
+  };
+  const eliminarImagenDePreviewOne = (img) => {
+    setPreviewOne(null);
   };
 
   const [image, setImage] = useState(null);
 
   const multimediaCompleted = () => {
-    if (multimedia.images.length !== 0 && multimedia.video_url !== "") {
+    if (multimedia.image !== "" && multimedia.images.length !== 0) {
       return false;
     } else {
       return true;
@@ -566,7 +612,11 @@ function DashboardSchool() {
     console.log(newDays);
   };
 
-  console.log(allData);
+  const [spanOne,setSpanOne] = useState(false)
+  const [spanTwo,setSpanTwo] = useState(false)
+  const [activeUpOne,setActiveUpOne] = useState(true)
+  const [activeUpTwo,setActiveUpTwo] = useState(true)
+  console.log(previewOne);
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -1163,7 +1213,9 @@ function DashboardSchool() {
                                   name="direccion"
                                   id="direccion"
                                   className={`p-3 rounded-md border-2 ${
-                                    direc === null ? "bg-inherit" : "bg-white"
+                                    datosPrincipales.direccion === null
+                                      ? "bg-inherit"
+                                      : "bg-white"
                                   }  outline-none w-full`}
                                   placeholder="Dirección"
                                   value={datosPrincipales.direccion}
@@ -1286,36 +1338,36 @@ function DashboardSchool() {
                                 <small>Puede marcar mas de una opción</small>
                               </div>
                               <div className="flex flex-col">
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={datosPrincipales.infraestructura.includes(
-                                      infra
-                                    )}
-                                    onChange={(event, target) => {
-                                      if (target) {
-                                        setDatosPrincipales({
-                                          ...datosPrincipales,
-                                          infraestructura: [
-                                            ...datosPrincipales.infraestructura,
-                                            infra,
-                                          ],
-                                        });
-                                      } else {
-                                        setDatosPrincipales({
-                                          ...datosPrincipales,
-                                          infraestructura:
-                                            datosPrincipales.infraestructura.filter(
-                                              (inf) => inf !== infra
-                                            ),
-                                        });
-                                      }
-                                    }}
-                                  />
-                                }
-                                label={infra.nombre_infraestructura}
-                              />
-                          </div>
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={datosPrincipales.infraestructura.includes(
+                                        infra
+                                      )}
+                                      onChange={(event, target) => {
+                                        if (target) {
+                                          setDatosPrincipales({
+                                            ...datosPrincipales,
+                                            infraestructura: [
+                                              ...datosPrincipales.infraestructura,
+                                              infra,
+                                            ],
+                                          });
+                                        } else {
+                                          setDatosPrincipales({
+                                            ...datosPrincipales,
+                                            infraestructura:
+                                              datosPrincipales.infraestructura.filter(
+                                                (inf) => inf !== infra
+                                              ),
+                                          });
+                                        }
+                                      }}
+                                    />
+                                  }
+                                  label={infra.nombre_infraestructura}
+                                />
+                              </div>
                             </>
                           ))}
                         </div>
@@ -1671,17 +1723,17 @@ function DashboardSchool() {
                       </small>
                       <div className="flex flex-col lg:flex-row gap-5">
                         <form
-                          onSubmit={handleFilesSubmit}
+                          onSubmit={handleFilesSubmitOne}
                           className="flex flex-col"
                         >
-                          <div className="file-select flex w-full">
+                          <div className="file-select flex w-full lg:min-w-[200px] ">
                             <label
                               htmlFor="image"
                               className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-t-md"
                             >
                               <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
                               <span className="text-sm mx-auto text-center text-[#0061dd]">
-                                Agregar imagenes
+                                Imagen principal
                               </span>{" "}
                             </label>
                             <input
@@ -1689,12 +1741,82 @@ function DashboardSchool() {
                               id="image"
                               name="image"
                               accept="image/png,image/jpeg"
-                              onChange={(e) => setFiles(e.target.files)}
+                              onChange={(e) => {setSpanOne(true);setFile(e.target.files[0])}}
+                              className="hidden"
+                            />
+                          </div>
+                          {activeUpOne &&                           <button
+                            type="submit"
+                            disabled={
+                              file !== null && previewOne !== null
+                                ? false
+                                : true
+                            }
+                            className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
+                          >
+                            Upload
+                          </button>}
+
+                          {spanOne &&                           <span className="relative text-center animate-bounce text-3xl">👆</span>}
+                        </form>
+                        {file !== null && previewOne !== null && (
+                          <>
+                            <div className="border-2 rounded-md overflow-hidden p-2 bg-white">
+                              <StandardImageList
+                                eliminarImagenDePreview={
+                                  eliminarImagenDePreviewOne
+                                }
+                                one={true}
+                                setImage={setImage}
+                                list={previewOne}
+                              />
+                            </div>
+                            <div
+                              className={`fixed top-0 left-0 z-50 bg-black/90 w-full h-full ${
+                                image ? "block" : "hidden"
+                              }`}
+                            >
+                              <button
+                                onClick={() => setImage(null)}
+                                className="absolute top-2 right-4 z-[100] text-white"
+                              >
+                                Atras
+                              </button>
+                              <img
+                                src={image}
+                                alt=""
+                                className="absolute border-4 top-1/2 left-1/2 -translate-x-1/2 rounded-md -translate-y-1/2 block max-w-[80%] max-h-[80%] object-cover "
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div className="flex flex-col lg:flex-row gap-5">
+                        <form
+                          onSubmit={handleFilesSubmit}
+                          className="flex flex-col"
+                        >
+                          <div className="file-select flex w-full lg:min-w-[200px] ">
+                            <label
+                              htmlFor="images"
+                              className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-t-md"
+                            >
+                              <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
+                              <span className="text-sm mx-auto text-center text-[#0061dd]">
+                                Galeria de imagenes
+                              </span>{" "}
+                            </label>
+                            <input
+                              type="file"
+                              id="images"
+                              name="images"
+                              accept="image/png,image/jpeg"
+                              onChange={(e) => {setSpanTwo(true);setFiles(e.target.files)}}
                               multiple
                               className="hidden"
                             />
                           </div>
-                          <button
+                          {activeUpTwo &&                           <button
                             type="submit"
                             disabled={
                               files !== null && preview.length !== 0
@@ -1704,7 +1826,10 @@ function DashboardSchool() {
                             className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
                           >
                             Upload
-                          </button>
+                          </button>}
+
+                          {spanTwo &&                           <span className="relative text-center animate-bounce text-3xl">👆</span>}
+
                         </form>
                         {files !== null && preview.length !== 0 && (
                           <>
@@ -1713,6 +1838,7 @@ function DashboardSchool() {
                                 eliminarImagenDePreview={
                                   eliminarImagenDePreview
                                 }
+                                one={false}
                                 setImage={setImage}
                                 list={preview}
                               />
