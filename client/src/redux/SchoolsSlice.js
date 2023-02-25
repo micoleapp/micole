@@ -13,13 +13,20 @@ export const schoolsSlice = createSlice({
     distrits: [],
     oneSchool: {},
     provincias: [],
+    infraestructura: [],
+    niveles: [],
+    paises: [],
     error: "",
-    rating: 10,
     loading: false
   },
   reducers : {
-    getProvincias : (state,action) => {
-      state.provincias = action.payload,
+    getPaises : (state,action) => {
+      state.paises = action.payload,
+      state.loading = false,
+      state.error = ""
+    },
+    getInfraestructura : (state,action) => {
+      state.infraestructura = action.payload,
       state.loading = false,
       state.error = ""
     },
@@ -28,8 +35,8 @@ export const schoolsSlice = createSlice({
       state.loading = false,
       state.error = ""
     },
-    filterByRatings : (state,action) => {
-      state.rating = action.payload,
+    getProvincias : (state,action) => {
+      state.provincias = action.payload,
       state.loading = false,
       state.error = ""
     },
@@ -58,6 +65,12 @@ export const schoolsSlice = createSlice({
       state.loading = false,
       state.error = ""
     },
+
+   cleanOneSchool: (state,action) => {
+      state.oneSchool = []
+      state.loading = false,
+      state.error = ""
+    },
     getError: (state,action) => {
       state.error = action.payload,
       state.loading = false
@@ -68,6 +81,6 @@ export const schoolsSlice = createSlice({
   }
 })
 
-export const {getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,filterByRatings,getDistrits,getCategories,getProvincias} = schoolsSlice.actions
+export const {getPaises,getInfraestructura, cleanOneSchool,getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,getDistrits,getCategories,getProvincias} = schoolsSlice.actions
 
 export default schoolsSlice.reducer

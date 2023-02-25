@@ -53,10 +53,9 @@ import {
   getAllCategories,
   getAllDepartaments,
   getAllDistrits,
-  getAllProvincias,
-  getSchoolDetail
+  getAllProvincias
 } from "../redux/SchoolsActions";
-import { logout } from "../redux/AuthActions";
+import { logout , getSchoolDetail} from "../redux/AuthActions";
 import { useState } from "react";
 import { useRef } from "react";
 import axios from "axios";
@@ -103,32 +102,19 @@ function DashboardSchool() {
   const [page, setPage] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
+  const [allData, setAllData] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { categories, provincias, distrits, departaments , oneSchool } = useSelector(
+  const { categories, provincias, distrits, departaments  } = useSelector(
     (state) => state.schools
   );
-  const { isAuth, user } = useSelector((state) => state.auth);
+  const { user , oneSchool } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!isAuth) return navigate("/");
-  }, [isAuth]);
-
-  useEffect(() => {
-    dispatch(getAllCategories());
-    dispatch(getAllDepartaments());
-    dispatch(getAllDistrits());
-    dispatch(getAllProvincias());
-    if(isAuth && user){
+    if(user){
       dispatch(getSchoolDetail(user.id))
     }
-  }, [])
-
-  useEffect(() => {
-    dispatch(getSchoolDetail(user.id))
   }, [allData])
-  
-  
 
   const totalSteps = () => {
     return steps.length;
@@ -163,6 +149,8 @@ function DashboardSchool() {
   const handleStep = (step) => () => {
     setActiveStep(step);
   };
+
+
 
   const handleCompleteDatosPrincipales = () => {
     const newCompleted = completed;
@@ -465,7 +453,6 @@ function DashboardSchool() {
     }
   };
 
-  const [allData, setAllData] = useState({});
 
   const handleSubmitFormComplete = (e) => {
     e.preventDefault();
@@ -499,6 +486,7 @@ function DashboardSchool() {
         dayjs("2014-08-18T08:00:00"),
         dayjs("2014-08-18T17:00:00"),
         true,
+        
       ],
     },
     {
@@ -536,10 +524,7 @@ function DashboardSchool() {
 
   const handleSubmitCitas = (e) => {
     e.preventDefault();
-    const newDaysWithTime = daysWithTime.filter((days) => {
-      return days[Object.keys(days)[0]][2] === true;
-    });
-    const newDays = newDaysWithTime.map((day) => ({
+    const newDays = daysWithTime.map((day) => ({
       [Object.keys(day)[0]]: [
         stringyDate(day[Object.keys(day)][0]["$H"])
           .toString()
@@ -548,7 +533,7 @@ function DashboardSchool() {
         stringyDate(day[Object.keys(day)][1]["$H"])
           .toString()
           .concat(":")
-          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
+          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),day[Object.keys(day)][2]
       ],
     }));
     Swal.fire({
@@ -558,6 +543,9 @@ function DashboardSchool() {
     });
     console.log(newDays);
   };
+
+
+
 
   console.log(allData)
 

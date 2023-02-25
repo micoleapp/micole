@@ -1,0 +1,45 @@
+.Layout{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.tableHead{
+display: flex;
+justify-content: space-between;
+font-size: 12px;
+border-radius: 2px;
+width: 100%;
+background-color:#0061DF ;
+
+}
+
+.tableTitleDiv{
+width: 100px;
+display: flex;
+justify-content: center;
+}
+
+.tableTitle{
+    font-size: 12px;
+    color: #ffff;
+}
+
+.cardTable{
+display: flex;
+width: 100%;
+justify-content: space-between;
+font-size: 12px;
+flex-direction: row;
+gap: 2px;
+box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.itemTable{
+    width: 100%;
+    display: flex;
+    align-items: center;
+  height: 40px;
+    justify-content: center;
+
+}

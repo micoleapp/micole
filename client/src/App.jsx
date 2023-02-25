@@ -9,20 +9,40 @@ import SchoolDetail from "./pages/SchoolDetail";
 import InfoPlanes from "./components/FormPayment/utils/InfoPlanes";
 import { useSelector, useDispatch } from "react-redux";
 import Error from "./pages/Error";
-import Payment from "./pages/Payment/Payment"
+import Payment from "./pages/Payment/Payment";
 import DashboardSchool from "./pages/DashboardSchool";
-import { getUserByToken,getUserById } from "./redux/AuthActions";
+import { getUserByToken, getSchoolDetail } from "./redux/AuthActions";
+import { useNavigate } from "react-router-dom";
+import {
+  getAllCategories,
+  getAllDepartaments,
+  getAllDistrits,
+  getAllProvincias,
+  getAllInfraestructura,
+  getAllPaises,
+} from "./redux/SchoolsActions";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
-
-
-  const { error : errorSchool } = useSelector((state) => state.schools);
-  const dispatch = useDispatch()
+  const { error: errorSchool } = useSelector((state) => state.schools);
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
-    // dispatch(getUserById())
-    dispatch(getUserByToken())
-  }, [])
-  
+    dispatch(getAllCategories());
+    dispatch(getAllDepartaments());
+    dispatch(getAllDistrits());
+    dispatch(getAllProvincias());
+    dispatch(getAllInfraestructura());
+    dispatch(getAllPaises());
+    dispatch(getUserByToken());
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(getSchoolDetail(user.id));
+    }
+  }, [user]);
 
   return (
     <>
@@ -37,8 +57,16 @@ function App() {
           <Route path="/schooldetail/:id" er element={<SchoolDetail />} />
           <Route path="/*" element={<Error />} />
           <Route path="*" element={<Error />} />
-          <Route path="/dashboardschool" element={<DashboardSchool />} />
-         <Route path="/payment" element={<Payment/>} />
+          <Route
+            exact
+            path="/dashboardschool"
+            element={
+              <RequireAuth>
+                <DashboardSchool />
+              </RequireAuth>
+            }
+          />
+          <Route path="/payment" element={<Payment />} />
         </Routes>
       )}
 
