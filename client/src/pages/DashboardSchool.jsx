@@ -96,7 +96,7 @@ function DashboardSchool() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [allData, setAllData] = useState({});
-  const [InputVacante, setInputVacante] = useState('');
+  const [InputVacante, setInputVacante] = useState(0);
 
   const dispatch = useDispatch();
   const {
@@ -538,20 +538,11 @@ function DashboardSchool() {
   const handleSubmitCitas = (e) => {
     e.preventDefault();
 
-    // const newDays = daysWithTime.map((day) => ({
-    //   [Object.keys(day)[0]]: [
-    //     stringyDate(day[Object.keys(day)][0]["$H"])
-    //       .toString()
-    //       .concat(":")
-    //       .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
-    //     stringyDate(day[Object.keys(day)][1]["$H"])
-    //       .toString()
-    //       .concat(":")
-    //       .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),day[Object.keys(day)][2]
-    //   ],
-    // }));
 
-    const newDays = daysWithTime.map((day) => ({
+    const newDaysWithTime = daysWithTime.filter((days) => {
+      return days[Object.keys(days)[0]][2] === true;
+    });
+    const newDays =newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
       vacantesDispo: InputVacante,
       horarios: {
