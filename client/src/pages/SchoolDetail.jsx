@@ -913,7 +913,7 @@ function SchoolDetail() {
                         <div className={style.cardTable}>
                           <div className={style.itemTable}>
                            
-                            {ele.vacantesDispo > 0 ? ` ${ele.dia} `: <p style={{ fontSize: "12px",color:'grey' }}> {ele.dia} </p>}
+                            {ele.vacantesDispo > 0 ?` ${ele.dia} `: <p style={{ fontSize: "12px",color:'grey' }}> {ele.dia} </p>}
                           </div>
                           <div className={style.itemTable}>
                             <p style={{ fontSize: "12px" }}>

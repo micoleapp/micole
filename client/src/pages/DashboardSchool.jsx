@@ -53,9 +53,9 @@ import {
   getAllCategories,
   getAllDepartaments,
   getAllDistrits,
-  getAllProvincias
+  getAllProvincias,
 } from "../redux/SchoolsActions";
-import { logout , getSchoolDetail} from "../redux/AuthActions";
+import { logout, getSchoolDetail } from "../redux/AuthActions";
 import { useState } from "react";
 import { useRef } from "react";
 import axios from "axios";
@@ -105,20 +105,20 @@ function DashboardSchool() {
   const [allData, setAllData] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { categories, provincias, distrits, departaments  } = useSelector(
+  const { categories, provincias, distrits, departaments } = useSelector(
     (state) => state.schools
   );
-  const { user , oneSchool } = useSelector((state) => state.auth);
+  const { user, oneSchool } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if(user){
-      dispatch(getSchoolDetail(user.id))
+    if (user) {
+      dispatch(getSchoolDetail(user.id));
     }
-  }, [allData])
+  }, [allData]);
 
   const totalSteps = () => {
     return steps.length;
-};
+  };
 
   const completedSteps = () => {
     return Object.keys(completed).length;
@@ -149,8 +149,6 @@ function DashboardSchool() {
   const handleStep = (step) => () => {
     setActiveStep(step);
   };
-
-
 
   const handleCompleteDatosPrincipales = () => {
     const newCompleted = completed;
@@ -197,7 +195,7 @@ function DashboardSchool() {
     setDatosPrincipales(initialDatosPrincipales);
     setInfraestructura(initialInfraestructura);
     setAcreditaciones(initialAcreditaciones);
-    setPreview([])
+    setPreview([]);
     setMultimedia(initialMultimedia);
   };
 
@@ -290,12 +288,18 @@ function DashboardSchool() {
     propuesta: oneSchool.propuesta_valor ? oneSchool.propuesta_valor : "",
     categoria: oneSchool.Categoria ? oneSchool.Categoria : "",
     nombreDirector: oneSchool.nombre_director ? oneSchool.nombre_director : "",
-    fundacion: oneSchool.fecha_fundacion ? Number(oneSchool.fecha_fundacion) : null,
+    fundacion: oneSchool.fecha_fundacion
+      ? Number(oneSchool.fecha_fundacion)
+      : null,
     ruc: oneSchool.ruc ? Number(oneSchool.ruc) : null,
     ugel: oneSchool.ugel ? Number(oneSchool.ugel) : null,
     area: oneSchool.area ? Number(oneSchool.area) : null,
-    ingles: oneSchool.horas_idioma_extranjero ? Number(oneSchool.horas_idioma_extranjero) : null,
-    alumnos: oneSchool.numero_estudiantes ? Number(oneSchool.numero_estudiantes) : null,
+    ingles: oneSchool.horas_idioma_extranjero
+      ? Number(oneSchool.horas_idioma_extranjero)
+      : null,
+    alumnos: oneSchool.numero_estudiantes
+      ? Number(oneSchool.numero_estudiantes)
+      : null,
     niveles: oneSchool.niveles ? oneSchool.niveles : [],
     departamento: oneSchool.Departamento ? oneSchool.Departamento : {},
     provincia: oneSchool.Provincium ? oneSchool.Provincium : {},
@@ -414,14 +418,13 @@ function DashboardSchool() {
     Swal.fire({
       icon: "success",
       title: "Imagenes subidas correctamente",
-
     });
   }
 
   const initialMultimedia = {
     images: [],
     video_url: "",
-  }
+  };
 
   const [multimedia, setMultimedia] = useState(initialMultimedia);
 
@@ -453,28 +456,28 @@ function DashboardSchool() {
     }
   };
 
-
   const handleSubmitFormComplete = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:3001/colegios/${user.id}`,allData )
-    .then(res=>{
-      Swal.fire({
-        icon: "success",
-        title: "Felicidades ya estas a un paso de publicar tu colegio",
-        text: "Continua completando el horario para tus citas",
+    axios
+      .put(`http://localhost:3001/colegios/${user.id}`, allData)
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Felicidades ya estas a un paso de publicar tu colegio",
+          text: "Continua completando el horario para tus citas",
+        });
+        setPage(1);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        Swal.fire({
+          icon: "error",
+          title: "Lo sentimos algo salio mal",
+          text: err.message,
+        });
       });
-      setPage(1);
-    })
-    .catch(err=>{
-      console.log(err.response.data.message)
-      Swal.fire({
-        icon: "error",
-        title: "Lo sentimos algo salio mal",
-        text: err.message,
-      });
-    })
   };
-  
+
   const [vacantes, setVacantes] = useState(0);
 
   const initialDaysWithTime = [
@@ -486,7 +489,6 @@ function DashboardSchool() {
         dayjs("2014-08-18T08:00:00"),
         dayjs("2014-08-18T17:00:00"),
         true,
-        
       ],
     },
     {
@@ -510,7 +512,7 @@ function DashboardSchool() {
         true,
       ],
     },
-  ]
+  ];
 
   const [daysWithTime, setDaysWithTime] = React.useState(initialDaysWithTime);
 
@@ -522,19 +524,42 @@ function DashboardSchool() {
     }
   };
 
+  // { Lunes: ["08:30", "13:00", true] },
+  // {
+  //   dia: "Lunes",
+  //   horarios: { desde: "08:30", hasta: "13:00" },
+  //   disponibilidad: false,
+  //   vacantesDispo:2,
+  //   vacantes: "20",
+  // },
   const handleSubmitCitas = (e) => {
     e.preventDefault();
+
+    // const newDays = daysWithTime.map((day) => ({
+    //   [Object.keys(day)[0]]: [
+    //     stringyDate(day[Object.keys(day)][0]["$H"])
+    //       .toString()
+    //       .concat(":")
+    //       .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
+    //     stringyDate(day[Object.keys(day)][1]["$H"])
+    //       .toString()
+    //       .concat(":")
+    //       .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),day[Object.keys(day)][2]
+    //   ],
+    // }));
+
     const newDays = daysWithTime.map((day) => ({
-      [Object.keys(day)[0]]: [
-        stringyDate(day[Object.keys(day)][0]["$H"])
+      dia: Object.keys(day)[0],
+      horarios: {
+        desde: stringyDate(day[Object.keys(day)][0]["$H"])
           .toString()
           .concat(":")
           .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
-        stringyDate(day[Object.keys(day)][1]["$H"])
+        hasta: stringyDate(day[Object.keys(day)][1]["$H"])
           .toString()
           .concat(":")
-          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),day[Object.keys(day)][2]
-      ],
+          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
+      },
     }));
     Swal.fire({
       icon: "success",
@@ -544,10 +569,7 @@ function DashboardSchool() {
     console.log(newDays);
   };
 
-
-
-
-  console.log(allData)
+  console.log(allData);
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -1074,14 +1096,22 @@ function DashboardSchool() {
                                 className="bg-white"
                                 defaultValue={datosPrincipales.distrito}
                               >
-                                <MenuItem value={datosPrincipales.distrito}>{datosPrincipales.distrito.nombre_distrito}</MenuItem>
-                                {distrits.filter(distrit=>distrit.nombre_distrito !== datosPrincipales.distrito.nombre_distrito).map((type, index) => (
-                                  <MenuItem value={type} key={type.index}>
-                                    <ListItemText
-                                      primary={type.nombre_distrito}
-                                    />
-                                  </MenuItem>
-                                ))}
+                                <MenuItem value={datosPrincipales.distrito}>
+                                  {datosPrincipales.distrito.nombre_distrito}
+                                </MenuItem>
+                                {distrits
+                                  .filter(
+                                    (distrit) =>
+                                      distrit.nombre_distrito !==
+                                      datosPrincipales.distrito.nombre_distrito
+                                  )
+                                  .map((type, index) => (
+                                    <MenuItem value={type} key={type.index}>
+                                      <ListItemText
+                                        primary={type.nombre_distrito}
+                                      />
+                                    </MenuItem>
+                                  ))}
                               </Select>
                             </FormControl>
                           </div>
@@ -1707,52 +1737,52 @@ function DashboardSchool() {
                   )}
                   {activeStep === 3 && (
                     <>
-                    <div className="w-full min-h-screen gap-2 flex flex-col">
-                      <h1 className="text-2xl">Vacantes disponibles</h1>
-                      <button
-                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
-                        onClick={() =>
-                          vacantes === 0 ? setVacantes(null) : setVacantes(0)
-                        }
-                      >
-                        {" "}
-                        <span>2023</span>{" "}
-                        <FontAwesomeIcon
-                          size="lg"
-                          icon={vacantes === 0 ? faArrowUp : faArrowDown}
-                        />{" "}
-                      </button>
-                      {vacantes === 0 && <GridVacantes />}
-                      <button
-                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
-                        onClick={() =>
-                          vacantes === 1 ? setVacantes(null) : setVacantes(1)
-                        }
-                      >
-                        {" "}
-                        <span>2024</span>{" "}
-                        <FontAwesomeIcon
-                          size="lg"
-                          icon={vacantes === 1 ? faArrowUp : faArrowDown}
-                        />{" "}
-                      </button>
-                      {vacantes === 1 && <GridVacantes />}
-                      <button
-                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
-                        onClick={() =>
-                          vacantes === 2 ? setVacantes(null) : setVacantes(2)
-                        }
-                      >
-                        {" "}
-                        <span>2025</span>{" "}
-                        <FontAwesomeIcon
-                          size="lg"
-                          icon={vacantes === 2 ? faArrowUp : faArrowDown}
-                        />{" "}
-                      </button>
-                      {vacantes === 2 && <GridVacantes />}
-                    </div>
-                    <Box
+                      <div className="w-full min-h-screen gap-2 flex flex-col">
+                        <h1 className="text-2xl">Vacantes disponibles</h1>
+                        <button
+                          className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                          onClick={() =>
+                            vacantes === 0 ? setVacantes(null) : setVacantes(0)
+                          }
+                        >
+                          {" "}
+                          <span>2023</span>{" "}
+                          <FontAwesomeIcon
+                            size="lg"
+                            icon={vacantes === 0 ? faArrowUp : faArrowDown}
+                          />{" "}
+                        </button>
+                        {vacantes === 0 && <GridVacantes />}
+                        <button
+                          className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                          onClick={() =>
+                            vacantes === 1 ? setVacantes(null) : setVacantes(1)
+                          }
+                        >
+                          {" "}
+                          <span>2024</span>{" "}
+                          <FontAwesomeIcon
+                            size="lg"
+                            icon={vacantes === 1 ? faArrowUp : faArrowDown}
+                          />{" "}
+                        </button>
+                        {vacantes === 1 && <GridVacantes />}
+                        <button
+                          className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                          onClick={() =>
+                            vacantes === 2 ? setVacantes(null) : setVacantes(2)
+                          }
+                        >
+                          {" "}
+                          <span>2025</span>{" "}
+                          <FontAwesomeIcon
+                            size="lg"
+                            icon={vacantes === 2 ? faArrowUp : faArrowDown}
+                          />{" "}
+                        </button>
+                        {vacantes === 2 && <GridVacantes />}
+                      </div>
+                      <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
                         <Button
@@ -1764,10 +1794,7 @@ function DashboardSchool() {
                           Back
                         </Button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
-                          onClick={handleCompleteVacantes}
-                          sx={{ mr: 1 }}
-                        >
+                        <Button onClick={handleCompleteVacantes} sx={{ mr: 1 }}>
                           Next
                         </Button>
                         {/* {activeStep !== steps.length &&
@@ -1989,7 +2016,7 @@ function DashboardSchool() {
                           ).toString(),
                         ].join(":")}{" "}
                       </small>
-                      <div className="flex gap-10">
+                      <div className="flex gap-2">
                         <MobileTimePicker
                           label="Desde"
                           disabled={!day[Object.keys(day)][2]}
@@ -2037,6 +2064,17 @@ function DashboardSchool() {
                           minutesStep={60}
                           minTime={day[Object.keys(day)][0]}
                           maxTime={dayjs("2014-08-18T17:00:00")}
+                        />
+                        <TextField
+                          // disabled
+                          Vacante
+                          className="w-[70px]"
+                          id="outlined-number"
+                          label="Vacante"
+                          type="number"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
                         />
                       </div>
                     </div>
