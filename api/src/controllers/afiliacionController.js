@@ -1,5 +1,4 @@
 const { Afiliacion, Afiliacion_tipo } = require('../db');
-const {Sequelize} = require("sequelize");
 
 const getAfiliacion = async (req, res, next) => {
   try {

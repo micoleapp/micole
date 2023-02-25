@@ -146,6 +146,15 @@ Infraestructura.belongsToMany(Colegio, {
   timestamps: false,
 });
 
+Colegio.belongsToMany(Afiliacion, {
+  through: 'Colegio_Afiliacion',
+  timestamps: false,
+});
+Afiliacion.belongsToMany(Colegio, {
+  through: 'Colegio_Afiliacion',
+  timestamps: false,
+});
+
 //------RELACIONES ADMINISTRATIVAS------
 
 Plan_Pago.hasMany(Colegio, {
