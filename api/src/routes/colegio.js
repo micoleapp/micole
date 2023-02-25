@@ -173,10 +173,10 @@ router.put("/:id", async (req, res) => {
       provincia,
       infraestructura,
     } = req.body;
-    // let video_url = multimedia.video_url;
-    // let primera_imagen = multimedia.images[0];
-    // let galeria_fotos = JSON.stringify(multimedia.images.slice(1));
-    // const ubicacion = { lat, lng };
+    let video_url = multimedia.video_url;
+    let primera_imagen = multimedia.images[0];
+    let galeria_fotos = JSON.stringify(multimedia.images.slice(1));
+    const ubicacion = { lat, lng };
     const editedColegio = await Colegio.update(
       {
         direccion: direccion,
@@ -185,13 +185,13 @@ router.put("/:id", async (req, res) => {
         nombre_director: nombreDirector,
         nombre_colegio: nombreColegio,
         //multimedia
-        // primera_imagen: primera_imagen,
-        // galeria_fotos: galeria_fotos,
-        // video_url: video_url,
+        primera_imagen: primera_imagen,
+        galeria_fotos: galeria_fotos,
+        video_url: video_url,
         ruc: ruc,
         area: area,
         ugel: ugel,
-        // ubicacion: JSON.stringify(ubicacion),
+        ubicacion: JSON.stringify(ubicacion),
         propuesta_valor: propuesta,
         descripcion: descripcion,
         horas_idioma_extranjero: ingles,
