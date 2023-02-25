@@ -115,14 +115,14 @@ router.get("/:Colegio_id", async (req, res) => {
         },
         {
           model: Categoria,
-          attributes: ["id", "nombre_categoria"],
+          attributes: ["id", "nombre_categoria","imagen_categoria","logo_categoria"],
           through: {
             attributes: [],
           },
         },
         {
           model: Infraestructura,
-          attributes: ["id", "nombre_infraestructura", "InfraestructuraTipoId"],
+          attributes: ["id", "nombre_infraestructura", "InfraestructuraTipoId","imagen"],
           through: {
             attributes: [],
           },
