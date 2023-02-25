@@ -6,6 +6,7 @@ import {
   getError,
   isLoading,
   updateUser,
+  getSchool
 } from "./AuthSlice";
 import axios from "axios";
 import Swal from 'sweetalert2'
@@ -152,3 +153,10 @@ export const logout = () => (dispatch) => {
     dispatch(getError(err.response.data.error));
   }
 };
+
+export const getSchoolDetail = (id) => (dispatch) => {
+  dispatch(isLoading())
+  axios.get(`/colegios/${id}`)
+  .then(res=>dispatch(getSchool(res.data[0])))
+  .catch(err=>dispatch(getError(err.message)))
+}

@@ -6,11 +6,15 @@ export const authSlice = createSlice({
     token: localStorage.hasOwnProperty('token') ? localStorage.getItem('token') : "",
     isAuth: false ,
     user: null,
+    oneSchool: null,
     success: null,
     error: "",
     loading: false
   },
   reducers : {
+    getSchool: (state,action) => {
+      state.oneSchool = action.payload
+    },
     getUser: (state,action) => {
       state.loading = false,
       state.success = true,
@@ -36,7 +40,8 @@ export const authSlice = createSlice({
       state.loading = false,
       state.success = null,
       state.user = null,
-      state.error = ""
+      state.error = "",
+      state.oneSchool = null,
       state.token = ""
     },
     updateUser: (state,action) => {
@@ -56,6 +61,6 @@ export const authSlice = createSlice({
   }
 })
 
-export const {getUser,registerUser,loginUser,logoutUser,getError,isLoading,updateUser} = authSlice.actions
+export const {getSchool,getUser,registerUser,loginUser,logoutUser,getError,isLoading,updateUser} = authSlice.actions
 
 export default authSlice.reducer
