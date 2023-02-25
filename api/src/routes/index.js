@@ -11,6 +11,9 @@ const userRouter = require("./userRoutes.js");
 const categoriaRouter = require("./categoria.js");
 const vacanteRouter = require("./vacanteRouter.js");
 const disponibilidadRouter = require("./disponibilidadRoutes.js");
+const infraestructuraRouter = require("./infraestructura.js");
+const gradoRouter = require("./grado.js");
+const nivelRouter = require("./nivel.js");
 
 const router = Router();
 
@@ -22,6 +25,9 @@ router.use("/paises", paisRouter);
 router.use("/categorias", categoriaRouter);
 router.use("/vacantes", vacanteRouter);
 router.use("/disponibilidad", disponibilidadRouter);
+router.use("/infraestructuras", infraestructuraRouter);
+router.use("/grados", gradoRouter);
+router.use("/niveles", nivelRouter);
 
 router.get("/", (req, res) =>
   res.json({ name: pkg.name, version: pkg.version })
