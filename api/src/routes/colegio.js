@@ -10,6 +10,7 @@ const {
   Plan_Pago,
   Distrito,
   Infraestructura,
+  Afiliacion
 } = require("../db.js");
 
 // const getComponentData = require("../funciones/getComponentData.js");
@@ -127,6 +128,13 @@ router.get("/:Colegio_id", async (req, res) => {
             attributes: [],
           },
         },
+        {
+          model: Afiliacion,
+          attributes: ["id", "nombre_afiliacion", "Afiliacion_tipo_Id"],
+          through: {
+            attributes: [],
+          },
+        },
       ],
       attributes: [
         "id",
@@ -181,6 +189,7 @@ router.put("/:id", async (req, res) => {
       departamento,
       provincia,
       infraestructura,
+      afiliacion
     } = req.body;
     let video_url = multimedia.video_url;
     let primera_imagen = multimedia.images[0];
@@ -217,6 +226,7 @@ router.put("/:id", async (req, res) => {
     } else {
       await colegio.setInfraestructuras(infraestructura);
       await colegio.setCategoria(categoria);
+      await colegio.setAfiliacion(afiliacion);
     }
 
     res.json(editedColegio);
