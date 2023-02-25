@@ -37,6 +37,8 @@ import { MobileTimePicker } from "@mui/x-date-pickers";
 import axios from "axios";
 import { fontSize } from "@mui/system";
 import style from "./SchoolD.module.css";
+import { HiChevronDown } from "react-icons/hi";
+import {HiChevronLeft}from "react-icons/hi";
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
     <div className="w-full px-4">
@@ -72,35 +74,35 @@ const ArrHorariosMockFormateado = [
     dia: "Lunes",
     horarios: { desde: "08:30", hasta: "13:00" },
     disponibilidad: false,
-    vacantesDispo:2,
+    vacantesDispo: 2,
     vacantes: "20",
   },
   {
     dia: "Martes",
     horarios: { desde: "10:30", hasta: "13:00" },
     disponibilidad: true,
-    vacantesDispo:3,
+    vacantesDispo: 3,
     vacantes: "5",
   },
   {
     dia: "Miercoles",
     horarios: { desde: "09:30", hasta: "13:00" },
     disponibilidad: true,
-    vacantesDispo:1,
+    vacantesDispo: 1,
     vacantes: "3",
   },
   {
     dia: "Jueves",
     horarios: { desde: "11:30", hasta: "13:00" },
     disponibilidad: false,
-    vacantesDispo:0,
+    vacantesDispo: 0,
     vacantes: "6",
   },
   {
     dia: "Viernes",
     horarios: { desde: "08:30", hasta: "13:00" },
     disponibilidad: false,
-    vacantesDispo:0,
+    vacantesDispo: 0,
     vacantes: "10",
   },
 ];
@@ -243,6 +245,10 @@ function SchoolDetail() {
 
   const disableWeekends = (date) => {
     return date.day() === 0 || date.day() === 6;
+  };
+  const [Horarios, setHorarios] = useState(false);
+  const toggleHorarios = () => {
+    setHorarios(!Horarios);
   };
 
   return (
@@ -887,61 +893,134 @@ function SchoolDetail() {
               data-aos-mirror={false}
             >
               <h2 className="font-semibold text-xl">Solicitar una visita</h2>
-              <p>La disponibilidad de este colegio es de : </p>
-              <div className={style.Layout}>
-                <div className={style.tableHead}>
-                  <div className={style.tableTitleDiv}>
-                    <p className={style.tableTitle}>Dia</p>
-                  </div>
-                  <div className={style.tableTitleDiv}>
-                    <p className={style.tableTitle}>Desde</p>
-                  </div>
-                  <div className={style.tableTitleDiv}>
-                    <p className={style.tableTitle}>Hasta</p>
-                  </div>
-                  <div className={style.tableTitleDiv}>
-                    <p className={style.tableTitle}>Vacantes</p>
-                  </div>
-                  <div className={style.tableTitleDiv}>
-                    <p className={style.tableTitle}>Disponible</p>
-                  </div>
-                </div>
-                {ArrHorariosMockFormateado.map((ele) => {
-                  return (
-                    <>
-                      <div className={style.cardTable}>
-                        <div className={style.cardTable}>
-                          <div className={style.itemTable}>
-                           
-                            {ele.vacantesDispo > 0 ?` ${ele.dia} `: <p style={{ fontSize: "12px",color:'grey' }}> {ele.dia} </p>}
-                          </div>
-                          <div className={style.itemTable}>
-                            <p style={{ fontSize: "12px" }}>
-                            {ele.vacantesDispo > 0 ?` ${ele.horarios.desde} `: <p style={{ fontSize: "12px",color:'grey' }}> {ele.horarios.desde} </p>}
-                             
-                            </p>
-                          </div>
-                          <div className={style.itemTable}>
-                            <p style={{ fontSize: "12px" }}>
-                            {ele.vacantesDispo > 0 ?` ${ele.horarios.hasta} `: <p style={{ fontSize: "12px",color:'grey' }}>{ele.horarios.hasta} </p>}
-                            
-                            </p>
-                          </div>
-                          <div className={style.itemTable}>
-                          {ele.vacantesDispo > 0 ?` ${ele.vacantes} `: <p style={{ fontSize: "12px",color:'grey' }}>{ele.vacantes} </p>}
-                          
-                          </div>
-
-                          <div className={style.itemTable}>
-                          {ele.vacantesDispo > 0 ?` ${ele.vacantesDispo} `: <p style={{ fontSize: "12px",color:'grey' }}>No disponible </p>}
-                           
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  );
-                })}
+              <div
+                onClick={toggleHorarios}
+                style={{ display: "flex", gap: "10px", alignItems: "center" }}
+              >
+                {Horarios && (
+                  <>
+                    <p>Ver la disponibilidad horaria de este colegio </p>
+                    <HiChevronDown  data-aos-duration="400" data-aos='flip-down'/>
+                  </>
+                )}
+                {Horarios === false && (
+                  <>
+                    <p>Ver la disponibilidad horaria de este colegio  </p>
+                    <HiChevronLeft   data-aos-duration="400" data-aos='flip-left' />
+                  </>
+                )}
               </div>
+              {Horarios && (
+                <>
+                  <div className={style.Layout}>
+                    <div
+                      data-aos="zoom-in-left"
+                 
+                      data-aos-duration="400"
+                      className={style.tableHead}
+                    >
+                      <div className={style.tableTitleDiv}>
+                        <p className={style.tableTitle}>Dia</p>
+                      </div>
+                      <div className={style.tableTitleDiv}>
+                        <p className={style.tableTitle}>Desde</p>
+                      </div>
+                      <div className={style.tableTitleDiv}>
+                        <p className={style.tableTitle}>Hasta</p>
+                      </div>
+                      <div className={style.tableTitleDiv}>
+                        <p className={style.tableTitle}>Vacantes</p>
+                      </div>
+                      <div className={style.tableTitleDiv}>
+                        <p className={style.tableTitle}>Disponible</p>
+                      </div>
+                    </div>
+                    {ArrHorariosMockFormateado.map((ele) => {
+                      return (
+                        <>
+                          <div
+                            data-aos="zoom-in-left"
+                            data-aos-duration="700"
+                            className={style.cardTable}
+                          >
+                            <div className={style.cardTable}>
+                              <div className={style.itemTable}>
+                                {ele.vacantesDispo > 0 ? (
+                                  ` ${ele.dia} `
+                                ) : (
+                                  <p
+                                    style={{ fontSize: "12px", color: "grey" }}
+                                  >
+                                    {" "}
+                                    {ele.dia}{" "}
+                                  </p>
+                                )}
+                              </div>
+                              <div className={style.itemTable}>
+                                <p style={{ fontSize: "12px" }}>
+                                  {ele.vacantesDispo > 0 ? (
+                                    ` ${ele.horarios.desde} `
+                                  ) : (
+                                    <p
+                                      style={{
+                                        fontSize: "12px",
+                                        color: "grey",
+                                      }}
+                                    >
+                                      {" "}
+                                      {ele.horarios.desde}{" "}
+                                    </p>
+                                  )}
+                                </p>
+                              </div>
+                              <div className={style.itemTable}>
+                                <p style={{ fontSize: "12px" }}>
+                                  {ele.vacantesDispo > 0 ? (
+                                    ` ${ele.horarios.hasta} `
+                                  ) : (
+                                    <p
+                                      style={{
+                                        fontSize: "12px",
+                                        color: "grey",
+                                      }}
+                                    >
+                                      {ele.horarios.hasta}{" "}
+                                    </p>
+                                  )}
+                                </p>
+                              </div>
+                              <div className={style.itemTable}>
+                                {ele.vacantesDispo > 0 ? (
+                                  ` ${ele.vacantes} `
+                                ) : (
+                                  <p
+                                    style={{ fontSize: "12px", color: "grey" }}
+                                  >
+                                    {ele.vacantes}{" "}
+                                  </p>
+                                )}
+                              </div>
+
+                              <div className={style.itemTable}>
+                                {ele.vacantesDispo > 0 ? (
+                                  ` ${ele.vacantesDispo} `
+                                ) : (
+                                  <p
+                                    style={{ fontSize: "12px", color: "grey" }}
+                                  >
+                                    No disponible{" "}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <div className="flex w-full justify-between flex-col gap-4 lg:flex-row">
                   <MobileDatePicker
