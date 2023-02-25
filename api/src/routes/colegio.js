@@ -147,7 +147,7 @@ router.get("/:Colegio_id", async (req, res) => {
         "horas_idioma_extranjero",
         "primera_imagen",
         "galeria_fotos",
-        "video_url",
+        "video_url"
       ],
     });
 
@@ -181,6 +181,7 @@ router.put("/:id", async (req, res) => {
       departamento,
       provincia,
       infraestructura,
+      niveles
     } = req.body;
     let video_url = multimedia.video_url;
     let primera_imagen = multimedia.image
@@ -216,6 +217,7 @@ router.put("/:id", async (req, res) => {
     } else {
       await colegio.setInfraestructuras(infraestructura.map((i) => i.id));
       await colegio.setCategoria(categoria.map((c) => c.id));
+      await colegio.setNivel(niveles.map((n) => n.id));
     }
 
     res.json(editedColegio);

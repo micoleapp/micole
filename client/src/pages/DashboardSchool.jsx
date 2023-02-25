@@ -79,13 +79,12 @@ function StandardImageList({ one, list, setImage, eliminarImagenDePreview }) {
         <img
           src={list}
           alt={list}
-          loading="lazy"
           onClick={() => setImage(list)}
-          className="cursor-pointer object-cover w-[400px] "
+          className="cursor-pointer object-cover w-[370px] h-[400px] "
         />
       </div>
     ) : (
-      <ImageList sx={{ width: "100%", height: 450 }} cols={3} rowHeight={400}>
+      <ImageList sx={{ width: "100%", height: 400 }} cols={2} rowHeight={400}>
         {list.map((item) => (
           <ImageListItem key={item}>
             <button
@@ -319,8 +318,8 @@ function DashboardSchool() {
     provincia: oneSchool.Provincium ? oneSchool.Provincium : {},
     distrito: oneSchool.Distrito ? oneSchool.Distrito : {},
     direccion: oneSchool.direccion ? oneSchool.direccion : "",
-    lat: oneSchool.lat ? oneSchool.lat : 0,
-    lng: oneSchool.lng ? oneSchool.lng : 0,
+    lat: oneSchool.ubicacion.length > 0 ? JSON.parse(oneSchool.ubicacion).lat : 0,
+    lng: oneSchool.ubicacion.length > 0 ? JSON.parse(oneSchool.ubicacion).lng : 0,
     infraestructura: oneSchool.Infraestructuras
       ? oneSchool.Infraestructuras
       : [],
@@ -459,15 +458,19 @@ function DashboardSchool() {
   }
 
   const initialMultimedia = {
-    image: "",
-    images: [],
-    video_url: "",
+    image: oneSchool.primera_imagen.length > 0 ? oneSchool.primera_imagen : "",
+    images: oneSchool.galeria_fotos.length > 0 ? JSON.parse(oneSchool.galeria_fotos) : [],
+    video_url: oneSchool.video_url.length > 0 ? oneSchool.video_url : "",
   };
 
   const [multimedia, setMultimedia] = useState(initialMultimedia);
 
-  const [preview, setPreview] = useState([]);
-  const [previewOne, setPreviewOne] = useState([]);
+  const initialPreviewOne = oneSchool.primera_imagen.length > 0 ? oneSchool.primera_imagen : "";
+  const initialPreview = oneSchool.galeria_fotos.length > 0 ? JSON.parse(oneSchool.galeria_fotos) : [];
+  const [preview, setPreview] = useState(initialPreview);
+  const [previewOne, setPreviewOne] = useState(initialPreviewOne);
+
+  console.log(preview)
 
   useEffect(() => {
     if (files !== null) {
@@ -495,7 +498,7 @@ function DashboardSchool() {
     setPreview(preview.filter((image) => image !== img));
   };
   const eliminarImagenDePreviewOne = (img) => {
-    setPreviewOne(null);
+    setPreviewOne("");
   };
 
   const [image, setImage] = useState(null);
@@ -616,7 +619,7 @@ function DashboardSchool() {
   const [spanTwo, setSpanTwo] = useState(false);
   const [activeUpOne, setActiveUpOne] = useState(true);
   const [activeUpTwo, setActiveUpTwo] = useState(true);
-  console.log(previewOne);
+  console.log(datosPrincipales);
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -820,9 +823,7 @@ function DashboardSchool() {
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  checked={datosPrincipales.categoria.includes(
-                                    category
-                                  )}
+                                  checked={datosPrincipales.categoria.some(c=>c.id === category.id)}
                                   onChange={(event, target) => {
                                     if (target) {
                                       setDatosPrincipales({
@@ -1023,9 +1024,7 @@ function DashboardSchool() {
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  checked={datosPrincipales.niveles.includes(
-                                    level
-                                  )}
+                                  checked={datosPrincipales.niveles.some(niv=>niv.id === level.id)}
                                   onChange={(event, target) => {
                                     if (target) {
                                       setDatosPrincipales({
@@ -1342,9 +1341,7 @@ function DashboardSchool() {
                                   <FormControlLabel
                                     control={
                                       <Checkbox
-                                        checked={datosPrincipales.infraestructura.includes(
-                                          infra
-                                        )}
+                                        checked={datosPrincipales.infraestructura.some(inf=>inf.id===infra.id)}
                                         onChange={(event, target) => {
                                           if (target) {
                                             setDatosPrincipales({
@@ -1389,9 +1386,7 @@ function DashboardSchool() {
                                 <FormControlLabel
                                   control={
                                     <Checkbox
-                                      checked={datosPrincipales.infraestructura.includes(
-                                        infra
-                                      )}
+                                    checked={datosPrincipales.infraestructura.some(inf=>inf.id===infra.id)}
                                       onChange={(event, target) => {
                                         if (target) {
                                           setDatosPrincipales({
@@ -1436,9 +1431,7 @@ function DashboardSchool() {
                                 <FormControlLabel
                                   control={
                                     <Checkbox
-                                      checked={datosPrincipales.infraestructura.includes(
-                                        infra
-                                      )}
+                                    checked={datosPrincipales.infraestructura.some(inf=>inf.id===infra.id)}
                                       onChange={(event, target) => {
                                         if (target) {
                                           setDatosPrincipales({
@@ -1483,9 +1476,7 @@ function DashboardSchool() {
                                 <FormControlLabel
                                   control={
                                     <Checkbox
-                                      checked={datosPrincipales.infraestructura.includes(
-                                        infra
-                                      )}
+                                    checked={datosPrincipales.infraestructura.some(inf=>inf.id===infra.id)}
                                       onChange={(event, target) => {
                                         if (target) {
                                           setDatosPrincipales({
@@ -1530,9 +1521,7 @@ function DashboardSchool() {
                                 <FormControlLabel
                                   control={
                                     <Checkbox
-                                      checked={datosPrincipales.infraestructura.includes(
-                                        infra
-                                      )}
+                                    checked={datosPrincipales.infraestructura.some(inf=>inf.id===infra.id)}
                                       onChange={(event, target) => {
                                         if (target) {
                                           setDatosPrincipales({
@@ -1959,7 +1948,7 @@ function DashboardSchool() {
                             </span>
                           )}
                         </form>
-                        {file !== null && previewOne !== null && (
+                        {previewOne !== "" && (
                           <>
                             <div className="border-2 rounded-md overflow-hidden p-2 bg-white">
                               <StandardImageList
@@ -2039,7 +2028,7 @@ function DashboardSchool() {
                             </span>
                           )}
                         </form>
-                        {files !== null && preview.length !== 0 && (
+                        {preview.length !== 0 && (
                           <>
                             <div className="border-2 rounded-md overflow-hidden p-2 bg-white">
                               <StandardImageList
