@@ -23,7 +23,13 @@ router.get("/", async (req, res) => {
     let cole;
     cole = await Colegio.findAll({
       include: [
-        { model: Idioma, attributes: ["nombre_idioma", "id"] },
+        {
+          model: Idioma,
+          attributes: ["nombre_idioma", "id"],
+          through: {
+            attributes: [],
+          },
+        },
         {
           model: Pais,
           attributes: ["id", "nombre_pais"],
@@ -47,6 +53,9 @@ router.get("/", async (req, res) => {
         {
           model: Categoria,
           attributes: ["id", "nombre_categoria"],
+          through: {
+            attributes: [],
+          },
         },
       ],
       attributes: [
@@ -98,7 +107,7 @@ router.get("/:Colegio_id", async (req, res) => {
         },
         {
           model: Distrito,
-          attributes: ["id", "nombre_distrito","ProvinciaId"],
+          attributes: ["id", "nombre_distrito", "ProvinciaId"],
         },
         {
           model: Plan_Pago,
@@ -198,10 +207,18 @@ router.put("/:id", async (req, res) => {
         categoria: categoria,
         DepartamentoId: departamento.id,
         provincia: provincia,
-        Infraestructuras: infraestructura,
       },
+
       { where: { id: id } }
     );
+    const colegio = await Colegio.findByPk(id);
+    if (colegio === null) {
+      console.log("Not found!");
+    } else {
+      await colegio.setInfraestructuras(infraestructura);
+      await colegio.setCategoria(categoria);
+    }
+
     res.json(editedColegio);
   } catch (err) {
     res.status(500).send({
