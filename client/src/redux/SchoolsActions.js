@@ -1,10 +1,17 @@
 import axios from 'axios'
-import { cleanOneSchool,getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,filterByRatings,getDistrits,getCategories,getProvincias} from './SchoolsSlice'
+import { cleanOneSchool,getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,getDistrits,getCategories,getProvincias,getInfraestructura,getPaises} from './SchoolsSlice'
 
 export const getAllProvincias = () => (dispatch) => {
   dispatch(isLoading())
   axios.get("/provincias")
   .then(res=>dispatch(getProvincias(res.data)))
+  .catch(err=>dispatch(getError(err.message)))
+}
+
+export const getAllPaises = () => (dispatch) => {
+  dispatch(isLoading())
+  axios.get("/paises")
+  .then(res=>dispatch(getPaises(res.data)))
   .catch(err=>dispatch(getError(err.message)))
 }
 
@@ -15,16 +22,18 @@ export const getAllCategories = () => (dispatch) => {
   .catch(err=>dispatch(getError(err.message)))
 }
 
+export const getAllInfraestructura = () => (dispatch) => {
+  dispatch(isLoading())
+  axios.get("/infraestructuras")
+  .then(res=>dispatch(getInfraestructura(res.data)))
+  .catch(err=>dispatch(getError(err.message)))
+}
+
 export const getAllDistrits = () => (dispatch) => {
   dispatch(isLoading())
   axios.get("/distritos")
   .then(res=>dispatch(getDistrits(res.data)))
   .catch(err=>dispatch(getError(err.message)))
-}
-
-export const filterByRating = (number) => (dispatch) => {
-  dispatch(isLoading())
-  dispatch(filterByRatings(number))
 }
 
 export const filterByDepartaments = (array) => (dispatch) => {

@@ -53,10 +53,9 @@ import {
   getAllCategories,
   getAllDepartaments,
   getAllDistrits,
-  getAllProvincias,
-  getSchoolDetail
+  getAllProvincias
 } from "../redux/SchoolsActions";
-import { logout } from "../redux/AuthActions";
+import { logout , getSchoolDetail} from "../redux/AuthActions";
 import { useState } from "react";
 import { useRef } from "react";
 import axios from "axios";
@@ -103,27 +102,13 @@ function DashboardSchool() {
   const [page, setPage] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
+  const [allData, setAllData] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { categories, provincias, distrits, departaments , oneSchool } = useSelector(
+  const { categories, provincias, distrits, departaments  } = useSelector(
     (state) => state.schools
   );
-  const { isAuth, user } = useSelector((state) => state.auth);
-  const [allData, setAllData] = useState({});
-
-  useEffect(() => {
-    if (!isAuth) return navigate("/");
-  }, [isAuth]);
-
-  useEffect(() => {
-    dispatch(getAllCategories());
-    dispatch(getAllDepartaments());
-    dispatch(getAllDistrits());
-    dispatch(getAllProvincias());
-    if(isAuth && user){
-      dispatch(getSchoolDetail(user.id))
-    }
-  }, [])
+  const { user , oneSchool } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if(user){
@@ -501,6 +486,7 @@ function DashboardSchool() {
         dayjs("2014-08-18T08:00:00"),
         dayjs("2014-08-18T17:00:00"),
         true,
+        
       ],
     },
     {
