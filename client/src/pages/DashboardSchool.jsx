@@ -521,20 +521,42 @@ function DashboardSchool() {
     }
   };
 
+  // { Lunes: ["08:30", "13:00", true] },
+  // {
+  //   dia: "Lunes",
+  //   horarios: { desde: "08:30", hasta: "13:00" },
+  //   disponibilidad: false,
+  //   vacantesDispo:2,
+  //   vacantes: "20",
+  // },
   const handleSubmitCitas = (e) => {
     e.preventDefault();
+
+    // const newDays = daysWithTime.map((day) => ({
+    //   [Object.keys(day)[0]]: [
+    //     stringyDate(day[Object.keys(day)][0]["$H"])
+    //       .toString()
+    //       .concat(":")
+    //       .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
+    //     stringyDate(day[Object.keys(day)][1]["$H"])
+    //       .toString()
+    //       .concat(":")
+    //       .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),day[Object.keys(day)][2]
+    //   ],
+    // }));
+
     const newDays = daysWithTime.map((day) => ({
-      [Object.keys(day)[0]]: [
-        stringyDate(day[Object.keys(day)][0]["$H"])
+      dia: Object.keys(day)[0],
+      horarios: {
+        desde: stringyDate(day[Object.keys(day)][0]["$H"])
           .toString()
           .concat(":")
           .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
-        stringyDate(day[Object.keys(day)][1]["$H"])
+        hasta: stringyDate(day[Object.keys(day)][1]["$H"])
           .toString()
           .concat(":")
           .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
-        day[Object.keys(day)][2],
-      ],
+      },
     }));
     Swal.fire({
       icon: "success",
@@ -544,7 +566,7 @@ function DashboardSchool() {
     console.log(newDays);
   };
 
-  console.log(datosPrincipales);
+  console.log(allData);
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -1840,7 +1862,7 @@ function DashboardSchool() {
                           ).toString(),
                         ].join(":")}{" "}
                       </small>
-                      <div className="flex gap-10">
+                      <div className="flex gap-2">
                         <MobileTimePicker
                           label="Desde"
                           disabled={!day[Object.keys(day)][2]}
@@ -1888,6 +1910,17 @@ function DashboardSchool() {
                           minutesStep={60}
                           minTime={day[Object.keys(day)][0]}
                           maxTime={dayjs("2014-08-18T17:00:00")}
+                        />
+                        <TextField
+                          // disabled
+                          Vacante
+                          className="w-[70px]"
+                          id="outlined-number"
+                          label="Vacante"
+                          type="number"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
                         />
                       </div>
                     </div>

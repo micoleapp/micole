@@ -71,7 +71,7 @@ const ArrHorariosMockFormateado = [
   {
     dia: "Lunes",
     horarios: { desde: "08:30", hasta: "13:00" },
-    disponibilidad: true,
+    disponibilidad: false,
     vacantesDispo:2,
     vacantes: "20",
   },
@@ -913,27 +913,27 @@ function SchoolDetail() {
                         <div className={style.cardTable}>
                           <div className={style.itemTable}>
                            
-                            {ele.disponibilidad === true ?` ${ele.dia} `: <p style={{ fontSize: "12px",color:'grey' }}> {ele.dia} </p>}
+                            {ele.vacantesDispo > 0 ?` ${ele.dia} `: <p style={{ fontSize: "12px",color:'grey' }}> {ele.dia} </p>}
                           </div>
                           <div className={style.itemTable}>
                             <p style={{ fontSize: "12px" }}>
-                            {ele.disponibilidad === true ?` ${ele.horarios.desde} `: <p style={{ fontSize: "12px",color:'grey' }}> {ele.horarios.desde} </p>}
+                            {ele.vacantesDispo > 0 ?` ${ele.horarios.desde} `: <p style={{ fontSize: "12px",color:'grey' }}> {ele.horarios.desde} </p>}
                              
                             </p>
                           </div>
                           <div className={style.itemTable}>
                             <p style={{ fontSize: "12px" }}>
-                            {ele.disponibilidad === true ?` ${ele.horarios.hasta} `: <p style={{ fontSize: "12px",color:'grey' }}>{ele.horarios.hasta} </p>}
+                            {ele.vacantesDispo > 0 ?` ${ele.horarios.hasta} `: <p style={{ fontSize: "12px",color:'grey' }}>{ele.horarios.hasta} </p>}
                             
                             </p>
                           </div>
                           <div className={style.itemTable}>
-                          {ele.disponibilidad === true ?` ${ele.vacantes} `: <p style={{ fontSize: "12px",color:'grey' }}>{ele.vacantes} </p>}
+                          {ele.vacantesDispo > 0 ?` ${ele.vacantes} `: <p style={{ fontSize: "12px",color:'grey' }}>{ele.vacantes} </p>}
                           
                           </div>
 
                           <div className={style.itemTable}>
-                          {ele.disponibilidad === true ?` ${ele.vacantesDispo} `: <p style={{ fontSize: "12px",color:'grey' }}>No disponible </p>}
+                          {ele.vacantesDispo > 0 ?` ${ele.vacantesDispo} `: <p style={{ fontSize: "12px",color:'grey' }}>No disponible </p>}
                            
                           </div>
                         </div>
