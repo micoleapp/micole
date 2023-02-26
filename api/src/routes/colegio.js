@@ -10,6 +10,7 @@ const {
   Plan_Pago,
   Distrito,
   Infraestructura,
+  Afiliacion
 } = require("../db.js");
 
 // const getComponentData = require("../funciones/getComponentData.js");
@@ -127,6 +128,13 @@ router.get("/:Colegio_id", async (req, res) => {
             attributes: [],
           },
         },
+        {
+          model: Afiliacion,
+          attributes: ["id", "nombre_afiliacion", "Afiliacion_tipo_Id"],
+          through: {
+            attributes: [],
+          },
+        },
       ],
       attributes: [
         "id",
@@ -181,7 +189,11 @@ router.put("/:id", async (req, res) => {
       departamento,
       provincia,
       infraestructura,
+<<<<<<< HEAD
       niveles
+=======
+      afiliacion
+>>>>>>> 8a06792690c08f0b5525c71f070f6abc7adab74d
     } = req.body;
     let video_url = multimedia.video_url;
     let primera_imagen = multimedia.image
@@ -215,9 +227,15 @@ router.put("/:id", async (req, res) => {
     if (colegio === null) {
       console.log("Not found!");
     } else {
+<<<<<<< HEAD
       await colegio.setInfraestructuras(infraestructura.map((i) => i.id));
       await colegio.setCategoria(categoria.map((c) => c.id));
       await colegio.setNivel(niveles.map((n) => n.id));
+=======
+      await colegio.setInfraestructuras(infraestructura);
+      await colegio.setCategoria(categoria);
+      await colegio.setAfiliacion(afiliacion);
+>>>>>>> 8a06792690c08f0b5525c71f070f6abc7adab74d
     }
 
     res.json(editedColegio);

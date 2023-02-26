@@ -81,7 +81,9 @@ const {
   Vacante,
   Grado,
   Nivel,
-  Disponibilidad
+  Disponibilidad,
+  Afiliacion_tipo,
+  Afiliacion
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -144,6 +146,15 @@ Infraestructura.belongsToMany(Colegio, {
   timestamps: false,
 });
 
+Colegio.belongsToMany(Afiliacion, {
+  through: 'Colegio_Afiliacion',
+  timestamps: false,
+});
+Afiliacion.belongsToMany(Colegio, {
+  through: 'Colegio_Afiliacion',
+  timestamps: false,
+});
+
 //------RELACIONES ADMINISTRATIVAS------
 
 Plan_Pago.hasMany(Colegio, {
@@ -177,6 +188,13 @@ Grado.hasMany(Vacante, {
 });
 Vacante.belongsTo(Grado, {
   foreignKey: 'GradoId',
+});
+
+Afiliacion_tipo.hasMany(Afiliacion, {
+  foreignKey: 'Afiliacion_tipo_Id',
+});
+Afiliacion.belongsTo(Afiliacion_tipo, {
+  foreignKey: 'Afiliacion_tipo_Id',
 });
 
 Infraestructura_tipo.hasMany(Infraestructura);
