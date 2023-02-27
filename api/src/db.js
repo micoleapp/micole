@@ -146,6 +146,15 @@ Infraestructura.belongsToMany(Colegio, {
   timestamps: false,
 });
 
+Colegio.belongsToMany(Nivel, {
+  through: 'Colegio_Nivel',
+  timestamps: false,
+});
+Nivel.belongsToMany(Colegio, {
+  through: 'Colegio_Nivel',
+  timestamps: false,
+});
+
 Colegio.belongsToMany(Afiliacion, {
   through: 'Colegio_Afiliacion',
   timestamps: false,

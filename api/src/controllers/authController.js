@@ -94,42 +94,37 @@ const signIn = async (req, res, next) => {
   }
 };
 
-const getAuthById = async (req, res, next) => {
-  const { id } = req.params;
+const editAuthById = async (req, res, next) => {
+  const { email, password, telefono } = req.body;
+  const tokenUser = req.user;
+  if (!tokenUser) {
+    return next(401);
+  }
   try {
-    const authInstance = await Auth.findByPk(id);
+    const authInstance = await Auth.findByPk(tokenUser.id);
     if (!authInstance) {
       return next({
         statusCode: 400,
         message: 'El usuario no existe en la BD',
       });
     }
-    const promises = [
-      User.findOne({ where: { idAuth: authInstance.id } }),
-      Colegio.findOne({ where: { idAuth: authInstance.id } }),
-    ];
-    const [dataUser, dataColegio] = await Promise.all(promises);
-    const user = dataColegio
-      ? {
-          id: authInstance.id,
-          email: authInstance.email,
-          nombre_responsable: dataColegio.nombre_responsable,
-          apellidos_responsable: dataColegio.apellidos_responsable,
-          ruc: dataColegio.ruc,
-          telefono: dataColegio.telefono,
-          rol: authInstance.rol,
-        }
-      : {
-          id: authInstance.id,
-          email: authInstance.email,
-          nombre: dataUser.nombre,
-          apellidos: dataUser.apellidos,
-          dni: dataUser.dni,
-          telefono: dataUser.telefono,
-          rol: authInstance.rol,
-        };
-
-    return res.status(200).send({ user });
+    if (authInstance.rol === 'Colegio') {
+      if (telefono) {
+        const user = await Colegio.findOne({
+          where: { AuthId: authInstance.id },
+        });
+        user.telefono = telefono;
+        await user.save();
+      }
+      if (email) {
+        authInstance.email = email;
+      }
+      if (password) {
+        authInstance.password = password;
+      }
+      await authInstance.save();
+    }
+    return res.status(200).send(authInstance);
   } catch (error) {
     return next(error);
   }
@@ -221,9 +216,53 @@ const signUp = async (req, res, next) => {
   }
 };
 
+const putAuth = async (req, res, next) => {
+  const { id } = req.params;
+  const { email, password, newEmail, telefono, newPassword } = req.body;
+  try {
+    const authInstance = await Auth.findOne({ where: { email } });
+    if (!authInstance) {
+      return next({
+        statusCode: 404,
+        message: 'El usuario ingresado no existe',
+      });
+    }
+    const validatePassword = await authInstance.comparePassword(password);
+    if (!validatePassword) {
+      return res
+        .status(403)
+        .send({ error: 'La contraseña ingresada no es correcta' });
+    }
+    if (newEmail) {
+      authInstance.email = newEmail;
+    }
+    if (newPassword) {
+      authInstance.password = newPassword;
+    }
+    await authInstance.save();
+
+    const coleUpdate = await Colegio.update(
+      {
+        telefono,
+      },
+      { where: { id } }
+    );
+    const sanitizedAuth = {
+      email: authInstance.email,
+      rol: authInstance.rol,
+      telefono: coleUpdate.telefono,
+      nombre: coleUpdate.nombre_colegio
+    };
+    return res.status(200).send(sanitizedAuth);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   signIn,
   signUp,
-  getAuthById,
+  editAuthById,
   getAuth,
+  putAuth,
 };

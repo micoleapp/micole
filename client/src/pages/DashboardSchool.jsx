@@ -1,6 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
+import { useForm } from "react-hook-form";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Button from "@mui/material/Button";
@@ -12,6 +13,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { BsEye } from "react-icons/bs";
+import { BsEyeSlash } from "react-icons/bs";
 import { Squash as Hamburger } from "hamburger-react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -20,7 +23,6 @@ import Logo from "../assets/logoPayment.png";
 import Confetti from "react-confetti";
 import DragAndDrop from "../components/DragAndDrop";
 import GridVacantes from "../components/GridVacantes";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
   GoogleMap,
@@ -28,34 +30,15 @@ import {
   MarkerF,
   Autocomplete,
 } from "@react-google-maps/api";
-import {
-  Administrativa,
-  Artistica,
-  Deportiva,
-  Enseñanza,
-  Laboratorios,
-} from "../MockupInfo/Infraestructura";
-import {
-  Acreditaciones,
-  Alianzas,
-  Asociaciones,
-  Certificaciones,
-} from "../MockupInfo/Afiliaciones";
-import { levels } from "../MockupInfo/Niveles";
 import { steps } from "../MockupInfo/Pasos";
 
 import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
 import { RiImageAddLine } from "react-icons/ri";
+import { GiHexagonalNut } from "react-icons/gi";
 import { useEffect } from "react";
-import {
-  getAllCategories,
-  getAllDepartaments,
-  getAllDistrits,
-  getAllProvincias
-} from "../redux/SchoolsActions";
-import { logout , getSchoolDetail} from "../redux/AuthActions";
+import { logout, getSchoolDetail } from "../redux/AuthActions";
 import { useState } from "react";
 import { useRef } from "react";
 import axios from "axios";
@@ -73,28 +56,45 @@ const containerStyle = {
   height: "400px",
 };
 
-function StandardImageList({ list, setImage, eliminarImagenDePreview }) {
-  return (
-    <ImageList sx={{ width: "100%", height: 450 }} cols={3} rowHeight={400}>
-      {list.map((item) => (
-        <ImageListItem key={item}>
-          <button
-            onClick={() => eliminarImagenDePreview(item)}
-            className="absolute bg-[#0061dd]/30 right-2 top-2 text-white hover:bg-[#0061dd] p-2 rounded-md duration-300"
-          >
-            Quitar
-          </button>
-          <img
-            src={item}
-            alt={item}
-            loading="lazy"
-            onClick={() => setImage(item)}
-            className="cursor-pointer"
-          />
-        </ImageListItem>
-      ))}
-    </ImageList>
-  );
+function StandardImageList({ one, list, setImage, eliminarImagenDePreview }) {
+  {
+    return one ? (
+      <div className="flex justify-center items-center relative">
+        <button
+          onClick={() => eliminarImagenDePreview(list)}
+          className="absolute bg-[#0061dd]/30 right-2 top-2 text-white hover:bg-[#0061dd] p-2 rounded-md duration-300"
+        >
+          Quitar
+        </button>
+        <img
+          src={list}
+          alt={list}
+          onClick={() => setImage(list)}
+          className="cursor-pointer object-cover w-[370px] h-[400px] "
+        />
+      </div>
+    ) : (
+      <ImageList sx={{ width: "100%", height: 400 }} cols={2} rowHeight={400}>
+        {list.map((item) => (
+          <ImageListItem key={item}>
+            <button
+              onClick={() => eliminarImagenDePreview(item)}
+              className="absolute bg-[#0061dd]/30 right-2 top-2 text-white hover:bg-[#0061dd] p-2 rounded-md duration-300"
+            >
+              Quitar
+            </button>
+            <img
+              src={item}
+              alt={item}
+              loading="lazy"
+              onClick={() => setImage(item)}
+              className="cursor-pointer min-h-[200px] "
+            />
+          </ImageListItem>
+        ))}
+      </ImageList>
+    );
+  }
 }
 
 function DashboardSchool() {
@@ -103,22 +103,69 @@ function DashboardSchool() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [allData, setAllData] = useState({});
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { categories, provincias, distrits, departaments  } = useSelector(
-    (state) => state.schools
-  );
-  const { user , oneSchool } = useSelector((state) => state.auth);
+  const [InputVacante, setInputVacante] = useState(0);
 
+  const dispatch = useDispatch();
+  const {
+    categories,
+    provincias,
+    distrits,
+    departaments,
+    niveles,
+    infraestructura: infraState,
+    afiliaciones,
+  } = useSelector((state) => state.schools);
+  const { user, oneSchool } = useSelector((state) => state.auth);
+  const id = user.id
   useEffect(() => {
-    if(user){
-      dispatch(getSchoolDetail(user.id))
+    if (user) {
+      dispatch(getSchoolDetail(user.id));
     }
-  }, [allData])
+  }, [allData]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: user.email ? user.email : "",
+      telefono: user.telefono ? user.telefono : "",
+      newEmail: "",
+      password : "",
+      newPassword: "",
+      repitPassword: ""
+    },
+    mode: "onChange",
+  });
+  const OnSubmit = async (user) => {
+   if(user.newPassword !== user.repitPassword){
+      Swal.fire("Error", "Las nuevas contraseñas no coinciden", "error");
+      return;
+   }
+   const data = {
+      email: user.email,
+      newEmail: user.newEmail,
+      telefono: user.telefono,
+      password: user.password,
+      newPassword: user.newPassword,
+   }
+   try {
+    axios.put(`/auth/${id}`, data)
+    .then(res=>{
+      Swal.fire("Exito", "Datos actualizados", "success");
+    })
+   } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Algo salio mal",
+      text: "No se pudo actualizar los datos",
+    });
+   }
+  }
 
   const totalSteps = () => {
     return steps.length;
-};
+  };
 
   const completedSteps = () => {
     return Object.keys(completed).length;
@@ -150,8 +197,6 @@ function DashboardSchool() {
     setActiveStep(step);
   };
 
-
-
   const handleCompleteDatosPrincipales = () => {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
@@ -171,7 +216,7 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    setAllData({ ...allData, infraestructura });
+    setAllData({ ...allData, ...datosPrincipales });
     handleNext();
   };
 
@@ -179,7 +224,7 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    setAllData({ ...allData, acreditaciones });
+    setAllData({ ...allData, ...datosPrincipales });
     handleNext();
   };
 
@@ -194,29 +239,9 @@ function DashboardSchool() {
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
-    setDatosPrincipales(initialDatosPrincipales);
-    setInfraestructura(initialInfraestructura);
-    setAcreditaciones(initialAcreditaciones);
-    setPreview([])
-    setMultimedia(initialMultimedia);
   };
-
-  const [provincia, setProvincia] = useState([]);
-
-  const handleChangeProvincia = (event) => {
-    setProvincia(event.target.value);
-  };
-
-  const [distrito, setDistrito] = useState([]);
-
-  const handleChangeDistrito = (event) => {
-    setDistrito(event.target.value);
-  };
-
-  const [departamento, setDepartamento] = useState([]);
-
-  const handleChangeDepartamento = (event) => {
-    setDepartamento(event.target.value);
+  const handlerVacanteInput = (e) => {
+    setInputVacante(e.target.value);
   };
 
   let libRef = React.useRef(libraries);
@@ -252,18 +277,12 @@ function DashboardSchool() {
     setAutocomplete(autocomplete);
   };
 
-  const [direc, setDirec] = useState(null);
   const [latitud, setLatitud] = useState(null);
   const [longitud, setLongitud] = useState(null);
 
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
       const place = autocomplete.getPlace();
-      setDirec(
-        place.address_components[1].long_name +
-          " " +
-          place.address_components[0].long_name
-      );
       setLatitud(place.geometry.location.lat());
       setLongitud(place.geometry.location.lng());
       setCenter({
@@ -290,19 +309,31 @@ function DashboardSchool() {
     propuesta: oneSchool.propuesta_valor ? oneSchool.propuesta_valor : "",
     categoria: oneSchool.Categoria ? oneSchool.Categoria : "",
     nombreDirector: oneSchool.nombre_director ? oneSchool.nombre_director : "",
-    fundacion: oneSchool.fecha_fundacion ? Number(oneSchool.fecha_fundacion) : null,
+    fundacion: oneSchool.fecha_fundacion
+      ? Number(oneSchool.fecha_fundacion)
+      : null,
     ruc: oneSchool.ruc ? Number(oneSchool.ruc) : null,
     ugel: oneSchool.ugel ? Number(oneSchool.ugel) : null,
     area: oneSchool.area ? Number(oneSchool.area) : null,
-    ingles: oneSchool.horas_idioma_extranjero ? Number(oneSchool.horas_idioma_extranjero) : null,
-    alumnos: oneSchool.numero_estudiantes ? Number(oneSchool.numero_estudiantes) : null,
-    niveles: oneSchool.niveles ? oneSchool.niveles : [],
+    ingles: oneSchool.horas_idioma_extranjero
+      ? Number(oneSchool.horas_idioma_extranjero)
+      : null,
+    alumnos: oneSchool.numero_estudiantes
+      ? Number(oneSchool.numero_estudiantes)
+      : null,
+    niveles: oneSchool.Nivels.length > 0 ? oneSchool.Nivels : [],
     departamento: oneSchool.Departamento ? oneSchool.Departamento : {},
     provincia: oneSchool.Provincium ? oneSchool.Provincium : {},
     distrito: oneSchool.Distrito ? oneSchool.Distrito : {},
     direccion: oneSchool.direccion ? oneSchool.direccion : "",
-    lat: oneSchool.lat ? oneSchool.lat : 0,
-    lng: oneSchool.lng ? oneSchool.lng : 0,
+    lat:
+      oneSchool.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lat : 0,
+    lng:
+      oneSchool.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lng : 0,
+    infraestructura: oneSchool.Infraestructuras
+      ? oneSchool.Infraestructuras
+      : [],
+    afiliaciones: oneSchool.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
   };
 
   const [datosPrincipales, setDatosPrincipales] = useState(
@@ -336,48 +367,16 @@ function DashboardSchool() {
     }
   };
 
-  const initialInfraestructura = {
-    laboratorio: [],
-    artistica: [],
-    deportiva: [],
-    administrativa: [],
-    enseñanza: [],
-  };
-
-  const [infraestructura, setInfraestructura] = useState(
-    initialInfraestructura
-  );
-
   const infraestructuraCompleted = () => {
-    if (
-      infraestructura.laboratorio.length > 0 &&
-      infraestructura.artistica.length > 0 &&
-      infraestructura.deportiva.length > 0 &&
-      infraestructura.administrativa.length > 0 &&
-      infraestructura.enseñanza.length > 0
-    ) {
+    if (datosPrincipales.infraestructura.length !== 0) {
       return false;
     } else {
       return true;
     }
   };
 
-  const initialAcreditaciones = {
-    afiliaciones: [],
-    alianzas: [],
-    certificaciones: [],
-    asociaciones: [],
-  };
-
-  const [acreditaciones, setAcreditaciones] = useState(initialAcreditaciones);
-
   const acreditacionesCompleted = () => {
-    if (
-      acreditaciones.afiliaciones.length > 0 &&
-      acreditaciones.alianzas.length > 0 &&
-      acreditaciones.certificaciones.length > 0 &&
-      acreditaciones.asociaciones.length > 0
-    ) {
+    if (datosPrincipales.afiliaciones.length !== 0) {
       return false;
     } else {
       return true;
@@ -386,9 +385,36 @@ function DashboardSchool() {
 
   const [isOpen, setOpen] = useState(false);
 
-  const windowSize = useRef(window.innerWidth);
+  const [file, setFile] = useState(null);
 
   const [files, setFiles] = useState(null);
+
+  const handleFilesSubmitOne = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    try {
+      formData.append("file", previewOne);
+      formData.append("upload_preset", "tcotxf16");
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/de4i6biay/image/upload",
+        formData
+      );
+      setMultimedia({ ...multimedia, image: res.data.secure_url });
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: "Intenta nuevamente",
+      });
+    }
+    Swal.fire({
+      icon: "success",
+      title: "Imagen subida correctamente",
+    });
+    setSpanOne(false);
+    setActiveUpOne(false);
+  };
 
   function handleFilesSubmit(e) {
     e.preventDefault();
@@ -409,23 +435,42 @@ function DashboardSchool() {
         });
       } catch (error) {
         console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Algo salio mal",
+          text: "Intenta nuevamente",
+        });
       }
     });
     Swal.fire({
       icon: "success",
       title: "Imagenes subidas correctamente",
-
     });
+    setSpanTwo(false);
+    setActiveUpTwo(false);
   }
 
   const initialMultimedia = {
-    images: [],
-    video_url: "",
-  }
+    image: oneSchool.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "",
+    images:
+      oneSchool.galeria_fotos?.length > 0
+        ? JSON.parse(oneSchool.galeria_fotos)
+        : [],
+    video_url: oneSchool.video_url?.length > 0 ? oneSchool.video_url : "",
+  };
 
   const [multimedia, setMultimedia] = useState(initialMultimedia);
 
-  const [preview, setPreview] = useState([]);
+  const initialPreviewOne =
+    oneSchool.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "";
+  const initialPreview =
+    oneSchool.galeria_fotos?.length > 0
+      ? JSON.parse(oneSchool.galeria_fotos)
+      : [];
+  const [preview, setPreview] = useState(initialPreview);
+  const [previewOne, setPreviewOne] = useState(initialPreviewOne);
+
+  console.log(allData);
 
   useEffect(() => {
     if (files !== null) {
@@ -439,42 +484,61 @@ function DashboardSchool() {
     }
   }, [files]);
 
+  useEffect(() => {
+    if (file !== null) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setPreviewOne(reader.result);
+      };
+    }
+  }, [file]);
+
   const eliminarImagenDePreview = (img) => {
     setPreview(preview.filter((image) => image !== img));
+  };
+  const eliminarImagenDePreviewOne = (img) => {
+    setPreviewOne("");
   };
 
   const [image, setImage] = useState(null);
 
   const multimediaCompleted = () => {
-    if (multimedia.images.length !== 0 && multimedia.video_url !== "") {
+    if (multimedia.image !== "" && multimedia.images.length !== 0) {
       return false;
     } else {
       return true;
     }
   };
 
-
   const handleSubmitFormComplete = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:3001/colegios/${user.id}`,allData )
-    .then(res=>{
-      Swal.fire({
-        icon: "success",
-        title: "Felicidades ya estas a un paso de publicar tu colegio",
-        text: "Continua completando el horario para tus citas",
+
+    axios
+      .put(`http://localhost:3001/colegios/${user.id}`, allData)
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Felicidades ya estas a un paso de publicar tu colegio",
+          text: "Continua completando el horario para tus citas",
+          confirmButtonText: "Continuar",
+        }).then((res) => {
+          if (res.isConfirmed) {
+            handleReset();
+            setPage(1);
+          }
+        });
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        Swal.fire({
+          icon: "error",
+          title: "Lo sentimos algo salio mal",
+          text: err.message,
+        });
       });
-      setPage(1);
-    })
-    .catch(err=>{
-      console.log(err.response.data.message)
-      Swal.fire({
-        icon: "error",
-        title: "Lo sentimos algo salio mal",
-        text: err.message,
-      });
-    })
   };
-  
+
   const [vacantes, setVacantes] = useState(0);
 
   const initialDaysWithTime = [
@@ -486,7 +550,6 @@ function DashboardSchool() {
         dayjs("2014-08-18T08:00:00"),
         dayjs("2014-08-18T17:00:00"),
         true,
-        
       ],
     },
     {
@@ -510,7 +573,7 @@ function DashboardSchool() {
         true,
       ],
     },
-  ]
+  ];
 
   const [daysWithTime, setDaysWithTime] = React.useState(initialDaysWithTime);
 
@@ -522,19 +585,33 @@ function DashboardSchool() {
     }
   };
 
+  // { Lunes: ["08:30", "13:00", true] },
+  // {
+  //   dia: "Lunes",
+  //   horarios: { desde: "08:30", hasta: "13:00" },
+  //   disponibilidad: false,
+  //   vacantesDispo:2,
+  //   vacantes: "20",
+  // },
   const handleSubmitCitas = (e) => {
     e.preventDefault();
-    const newDays = daysWithTime.map((day) => ({
-      [Object.keys(day)[0]]: [
-        stringyDate(day[Object.keys(day)][0]["$H"])
+
+    const newDaysWithTime = daysWithTime.filter((days) => {
+      return days[Object.keys(days)[0]][2] === true;
+    });
+    const newDays = newDaysWithTime.map((day) => ({
+      dia: Object.keys(day)[0],
+      vacantesDispo: InputVacante,
+      horarios: {
+        desde: stringyDate(day[Object.keys(day)][0]["$H"])
           .toString()
           .concat(":")
           .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
-        stringyDate(day[Object.keys(day)][1]["$H"])
+        hasta: stringyDate(day[Object.keys(day)][1]["$H"])
           .toString()
           .concat(":")
-          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),day[Object.keys(day)][2]
-      ],
+          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
+      },
     }));
     Swal.fire({
       icon: "success",
@@ -544,10 +621,13 @@ function DashboardSchool() {
     console.log(newDays);
   };
 
-
-
-
-  console.log(allData)
+  const [spanOne, setSpanOne] = useState(false);
+  const [spanTwo, setSpanTwo] = useState(false);
+  const [activeUpOne, setActiveUpOne] = useState(true);
+  const [activeUpTwo, setActiveUpTwo] = useState(true);
+ 
+  const [seePassword,setSeePassword] = useState(false)
+  const [seeNewPassword,setSeeNewPassword] = useState(false)
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -601,6 +681,15 @@ function DashboardSchool() {
             <BsWindowDock className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
             <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
               Mi plan
+            </span>
+          </button>
+          <button
+            className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
+            onClick={() => setPage(3)}
+          >
+            <GiHexagonalNut className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
+            <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
+              Configuración
             </span>
           </button>
           <button
@@ -660,10 +749,6 @@ function DashboardSchool() {
                     >
                       Enviar datos
                     </button>
-                    <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                      <Box sx={{ flex: "1 1 auto" }} />
-                      <Button onClick={handleReset}>Reset</Button>
-                    </Box>
                   </div>
                 </React.Fragment>
               ) : (
@@ -749,18 +834,19 @@ function DashboardSchool() {
                         <div className="flex flex-col lg:grid grid-cols-3">
                           {categories?.map((category) => (
                             <FormControlLabel
+                              key={category.id}
                               control={
                                 <Checkbox
-                                  checked={datosPrincipales.categoria.includes(
-                                    category.nombre_categoria
-                                  )}
+                                  checked={datosPrincipales.categoria
+                                    .map((e) => e.id)
+                                    .includes(category.id)}
                                   onChange={(event, target) => {
                                     if (target) {
                                       setDatosPrincipales({
                                         ...datosPrincipales,
                                         categoria: [
                                           ...datosPrincipales.categoria,
-                                          category.nombre_categoria,
+                                          category,
                                         ],
                                       });
                                     } else {
@@ -768,8 +854,7 @@ function DashboardSchool() {
                                         ...datosPrincipales,
                                         categoria:
                                           datosPrincipales.categoria.filter(
-                                            (cat) =>
-                                              cat !== category.nombre_categoria
+                                            (cat) => cat.id !== category.id
                                           ),
                                       });
                                     }
@@ -951,17 +1036,20 @@ function DashboardSchool() {
                           <small>Puede marcar mas de una opción</small>
                         </div>
                         <div className="flex flex-col lg:grid grid-cols-3">
-                          {levels?.map((level) => (
+                          {niveles?.map((level) => (
                             <FormControlLabel
                               control={
                                 <Checkbox
+                                  checked={datosPrincipales.niveles.some(
+                                    (niv) => niv.id === level.id
+                                  )}
                                   onChange={(event, target) => {
                                     if (target) {
                                       setDatosPrincipales({
                                         ...datosPrincipales,
                                         niveles: [
                                           ...datosPrincipales.niveles,
-                                          level.nombre,
+                                          level,
                                         ],
                                       });
                                     } else {
@@ -969,14 +1057,14 @@ function DashboardSchool() {
                                         ...datosPrincipales,
                                         niveles:
                                           datosPrincipales.niveles.filter(
-                                            (cat) => cat !== level.nombre
+                                            (cat) => cat.id !== level.id
                                           ),
                                       });
                                     }
                                   }}
                                 />
                               }
-                              label={level.nombre}
+                              label={level.nombre_nivel}
                             />
                           ))}
                         </div>
@@ -995,9 +1083,8 @@ function DashboardSchool() {
                               <Select
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-type-select-standard"
-                                value={departamento}
+                                value={datosPrincipales.departamento}
                                 onChange={(e) => {
-                                  setDepartamento(e.target.value);
                                   setDatosPrincipales({
                                     ...datosPrincipales,
                                     departamento: e.target.value,
@@ -1005,15 +1092,28 @@ function DashboardSchool() {
                                 }}
                                 label="Selecciona una Provincia"
                                 className="bg-white"
-                                defaultValue={""}
+                                defaultValue={datosPrincipales.departamento}
                               >
-                                {departaments.map((type, index) => (
-                                  <MenuItem value={type} key={type.index}>
-                                    <ListItemText
-                                      primary={type.nombre_departamento}
-                                    />
-                                  </MenuItem>
-                                ))}
+                                <MenuItem value={datosPrincipales.departamento}>
+                                  {
+                                    datosPrincipales.departamento
+                                      .nombre_departamento
+                                  }
+                                </MenuItem>
+                                {departaments
+                                  .filter(
+                                    (dep) =>
+                                      dep.nombre_departamento !==
+                                      datosPrincipales.departamento
+                                        .nombre_departamento
+                                  )
+                                  .map((type, index) => (
+                                    <MenuItem value={type} key={type.index}>
+                                      <ListItemText
+                                        primary={type.nombre_departamento}
+                                      />
+                                    </MenuItem>
+                                  ))}
                               </Select>
                             </FormControl>
                           </div>
@@ -1029,9 +1129,8 @@ function DashboardSchool() {
                               <Select
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-type-select-standard"
-                                value={provincia}
+                                value={datosPrincipales.provincia}
                                 onChange={(e) => {
-                                  setProvincia(e.target.value);
                                   setDatosPrincipales({
                                     ...datosPrincipales,
                                     provincia: e.target.value,
@@ -1039,15 +1138,25 @@ function DashboardSchool() {
                                 }}
                                 label="Selecciona una Provincia"
                                 className="bg-white"
-                                defaultValue={""}
+                                defaultValue={datosPrincipales.provincia}
                               >
-                                {provincias.map((type, index) => (
-                                  <MenuItem value={type} key={type.index}>
-                                    <ListItemText
-                                      primary={type.nombre_provincia}
-                                    />
-                                  </MenuItem>
-                                ))}
+                                <MenuItem value={datosPrincipales.provincia}>
+                                  {datosPrincipales.provincia.nombre_provincia}
+                                </MenuItem>
+                                {provincias
+                                  .filter(
+                                    (prov) =>
+                                      prov.nombre_provincia !==
+                                      datosPrincipales.provincia
+                                        .nombre_provincia
+                                  )
+                                  .map((type, index) => (
+                                    <MenuItem value={type} key={type.index}>
+                                      <ListItemText
+                                        primary={type.nombre_provincia}
+                                      />
+                                    </MenuItem>
+                                  ))}
                               </Select>
                             </FormControl>
                           </div>
@@ -1074,14 +1183,22 @@ function DashboardSchool() {
                                 className="bg-white"
                                 defaultValue={datosPrincipales.distrito}
                               >
-                                <MenuItem value={datosPrincipales.distrito}>{datosPrincipales.distrito.nombre_distrito}</MenuItem>
-                                {distrits.filter(distrit=>distrit.nombre_distrito !== datosPrincipales.distrito.nombre_distrito).map((type, index) => (
-                                  <MenuItem value={type} key={type.index}>
-                                    <ListItemText
-                                      primary={type.nombre_distrito}
-                                    />
-                                  </MenuItem>
-                                ))}
+                                <MenuItem value={datosPrincipales.distrito}>
+                                  {datosPrincipales.distrito.nombre_distrito}
+                                </MenuItem>
+                                {distrits
+                                  .filter(
+                                    (distrit) =>
+                                      distrit.nombre_distrito !==
+                                      datosPrincipales.distrito.nombre_distrito
+                                  )
+                                  .map((type, index) => (
+                                    <MenuItem value={type} key={type.index}>
+                                      <ListItemText
+                                        primary={type.nombre_distrito}
+                                      />
+                                    </MenuItem>
+                                  ))}
                               </Select>
                             </FormControl>
                           </div>
@@ -1113,10 +1230,12 @@ function DashboardSchool() {
                                   name="direccion"
                                   id="direccion"
                                   className={`p-3 rounded-md border-2 ${
-                                    direc === null ? "bg-inherit" : "bg-white"
+                                    datosPrincipales.direccion === null
+                                      ? "bg-inherit"
+                                      : "bg-white"
                                   }  outline-none w-full`}
                                   placeholder="Dirección"
-                                  value={direc}
+                                  value={datosPrincipales.direccion}
                                   disabled
                                   onChange={(e) => {
                                     setDatosPrincipales({
@@ -1219,55 +1338,58 @@ function DashboardSchool() {
                   {activeStep === 1 && (
                     <div className="flex flex-col gap-5">
                       <h1 className="text-2xl">
-                        Almenos una casilla de cada categoria debe ser
-                        seleccionada
+                        Almenos una casilla debe ser seleccionada
                       </h1>
+                      <small>Puede marcar mas de una opción</small>
                       <div className="flex flex-col lg:flex-row gap-5">
-                        <div>
+                        <div className="grid lg:grid-cols-5 grid-cols-2">
                           <div className="flex flex-col">
                             <label
                               htmlFor="categoria"
                               className="text-lg font-medium"
                             >
-                              Laboratorio
+                              Administrativo
                             </label>
-                            <small>Puede marcar mas de una opción</small>
-                          </div>
-                          <div className="flex flex-col">
-                            {Laboratorios?.map((lab) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={infraestructura.laboratorio.includes(
-                                      lab
-                                    )}
-                                    onChange={(event, target) => {
-                                      if (target) {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          laboratorio: [
-                                            ...infraestructura.laboratorio,
-                                            lab,
-                                          ],
-                                        });
-                                      } else {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          laboratorio:
-                                            infraestructura.laboratorio.filter(
-                                              (cat) => cat !== lab
-                                            ),
-                                        });
+
+                            {infraState
+                              .filter((inf) => inf.InfraestructuraTipoId === 1)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.infraestructura.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura: [
+                                                  ...datosPrincipales.infraestructura,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura:
+                                                  datosPrincipales.infraestructura.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
                                       }
-                                    }}
-                                  />
-                                }
-                                label={lab}
-                              />
-                            ))}
+                                      label={infra.nombre_infraestructura}
+                                    />
+                                  </div>
+                                </>
+                              ))}
                           </div>
-                        </div>
-                        <div>
+
                           <div className="flex flex-col">
                             <label
                               htmlFor="categoria"
@@ -1275,43 +1397,46 @@ function DashboardSchool() {
                             >
                               Artistica
                             </label>
-                            <small>Puede marcar mas de una opción</small>
-                          </div>
-                          <div className="flex flex-col">
-                            {Artistica?.map((art) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={infraestructura.artistica.includes(
-                                      art
-                                    )}
-                                    onChange={(event, target) => {
-                                      if (target) {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          artistica: [
-                                            ...infraestructura.artistica,
-                                            art,
-                                          ],
-                                        });
-                                      } else {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          artistica:
-                                            infraestructura.artistica.filter(
-                                              (cat) => cat !== art
-                                            ),
-                                        });
+
+                            {infraState
+                              .filter((inf) => inf.InfraestructuraTipoId === 2)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.infraestructura.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura: [
+                                                  ...datosPrincipales.infraestructura,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura:
+                                                  datosPrincipales.infraestructura.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
                                       }
-                                    }}
-                                  />
-                                }
-                                label={art}
-                              />
-                            ))}
+                                      label={infra.nombre_infraestructura}
+                                    />
+                                  </div>
+                                </>
+                              ))}
                           </div>
-                        </div>
-                        <div>
+
                           <div className="flex flex-col">
                             <label
                               htmlFor="categoria"
@@ -1319,87 +1444,46 @@ function DashboardSchool() {
                             >
                               Deportiva
                             </label>
-                            <small>Puede marcar mas de una opción</small>
-                          </div>
-                          <div className="flex flex-col">
-                            {Deportiva?.map((dep) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={infraestructura.deportiva.includes(
-                                      dep
-                                    )}
-                                    onChange={(event, target) => {
-                                      if (target) {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          deportiva: [
-                                            ...infraestructura.deportiva,
-                                            dep,
-                                          ],
-                                        });
-                                      } else {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          deportiva:
-                                            infraestructura.deportiva.filter(
-                                              (cat) => cat !== dep
-                                            ),
-                                        });
+
+                            {infraState
+                              .filter((inf) => inf.InfraestructuraTipoId === 3)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.infraestructura.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura: [
+                                                  ...datosPrincipales.infraestructura,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura:
+                                                  datosPrincipales.infraestructura.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
                                       }
-                                    }}
-                                  />
-                                }
-                                label={dep}
-                              />
-                            ))}
+                                      label={infra.nombre_infraestructura}
+                                    />
+                                  </div>
+                                </>
+                              ))}
                           </div>
-                        </div>
-                        <div>
-                          <div className="flex flex-col">
-                            <label
-                              htmlFor="categoria"
-                              className="text-lg font-medium"
-                            >
-                              Administrativa
-                            </label>
-                            <small>Puede marcar mas de una opción</small>
-                          </div>
-                          <div className="flex flex-col">
-                            {Administrativa?.map((adm) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={infraestructura.administrativa.includes(
-                                      adm
-                                    )}
-                                    onChange={(event, target) => {
-                                      if (target) {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          administrativa: [
-                                            ...infraestructura.administrativa,
-                                            adm,
-                                          ],
-                                        });
-                                      } else {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          administrativa:
-                                            infraestructura.administrativa.filter(
-                                              (cat) => cat !== adm
-                                            ),
-                                        });
-                                      }
-                                    }}
-                                  />
-                                }
-                                label={adm}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                        <div>
+
                           <div className="flex flex-col">
                             <label
                               htmlFor="categoria"
@@ -1407,40 +1491,91 @@ function DashboardSchool() {
                             >
                               Enseñanza
                             </label>
-                            <small>Puede marcar mas de una opción</small>
-                          </div>
-                          <div className="flex flex-col">
-                            {Enseñanza?.map((ens) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={infraestructura.enseñanza.includes(
-                                      ens
-                                    )}
-                                    onChange={(event, target) => {
-                                      if (target) {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          enseñanza: [
-                                            ...infraestructura.enseñanza,
-                                            ens,
-                                          ],
-                                        });
-                                      } else {
-                                        setInfraestructura({
-                                          ...infraestructura,
-                                          enseñanza:
-                                            infraestructura.enseñanza.filter(
-                                              (cat) => cat !== ens
-                                            ),
-                                        });
+
+                            {infraState
+                              .filter((inf) => inf.InfraestructuraTipoId === 4)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.infraestructura.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura: [
+                                                  ...datosPrincipales.infraestructura,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura:
+                                                  datosPrincipales.infraestructura.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
                                       }
-                                    }}
-                                  />
-                                }
-                                label={ens}
-                              />
-                            ))}
+                                      label={infra.nombre_infraestructura}
+                                    />
+                                  </div>
+                                </>
+                              ))}
+                          </div>
+
+                          <div className="flex flex-col">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Laboratorio
+                            </label>
+
+                            {infraState
+                              .filter((inf) => inf.InfraestructuraTipoId === 5)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.infraestructura.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura: [
+                                                  ...datosPrincipales.infraestructura,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura:
+                                                  datosPrincipales.infraestructura.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_infraestructura}
+                                    />
+                                  </div>
+                                </>
+                              ))}
                           </div>
                         </div>
                       </div>
@@ -1484,187 +1619,197 @@ function DashboardSchool() {
                   {activeStep === 2 && (
                     <div className="flex flex-col gap-5">
                       <h1 className="text-2xl">
-                        Almenos una casilla de cada categoria debe ser
-                        seleccionada
+                        Almenos una casilla debe ser seleccionada
                       </h1>
+                      <small>Puede marcar mas de una opción</small>
                       <div className="flex flex-col lg:flex-row gap-5">
-                        <div className="flex flex-col gap-7">
-                          <div>
-                            <div className="flex flex-col">
-                              <label
-                                htmlFor="categoria"
-                                className="text-lg font-medium"
-                              >
-                                Afiliaciones
-                              </label>
-                              <small>Puede marcar mas de una opción</small>
-                            </div>
-                            <div className="flex flex-col">
-                              {Acreditaciones?.map((acc) => (
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                      checked={acreditaciones.afiliaciones.includes(
-                                        acc
-                                      )}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setAcreditaciones({
-                                            ...acreditaciones,
-                                            afiliaciones: [
-                                              ...acreditaciones.afiliaciones,
-                                              acc,
-                                            ],
-                                          });
-                                        } else {
-                                          setAcreditaciones({
-                                            ...acreditaciones,
-                                            afiliaciones:
-                                              acreditaciones.afiliaciones.filter(
-                                                (cat) => cat !== acc
-                                              ),
-                                          });
-                                        }
-                                      }}
-                                    />
-                                  }
-                                  label={acc}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="flex flex-col">
-                              <label
-                                htmlFor="categoria"
-                                className="text-lg font-medium"
-                              >
-                                Alianzas
-                              </label>
-                              <small>Puede marcar mas de una opción</small>
-                            </div>
-                            <div className="flex flex-col">
-                              {Alianzas?.map((all) => (
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                      checked={acreditaciones.alianzas.includes(
-                                        all
-                                      )}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setAcreditaciones({
-                                            ...acreditaciones,
-                                            alianzas: [
-                                              ...acreditaciones.alianzas,
-                                              all,
-                                            ],
-                                          });
-                                        } else {
-                                          setAcreditaciones({
-                                            ...acreditaciones,
-                                            alianzas:
-                                              acreditaciones.alianzas.filter(
-                                                (cat) => cat !== all
-                                              ),
-                                          });
-                                        }
-                                      }}
-                                    />
-                                  }
-                                  label={all}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="flex flex-col">
-                              <label
-                                htmlFor="categoria"
-                                className="text-lg font-medium"
-                              >
-                                Certificaciones
-                              </label>
-                              <small>Puede marcar mas de una opción</small>
-                            </div>
-                            <div className="flex flex-col">
-                              {Certificaciones?.map((cert) => (
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                      checked={acreditaciones.certificaciones.includes(
-                                        cert
-                                      )}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setAcreditaciones({
-                                            ...acreditaciones,
-                                            certificaciones: [
-                                              ...acreditaciones.certificaciones,
-                                              cert,
-                                            ],
-                                          });
-                                        } else {
-                                          setAcreditaciones({
-                                            ...acreditaciones,
-                                            certificaciones:
-                                              acreditaciones.certificaciones.filter(
-                                                (cat) => cat !== cert
-                                              ),
-                                          });
-                                        }
-                                      }}
-                                    />
-                                  }
-                                  label={cert}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                        </div>
+                        <div className="grid lg:grid-cols-4 grid-cols-2">
+                          <div className="flex flex-col gap-3">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Afiliaciones
+                            </label>
 
-                        <div>
-                          <div className="flex flex-col">
+                            {afiliaciones
+                              .filter((inf) => inf.Afiliacion_tipo_Id === 1)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.afiliaciones.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones: [
+                                                  ...datosPrincipales.afiliaciones,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones:
+                                                  datosPrincipales.afiliaciones.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_afiliacion}
+                                    />
+                                  </div>
+                                </>
+                              ))}
+                          </div>
+
+                          <div className="flex flex-col gap-3">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Alianzas
+                            </label>
+
+                            {afiliaciones
+                              .filter((inf) => inf.Afiliacion_tipo_Id === 2)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.afiliaciones.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones: [
+                                                  ...datosPrincipales.afiliaciones,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones:
+                                                  datosPrincipales.afiliaciones.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_afiliacion}
+                                    />
+                                  </div>
+                                </>
+                              ))}
+                          </div>
+
+                          <div className="flex flex-col gap-3">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Certificaciones
+                            </label>
+
+                            {afiliaciones
+                              .filter((inf) => inf.Afiliacion_tipo_Id === 3)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.afiliaciones.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones: [
+                                                  ...datosPrincipales.afiliaciones,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones:
+                                                  datosPrincipales.afiliaciones.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_afiliacion}
+                                    />
+                                  </div>
+                                </>
+                              ))}
+                          </div>
+
+                          <div className="flex flex-col gap-3">
                             <label
                               htmlFor="categoria"
                               className="text-lg font-medium"
                             >
                               Asociaciones
                             </label>
-                            <small>Puede marcar mas de una opción</small>
-                          </div>
-                          <div className="flex flex-col">
-                            {Asociaciones?.map((asc) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={acreditaciones.asociaciones.includes(
-                                      asc
-                                    )}
-                                    onChange={(event, target) => {
-                                      if (target) {
-                                        setAcreditaciones({
-                                          ...acreditaciones,
-                                          asociaciones: [
-                                            ...acreditaciones.asociaciones,
-                                            asc,
-                                          ],
-                                        });
-                                      } else {
-                                        setAcreditaciones({
-                                          ...acreditaciones,
-                                          asociaciones:
-                                            acreditaciones.asociaciones.filter(
-                                              (cat) => cat !== asc
-                                            ),
-                                        });
+
+                            {afiliaciones
+                              .filter((inf) => inf.Afiliacion_tipo_Id === 4)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.afiliaciones.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones: [
+                                                  ...datosPrincipales.afiliaciones,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones:
+                                                  datosPrincipales.afiliaciones.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
                                       }
-                                    }}
-                                  />
-                                }
-                                label={asc}
-                              />
-                            ))}
+                                      label={infra.nombre_afiliacion}
+                                    />
+                                  </div>
+                                </>
+                              ))}
                           </div>
                         </div>
                       </div>
@@ -1688,71 +1833,71 @@ function DashboardSchool() {
                           Next
                         </Button>
                         {/* {activeStep !== steps.length &&
-                                        (completed[activeStep] ? (
-                                          <Typography
-                                            variant="caption"
-                                            sx={{ display: "inline-block" }}
-                                          >
-                                            Step {activeStep + 1} already completed
-                                          </Typography>
-                                        ) : (
-                                          <Button onClick={handleComplete}>
-                                            {completedSteps() === totalSteps() - 1
-                                              ? "Finish"
-                                              : "Complete Step"}
-                                          </Button>
-                                        ))} */}
+                      (completed[activeStep] ? (
+                        <Typography
+                          variant="caption"
+                          sx={{ display: "inline-block" }}
+                        >
+                          Step {activeStep + 1} already completed
+                        </Typography>
+                      ) : (
+                        <Button onClick={handleComplete}>
+                          {completedSteps() === totalSteps() - 1
+                            ? "Finish"
+                            : "Complete Step"}
+                        </Button>
+                      ))} */}
                       </Box>
                     </div>
                   )}
                   {activeStep === 3 && (
                     <>
-                    <div className="w-full min-h-screen gap-2 flex flex-col">
-                      <h1 className="text-2xl">Vacantes disponibles</h1>
-                      <button
-                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
-                        onClick={() =>
-                          vacantes === 0 ? setVacantes(null) : setVacantes(0)
-                        }
-                      >
-                        {" "}
-                        <span>2023</span>{" "}
-                        <FontAwesomeIcon
-                          size="lg"
-                          icon={vacantes === 0 ? faArrowUp : faArrowDown}
-                        />{" "}
-                      </button>
-                      {vacantes === 0 && <GridVacantes />}
-                      <button
-                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
-                        onClick={() =>
-                          vacantes === 1 ? setVacantes(null) : setVacantes(1)
-                        }
-                      >
-                        {" "}
-                        <span>2024</span>{" "}
-                        <FontAwesomeIcon
-                          size="lg"
-                          icon={vacantes === 1 ? faArrowUp : faArrowDown}
-                        />{" "}
-                      </button>
-                      {vacantes === 1 && <GridVacantes />}
-                      <button
-                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
-                        onClick={() =>
-                          vacantes === 2 ? setVacantes(null) : setVacantes(2)
-                        }
-                      >
-                        {" "}
-                        <span>2025</span>{" "}
-                        <FontAwesomeIcon
-                          size="lg"
-                          icon={vacantes === 2 ? faArrowUp : faArrowDown}
-                        />{" "}
-                      </button>
-                      {vacantes === 2 && <GridVacantes />}
-                    </div>
-                    <Box
+                      <div className="w-full min-h-screen gap-2 flex flex-col">
+                        <h1 className="text-2xl">Vacantes disponibles</h1>
+                        <button
+                          className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                          onClick={() =>
+                            vacantes === 0 ? setVacantes(null) : setVacantes(0)
+                          }
+                        >
+                          {" "}
+                          <span>2023</span>{" "}
+                          <FontAwesomeIcon
+                            size="lg"
+                            icon={vacantes === 0 ? faArrowUp : faArrowDown}
+                          />{" "}
+                        </button>
+                        {vacantes === 0 && <GridVacantes />}
+                        <button
+                          className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                          onClick={() =>
+                            vacantes === 1 ? setVacantes(null) : setVacantes(1)
+                          }
+                        >
+                          {" "}
+                          <span>2024</span>{" "}
+                          <FontAwesomeIcon
+                            size="lg"
+                            icon={vacantes === 1 ? faArrowUp : faArrowDown}
+                          />{" "}
+                        </button>
+                        {vacantes === 1 && <GridVacantes />}
+                        <button
+                          className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                          onClick={() =>
+                            vacantes === 2 ? setVacantes(null) : setVacantes(2)
+                          }
+                        >
+                          {" "}
+                          <span>2025</span>{" "}
+                          <FontAwesomeIcon
+                            size="lg"
+                            icon={vacantes === 2 ? faArrowUp : faArrowDown}
+                          />{" "}
+                        </button>
+                        {vacantes === 2 && <GridVacantes />}
+                      </div>
+                      <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
                         <Button
@@ -1764,10 +1909,7 @@ function DashboardSchool() {
                           Back
                         </Button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
-                          onClick={handleCompleteVacantes}
-                          sx={{ mr: 1 }}
-                        >
+                        <Button onClick={handleCompleteVacantes} sx={{ mr: 1 }}>
                           Next
                         </Button>
                         {/* {activeStep !== steps.length &&
@@ -1798,17 +1940,17 @@ function DashboardSchool() {
                       </small>
                       <div className="flex flex-col lg:flex-row gap-5">
                         <form
-                          onSubmit={handleFilesSubmit}
+                          onSubmit={handleFilesSubmitOne}
                           className="flex flex-col"
                         >
-                          <div className="file-select flex w-full">
+                          <div className="file-select flex w-full lg:min-w-[200px] ">
                             <label
                               htmlFor="image"
                               className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-t-md"
                             >
                               <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
                               <span className="text-sm mx-auto text-center text-[#0061dd]">
-                                Agregar imagenes
+                                Imagen principal
                               </span>{" "}
                             </label>
                             <input
@@ -1816,30 +1958,121 @@ function DashboardSchool() {
                               id="image"
                               name="image"
                               accept="image/png,image/jpeg"
-                              onChange={(e) => setFiles(e.target.files)}
+                              onChange={(e) => {
+                                setSpanOne(true);
+                                setFile(e.target.files[0]);
+                              }}
+                              className="hidden"
+                            />
+                          </div>
+                          {activeUpOne && (
+                            <button
+                              type="submit"
+                              disabled={
+                                file !== null && previewOne !== null
+                                  ? false
+                                  : true
+                              }
+                              className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
+                            >
+                              Upload
+                            </button>
+                          )}
+
+                          {spanOne && (
+                            <span className="relative text-center animate-bounce text-3xl">
+                              👆
+                            </span>
+                          )}
+                        </form>
+                        {previewOne !== "" && (
+                          <>
+                            <div className="border-2 rounded-md overflow-hidden p-2 bg-white">
+                              <StandardImageList
+                                eliminarImagenDePreview={
+                                  eliminarImagenDePreviewOne
+                                }
+                                one={true}
+                                setImage={setImage}
+                                list={previewOne}
+                              />
+                            </div>
+                            <div
+                              className={`fixed top-0 left-0 z-50 bg-black/90 w-full h-full ${
+                                image ? "block" : "hidden"
+                              }`}
+                            >
+                              <button
+                                onClick={() => setImage(null)}
+                                className="absolute top-2 right-4 z-[100] text-white"
+                              >
+                                Atras
+                              </button>
+                              <img
+                                src={image}
+                                alt=""
+                                className="absolute border-4 top-1/2 left-1/2 -translate-x-1/2 rounded-md -translate-y-1/2 block max-w-[80%] max-h-[80%] object-cover "
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div className="flex flex-col lg:flex-row gap-5">
+                        <form
+                          onSubmit={handleFilesSubmit}
+                          className="flex flex-col"
+                        >
+                          <div className="file-select flex w-full lg:min-w-[200px] ">
+                            <label
+                              htmlFor="images"
+                              className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-t-md"
+                            >
+                              <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
+                              <span className="text-sm mx-auto text-center text-[#0061dd]">
+                                Galeria de imagenes
+                              </span>{" "}
+                            </label>
+                            <input
+                              type="file"
+                              id="images"
+                              name="images"
+                              accept="image/png,image/jpeg"
+                              onChange={(e) => {
+                                setSpanTwo(true);
+                                setFiles(e.target.files);
+                              }}
                               multiple
                               className="hidden"
                             />
                           </div>
-                          <button
-                            type="submit"
-                            disabled={
-                              files !== null && preview.length !== 0
-                                ? false
-                                : true
-                            }
-                            className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
-                          >
-                            Upload
-                          </button>
+                          {activeUpTwo && (
+                            <button
+                              type="submit"
+                              disabled={
+                                files !== null && preview.length !== 0
+                                  ? false
+                                  : true
+                              }
+                              className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
+                            >
+                              Upload
+                            </button>
+                          )}
+
+                          {spanTwo && (
+                            <span className="relative text-center animate-bounce text-3xl">
+                              👆
+                            </span>
+                          )}
                         </form>
-                        {files !== null && preview.length !== 0 && (
+                        {preview.length !== 0 && (
                           <>
                             <div className="border-2 rounded-md overflow-hidden p-2 bg-white">
                               <StandardImageList
                                 eliminarImagenDePreview={
                                   eliminarImagenDePreview
                                 }
+                                one={false}
                                 setImage={setImage}
                                 list={preview}
                               />
@@ -1989,7 +2222,7 @@ function DashboardSchool() {
                           ).toString(),
                         ].join(":")}{" "}
                       </small>
-                      <div className="flex gap-10">
+                      <div className="flex gap-2">
                         <MobileTimePicker
                           label="Desde"
                           disabled={!day[Object.keys(day)][2]}
@@ -2038,6 +2271,19 @@ function DashboardSchool() {
                           minTime={day[Object.keys(day)][0]}
                           maxTime={dayjs("2014-08-18T17:00:00")}
                         />
+                        <TextField
+                          // disabled
+                          Vacante
+                          className="w-[70px]"
+                          id="outlined-number"
+                          label="Vacantes"
+                          type="number"
+                          onChange={handlerVacanteInput}
+                          // value={InputVacante}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
                       </div>
                     </div>
                   </div>
@@ -2053,7 +2299,106 @@ function DashboardSchool() {
             <DragAndDrop />
           </div>
         ) : page === 2 ? (
-          <div>Plan</div>
+          <div className="min-h-screen">Plan</div>
+        ) : page === 3 ? (
+          <div className="flex flex-col gap-5 min-h-screen px-24">
+            <h1 className="text-xl font-semibold">Datos Personales</h1>
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit(OnSubmit)}>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="email" className="text-base font-medium">
+                  Email Actual
+                </label>
+                <input
+                {...register("email",{
+                  required: true
+                })}
+                  disabled
+                  type="email"
+                  name="email"
+                  id="email"
+                  className="p-3 rounded-md border-2 w-full lg:w-1/2 outline-none"
+                  placeholder="Ingresa el email"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="newEmail" className="text-base font-medium">
+                  Nuevo Email
+                </label>
+                <input
+                {...register("newEmail")}
+                  type="email"
+                  name="newEmail"
+                  id="newEmail"
+                  className="p-3 rounded-md border-2 w-full lg:w-1/2 outline-none"
+                  placeholder="Ingresa el nuevo email"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="telefono" className="text-base font-medium">
+                  Telefono
+                </label>
+                <input
+                                {...register("telefono",{
+                                  required: true
+                                })}
+                  type="number"
+                  name="telefono"
+                  id="telefono"
+                  className="p-3 rounded-md border-2 w-full lg:w-1/2 outline-none"
+                  placeholder="Ingresa el telefono"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="password" className="text-base font-medium">
+                  Contraseña actual
+                </label>
+                <div className="relative w-full lg:w-1/2">
+                <input
+                {...register("password")}
+                  type={seePassword ? "text" : "password"}
+                  name="password"
+                  id="password"
+                  className="p-3 rounded-md border-2 w-full outline-none"
+                  placeholder="Ingresa la contraseña"
+                />
+                {seePassword ? <BsEye onClick={()=>setSeePassword(!seePassword)} className="absolute cursor-pointer top-[35%] lg:top-[40%] right-5"/> : <BsEyeSlash onClick={()=>setSeePassword(!seePassword)} className="absolute top-[35%] lg:top-[40%] cursor-pointer right-5"/>}           
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="newPassword" className="text-base font-medium">
+                  Contraseña nueva
+                </label>
+                <div className="relative w-full lg:w-1/2">
+                <input
+                {...register("newPassword")}
+                  type={seeNewPassword ? "text" : "password"}
+                  name="newPassword"
+                  id="newPassword"
+                  className="p-3 rounded-md border-2 w-full outline-none"
+                  placeholder="Ingresa la nueva contraseña"
+                />
+                {seeNewPassword ? <BsEye onClick={()=>setSeeNewPassword(!seeNewPassword)} className="absolute cursor-pointer top-[35%] lg:top-[40%] right-5"/> : <BsEyeSlash onClick={()=>setSeeNewPassword(!seeNewPassword)} className="absolute top-[35%] lg:top-[40%] cursor-pointer right-5"/>}           
+                </div>
+                <div className="relative w-full lg:w-1/2">
+                <input
+                 {...register("repitPassword")}
+                  type={seeNewPassword ? "text" : "password"}
+                  name="repitPassword"
+                  id="repitPassword"
+                  className="p-3 rounded-md border-2 w-full outline-none"
+                  placeholder="Repeti la nueva contraseña"
+                />
+                {seeNewPassword ? <BsEye onClick={()=>setSeeNewPassword(!seeNewPassword)} className="absolute cursor-pointer top-[35%] lg:top-[40%] right-5"/> : <BsEyeSlash onClick={()=>setSeeNewPassword(!seeNewPassword)} className="absolute top-[35%] lg:top-[40%] cursor-pointer right-5"/>}           
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="bg-[#0061dd] text-white w-full lg:w-1/2 outline-none p-2 rounded-md"
+              >
+                Guardar cambios
+              </button>
+            </form>
+          </div>
         ) : null}
       </section>
     </div>

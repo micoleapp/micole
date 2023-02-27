@@ -13,18 +13,17 @@ import { MenuItem } from "@mui/material";
 
 import { InputLabel } from "@mui/material";
 import { useSelector } from "react-redux";
-
-const Ingreso2 = ["2023", "2024", "2025"];
+const yearNow = new Date().getFullYear();
+const Ingreso2 = [yearNow, yearNow+1, yearNow+2];
 
 function FiltrosHome() {
     const [OpenFilter, setOpenFilter] = useState(false);
     const [Ingreso, setIngreso] = useState(false);
     const [Grado, setGrado] = useState(false);
     const [Distrito, setDistrito] = useState(false);
-  const { allschools, loading, departaments, distrits } = useSelector(
+  const { allschools, loading, departaments, distrits, grados } = useSelector(
     (state) => state.schools
   );
-  console.log(distrits)
 
   const toggleFilters = () => {
     setOpenFilter(!OpenFilter);
@@ -66,7 +65,7 @@ const handleValueAño =(event)=>{
               label="Tipo de colegio"
             >
               {distrits.map((dis) => (
-                <MenuItem value={dis.id} key={dis.id}>
+                <MenuItem value={dis.nombre_distrito} key={dis.id}>
                   <ListItemText primary={ dis.nombre_distrito} />
                 </MenuItem>
               ))}
@@ -93,9 +92,9 @@ const handleValueAño =(event)=>{
               onChange={handleValueGrado}
               label="Tipo de colegio"
             >
-              {MockupGrados.map((type) => (
-                <MenuItem value={type} key={type}>
-                  <ListItemText primary={type} />
+                            {grados.map((grad) => (
+                <MenuItem value={grad.nombre_grado} key={grad.id}>
+                  <ListItemText primary={ grad.nombre_grado} />
                 </MenuItem>
               ))}
             </Select>

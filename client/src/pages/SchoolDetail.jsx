@@ -37,6 +37,8 @@ import { MobileTimePicker } from "@mui/x-date-pickers";
 import axios from "axios";
 import { fontSize } from "@mui/system";
 import style from "./SchoolD.module.css";
+import { HiChevronDown } from "react-icons/hi";
+import {HiChevronLeft}from "react-icons/hi";
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
     <div className="w-full px-4">
@@ -72,35 +74,35 @@ const ArrHorariosMockFormateado = [
     dia: "Lunes",
     horarios: { desde: "08:30", hasta: "13:00" },
     disponibilidad: false,
-    vacantesDispo:2,
+    vacantesDispo: 2,
     vacantes: "20",
   },
   {
     dia: "Martes",
     horarios: { desde: "10:30", hasta: "13:00" },
     disponibilidad: true,
-    vacantesDispo:3,
+    vacantesDispo: 3,
     vacantes: "5",
   },
   {
     dia: "Miercoles",
     horarios: { desde: "09:30", hasta: "13:00" },
     disponibilidad: true,
-    vacantesDispo:1,
+    vacantesDispo: 1,
     vacantes: "3",
   },
   {
     dia: "Jueves",
     horarios: { desde: "11:30", hasta: "13:00" },
     disponibilidad: false,
-    vacantesDispo:0,
+    vacantesDispo: 0,
     vacantes: "6",
   },
   {
     dia: "Viernes",
     horarios: { desde: "08:30", hasta: "13:00" },
     disponibilidad: false,
-    vacantesDispo:0,
+    vacantesDispo: 0,
     vacantes: "10",
   },
 ];
@@ -121,9 +123,6 @@ function SchoolDetail() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getSchoolDetail(id));
-    return () => {
-      dispatch(clannDetailid());
-    };
   }, []);
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -244,6 +243,12 @@ function SchoolDetail() {
   const disableWeekends = (date) => {
     return date.day() === 0 || date.day() === 6;
   };
+  const [Horarios, setHorarios] = useState(false);
+  const toggleHorarios = () => {
+    setHorarios(!Horarios);
+  };
+
+  let infra = Array.from(new Set(oneSchool?.Infraestructuras?.map(e=>e.InfraestructuraTipoId)))
 
   return (
     <div className="bg-[#f6f7f8]">
@@ -512,71 +517,72 @@ function SchoolDetail() {
                 scrollButtons
                 allowScrollButtonsMobile
               >
+                {infra.map(e=>(
                 <Tab
-                  style={{
-                    fontSize: "11px",
-                    fontFamily: "Poppins",
-                    textTransform: "capitalize",
-                  }}
-                  label="Administrativa"
-                  {...a11yProps(0)}
-                />
-                <Tab
-                  style={{
-                    fontSize: "11px",
-                    fontFamily: "Poppins",
-                    textTransform: "capitalize",
-                  }}
-                  label="Artistica"
-                  {...a11yProps(1)}
-                />
-                <Tab
-                  style={{
-                    fontSize: "11px",
-                    fontFamily: "Poppins",
-                    textTransform: "capitalize",
-                  }}
-                  label="Deportiva"
-                  {...a11yProps(2)}
-                />
-                {/* <Tab
-                  style={{
-                    fontSize: "16px",
-                    fontFamily: "Poppins"
-                  }}
-                  label="Toggles"
-                  {...a11yProps(3)}
-                />*/}
-                <Tab
-                  style={{
-                    fontSize: "11px",
-                    fontFamily: "Poppins",
-                    textTransform: "capitalize",
-                  }}
-                  label="Enseñanza"
-                  {...a11yProps(3)}
-                />
-                <Tab
-                  style={{
-                    fontSize: "11px",
-                    fontFamily: "Poppins",
-                    textTransform: "capitalize",
-                  }}
-                  label="Laboratorio"
-                  {...a11yProps(4)}
-                />
-                {/*<Tab
-                  style={{
-                    fontSize: "16px",
-                    fontFamily: "Poppins"
-                  }}
-                  label="AWS S3 Config"
-                  {...a11yProps(5)}
-                />*/}
+                style={{
+                  fontSize: "11px",
+                  fontFamily: "Poppins",
+                  textTransform: "capitalize",
+                }}
+                label={e === 1 ? "Administrativo" : e === 2 ? "Artistica" : e === 3 ? "Deportiva" : e === 4 ? "Enseñanza" : e === 5 ? "Laboratorio" : null}
+                {...a11yProps(e)}
+              />
+                ))}
               </Tabs>
 
               <div className="flex text-xs w-full justify-between">
-                <TabPanel value={value} index={0}>
+                {oneSchool?.Infraestructuras?.some(e=>e.InfraestructuraTipoId === 1) && <TabPanel value={value} index={0}>
+                  <ul className="flex flex-col gap-3">
+                    {oneSchool?.Infraestructuras?.filter(e=>e.InfraestructuraTipoId === 1).map(e=>(
+                    <li className="flex items-center gap-3">
+                              {e.imagen.length > 0 ?                       <img src={e.imagen} alt={e.nombre_infraestructura} className="w-10"/> : <img src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png" alt={e.nombre_infraestructura} className="w-10"/>}
+                      {e.nombre_infraestructura}
+                    </li>
+                    ))}
+                  </ul>
+                </TabPanel>}
+                {oneSchool?.Infraestructuras?.some(e=>e.InfraestructuraTipoId === 2) && <TabPanel value={value} index={1}>
+                  <ul className="flex flex-col gap-3">
+                    {oneSchool?.Infraestructuras?.filter(e=>e.InfraestructuraTipoId === 2).map(e=>(
+                    <li className="flex items-center gap-3">
+                      {e.imagen.length > 0 ?                       <img src={e.imagen} alt={e.nombre_infraestructura} className="w-10"/> : <img src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png" alt={e.nombre_infraestructura} className="w-10"/>}
+                      {e.nombre_infraestructura}
+                    </li>
+                    ))}
+                  </ul>
+                </TabPanel>}
+                {oneSchool?.Infraestructuras?.some(e=>e.InfraestructuraTipoId === 3) && <TabPanel value={value} index={2}>
+                  <ul className="flex flex-col gap-3">
+                    {oneSchool?.Infraestructuras?.filter(e=>e.InfraestructuraTipoId === 3).map(e=>(
+                    <li className="flex items-center gap-3">
+                       {e.imagen.length > 0 ?                       <img src={e.imagen} alt={e.nombre_infraestructura} className="w-10"/> : <img src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png" alt={e.nombre_infraestructura} className="w-10"/>}
+                      {e.nombre_infraestructura}
+                    </li>
+                    ))}
+                  </ul>
+                </TabPanel>}
+                {oneSchool?.Infraestructuras?.some(e=>e.InfraestructuraTipoId === 4) && <TabPanel value={value} index={3}>
+                  <ul className="flex flex-col gap-3">
+                    {oneSchool?.Infraestructuras?.filter(e=>e.InfraestructuraTipoId === 4).map(e=>(
+                    <li className="flex items-center gap-3">
+                      {e.imagen.length > 0 ?                       <img src={e.imagen} alt={e.nombre_infraestructura} className="w-10"/> : <img src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png" alt={e.nombre_infraestructura} className="w-10"/>}
+                      {e.nombre_infraestructura}
+                    </li>
+                    ))}
+                  </ul>
+                </TabPanel>}
+                {oneSchool?.Infraestructuras?.some(e=>e.InfraestructuraTipoId === 5) && <TabPanel value={value} index={4}>
+                  <ul className="flex flex-col gap-3">
+                    {oneSchool?.Infraestructuras?.filter(e=>e.InfraestructuraTipoId === 5).map(e=>(
+                    <li className="flex items-center gap-3">
+                      {e.imagen.length > 0 ?                       <img src={e.imagen} alt={e.nombre_infraestructura} className="w-10"/> : <img src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png" alt={e.nombre_infraestructura} className="w-10"/>}
+
+                      {e.nombre_infraestructura}
+                    </li>
+                    ))}
+                  </ul>
+                </TabPanel>}
+                {/* <TabPanel value={value} index={0}>
                   <ul className="flex flex-col gap-3">
                     <li className="flex items-center gap-2">
                       {" "}
@@ -737,7 +743,7 @@ function SchoolDetail() {
                       Compartir
                     </li>
                   </ul>
-                </TabPanel>
+                </TabPanel> */}
               </div>
             </div>
             <div
@@ -750,33 +756,13 @@ function SchoolDetail() {
                 Acreditaciones / Certificaciones / Asosiaciones
               </h2>
               <div className="flex text-xs w-full gap-5">
-                <ul className="flex flex-col gap-5">
-                  <li className="text-black/60 flex items-center gap-3">
-                    <img src={logo} alt="" className="w-10" />
-                    Great Place to Study
-                  </li>
-                  <li className="text-black/60 flex items-center gap-3">
-                    <img src={logo} alt="" className="w-10" />
-                    Great Place to Study
-                  </li>{" "}
-                  <li className="text-black/60 flex items-center gap-3">
-                    <img src={logo} alt="" className="w-10" />
-                    Great Place to Study
-                  </li>
-                </ul>
-                <ul className="flex flex-col gap-5">
-                  <li className="text-black/60 flex items-center gap-3">
-                    <img src={logo} alt="" className="w-10" />
-                    Great Place to Study
-                  </li>
-                  <li className="text-black/60 flex items-center gap-3">
-                    <img src={logo} alt="" className="w-10" />
-                    Great Place to Study
-                  </li>
-                  <li className="text-black/60 flex items-center gap-3">
-                    <img src={logo} alt="" className="w-10" />
-                    Great Place to Study
-                  </li>
+                <ul className="grid grid-cols-2 grid-rows-5">
+                  {oneSchool?.Afiliacions?.map(ac=>(
+                                      <li className="text-black/60 flex items-center gap-3">
+                                      <img src={ac.logo} alt="" className="w-10" />
+                                      {ac.nombre_afiliacion}
+                                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -887,61 +873,134 @@ function SchoolDetail() {
               data-aos-mirror={false}
             >
               <h2 className="font-semibold text-xl">Solicitar una visita</h2>
-              <p>La disponibilidad de este colegio es de : </p>
-              <div className={style.Layout}>
-                <div className={style.tableHead}>
-                  <div className={style.tableTitleDiv}>
-                    <p className={style.tableTitle}>Dia</p>
-                  </div>
-                  <div className={style.tableTitleDiv}>
-                    <p className={style.tableTitle}>Desde</p>
-                  </div>
-                  <div className={style.tableTitleDiv}>
-                    <p className={style.tableTitle}>Hasta</p>
-                  </div>
-                  <div className={style.tableTitleDiv}>
-                    <p className={style.tableTitle}>Vacantes</p>
-                  </div>
-                  <div className={style.tableTitleDiv}>
-                    <p className={style.tableTitle}>Disponible</p>
-                  </div>
-                </div>
-                {ArrHorariosMockFormateado.map((ele) => {
-                  return (
-                    <>
-                      <div className={style.cardTable}>
-                        <div className={style.cardTable}>
-                          <div className={style.itemTable}>
-                           
-                            {ele.vacantesDispo > 0 ? ` ${ele.dia} `: <p style={{ fontSize: "12px",color:'grey' }}> {ele.dia} </p>}
-                          </div>
-                          <div className={style.itemTable}>
-                            <p style={{ fontSize: "12px" }}>
-                            {ele.vacantesDispo > 0 ?` ${ele.horarios.desde} `: <p style={{ fontSize: "12px",color:'grey' }}> {ele.horarios.desde} </p>}
-                             
-                            </p>
-                          </div>
-                          <div className={style.itemTable}>
-                            <p style={{ fontSize: "12px" }}>
-                            {ele.vacantesDispo > 0 ?` ${ele.horarios.hasta} `: <p style={{ fontSize: "12px",color:'grey' }}>{ele.horarios.hasta} </p>}
-                            
-                            </p>
-                          </div>
-                          <div className={style.itemTable}>
-                          {ele.vacantesDispo > 0 ?` ${ele.vacantes} `: <p style={{ fontSize: "12px",color:'grey' }}>{ele.vacantes} </p>}
-                          
-                          </div>
-
-                          <div className={style.itemTable}>
-                          {ele.vacantesDispo > 0 ?` ${ele.vacantesDispo} `: <p style={{ fontSize: "12px",color:'grey' }}>No disponible </p>}
-                           
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  );
-                })}
+              <div
+                onClick={toggleHorarios}
+                style={{ display: "flex", gap: "10px", alignItems: "center" }}
+              >
+                {Horarios && (
+                  <>
+                    <p>Ver la disponibilidad horaria de este colegio </p>
+                    <HiChevronDown  data-aos-duration="400" data-aos='flip-down'/>
+                  </>
+                )}
+                {Horarios === false && (
+                  <>
+                    <p>Ver la disponibilidad horaria de este colegio  </p>
+                    <HiChevronLeft   data-aos-duration="400" data-aos='flip-left' />
+                  </>
+                )}
               </div>
+              {Horarios && (
+                <>
+                  <div className={style.Layout}>
+                    <div
+                      data-aos="zoom-in-left"
+                 
+                      data-aos-duration="400"
+                      className={style.tableHead}
+                    >
+                      <div className={style.tableTitleDiv}>
+                        <p className={style.tableTitle}>Dia</p>
+                      </div>
+                      <div className={style.tableTitleDiv}>
+                        <p className={style.tableTitle}>Desde</p>
+                      </div>
+                      <div className={style.tableTitleDiv}>
+                        <p className={style.tableTitle}>Hasta</p>
+                      </div>
+                      <div className={style.tableTitleDiv}>
+                        <p className={style.tableTitle}>Vacantes</p>
+                      </div>
+                      <div className={style.tableTitleDiv}>
+                        <p className={style.tableTitle}>Disponible</p>
+                      </div>
+                    </div>
+                    {ArrHorariosMockFormateado.map((ele) => {
+                      return (
+                        <>
+                          <div
+                            data-aos="zoom-in-left"
+                            data-aos-duration="700"
+                            className={style.cardTable}
+                          >
+                            <div className={style.cardTable}>
+                              <div className={style.itemTable}>
+                                {ele.vacantesDispo > 0 ? (
+                                  ` ${ele.dia} `
+                                ) : (
+                                  <p
+                                    style={{ fontSize: "12px", color: "grey" }}
+                                  >
+                                    {" "}
+                                    {ele.dia}{" "}
+                                  </p>
+                                )}
+                              </div>
+                              <div className={style.itemTable}>
+                                <p style={{ fontSize: "12px" }}>
+                                  {ele.vacantesDispo > 0 ? (
+                                    ` ${ele.horarios.desde} `
+                                  ) : (
+                                    <p
+                                      style={{
+                                        fontSize: "12px",
+                                        color: "grey",
+                                      }}
+                                    >
+                                      {" "}
+                                      {ele.horarios.desde}{" "}
+                                    </p>
+                                  )}
+                                </p>
+                              </div>
+                              <div className={style.itemTable}>
+                                <p style={{ fontSize: "12px" }}>
+                                  {ele.vacantesDispo > 0 ? (
+                                    ` ${ele.horarios.hasta} `
+                                  ) : (
+                                    <p
+                                      style={{
+                                        fontSize: "12px",
+                                        color: "grey",
+                                      }}
+                                    >
+                                      {ele.horarios.hasta}{" "}
+                                    </p>
+                                  )}
+                                </p>
+                              </div>
+                              <div className={style.itemTable}>
+                                {ele.vacantesDispo > 0 ? (
+                                  ` ${ele.vacantes} `
+                                ) : (
+                                  <p
+                                    style={{ fontSize: "12px", color: "grey" }}
+                                  >
+                                    {ele.vacantes}{" "}
+                                  </p>
+                                )}
+                              </div>
+
+                              <div className={style.itemTable}>
+                                {ele.vacantesDispo > 0 ? (
+                                  ` ${ele.vacantesDispo} `
+                                ) : (
+                                  <p
+                                    style={{ fontSize: "12px", color: "grey" }}
+                                  >
+                                    No disponible{" "}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <div className="flex w-full justify-between flex-col gap-4 lg:flex-row">
                   <MobileDatePicker
@@ -1075,6 +1134,7 @@ function SchoolDetail() {
                 />
               </div>
             </div>
+            {oneSchool.video_url?.length > 0 &&             
             <div
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
               data-aos="zoom-in-left"
@@ -1082,13 +1142,10 @@ function SchoolDetail() {
               data-aos-mirror={false}
             >
               <h2 className="font-semibold text-xl">Video</h2>
-              <video width="750" height="500" controls className="rounded-md">
-                <source
-                  src={oneSchool.video_url && oneSchool.video_url.trim()}
-                  type="video/mp4"
-                />
-              </video>
+              <iframe className="w-full h-[300px] lg:h-[400px] " src={`${oneSchool.video_url.replace('watch?v=',"embed/")}`}>
+              </iframe>
             </div>
+            }
             <form
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
               onSubmit={comentarioSubmit}
