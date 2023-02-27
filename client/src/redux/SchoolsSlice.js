@@ -17,10 +17,16 @@ export const schoolsSlice = createSlice({
     infraestructura: [],
     niveles: [],
     afiliaciones: [],
+    grados: [],
     error: "",
     loading: false
   },
   reducers : {
+    getGrados: (state,action) => {
+      state.grados = action.payload,
+      state.loading = false,
+      state.error = ""
+    },
     getAfiliaciones: (state,action) => {
       state.afiliaciones = action.payload,
       state.loading = false,
@@ -92,6 +98,6 @@ export const schoolsSlice = createSlice({
   }
 })
 
-export const {getAfiliaciones,getNiveles,getPaises,getInfraestructura, cleanOneSchool,getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,getDistrits,getCategories,getProvincias} = schoolsSlice.actions
+export const {getGrados,getAfiliaciones,getNiveles,getPaises,getInfraestructura, cleanOneSchool,getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,getDistrits,getCategories,getProvincias} = schoolsSlice.actions
 
 export default schoolsSlice.reducer

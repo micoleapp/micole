@@ -221,9 +221,37 @@ const signUp = async (req, res, next) => {
   }
 };
 
+const putAuth = async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id)
+  const { email, password, telefono } = req.body;
+  try {
+    const authInstance = await Auth.findByPk(id);
+    const colegioInstance = await Colegio.findByPk(id);
+    if (!authInstance) {
+      return next({
+        statusCode: 400,
+        message: 'El usuario no existe en la BD',
+      });
+    }
+    const authUpdated = await authInstance.update({
+      email,
+      password,
+      telefono,
+    });
+    const colegioUpdated = await colegioInstance.update({
+      telefono
+    })
+    return res.status(200).send(authUpdated);
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   signIn,
   signUp,
   getAuthById,
   getAuth,
+  putAuth
 };

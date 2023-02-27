@@ -21,7 +21,8 @@ import {
   getAllInfraestructura,
   getAllPaises,
   getAllNiveles,
-  getAllAfiliaciones
+  getAllAfiliaciones,
+  getAllGrados
 } from "./redux/SchoolsActions";
 import RequireAuth from "./components/RequireAuth";
 
@@ -32,6 +33,7 @@ function App() {
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(getAllCategories());
+    dispatch(getAllGrados());
     dispatch(getAllDepartaments());
     dispatch(getAllDistrits());
     dispatch(getAllProvincias());

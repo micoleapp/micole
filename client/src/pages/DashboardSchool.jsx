@@ -1,6 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
+import { useForm } from "react-hook-form";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Button from "@mui/material/Button";
@@ -12,6 +13,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { BsEye } from "react-icons/bs";
+import { BsEyeSlash } from "react-icons/bs";
 import { Squash as Hamburger } from "hamburger-react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -27,26 +30,13 @@ import {
   MarkerF,
   Autocomplete,
 } from "@react-google-maps/api";
-import {
-  Administrativa,
-  Artistica,
-  Deportiva,
-  Enseñanza,
-  Laboratorios,
-} from "../MockupInfo/Infraestructura";
-import {
-  Acreditaciones,
-  Alianzas,
-  Asociaciones,
-  Certificaciones,
-} from "../MockupInfo/Afiliaciones";
-import { levels } from "../MockupInfo/Niveles";
 import { steps } from "../MockupInfo/Pasos";
 
 import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
 import { RiImageAddLine } from "react-icons/ri";
+import { GiHexagonalNut } from "react-icons/gi";
 import { useEffect } from "react";
 import { logout, getSchoolDetail } from "../redux/AuthActions";
 import { useState } from "react";
@@ -123,15 +113,53 @@ function DashboardSchool() {
     departaments,
     niveles,
     infraestructura: infraState,
-    afiliaciones
+    afiliaciones,
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
-
+  const id = user.id
   useEffect(() => {
     if (user) {
       dispatch(getSchoolDetail(user.id));
     }
   }, [allData]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: user.email ? user.email : "",
+      telefono: user.telefono ? user.telefono : "",
+      password : "",
+      newPassword: "",
+      repitPassword: ""
+    },
+    mode: "onChange",
+  });
+  const OnSubmit = async (user) => {
+   if(user.newPassword !== user.repitPassword){
+      Swal.fire("Error", "Las contraseñas no coinciden", "error");
+      return;
+   }
+   const data = {
+      email: user.email,
+      telefono: user.telefono,
+      password: user.password
+   }
+   console.log(id)
+   try {
+    axios.put(`/auth/${id}`, data)
+    .then(res=>{
+      Swal.fire("Exito", "Datos actualizados", "success");
+    })
+   } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Algo salio mal",
+      text: error.message,
+    });
+   }
+  }
 
   const totalSteps = () => {
     return steps.length;
@@ -271,7 +299,7 @@ function DashboardSchool() {
     } else {
       console.log("Autocomplete is not loaded yet!");
     }
-  };  
+  };
 
   const initialDatosPrincipales = {
     nombreColegio: oneSchool.nombre_colegio ? oneSchool.nombre_colegio : "",
@@ -296,8 +324,10 @@ function DashboardSchool() {
     provincia: oneSchool.Provincium ? oneSchool.Provincium : {},
     distrito: oneSchool.Distrito ? oneSchool.Distrito : {},
     direccion: oneSchool.direccion ? oneSchool.direccion : "",
-    lat: oneSchool.ubicacion.length > 0 ? JSON.parse(oneSchool.ubicacion).lat : 0,
-    lng: oneSchool.ubicacion.length > 0 ? JSON.parse(oneSchool.ubicacion).lng : 0,
+    lat:
+      oneSchool.ubicacion.length > 0 ? JSON.parse(oneSchool.ubicacion).lat : 0,
+    lng:
+      oneSchool.ubicacion.length > 0 ? JSON.parse(oneSchool.ubicacion).lng : 0,
     infraestructura: oneSchool.Infraestructuras
       ? oneSchool.Infraestructuras
       : [],
@@ -307,7 +337,7 @@ function DashboardSchool() {
   const [datosPrincipales, setDatosPrincipales] = useState(
     initialDatosPrincipales
   );
-  
+
   const datosPrincipalesCompleted = () => {
     if (
       datosPrincipales.nombreColegio !== "" &&
@@ -350,7 +380,6 @@ function DashboardSchool() {
       return true;
     }
   };
-
 
   const [isOpen, setOpen] = useState(false);
 
@@ -421,18 +450,25 @@ function DashboardSchool() {
 
   const initialMultimedia = {
     image: oneSchool.primera_imagen.length > 0 ? oneSchool.primera_imagen : "",
-    images: oneSchool.galeria_fotos.length > 0 ? JSON.parse(oneSchool.galeria_fotos) : [],
+    images:
+      oneSchool.galeria_fotos.length > 0
+        ? JSON.parse(oneSchool.galeria_fotos)
+        : [],
     video_url: oneSchool.video_url.length > 0 ? oneSchool.video_url : "",
   };
 
   const [multimedia, setMultimedia] = useState(initialMultimedia);
 
-  const initialPreviewOne = oneSchool.primera_imagen.length > 0 ? oneSchool.primera_imagen : "";
-  const initialPreview = oneSchool.galeria_fotos.length > 0 ? JSON.parse(oneSchool.galeria_fotos) : [];
+  const initialPreviewOne =
+    oneSchool.primera_imagen.length > 0 ? oneSchool.primera_imagen : "";
+  const initialPreview =
+    oneSchool.galeria_fotos.length > 0
+      ? JSON.parse(oneSchool.galeria_fotos)
+      : [];
   const [preview, setPreview] = useState(initialPreview);
   const [previewOne, setPreviewOne] = useState(initialPreviewOne);
 
-  console.log(allData)
+  console.log(allData);
 
   useEffect(() => {
     if (files !== null) {
@@ -483,10 +519,10 @@ function DashboardSchool() {
           icon: "success",
           title: "Felicidades ya estas a un paso de publicar tu colegio",
           text: "Continua completando el horario para tus citas",
-          confirmButtonText: 'Continuar'
-        }).then(res=>{
-          if(res.isConfirmed){
-            handleReset()
+          confirmButtonText: "Continuar",
+        }).then((res) => {
+          if (res.isConfirmed) {
+            handleReset();
             setPage(1);
           }
         });
@@ -587,9 +623,10 @@ function DashboardSchool() {
   const [spanTwo, setSpanTwo] = useState(false);
   const [activeUpOne, setActiveUpOne] = useState(true);
   const [activeUpTwo, setActiveUpTwo] = useState(true);
-  const isCategorySelected = (categoryId) => {
-    return datosPrincipales.categoria.some((c) => c.id === categoryId);
-  }
+ 
+  const [seePassword,setSeePassword] = useState(false)
+  const [seeNewPassword,setSeeNewPassword] = useState(false)
+
   return (
     <div className="flex lg:flex-row flex-col">
       <section
@@ -642,6 +679,15 @@ function DashboardSchool() {
             <BsWindowDock className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
             <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
               Mi plan
+            </span>
+          </button>
+          <button
+            className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
+            onClick={() => setPage(3)}
+          >
+            <GiHexagonalNut className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
+            <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
+              Configuración
             </span>
           </button>
           <button
@@ -789,7 +835,9 @@ function DashboardSchool() {
                               key={category.id}
                               control={
                                 <Checkbox
-                                checked={datosPrincipales.categoria.map(e=>e.id).includes(category.id)}
+                                  checked={datosPrincipales.categoria
+                                    .map((e) => e.id)
+                                    .includes(category.id)}
                                   onChange={(event, target) => {
                                     if (target) {
                                       setDatosPrincipales({
@@ -990,7 +1038,9 @@ function DashboardSchool() {
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  checked={datosPrincipales.niveles.some(niv=>niv.id === level.id)}
+                                  checked={datosPrincipales.niveles.some(
+                                    (niv) => niv.id === level.id
+                                  )}
                                   onChange={(event, target) => {
                                     if (target) {
                                       setDatosPrincipales({
@@ -1286,8 +1336,7 @@ function DashboardSchool() {
                   {activeStep === 1 && (
                     <div className="flex flex-col gap-5">
                       <h1 className="text-2xl">
-                        Almenos una casilla debe ser
-                        seleccionada
+                        Almenos una casilla debe ser seleccionada
                       </h1>
                       <small>Puede marcar mas de una opción</small>
                       <div className="flex flex-col lg:flex-row gap-5">
@@ -1299,42 +1348,44 @@ function DashboardSchool() {
                             >
                               Administrativo
                             </label>
-                         
-                          {infraState
-                            .filter((inf) => inf.InfraestructuraTipoId === 1)
-                            .map((infra) => (
-                              <>
-                                <div className="flex flex-col">
-                                  <FormControlLabel
-                                    control={
-                                      <Checkbox
-                                        checked={datosPrincipales.infraestructura.some(inf=>inf.id===infra.id)}
-                                        onChange={(event, target) => {
-                                          if (target) {
-                                            setDatosPrincipales({
-                                              ...datosPrincipales,
-                                              infraestructura: [
-                                                ...datosPrincipales.infraestructura,
-                                                infra,
-                                              ],
-                                            });
-                                          } else {
-                                            setDatosPrincipales({
-                                              ...datosPrincipales,
-                                              infraestructura:
-                                                datosPrincipales.infraestructura.filter(
-                                                  (inf) => inf.id !== infra.id
-                                                ),
-                                            });
-                                          }
-                                        }}
-                                      />
-                                    }
-                                    label={infra.nombre_infraestructura}
-                                  />
-                                </div>
-                              </>
-                            ))}
+
+                            {infraState
+                              .filter((inf) => inf.InfraestructuraTipoId === 1)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.infraestructura.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura: [
+                                                  ...datosPrincipales.infraestructura,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura:
+                                                  datosPrincipales.infraestructura.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_infraestructura}
+                                    />
+                                  </div>
+                                </>
+                              ))}
                           </div>
 
                           <div className="flex flex-col">
@@ -1344,42 +1395,44 @@ function DashboardSchool() {
                             >
                               Artistica
                             </label>
-                            
-                          {infraState
-                            .filter((inf) => inf.InfraestructuraTipoId === 2)
-                            .map((infra) => (
-                              <>
-                              <div className="flex flex-col">
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                    checked={datosPrincipales.infraestructura.some(inf=>inf.id===infra.id)}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            infraestructura: [
-                                              ...datosPrincipales.infraestructura,
-                                              infra,
-                                            ],
-                                          });
-                                        } else {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            infraestructura:
-                                              datosPrincipales.infraestructura.filter(
-                                                (inf) => inf.id !== infra.id
-                                              ),
-                                          });
-                                        }
-                                      }}
+
+                            {infraState
+                              .filter((inf) => inf.InfraestructuraTipoId === 2)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.infraestructura.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura: [
+                                                  ...datosPrincipales.infraestructura,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura:
+                                                  datosPrincipales.infraestructura.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_infraestructura}
                                     />
-                                  }
-                                  label={infra.nombre_infraestructura}
-                                />
-                              </div>
-                            </>
-                            ))}
+                                  </div>
+                                </>
+                              ))}
                           </div>
 
                           <div className="flex flex-col">
@@ -1389,42 +1442,44 @@ function DashboardSchool() {
                             >
                               Deportiva
                             </label>
-                           
-                          {infraState
-                            .filter((inf) => inf.InfraestructuraTipoId === 3)
-                            .map((infra) => (
-                              <>
-                              <div className="flex flex-col">
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                    checked={datosPrincipales.infraestructura.some(inf=>inf.id===infra.id)}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            infraestructura: [
-                                              ...datosPrincipales.infraestructura,
-                                              infra,
-                                            ],
-                                          });
-                                        } else {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            infraestructura:
-                                              datosPrincipales.infraestructura.filter(
-                                                (inf) => inf.id !== infra.id
-                                              ),
-                                          });
-                                        }
-                                      }}
+
+                            {infraState
+                              .filter((inf) => inf.InfraestructuraTipoId === 3)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.infraestructura.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura: [
+                                                  ...datosPrincipales.infraestructura,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura:
+                                                  datosPrincipales.infraestructura.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_infraestructura}
                                     />
-                                  }
-                                  label={infra.nombre_infraestructura}
-                                />
-                              </div>
-                            </>
-                            ))}
+                                  </div>
+                                </>
+                              ))}
                           </div>
 
                           <div className="flex flex-col">
@@ -1434,42 +1489,44 @@ function DashboardSchool() {
                             >
                               Enseñanza
                             </label>
-                           
-                          {infraState
-                            .filter((inf) => inf.InfraestructuraTipoId === 4)
-                            .map((infra) => (
-                              <>
-                              <div className="flex flex-col">
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                    checked={datosPrincipales.infraestructura.some(inf=>inf.id===infra.id)}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            infraestructura: [
-                                              ...datosPrincipales.infraestructura,
-                                              infra,
-                                            ],
-                                          });
-                                        } else {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            infraestructura:
-                                              datosPrincipales.infraestructura.filter(
-                                                (inf) => inf.id !== infra.id
-                                              ),
-                                          });
-                                        }
-                                      }}
+
+                            {infraState
+                              .filter((inf) => inf.InfraestructuraTipoId === 4)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.infraestructura.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura: [
+                                                  ...datosPrincipales.infraestructura,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura:
+                                                  datosPrincipales.infraestructura.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_infraestructura}
                                     />
-                                  }
-                                  label={infra.nombre_infraestructura}
-                                />
-                              </div>
-                            </>
-                            ))}
+                                  </div>
+                                </>
+                              ))}
                           </div>
 
                           <div className="flex flex-col">
@@ -1479,44 +1536,45 @@ function DashboardSchool() {
                             >
                               Laboratorio
                             </label>
-                          
-                          {infraState
-                            .filter((inf) => inf.InfraestructuraTipoId === 5)
-                            .map((infra) => (
-                              <>
-                              <div className="flex flex-col">
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                    checked={datosPrincipales.infraestructura.some(inf=>inf.id===infra.id)}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            infraestructura: [
-                                              ...datosPrincipales.infraestructura,
-                                              infra,
-                                            ],
-                                          });
-                                        } else {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            infraestructura:
-                                              datosPrincipales.infraestructura.filter(
-                                                (inf) => inf.id !== infra.id
-                                              ),
-                                          });
-                                        }
-                                      }}
-                                    />
-                                  }
-                                  label={infra.nombre_infraestructura}
-                                />
-                              </div>
-                            </>
-                            ))}
-                          </div>
 
+                            {infraState
+                              .filter((inf) => inf.InfraestructuraTipoId === 5)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.infraestructura.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura: [
+                                                  ...datosPrincipales.infraestructura,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                infraestructura:
+                                                  datosPrincipales.infraestructura.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_infraestructura}
+                                    />
+                                  </div>
+                                </>
+                              ))}
+                          </div>
                         </div>
                       </div>
                       <Box
@@ -1559,8 +1617,7 @@ function DashboardSchool() {
                   {activeStep === 2 && (
                     <div className="flex flex-col gap-5">
                       <h1 className="text-2xl">
-                        Almenos una casilla debe ser
-                        seleccionada
+                        Almenos una casilla debe ser seleccionada
                       </h1>
                       <small>Puede marcar mas de una opción</small>
                       <div className="flex flex-col lg:flex-row gap-5">
@@ -1572,42 +1629,44 @@ function DashboardSchool() {
                             >
                               Afiliaciones
                             </label>
-                            
-                          {afiliaciones
-                            .filter((inf) => inf.Afiliacion_tipo_Id === 1)
-                            .map((infra) => (
-                              <>
-                                <div className="flex flex-col">
-                                  <FormControlLabel
-                                    control={
-                                      <Checkbox
-                                        checked={datosPrincipales.afiliaciones.some(inf=>inf.id===infra.id)}
-                                        onChange={(event, target) => {
-                                          if (target) {
-                                            setDatosPrincipales({
-                                              ...datosPrincipales,
-                                              afiliaciones: [
-                                                ...datosPrincipales.afiliaciones,
-                                                infra,
-                                              ],
-                                            });
-                                          } else {
-                                            setDatosPrincipales({
-                                              ...datosPrincipales,
-                                              afiliaciones:
-                                                datosPrincipales.afiliaciones.filter(
-                                                  (inf) => inf.id !== infra.id
-                                                ),
-                                            });
-                                          }
-                                        }}
-                                      />
-                                    }
-                                    label={infra.nombre_afiliacion}
-                                  />
-                                </div>
-                              </>
-                            ))}
+
+                            {afiliaciones
+                              .filter((inf) => inf.Afiliacion_tipo_Id === 1)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.afiliaciones.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones: [
+                                                  ...datosPrincipales.afiliaciones,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones:
+                                                  datosPrincipales.afiliaciones.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_afiliacion}
+                                    />
+                                  </div>
+                                </>
+                              ))}
                           </div>
 
                           <div className="flex flex-col gap-3">
@@ -1617,42 +1676,44 @@ function DashboardSchool() {
                             >
                               Alianzas
                             </label>
-                          
-                          {afiliaciones
-                            .filter((inf) => inf.Afiliacion_tipo_Id === 2)
-                            .map((infra) => (
-                              <>
-                              <div className="flex flex-col">
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                    checked={datosPrincipales.afiliaciones.some(inf=>inf.id===infra.id)}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            afiliaciones: [
-                                              ...datosPrincipales.afiliaciones,
-                                              infra,
-                                            ],
-                                          });
-                                        } else {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            afiliaciones:
-                                              datosPrincipales.afiliaciones.filter(
-                                                (inf) => inf.id !== infra.id
-                                              ),
-                                          });
-                                        }
-                                      }}
+
+                            {afiliaciones
+                              .filter((inf) => inf.Afiliacion_tipo_Id === 2)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.afiliaciones.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones: [
+                                                  ...datosPrincipales.afiliaciones,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones:
+                                                  datosPrincipales.afiliaciones.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_afiliacion}
                                     />
-                                  }
-                                  label={infra.nombre_afiliacion}
-                                />
-                              </div>
-                            </>
-                            ))}
+                                  </div>
+                                </>
+                              ))}
                           </div>
 
                           <div className="flex flex-col gap-3">
@@ -1662,42 +1723,44 @@ function DashboardSchool() {
                             >
                               Certificaciones
                             </label>
-                           
-                          {afiliaciones
-                            .filter((inf) => inf.Afiliacion_tipo_Id === 3)
-                            .map((infra) => (
-                              <>
-                              <div className="flex flex-col">
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                    checked={datosPrincipales.afiliaciones.some(inf=>inf.id===infra.id)}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            afiliaciones: [
-                                              ...datosPrincipales.afiliaciones,
-                                              infra,
-                                            ],
-                                          });
-                                        } else {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            afiliaciones:
-                                              datosPrincipales.afiliaciones.filter(
-                                                (inf) => inf.id !== infra.id
-                                              ),
-                                          });
-                                        }
-                                      }}
+
+                            {afiliaciones
+                              .filter((inf) => inf.Afiliacion_tipo_Id === 3)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.afiliaciones.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones: [
+                                                  ...datosPrincipales.afiliaciones,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones:
+                                                  datosPrincipales.afiliaciones.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_afiliacion}
                                     />
-                                  }
-                                  label={infra.nombre_afiliacion}
-                                />
-                              </div>
-                            </>
-                            ))}
+                                  </div>
+                                </>
+                              ))}
                           </div>
 
                           <div className="flex flex-col gap-3">
@@ -1707,42 +1770,44 @@ function DashboardSchool() {
                             >
                               Asociaciones
                             </label>
-                            
-                          {afiliaciones
-                            .filter((inf) => inf.Afiliacion_tipo_Id === 4)
-                            .map((infra) => (
-                              <>
-                              <div className="flex flex-col">
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                    checked={datosPrincipales.afiliaciones.some(inf=>inf.id===infra.id)}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            afiliaciones: [
-                                              ...datosPrincipales.afiliaciones,
-                                              infra,
-                                            ],
-                                          });
-                                        } else {
-                                          setDatosPrincipales({
-                                            ...datosPrincipales,
-                                            afiliaciones:
-                                              datosPrincipales.afiliaciones.filter(
-                                                (inf) => inf.id !== infra.id
-                                              ),
-                                          });
-                                        }
-                                      }}
+
+                            {afiliaciones
+                              .filter((inf) => inf.Afiliacion_tipo_Id === 4)
+                              .map((infra) => (
+                                <>
+                                  <div className="flex flex-col">
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={datosPrincipales.afiliaciones.some(
+                                            (inf) => inf.id === infra.id
+                                          )}
+                                          onChange={(event, target) => {
+                                            if (target) {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones: [
+                                                  ...datosPrincipales.afiliaciones,
+                                                  infra,
+                                                ],
+                                              });
+                                            } else {
+                                              setDatosPrincipales({
+                                                ...datosPrincipales,
+                                                afiliaciones:
+                                                  datosPrincipales.afiliaciones.filter(
+                                                    (inf) => inf.id !== infra.id
+                                                  ),
+                                              });
+                                            }
+                                          }}
+                                        />
+                                      }
+                                      label={infra.nombre_afiliacion}
                                     />
-                                  }
-                                  label={infra.nombre_afiliacion}
-                                />
-                              </div>
-                            </>
-                            ))}
+                                  </div>
+                                </>
+                              ))}
                           </div>
                         </div>
                       </div>
@@ -2232,7 +2297,92 @@ function DashboardSchool() {
             <DragAndDrop />
           </div>
         ) : page === 2 ? (
-          <div>Plan</div>
+          <div className="min-h-screen">Plan</div>
+        ) : page === 3 ? (
+          <div className="flex flex-col gap-5 min-h-screen px-24">
+            <h1 className="text-xl font-semibold">Datos Personales</h1>
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit(OnSubmit)}>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="email" className="text-base font-medium">
+                  Email
+                </label>
+                <input
+                {...register("email",{
+                  required: true
+                })}
+                  type="email"
+                  name="email"
+                  id="email"
+                  className="p-3 rounded-md border-2 w-full lg:w-1/2 outline-none"
+                  placeholder="Ingresa el email"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="telefono" className="text-base font-medium">
+                  Telefono
+                </label>
+                <input
+                                {...register("telefono",{
+                                  required: true
+                                })}
+                  type="number"
+                  name="telefono"
+                  id="telefono"
+                  className="p-3 rounded-md border-2 w-full lg:w-1/2 outline-none"
+                  placeholder="Ingresa el telefono"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="password" className="text-base font-medium">
+                  Contraseña actual
+                </label>
+                <div className="relative w-full lg:w-1/2">
+                <input
+                {...register("password")}
+                  type={seePassword ? "text" : "password"}
+                  name="password"
+                  id="password"
+                  className="p-3 rounded-md border-2 w-full outline-none"
+                  placeholder="Ingresa la contraseña"
+                />
+                {seePassword ? <BsEye onClick={()=>setSeePassword(!seePassword)} className="absolute cursor-pointer top-[35%] lg:top-[40%] right-5"/> : <BsEyeSlash onClick={()=>setSeePassword(!seePassword)} className="absolute top-[35%] lg:top-[40%] cursor-pointer right-5"/>}           
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="newPassword" className="text-base font-medium">
+                  Contraseña nueva
+                </label>
+                <div className="relative w-full lg:w-1/2">
+                <input
+                {...register("newPassword")}
+                  type={seeNewPassword ? "text" : "password"}
+                  name="newPassword"
+                  id="newPassword"
+                  className="p-3 rounded-md border-2 w-full outline-none"
+                  placeholder="Ingresa la nueva contraseña"
+                />
+                {seeNewPassword ? <BsEye onClick={()=>setSeeNewPassword(!seeNewPassword)} className="absolute cursor-pointer top-[35%] lg:top-[40%] right-5"/> : <BsEyeSlash onClick={()=>setSeeNewPassword(!seeNewPassword)} className="absolute top-[35%] lg:top-[40%] cursor-pointer right-5"/>}           
+                </div>
+                <div className="relative w-full lg:w-1/2">
+                <input
+                 {...register("repitPassword")}
+                  type={seeNewPassword ? "text" : "password"}
+                  name="repitPassword"
+                  id="repitPassword"
+                  className="p-3 rounded-md border-2 w-full outline-none"
+                  placeholder="Repeti la nueva contraseña"
+                />
+                {seeNewPassword ? <BsEye onClick={()=>setSeeNewPassword(!seeNewPassword)} className="absolute cursor-pointer top-[35%] lg:top-[40%] right-5"/> : <BsEyeSlash onClick={()=>setSeeNewPassword(!seeNewPassword)} className="absolute top-[35%] lg:top-[40%] cursor-pointer right-5"/>}           
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="bg-[#0061dd] text-white w-full lg:w-1/2 outline-none p-2 rounded-md"
+              >
+                Guardar cambios
+              </button>
+            </form>
+          </div>
         ) : null}
       </section>
     </div>

@@ -64,19 +64,6 @@ router.get("/", async (req, res) => {
           },
         },
       ],
-      attributes: [
-        "id",
-        "nombre_colegio",
-        "direccion",
-        "ruc",
-        "numero_estudiantes",
-        "fecha_fundacion",
-        "nombre_director",
-        "telefono",
-        "rating",
-        "horas_idioma_extranjero",
-        "primera_imagen"
-      ],
     });
     response = cole;
     res.json(response);
@@ -144,27 +131,6 @@ router.get("/:Colegio_id", async (req, res) => {
             attributes: [],
           },
         },
-      ],
-      attributes: [
-        "id",
-        "nombre_colegio",
-        "direccion",
-        "ruc",
-        "numero_estudiantes",
-        "fecha_fundacion",
-        "nombre_director",
-        "area",
-        "ugel",
-        "ubicacion",
-        "telefono",
-        "referencia_ubicacion",
-        "propuesta_valor",
-        "descripcion",
-        "rating",
-        "horas_idioma_extranjero",
-        "primera_imagen",
-        "galeria_fotos",
-        "video_url"
       ],
     });
 
