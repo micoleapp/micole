@@ -130,6 +130,7 @@ function DashboardSchool() {
     defaultValues: {
       email: user.email ? user.email : "",
       telefono: user.telefono ? user.telefono : "",
+      newEmail: "",
       password : "",
       newPassword: "",
       repitPassword: ""
@@ -138,15 +139,16 @@ function DashboardSchool() {
   });
   const OnSubmit = async (user) => {
    if(user.newPassword !== user.repitPassword){
-      Swal.fire("Error", "Las contraseñas no coinciden", "error");
+      Swal.fire("Error", "Las nuevas contraseñas no coinciden", "error");
       return;
    }
    const data = {
       email: user.email,
+      newEmail: user.newEmail,
       telefono: user.telefono,
-      password: user.password
+      password: user.password,
+      newPassword: user.newPassword,
    }
-   console.log(id)
    try {
     axios.put(`/auth/${id}`, data)
     .then(res=>{
@@ -156,7 +158,7 @@ function DashboardSchool() {
     Swal.fire({
       icon: "error",
       title: "Algo salio mal",
-      text: error.message,
+      text: "No se pudo actualizar los datos",
     });
    }
   }
@@ -2304,17 +2306,31 @@ function DashboardSchool() {
             <form className="flex flex-col gap-4" onSubmit={handleSubmit(OnSubmit)}>
               <div className="flex flex-col gap-2">
                 <label htmlFor="email" className="text-base font-medium">
-                  Email
+                  Email Actual
                 </label>
                 <input
                 {...register("email",{
                   required: true
                 })}
+                  disabled
                   type="email"
                   name="email"
                   id="email"
                   className="p-3 rounded-md border-2 w-full lg:w-1/2 outline-none"
                   placeholder="Ingresa el email"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="newEmail" className="text-base font-medium">
+                  Nuevo Email
+                </label>
+                <input
+                {...register("newEmail")}
+                  type="email"
+                  name="newEmail"
+                  id="newEmail"
+                  className="p-3 rounded-md border-2 w-full lg:w-1/2 outline-none"
+                  placeholder="Ingresa el nuevo email"
                 />
               </div>
               <div className="flex flex-col gap-2">
