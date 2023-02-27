@@ -154,11 +154,18 @@ function DashboardSchool() {
     .then(res=>{
       Swal.fire("Exito", "Datos actualizados", "success");
     })
-   } catch (error) {
+    .catch(err=>{
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: err.response.data.error,
+      });
+    })
+  } catch (error) {
     Swal.fire({
       icon: "error",
       title: "Algo salio mal",
-      text: "No se pudo actualizar los datos",
+      text: error.response.data.message,
     });
    }
   }
