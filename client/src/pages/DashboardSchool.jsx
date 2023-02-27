@@ -327,9 +327,9 @@ function DashboardSchool() {
     distrito: oneSchool.Distrito ? oneSchool.Distrito : {},
     direccion: oneSchool.direccion ? oneSchool.direccion : "",
     lat:
-      oneSchool.ubicacion.length > 0 ? JSON.parse(oneSchool.ubicacion).lat : 0,
+      oneSchool.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lat : 0,
     lng:
-      oneSchool.ubicacion.length > 0 ? JSON.parse(oneSchool.ubicacion).lng : 0,
+      oneSchool.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lng : 0,
     infraestructura: oneSchool.Infraestructuras
       ? oneSchool.Infraestructuras
       : [],
@@ -451,20 +451,20 @@ function DashboardSchool() {
   }
 
   const initialMultimedia = {
-    image: oneSchool.primera_imagen.length > 0 ? oneSchool.primera_imagen : "",
+    image: oneSchool.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "",
     images:
-      oneSchool.galeria_fotos.length > 0
+      oneSchool.galeria_fotos?.length > 0
         ? JSON.parse(oneSchool.galeria_fotos)
         : [],
-    video_url: oneSchool.video_url.length > 0 ? oneSchool.video_url : "",
+    video_url: oneSchool.video_url?.length > 0 ? oneSchool.video_url : "",
   };
 
   const [multimedia, setMultimedia] = useState(initialMultimedia);
 
   const initialPreviewOne =
-    oneSchool.primera_imagen.length > 0 ? oneSchool.primera_imagen : "";
+    oneSchool.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "";
   const initialPreview =
-    oneSchool.galeria_fotos.length > 0
+    oneSchool.galeria_fotos?.length > 0
       ? JSON.parse(oneSchool.galeria_fotos)
       : [];
   const [preview, setPreview] = useState(initialPreview);
