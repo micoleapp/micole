@@ -219,7 +219,6 @@ const signUp = async (req, res, next) => {
 const putAuth = async (req, res, next) => {
   const { id } = req.params;
   const { email, password, newEmail, telefono, newPassword } = req.body;
-  
   try {
     const authInstance = await Auth.findOne({ where: { email } });
     if (!authInstance) {
@@ -230,34 +229,40 @@ const putAuth = async (req, res, next) => {
     }
     const validatePassword = await authInstance.comparePassword(password);
     if (!validatePassword) {
-      return res.status(403).send({error:"La contraseña ingresada no es correcta"});
+      return res
+        .status(403)
+        .send({ error: 'La contraseña ingresada no es correcta' });
     }
-    const authUpdated = await Auth.update({
-      email: newEmail,
-      password: newPassword,
-    },{where:{email}})
-    const coleUpdate = await Colegio.update({
-      telefono
-    },{where:{id}})
-    const userUpdate = await User.update({
-      telefono
-    },{where:{id}})
+    if (newEmail) {
+      authInstance.email = newEmail;
+    }
+    if (newPassword) {
+      authInstance.password = newPassword;
+    }
+    await authInstance.save();
+
+    const coleUpdate = await Colegio.update(
+      {
+        telefono,
+      },
+      { where: { id } }
+    );
     const sanitizedAuth = {
-      email: authUpdated.email,
-      rol: authUpdated.rol,
-      nombre: userUpdate.nombre,
-      telefono : coleUpdate.telefono
-    }
+      email: authInstance.email,
+      rol: authInstance.rol,
+      telefono: coleUpdate.telefono,
+      nombre: coleUpdate.nombre_colegio
+    };
     return res.status(200).send(sanitizedAuth);
   } catch (error) {
     return next(error);
   }
-}
+};
 
 module.exports = {
   signIn,
   signUp,
   editAuthById,
   getAuth,
-  putAuth
+  putAuth,
 };

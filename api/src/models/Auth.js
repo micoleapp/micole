@@ -25,10 +25,6 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          len: {
-            args: [6, 15],
-            msg: "La contraseña debe tener entre 6 y 15 caracteres",
-          },
           check: (value) => {
             const hasUppercase = /[A-Z]/.test(value);
             const hasSign = /[@$!%*#?&]/.test(value);
