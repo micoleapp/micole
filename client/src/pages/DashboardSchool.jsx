@@ -123,6 +123,7 @@ function DashboardSchool() {
     departaments,
     niveles,
     infraestructura: infraState,
+    afiliaciones
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
 
@@ -193,7 +194,7 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    setAllData({ ...allData, acreditaciones });
+    setAllData({ ...allData, ...datosPrincipales });
     handleNext();
   };
 
@@ -208,32 +209,9 @@ function DashboardSchool() {
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
-    setDatosPrincipales(initialDatosPrincipales);
-    setInfraestructura(initialInfraestructura);
-    setAcreditaciones(initialAcreditaciones);
-    setPreview([]);
-    setMultimedia(initialMultimedia);
   };
   const handlerVacanteInput = (e) => {
     setInputVacante(e.target.value);
-  };
-
-  const [provincia, setProvincia] = useState([]);
-
-  const handleChangeProvincia = (event) => {
-    setProvincia(event.target.value);
-  };
-
-  const [distrito, setDistrito] = useState([]);
-
-  const handleChangeDistrito = (event) => {
-    setDistrito(event.target.value);
-  };
-
-  const [departamento, setDepartamento] = useState([]);
-
-  const handleChangeDepartamento = (event) => {
-    setDepartamento(event.target.value);
   };
 
   let libRef = React.useRef(libraries);
@@ -293,7 +271,7 @@ function DashboardSchool() {
     } else {
       console.log("Autocomplete is not loaded yet!");
     }
-  };
+  };  
 
   const initialDatosPrincipales = {
     nombreColegio: oneSchool.nombre_colegio ? oneSchool.nombre_colegio : "",
@@ -313,7 +291,7 @@ function DashboardSchool() {
     alumnos: oneSchool.numero_estudiantes
       ? Number(oneSchool.numero_estudiantes)
       : null,
-    niveles: oneSchool.niveles ? oneSchool.niveles : [],
+    niveles: oneSchool.Nivels.length > 0 ? oneSchool.Nivels : [],
     departamento: oneSchool.Departamento ? oneSchool.Departamento : {},
     provincia: oneSchool.Provincium ? oneSchool.Provincium : {},
     distrito: oneSchool.Distrito ? oneSchool.Distrito : {},
@@ -323,12 +301,13 @@ function DashboardSchool() {
     infraestructura: oneSchool.Infraestructuras
       ? oneSchool.Infraestructuras
       : [],
+    afiliaciones: oneSchool.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
   };
 
   const [datosPrincipales, setDatosPrincipales] = useState(
     initialDatosPrincipales
   );
-
+  
   const datosPrincipalesCompleted = () => {
     if (
       datosPrincipales.nombreColegio !== "" &&
@@ -356,8 +335,6 @@ function DashboardSchool() {
     }
   };
 
-  console.log(datosPrincipales);
-
   const infraestructuraCompleted = () => {
     if (datosPrincipales.infraestructura.length !== 0) {
       return false;
@@ -366,31 +343,16 @@ function DashboardSchool() {
     }
   };
 
-  const initialAcreditaciones = {
-    afiliaciones: [],
-    alianzas: [],
-    certificaciones: [],
-    asociaciones: [],
-  };
-
-  const [acreditaciones, setAcreditaciones] = useState(initialAcreditaciones);
-
   const acreditacionesCompleted = () => {
-    if (
-      acreditaciones.afiliaciones.length > 0 &&
-      acreditaciones.alianzas.length > 0 &&
-      acreditaciones.certificaciones.length > 0 &&
-      acreditaciones.asociaciones.length > 0
-    ) {
+    if (datosPrincipales.afiliaciones.length !== 0) {
       return false;
     } else {
       return true;
     }
   };
 
-  const [isOpen, setOpen] = useState(false);
 
-  const windowSize = useRef(window.innerWidth);
+  const [isOpen, setOpen] = useState(false);
 
   const [file, setFile] = useState(null);
 
@@ -470,7 +432,7 @@ function DashboardSchool() {
   const [preview, setPreview] = useState(initialPreview);
   const [previewOne, setPreviewOne] = useState(initialPreviewOne);
 
-  console.log(preview)
+  console.log(allData)
 
   useEffect(() => {
     if (files !== null) {
@@ -513,6 +475,7 @@ function DashboardSchool() {
 
   const handleSubmitFormComplete = (e) => {
     e.preventDefault();
+
     axios
       .put(`http://localhost:3001/colegios/${user.id}`, allData)
       .then((res) => {
@@ -520,8 +483,13 @@ function DashboardSchool() {
           icon: "success",
           title: "Felicidades ya estas a un paso de publicar tu colegio",
           text: "Continua completando el horario para tus citas",
+          confirmButtonText: 'Continuar'
+        }).then(res=>{
+          if(res.isConfirmed){
+            handleReset()
+            setPage(1);
+          }
         });
-        setPage(1);
       })
       .catch((err) => {
         console.log(err.response.data.message);
@@ -619,8 +587,9 @@ function DashboardSchool() {
   const [spanTwo, setSpanTwo] = useState(false);
   const [activeUpOne, setActiveUpOne] = useState(true);
   const [activeUpTwo, setActiveUpTwo] = useState(true);
-  console.log(datosPrincipales);
-
+  const isCategorySelected = (categoryId) => {
+    return datosPrincipales.categoria.some((c) => c.id === categoryId);
+  }
   return (
     <div className="flex lg:flex-row flex-col">
       <section
@@ -732,10 +701,6 @@ function DashboardSchool() {
                     >
                       Enviar datos
                     </button>
-                    <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                      <Box sx={{ flex: "1 1 auto" }} />
-                      <Button onClick={handleReset}>Reset</Button>
-                    </Box>
                   </div>
                 </React.Fragment>
               ) : (
@@ -821,9 +786,10 @@ function DashboardSchool() {
                         <div className="flex flex-col lg:grid grid-cols-3">
                           {categories?.map((category) => (
                             <FormControlLabel
+                              key={category.id}
                               control={
                                 <Checkbox
-                                  checked={datosPrincipales.categoria.some(c=>c.id === category.id)}
+                                checked={datosPrincipales.categoria.map(e=>e.id).includes(category.id)}
                                   onChange={(event, target) => {
                                     if (target) {
                                       setDatosPrincipales({
@@ -838,7 +804,7 @@ function DashboardSchool() {
                                         ...datosPrincipales,
                                         categoria:
                                           datosPrincipales.categoria.filter(
-                                            (cat) => cat !== category
+                                            (cat) => cat.id !== category.id
                                           ),
                                       });
                                     }
@@ -1039,7 +1005,7 @@ function DashboardSchool() {
                                         ...datosPrincipales,
                                         niveles:
                                           datosPrincipales.niveles.filter(
-                                            (cat) => cat !== level
+                                            (cat) => cat.id !== level.id
                                           ),
                                       });
                                     }
@@ -1323,6 +1289,7 @@ function DashboardSchool() {
                         Almenos una casilla debe ser
                         seleccionada
                       </h1>
+                      <small>Puede marcar mas de una opción</small>
                       <div className="flex flex-col lg:flex-row gap-5">
                         <div className="grid lg:grid-cols-5 grid-cols-2">
                           <div className="flex flex-col">
@@ -1332,7 +1299,7 @@ function DashboardSchool() {
                             >
                               Administrativo
                             </label>
-                            <small>Puede marcar mas de una opción</small>
+                         
                           {infraState
                             .filter((inf) => inf.InfraestructuraTipoId === 1)
                             .map((infra) => (
@@ -1356,7 +1323,7 @@ function DashboardSchool() {
                                               ...datosPrincipales,
                                               infraestructura:
                                                 datosPrincipales.infraestructura.filter(
-                                                  (inf) => inf !== infra
+                                                  (inf) => inf.id !== infra.id
                                                 ),
                                             });
                                           }
@@ -1377,7 +1344,7 @@ function DashboardSchool() {
                             >
                               Artistica
                             </label>
-                            <small>Puede marcar mas de una opción</small>
+                            
                           {infraState
                             .filter((inf) => inf.InfraestructuraTipoId === 2)
                             .map((infra) => (
@@ -1401,7 +1368,7 @@ function DashboardSchool() {
                                             ...datosPrincipales,
                                             infraestructura:
                                               datosPrincipales.infraestructura.filter(
-                                                (inf) => inf !== infra
+                                                (inf) => inf.id !== infra.id
                                               ),
                                           });
                                         }
@@ -1422,7 +1389,7 @@ function DashboardSchool() {
                             >
                               Deportiva
                             </label>
-                            <small>Puede marcar mas de una opción</small>
+                           
                           {infraState
                             .filter((inf) => inf.InfraestructuraTipoId === 3)
                             .map((infra) => (
@@ -1446,7 +1413,7 @@ function DashboardSchool() {
                                             ...datosPrincipales,
                                             infraestructura:
                                               datosPrincipales.infraestructura.filter(
-                                                (inf) => inf !== infra
+                                                (inf) => inf.id !== infra.id
                                               ),
                                           });
                                         }
@@ -1467,7 +1434,7 @@ function DashboardSchool() {
                             >
                               Enseñanza
                             </label>
-                            <small>Puede marcar mas de una opción</small>
+                           
                           {infraState
                             .filter((inf) => inf.InfraestructuraTipoId === 4)
                             .map((infra) => (
@@ -1491,7 +1458,7 @@ function DashboardSchool() {
                                             ...datosPrincipales,
                                             infraestructura:
                                               datosPrincipales.infraestructura.filter(
-                                                (inf) => inf !== infra
+                                                (inf) => inf.id !== infra.id
                                               ),
                                           });
                                         }
@@ -1512,7 +1479,7 @@ function DashboardSchool() {
                             >
                               Laboratorio
                             </label>
-                            <small>Puede marcar mas de una opción</small>
+                          
                           {infraState
                             .filter((inf) => inf.InfraestructuraTipoId === 5)
                             .map((infra) => (
@@ -1536,7 +1503,7 @@ function DashboardSchool() {
                                             ...datosPrincipales,
                                             infraestructura:
                                               datosPrincipales.infraestructura.filter(
-                                                (inf) => inf !== infra
+                                                (inf) => inf.id !== infra.id
                                               ),
                                           });
                                         }
@@ -1592,186 +1559,189 @@ function DashboardSchool() {
                   {activeStep === 2 && (
                     <div className="flex flex-col gap-5">
                       <h1 className="text-2xl">
-                        Almenos una casilla de cada categoria debe ser
+                        Almenos una casilla debe ser
                         seleccionada
                       </h1>
+                      <small>Puede marcar mas de una opción</small>
                       <div className="flex flex-col lg:flex-row gap-5">
-                        <div className="flex flex-col gap-7">
-                          <div>
-                            <div className="flex flex-col">
-                              <label
-                                htmlFor="categoria"
-                                className="text-lg font-medium"
-                              >
-                                Afiliaciones
-                              </label>
-                              <small>Puede marcar mas de una opción</small>
-                            </div>
-                            <div className="flex flex-col">
-                              {Acreditaciones?.map((acc) => (
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                      checked={acreditaciones.afiliaciones.includes(
-                                        acc
-                                      )}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setAcreditaciones({
-                                            ...acreditaciones,
-                                            afiliaciones: [
-                                              ...acreditaciones.afiliaciones,
-                                              acc,
-                                            ],
-                                          });
-                                        } else {
-                                          setAcreditaciones({
-                                            ...acreditaciones,
-                                            afiliaciones:
-                                              acreditaciones.afiliaciones.filter(
-                                                (cat) => cat !== acc
-                                              ),
-                                          });
-                                        }
-                                      }}
-                                    />
-                                  }
-                                  label={acc}
-                                />
-                              ))}
-                            </div>
+                        <div className="grid lg:grid-cols-4 grid-cols-2">
+                          <div className="flex flex-col gap-3">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Afiliaciones
+                            </label>
+                            
+                          {afiliaciones
+                            .filter((inf) => inf.Afiliacion_tipo_Id === 1)
+                            .map((infra) => (
+                              <>
+                                <div className="flex flex-col">
+                                  <FormControlLabel
+                                    control={
+                                      <Checkbox
+                                        checked={datosPrincipales.afiliaciones.some(inf=>inf.id===infra.id)}
+                                        onChange={(event, target) => {
+                                          if (target) {
+                                            setDatosPrincipales({
+                                              ...datosPrincipales,
+                                              afiliaciones: [
+                                                ...datosPrincipales.afiliaciones,
+                                                infra,
+                                              ],
+                                            });
+                                          } else {
+                                            setDatosPrincipales({
+                                              ...datosPrincipales,
+                                              afiliaciones:
+                                                datosPrincipales.afiliaciones.filter(
+                                                  (inf) => inf.id !== infra.id
+                                                ),
+                                            });
+                                          }
+                                        }}
+                                      />
+                                    }
+                                    label={infra.nombre_afiliacion}
+                                  />
+                                </div>
+                              </>
+                            ))}
                           </div>
-                          <div>
-                            <div className="flex flex-col">
-                              <label
-                                htmlFor="categoria"
-                                className="text-lg font-medium"
-                              >
-                                Alianzas
-                              </label>
-                              <small>Puede marcar mas de una opción</small>
-                            </div>
-                            <div className="flex flex-col">
-                              {Alianzas?.map((all) => (
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                      checked={acreditaciones.alianzas.includes(
-                                        all
-                                      )}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setAcreditaciones({
-                                            ...acreditaciones,
-                                            alianzas: [
-                                              ...acreditaciones.alianzas,
-                                              all,
-                                            ],
-                                          });
-                                        } else {
-                                          setAcreditaciones({
-                                            ...acreditaciones,
-                                            alianzas:
-                                              acreditaciones.alianzas.filter(
-                                                (cat) => cat !== all
-                                              ),
-                                          });
-                                        }
-                                      }}
-                                    />
-                                  }
-                                  label={all}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="flex flex-col">
-                              <label
-                                htmlFor="categoria"
-                                className="text-lg font-medium"
-                              >
-                                Certificaciones
-                              </label>
-                              <small>Puede marcar mas de una opción</small>
-                            </div>
-                            <div className="flex flex-col">
-                              {Certificaciones?.map((cert) => (
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                      checked={acreditaciones.certificaciones.includes(
-                                        cert
-                                      )}
-                                      onChange={(event, target) => {
-                                        if (target) {
-                                          setAcreditaciones({
-                                            ...acreditaciones,
-                                            certificaciones: [
-                                              ...acreditaciones.certificaciones,
-                                              cert,
-                                            ],
-                                          });
-                                        } else {
-                                          setAcreditaciones({
-                                            ...acreditaciones,
-                                            certificaciones:
-                                              acreditaciones.certificaciones.filter(
-                                                (cat) => cat !== cert
-                                              ),
-                                          });
-                                        }
-                                      }}
-                                    />
-                                  }
-                                  label={cert}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                        </div>
 
-                        <div>
-                          <div className="flex flex-col">
+                          <div className="flex flex-col gap-3">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Alianzas
+                            </label>
+                          
+                          {afiliaciones
+                            .filter((inf) => inf.Afiliacion_tipo_Id === 2)
+                            .map((infra) => (
+                              <>
+                              <div className="flex flex-col">
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                    checked={datosPrincipales.afiliaciones.some(inf=>inf.id===infra.id)}
+                                      onChange={(event, target) => {
+                                        if (target) {
+                                          setDatosPrincipales({
+                                            ...datosPrincipales,
+                                            afiliaciones: [
+                                              ...datosPrincipales.afiliaciones,
+                                              infra,
+                                            ],
+                                          });
+                                        } else {
+                                          setDatosPrincipales({
+                                            ...datosPrincipales,
+                                            afiliaciones:
+                                              datosPrincipales.afiliaciones.filter(
+                                                (inf) => inf.id !== infra.id
+                                              ),
+                                          });
+                                        }
+                                      }}
+                                    />
+                                  }
+                                  label={infra.nombre_afiliacion}
+                                />
+                              </div>
+                            </>
+                            ))}
+                          </div>
+
+                          <div className="flex flex-col gap-3">
+                            <label
+                              htmlFor="categoria"
+                              className="text-lg font-medium"
+                            >
+                              Certificaciones
+                            </label>
+                           
+                          {afiliaciones
+                            .filter((inf) => inf.Afiliacion_tipo_Id === 3)
+                            .map((infra) => (
+                              <>
+                              <div className="flex flex-col">
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                    checked={datosPrincipales.afiliaciones.some(inf=>inf.id===infra.id)}
+                                      onChange={(event, target) => {
+                                        if (target) {
+                                          setDatosPrincipales({
+                                            ...datosPrincipales,
+                                            afiliaciones: [
+                                              ...datosPrincipales.afiliaciones,
+                                              infra,
+                                            ],
+                                          });
+                                        } else {
+                                          setDatosPrincipales({
+                                            ...datosPrincipales,
+                                            afiliaciones:
+                                              datosPrincipales.afiliaciones.filter(
+                                                (inf) => inf.id !== infra.id
+                                              ),
+                                          });
+                                        }
+                                      }}
+                                    />
+                                  }
+                                  label={infra.nombre_afiliacion}
+                                />
+                              </div>
+                            </>
+                            ))}
+                          </div>
+
+                          <div className="flex flex-col gap-3">
                             <label
                               htmlFor="categoria"
                               className="text-lg font-medium"
                             >
                               Asociaciones
                             </label>
-                            <small>Puede marcar mas de una opción</small>
-                          </div>
-                          <div className="flex flex-col">
-                            {Asociaciones?.map((asc) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={acreditaciones.asociaciones.includes(
-                                      asc
-                                    )}
-                                    onChange={(event, target) => {
-                                      if (target) {
-                                        setAcreditaciones({
-                                          ...acreditaciones,
-                                          asociaciones: [
-                                            ...acreditaciones.asociaciones,
-                                            asc,
-                                          ],
-                                        });
-                                      } else {
-                                        setAcreditaciones({
-                                          ...acreditaciones,
-                                          asociaciones:
-                                            acreditaciones.asociaciones.filter(
-                                              (cat) => cat !== asc
-                                            ),
-                                        });
-                                      }
-                                    }}
-                                  />
-                                }
-                                label={asc}
-                              />
+                            
+                          {afiliaciones
+                            .filter((inf) => inf.Afiliacion_tipo_Id === 4)
+                            .map((infra) => (
+                              <>
+                              <div className="flex flex-col">
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                    checked={datosPrincipales.afiliaciones.some(inf=>inf.id===infra.id)}
+                                      onChange={(event, target) => {
+                                        if (target) {
+                                          setDatosPrincipales({
+                                            ...datosPrincipales,
+                                            afiliaciones: [
+                                              ...datosPrincipales.afiliaciones,
+                                              infra,
+                                            ],
+                                          });
+                                        } else {
+                                          setDatosPrincipales({
+                                            ...datosPrincipales,
+                                            afiliaciones:
+                                              datosPrincipales.afiliaciones.filter(
+                                                (inf) => inf.id !== infra.id
+                                              ),
+                                          });
+                                        }
+                                      }}
+                                    />
+                                  }
+                                  label={infra.nombre_afiliacion}
+                                />
+                              </div>
+                            </>
                             ))}
                           </div>
                         </div>
@@ -1796,20 +1766,20 @@ function DashboardSchool() {
                           Next
                         </Button>
                         {/* {activeStep !== steps.length &&
-                                        (completed[activeStep] ? (
-                                          <Typography
-                                            variant="caption"
-                                            sx={{ display: "inline-block" }}
-                                          >
-                                            Step {activeStep + 1} already completed
-                                          </Typography>
-                                        ) : (
-                                          <Button onClick={handleComplete}>
-                                            {completedSteps() === totalSteps() - 1
-                                              ? "Finish"
-                                              : "Complete Step"}
-                                          </Button>
-                                        ))} */}
+                      (completed[activeStep] ? (
+                        <Typography
+                          variant="caption"
+                          sx={{ display: "inline-block" }}
+                        >
+                          Step {activeStep + 1} already completed
+                        </Typography>
+                      ) : (
+                        <Button onClick={handleComplete}>
+                          {completedSteps() === totalSteps() - 1
+                            ? "Finish"
+                            : "Complete Step"}
+                        </Button>
+                      ))} */}
                       </Box>
                     </div>
                   )}

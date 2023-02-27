@@ -10,7 +10,8 @@ const {
   Plan_Pago,
   Distrito,
   Infraestructura,
-  Afiliacion
+  Afiliacion,
+  Nivel
 } = require("../db.js");
 
 // const getComponentData = require("../funciones/getComponentData.js");
@@ -24,6 +25,10 @@ router.get("/", async (req, res) => {
     let cole;
     cole = await Colegio.findAll({
       include: [
+        {
+          model: Nivel,
+          attributes: ["nombre_nivel","id"],
+        },
         {
           model: Idioma,
           attributes: ["nombre_idioma", "id"],
@@ -70,7 +75,7 @@ router.get("/", async (req, res) => {
         "telefono",
         "rating",
         "horas_idioma_extranjero",
-        "primera_imagen",
+        "primera_imagen"
       ],
     });
     response = cole;
@@ -87,6 +92,10 @@ router.get("/:Colegio_id", async (req, res) => {
     const cole = await Colegio.findAll({
       where: { id: [Colegio_id] },
       include: [
+        {
+          model: Nivel,
+          attributes: ["nombre_nivel","id"],
+        },
         {
           model: Idioma,
           attributes: ["nombre_idioma", "id"],
@@ -130,7 +139,7 @@ router.get("/:Colegio_id", async (req, res) => {
         },
         {
           model: Afiliacion,
-          attributes: ["id", "nombre_afiliacion", "Afiliacion_tipo_Id"],
+          attributes: ["id", "nombre_afiliacion", "Afiliacion_tipo_Id","logo"],
           through: {
             attributes: [],
           },
@@ -190,7 +199,7 @@ router.put("/:id", async (req, res) => {
       provincia,
       infraestructura,
       niveles,
-      afiliacion
+      afiliaciones
     } = req.body;
     let video_url = multimedia.video_url;
     let primera_imagen = multimedia.image
@@ -221,13 +230,13 @@ router.put("/:id", async (req, res) => {
       { where: { id: id } }
     );
     const colegio = await Colegio.findByPk(id);
-    if (colegio === null) {
+    if (colegio === null) { 
       console.log("Not found!");
     } else {
       await colegio.setInfraestructuras(infraestructura.map((i) => i.id));
       await colegio.setCategoria(categoria.map((c) => c.id));
-      await colegio.setNivel(niveles.map((n) => n.id));
-      await colegio.setAfiliacion(afiliacion);
+      await colegio.setNivels(niveles.map((n) => n.id));
+      await colegio.setAfiliacions(afiliaciones.map((a) => a.id));
     }
 
     res.json(editedColegio);
