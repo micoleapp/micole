@@ -20,6 +20,9 @@ import {
   getAllProvincias,
   getAllInfraestructura,
   getAllPaises,
+  getAllNiveles,
+  getAllAfiliaciones,
+  getAllGrados
 } from "./redux/SchoolsActions";
 import RequireAuth from "./components/RequireAuth";
 
@@ -30,11 +33,14 @@ function App() {
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(getAllCategories());
+    dispatch(getAllGrados());
     dispatch(getAllDepartaments());
     dispatch(getAllDistrits());
     dispatch(getAllProvincias());
     dispatch(getAllInfraestructura());
     dispatch(getAllPaises());
+    dispatch(getAllNiveles());
+    dispatch(getAllAfiliaciones());
     dispatch(getUserByToken());
   }, []);
 
