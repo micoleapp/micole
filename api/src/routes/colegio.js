@@ -17,7 +17,7 @@ const {
 
 //------- PEDIR TODOS LOS COLEGIOS A LA BD--------
 router.get("/", async (req, res) => {
-  //   const { brand, category, priceMin, priceMax } = req.query;
+  const { distrito, grado, año } = req.query;
   let response = [];
   try {
     let cole;
@@ -73,12 +73,18 @@ router.get("/", async (req, res) => {
       ],
     });
     response = cole;
+
+    distrito
+      ? (response = response.filter((c) => c.Distrito.id.includes(distrito)))
+      : null;
+
     res.json(response);
   } catch (err) {
     res.json({ err });
   }
 });
 
+//------- PEDIR UNO DE LOS COLEGIOS POR ID--------
 router.get("/:Colegio_id", async (req, res) => {
   const { Colegio_id } = req.params;
 
@@ -115,14 +121,24 @@ router.get("/:Colegio_id", async (req, res) => {
         },
         {
           model: Categoria,
-          attributes: ["id", "nombre_categoria","imagen_categoria","logo_categoria"],
+          attributes: [
+            "id",
+            "nombre_categoria",
+            "imagen_categoria",
+            "logo_categoria",
+          ],
           through: {
             attributes: [],
           },
         },
         {
           model: Infraestructura,
-          attributes: ["id", "nombre_infraestructura", "InfraestructuraTipoId","imagen"],
+          attributes: [
+            "id",
+            "nombre_infraestructura",
+            "InfraestructuraTipoId",
+            "imagen",
+          ],
           through: {
             attributes: [],
           },
@@ -157,7 +173,7 @@ router.get("/:Colegio_id", async (req, res) => {
   }
 });
 
-//--------------------PUT  UN PRODUCTO DEL ALMACEN--------------------
+//--------------------PUT  UN COLEGIO POR ID-------
 router.put("/:id", async (req, res) => {
   console.log(req.body);
   try {
