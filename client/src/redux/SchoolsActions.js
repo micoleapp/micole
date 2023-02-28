@@ -1,5 +1,12 @@
 import axios from 'axios'
-import {getNiveles, cleanOneSchool,getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,getDistrits,getCategories,getProvincias,getInfraestructura,getPaises,getAfiliaciones,getGrados} from './SchoolsSlice'
+import {getNiveles, cleanOneSchool,getSchools,getOneSchool,getError,isLoading,getDepartaments,filterByDepartament,getDistrits,getCategories,getProvincias,getInfraestructura,getPaises,getAfiliaciones,getGrados,getFilterSchool} from './SchoolsSlice'
+
+export const getFilterHome = (distrito,grado,ingreso) => (dispatch) => {
+  dispatch(isLoading())
+  axios.get(`/colegios?distrito=${distrito}&?grado=${grado}&?ingreso=${ingreso}`)
+  .then(res=>dispatch(getFilterSchool(res.data)))
+  .catch(err=>dispatch(getError(err.message)))
+}
 
 export const getAllGrados = () => (dispatch) => {
   dispatch(isLoading())

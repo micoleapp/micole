@@ -65,7 +65,7 @@ const handleValueAño =(event)=>{
               label="Tipo de colegio"
             >
               {distrits.map((dis) => (
-                <MenuItem value={dis.nombre_distrito} key={dis.id}>
+                <MenuItem value={dis.id} key={dis.id}>
                   <ListItemText primary={ dis.nombre_distrito} />
                 </MenuItem>
               ))}
@@ -93,7 +93,7 @@ const handleValueAño =(event)=>{
               label="Tipo de colegio"
             >
                             {grados.map((grad) => (
-                <MenuItem value={grad.nombre_grado} key={grad.id}>
+                <MenuItem value={grad.id} key={grad.id}>
                   <ListItemText primary={ grad.nombre_grado} />
                 </MenuItem>
               ))}
