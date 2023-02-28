@@ -10,6 +10,8 @@ const {
   Plan_Pago,
   Distrito,
   Infraestructura,
+  Afiliacion,
+  Nivel
 } = require("../db.js");
 
 // const getComponentData = require("../funciones/getComponentData.js");
@@ -23,6 +25,10 @@ router.get("/", async (req, res) => {
     let cole;
     cole = await Colegio.findAll({
       include: [
+        {
+          model: Nivel,
+          attributes: ["nombre_nivel","id"],
+        },
         {
           model: Idioma,
           attributes: ["nombre_idioma", "id"],
@@ -58,19 +64,6 @@ router.get("/", async (req, res) => {
           },
         },
       ],
-      attributes: [
-        "id",
-        "nombre_colegio",
-        "direccion",
-        "ruc",
-        "numero_estudiantes",
-        "fecha_fundacion",
-        "nombre_director",
-        "telefono",
-        "rating",
-        "horas_idioma_extranjero",
-        "primera_imagen",
-      ],
     });
     response = cole;
 
@@ -92,6 +85,10 @@ router.get("/:Colegio_id", async (req, res) => {
     const cole = await Colegio.findAll({
       where: { id: [Colegio_id] },
       include: [
+        {
+          model: Nivel,
+          attributes: ["nombre_nivel","id"],
+        },
         {
           model: Idioma,
           attributes: ["nombre_idioma", "id"],
@@ -143,27 +140,13 @@ router.get("/:Colegio_id", async (req, res) => {
             attributes: [],
           },
         },
-      ],
-      attributes: [
-        "id",
-        "nombre_colegio",
-        "direccion",
-        "ruc",
-        "numero_estudiantes",
-        "fecha_fundacion",
-        "nombre_director",
-        "area",
-        "ugel",
-        "ubicacion",
-        "telefono",
-        "referencia_ubicacion",
-        "propuesta_valor",
-        "descripcion",
-        "rating",
-        "horas_idioma_extranjero",
-        "primera_imagen",
-        "galeria_fotos",
-        "video_url",
+        {
+          model: Afiliacion,
+          attributes: ["id", "nombre_afiliacion", "Afiliacion_tipo_Id","logo"],
+          through: {
+            attributes: [],
+          },
+        },
       ],
     });
 
@@ -197,10 +180,12 @@ router.put("/:id", async (req, res) => {
       departamento,
       provincia,
       infraestructura,
+      niveles,
+      afiliaciones
     } = req.body;
     let video_url = multimedia.video_url;
-    let primera_imagen = multimedia.images[0];
-    let galeria_fotos = JSON.stringify(multimedia.images.slice(1));
+    let primera_imagen = multimedia.image
+    let galeria_fotos = JSON.stringify(multimedia.images);
     const ubicacion = { lat, lng };
     const editedColegio = await Colegio.update(
       {
@@ -220,7 +205,6 @@ router.put("/:id", async (req, res) => {
         propuesta_valor: propuesta,
         descripcion: descripcion,
         horas_idioma_extranjero: ingles,
-        categoria: categoria,
         DepartamentoId: departamento.id,
         provincia: provincia,
       },
@@ -228,11 +212,13 @@ router.put("/:id", async (req, res) => {
       { where: { id: id } }
     );
     const colegio = await Colegio.findByPk(id);
-    if (colegio === null) {
+    if (colegio === null) { 
       console.log("Not found!");
     } else {
-      await colegio.setInfraestructuras(infraestructura);
-      await colegio.setCategoria(categoria);
+      await colegio.setInfraestructuras(infraestructura.map((i) => i.id));
+      await colegio.setCategoria(categoria.map((c) => c.id));
+      await colegio.setNivels(niveles.map((n) => n.id));
+      await colegio.setAfiliacions(afiliaciones.map((a) => a.id));
     }
 
     res.json(editedColegio);
