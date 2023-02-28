@@ -5,14 +5,12 @@ import Select from "@mui/material/Select";
 
 import ListItemText from "@mui/material/ListItemText";
 import Icon_filters_home from "./svg/Icon_filters_home";
-import MockupDistritos from "../../MockupInfo/MockupDistritos";
-import MockupGrados from "../../MockupInfo/MockupGrados";
-import MockupCategoria from "../../MockupInfo/MockupCategoria";
 import FormControl from "@mui/material/FormControl";
 import { MenuItem } from "@mui/material";
-
+import { useDispatch } from "react-redux";
 import { InputLabel } from "@mui/material";
 import { useSelector } from "react-redux";
+import { getFilterHome } from "../../redux/SchoolsActions";
 const yearNow = new Date().getFullYear();
 const Ingreso2 = [yearNow, yearNow+1, yearNow+2];
 
@@ -21,7 +19,8 @@ function FiltrosHome() {
     const [Ingreso, setIngreso] = useState(false);
     const [Grado, setGrado] = useState(false);
     const [Distrito, setDistrito] = useState(false);
-  const { allschools, loading, departaments, distrits, grados } = useSelector(
+    const dispatch = useDispatch();
+  const { distrits, grados } = useSelector(
     (state) => state.schools
   );
 
@@ -137,7 +136,7 @@ const handleValueAño =(event)=>{
 
         <div className={style.container_button}>
           <Link to={`/listschool?distrito=${Distrito}&grado=${Grado}&ingreso=${Ingreso}`}>
-            <button>Buscar</button>
+            <button onClick={()=>dispatch(getFilterHome(Distrito,Grado,Ingreso))}>Buscar</button>
           </Link>
         </div>
       </div>

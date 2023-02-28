@@ -31,7 +31,7 @@ import {
   Autocomplete,
 } from "@react-google-maps/api";
 import { steps } from "../MockupInfo/Pasos";
-
+import { getVacantes} from "../redux/SchoolsActions"
 import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
@@ -639,6 +639,12 @@ function DashboardSchool() {
  
   const [seePassword,setSeePassword] = useState(false)
   const [seeNewPassword,setSeeNewPassword] = useState(false)
+
+  useEffect(() => {
+    dispatch(getVacantes(datosPrincipales.niveles))
+  }, [datosPrincipales.niveles])
+  
+  console.log(datosPrincipales)
 
   return (
     <div className="flex lg:flex-row flex-col">
