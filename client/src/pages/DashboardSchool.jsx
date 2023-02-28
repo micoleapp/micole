@@ -139,7 +139,11 @@ function DashboardSchool() {
   });
   const OnSubmit = async (user) => {
    if(user.newPassword !== user.repitPassword){
-      Swal.fire("Error", "Las nuevas contraseñas no coinciden", "error");
+      Swal.fire("warning", "Las nuevas contraseñas no coinciden", "error");
+      return;
+   }
+   if(password){
+      Swal.fire("Error", "Ingrese su contraseña para modificar algun campo", "warning");
       return;
    }
    const data = {
@@ -165,7 +169,7 @@ function DashboardSchool() {
     Swal.fire({
       icon: "error",
       title: "Algo salio mal",
-      text: error.response.data.message,
+      text: error.response,
     });
    }
   }
@@ -673,29 +677,47 @@ function DashboardSchool() {
             </span>
           </button>
           <button
-            className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
+            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+              page == 1? "bg-[#0061dd] text-white" : null
+            } `}
             onClick={() => setPage(1)}
           >
-            <CiClock1 className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
-            <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
+            <CiClock1               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                page == 1 ? "text-white" : null
+              }`} />
+            <span               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                page == 1 ? "text-white" : null
+              }`}>
               Horario para citas{" "}
             </span>
           </button>
           <button
-            className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
+            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+              page == 2 ? "bg-[#0061dd] text-white" : null
+            } `}
             onClick={() => setPage(2)}
           >
-            <BsWindowDock className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
-            <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
+            <BsWindowDock               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                page == 2 ? "text-white" : null
+              }`} />
+            <span               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                page == 2 ? "text-white" : null
+              }`}>
               Mi plan
             </span>
           </button>
           <button
-            className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
+            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+              page == 3 ? "bg-[#0061dd] text-white" : null
+            } `}
             onClick={() => setPage(3)}
           >
-            <GiHexagonalNut className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
-            <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
+            <GiHexagonalNut               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                page == 3 ? "text-white" : null
+              }`} />
+            <span               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                page == 3 ? "text-white" : null
+              }`}>
               Configuración
             </span>
           </button>
