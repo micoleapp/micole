@@ -178,7 +178,7 @@ function SchoolDetail() {
     ) {
       return alert("Llena todos los campos para poder continuar");
     }
-    axios.post("http://localhost:3000/citas", cita);
+    axios.post("http://localhost:3000/citas", {cita,id});
   };
 
   const handleModo = () => {
