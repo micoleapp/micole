@@ -42,7 +42,7 @@ module.exports = (sequelize) => {
         },
       },
       cuota_pension: {
-        type: DataTypes.DECIMAL(10,2),
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
         validate: {
           notEmpty: {
@@ -58,7 +58,7 @@ module.exports = (sequelize) => {
         },
       },
       cuota_ingreso: {
-        type: DataTypes.DECIMAL(10,2),
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
         validate: {
           notEmpty: {
@@ -127,6 +127,19 @@ module.exports = (sequelize) => {
           min: {
             args: 1,
             msg: 'La capacidad debe ser al menos 1',
+          },
+        },
+      },
+      Año: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          esAnioValido(value) {
+            const anioActual = new Date().getFullYear();
+            const anioMaximo = anioActual + 2;
+            if (value < anioActual || value > anioMaximo) {
+              throw new Error('El campo "Año" debe ser el año actual o hasta dos años posteriores');
+            }
           },
         },
       },
