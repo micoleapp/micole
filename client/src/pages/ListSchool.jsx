@@ -108,13 +108,14 @@ function ListSchool() {
   });
 
   const dispatch = useDispatch();
-  const { allschools, loading, departaments, distrits } = useSelector(
+  const { filtersSchools:allschools, loading, distrits } = useSelector(
     (state) => state.schools
   );
     useEffect(() => {
     dispatch(getAllSchools());
     dispatch(getAllDepartaments())
     dispatch(getAllDistrits())
+
   }, []);
   const [disabledPage, setDisabledPage] = useState(false);
   
