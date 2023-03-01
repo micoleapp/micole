@@ -30,13 +30,12 @@ const getVacantes = async (req, res, next) => {
 const createVacante = async (req, res, next) => {
   const {
     alumnos_matriculados,
-    cantidad_profesores,
     cuota_pension,
     cuota_ingreso,
-    tamaño_grupo,
-    cantidad_salones,
+    matricula,
     capacidad,
     GradoId,
+    año
   } = req.body;
   try {
     const authColegio = await Colegio.findOne({ where: { idAuth: req.user.id } });
@@ -57,14 +56,13 @@ const createVacante = async (req, res, next) => {
     }
     const newVacante = await Vacante.create({  
       alumnos_matriculados,
-      cantidad_profesores,
       cuota_pension,
       cuota_ingreso, 
-      tamaño_grupo,
-      cantidad_salones,
+      matricula,
       capacidad,
       ColegioId: authColegio.id,
       GradoId,
+      año
     });
     res.status(200).json(newVacante);
   } catch (error) {
