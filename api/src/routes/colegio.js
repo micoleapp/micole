@@ -11,7 +11,8 @@ const {
   Distrito,
   Infraestructura,
   Afiliacion,
-  Nivel
+  Nivel,
+  Vacante
 } = require("../db.js");
 
 // const getComponentData = require("../funciones/getComponentData.js");
@@ -19,7 +20,7 @@ const {
 
 //------- PEDIR TODOS LOS COLEGIOS A LA BD--------
 router.get("/", async (req, res) => {
-  const { distrito, grado, año } = req.query;
+  const { distrito, grado, ingreso } = req.query;
   let response = [];
   try {
     let cole;
@@ -27,7 +28,11 @@ router.get("/", async (req, res) => {
       include: [
         {
           model: Nivel,
-          attributes: ["nombre_nivel","id"],
+          attributes: ["nombre_nivel", "id"],
+        },
+        {
+          model: Vacante,
+          attributes: ["año", "GradoId"],
         },
         {
           model: Idioma,
@@ -66,11 +71,19 @@ router.get("/", async (req, res) => {
       ],
     });
     response = cole;
-
-    distrito
-      ? (response = response.filter((c) => c.Distrito.id.includes(distrito)))
+    // distrito=parseInt(distrito);
+    console.log(distrito);
+    console.log(grado);
+    console.log(ingreso);
+    // distrito
+    //   ? (response = response.filter((c) => c.Distrito.id === Number(distrito)))
+    //   : null;
+    grado
+      ? (response = response.filter((c) => c.Vacantes[0]["GradoId"] === Number(grado)))
       : null;
-
+    ingreso
+      ? (response = response.filter((c) => c.Vacantes[0]["año"] === Number(ingreso)))
+      : null;
     res.json(response);
   } catch (err) {
     res.json({ err });
@@ -87,7 +100,7 @@ router.get("/:Colegio_id", async (req, res) => {
       include: [
         {
           model: Nivel,
-          attributes: ["nombre_nivel","id"],
+          attributes: ["nombre_nivel", "id"],
         },
         {
           model: Idioma,
@@ -142,7 +155,7 @@ router.get("/:Colegio_id", async (req, res) => {
         },
         {
           model: Afiliacion,
-          attributes: ["id", "nombre_afiliacion", "Afiliacion_tipo_Id","logo"],
+          attributes: ["id", "nombre_afiliacion", "Afiliacion_tipo_Id", "logo"],
           through: {
             attributes: [],
           },
@@ -181,10 +194,10 @@ router.put("/:id", async (req, res) => {
       provincia,
       infraestructura,
       niveles,
-      afiliaciones
+      afiliaciones,
     } = req.body;
     let video_url = multimedia.video_url;
-    let primera_imagen = multimedia.image
+    let primera_imagen = multimedia.image;
     let galeria_fotos = JSON.stringify(multimedia.images);
     const ubicacion = { lat, lng };
     const editedColegio = await Colegio.update(
@@ -212,7 +225,7 @@ router.put("/:id", async (req, res) => {
       { where: { id: id } }
     );
     const colegio = await Colegio.findByPk(id);
-    if (colegio === null) { 
+    if (colegio === null) {
       console.log("Not found!");
     } else {
       await colegio.setInfraestructuras(infraestructura.map((i) => i.id));

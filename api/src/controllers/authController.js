@@ -1,9 +1,9 @@
-const { Auth, User, Colegio, Provincia, Distrito } = require('../db');
-const { generateToken } = require('../utils/generateToken');
-const mailer = require('../utils/sendMails/mailer');
+const { Auth, User, Colegio, Provincia, Distrito } = require("../db");
+const { generateToken } = require("../utils/generateToken");
+const mailer = require("../utils/sendMails/mailer");
 
 const getResponse = (from, auth, data) => {
-  return from === 'Colegio'
+  return from === "Colegio"
     ? {
         id: data.id,
         email: auth.email,
@@ -30,20 +30,20 @@ const getAuth = async (req, res, next) => {
     return next(401);
   }
   try {
-    if (tokenUser.rol === 'Colegio') {
+    if (tokenUser.rol === "Colegio") {
       const dataColegio = await Colegio.findOne({
         where: { idAuth: tokenUser.id },
       });
       return res
         .status(200)
-        .send({ user: getResponse('Colegio', tokenUser, dataColegio) });
+        .send({ user: getResponse("Colegio", tokenUser, dataColegio) });
     } else {
       const dataUser = await User.findOne({
         where: { idAuth: tokenUser.id },
       });
       return res
         .status(200)
-        .send({ user: getResponse('Usuario', tokenUser, dataUser) });
+        .send({ user: getResponse("Usuario", tokenUser, dataUser) });
     }
   } catch (error) {
     return next(error);
@@ -60,23 +60,23 @@ const signIn = async (req, res, next) => {
     if (!authInstance) {
       return next({
         statusCode: 404,
-        message: 'El usuario ingresado no existe',
+        message: "El usuario ingresado no existe",
       });
     }
     const validatePassword = await authInstance.comparePassword(password);
     if (!validatePassword) {
       return next({
         statusCode: 403,
-        message: 'Error en las credenciales de acceso',
+        message: "Error en las credenciales de acceso",
       });
     }
-    if (authInstance.rol === 'Colegio') {
+    if (authInstance.rol === "Colegio") {
       const dataColegio = await Colegio.findOne({
         where: { idAuth: authInstance.id },
       });
       const jwToken = generateToken(authInstance.id);
       return res.status(200).send({
-        user: getResponse('Colegio', authInstance, dataColegio),
+        user: getResponse("Colegio", authInstance, dataColegio),
         token: jwToken.token,
       });
     } else {
@@ -85,7 +85,7 @@ const signIn = async (req, res, next) => {
       });
       const jwToken = generateToken(authInstance.id);
       return res.status(200).send({
-        user: getResponse('Usuario', authInstance, dataUser),
+        user: getResponse("Usuario", authInstance, dataUser),
         token: jwToken.token,
       });
     }
@@ -105,10 +105,10 @@ const editAuthById = async (req, res, next) => {
     if (!authInstance) {
       return next({
         statusCode: 400,
-        message: 'El usuario no existe en la BD',
+        message: "El usuario no existe en la BD",
       });
     }
-    if (authInstance.rol === 'Colegio') {
+    if (authInstance.rol === "Colegio") {
       if (telefono) {
         const user = await Colegio.findOne({
           where: { AuthId: authInstance.id },
@@ -169,13 +169,13 @@ const signUp = async (req, res, next) => {
     if (isUserRegistered) {
       return next({
         statusCode: 400,
-        message: 'El email de usuario ya está registrado',
+        message: "El email de usuario ya está registrado",
       });
     }
     const newAuth = await Auth.create({
       email,
       password,
-      rol: esColegio ? 'Colegio' : 'Usuario',
+      rol: esColegio ? "Colegio" : "Usuario",
     });
     const idAuth = newAuth.id;
     if (esColegio) {
@@ -199,7 +199,7 @@ const signUp = async (req, res, next) => {
         nombre: newColegio.nombre_colegio,
         rol: newAuth.rol,
       };
-      mailer.sendMailSignUp(sanitizedSchool, 'Colegio'); //Enviamos el mail de Confirmación de Registro para el Usuario Colegio
+      mailer.sendMailSignUp(sanitizedSchool, "Colegio"); //Enviamos el mail de Confirmación de Registro para el Usuario Colegio
       return res.status(201).send(sanitizedSchool);
     }
     const newUser = await User.create({ nombre, apellidos, dni, idAuth });
@@ -209,7 +209,7 @@ const signUp = async (req, res, next) => {
       rol: newAuth.rol,
       avatar: newUser.avatar,
     };
-    mailer.sendMailSignUp(sanitizedUser, 'User'); //Enviamos el mail de Confirmación de Registro para el Usuario Normal
+    mailer.sendMailSignUp(sanitizedUser, "User"); //Enviamos el mail de Confirmación de Registro para el Usuario Normal
     return res.status(201).send(sanitizedUser);
   } catch (error) {
     return next(error);
@@ -224,14 +224,14 @@ const putAuth = async (req, res, next) => {
     if (!authInstance) {
       return next({
         statusCode: 404,
-        message: 'El usuario ingresado no existe',
+        message: "El usuario ingresado no existe",
       });
     }
     const validatePassword = await authInstance.comparePassword(password);
     if (!validatePassword) {
       return res
         .status(403)
-        .send({ error: 'La contraseña ingresada no es correcta' });
+        .send({ error: "La contraseña ingresada no es correcta" });
     }
     if (newEmail) {
       authInstance.email = newEmail;
@@ -251,7 +251,7 @@ const putAuth = async (req, res, next) => {
       email: authInstance.email,
       rol: authInstance.rol,
       telefono: coleUpdate.telefono,
-      nombre: coleUpdate.nombre_colegio
+      nombre: coleUpdate.nombre_colegio,
     };
     return res.status(200).send(sanitizedAuth);
   } catch (error) {
