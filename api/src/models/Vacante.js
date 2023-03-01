@@ -25,19 +25,19 @@ module.exports = (sequelize) => {
           },
         },
       },
-      cantidad_profesores: {
-        type: DataTypes.INTEGER,
+      matricula: {
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'El campo cantidad_profesores no puede estar vacío',
+            msg: 'El campo matricula no puede estar vacío',
           },
-          isInt: {
-            msg: 'El campo cantidad_profesores debe ser un número entero',
+          isDecimal: {
+            msg: 'El campo matricula debe ser un número decimal',
           },
           min: {
             args: [0],
-            msg: 'El campo cantidad_profesores debe ser un número entero positivo',
+            msg: 'El campo matricula debe ser un número decimal positivo',
           },
         },
       },
@@ -73,44 +73,6 @@ module.exports = (sequelize) => {
           },
         },
       },
-      tamaño_grupo: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: 'El campo tamaño_grupo no puede estar vacío',
-          },
-          isNumeric: {
-            msg: 'El tamaño_grupo debe ser un número',
-          },
-          isInt: {
-            msg: 'El tamaño_grupo debe ser un número entero',
-          },
-          min: {
-            args: 1,
-            msg: 'El tamaño_grupo debe ser al menos 1',
-          },
-        },
-      },
-      cantidad_salones: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: 'El campo cantidad_salones no puede estar vacío',
-          },
-          isNumeric: {
-            msg: 'La cantidad_salones debe ser un número',
-          },
-          isInt: {
-            msg: 'La cantidad_salones debe ser un número entero',
-          },
-          min: {
-            args: 1,
-            msg: 'La cantidad_salones debe ser al menos 1',
-          },
-        },
-      },
       capacidad: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -130,7 +92,7 @@ module.exports = (sequelize) => {
           },
         },
       },
-      Año: {
+      año: {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
