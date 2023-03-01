@@ -38,7 +38,7 @@ import axios from "axios";
 import { fontSize } from "@mui/system";
 import style from "./SchoolD.module.css";
 import { HiChevronDown } from "react-icons/hi";
-import {HiChevronLeft}from "react-icons/hi";
+import { HiChevronLeft } from "react-icons/hi";
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
     <div className="w-full px-4">
@@ -178,7 +178,8 @@ function SchoolDetail() {
     ) {
       return alert("Llena todos los campos para poder continuar");
     }
-    axios.post("http://localhost:3000/citas", {cita,id});
+    console.log(cita, id )
+    axios.post("http://localhost:3000/citas", { cita, id });
   };
 
   const handleModo = () => {
@@ -248,7 +249,9 @@ function SchoolDetail() {
     setHorarios(!Horarios);
   };
 
-  let infra = Array.from(new Set(oneSchool?.Infraestructuras?.map(e=>e.InfraestructuraTipoId)))
+  let infra = Array.from(
+    new Set(oneSchool?.Infraestructuras?.map((e) => e.InfraestructuraTipoId))
+  );
 
   return (
     <div className="bg-[#f6f7f8]">
@@ -517,71 +520,173 @@ function SchoolDetail() {
                 scrollButtons
                 allowScrollButtonsMobile
               >
-                {infra.map(e=>(
-                <Tab
-                style={{
-                  fontSize: "11px",
-                  fontFamily: "Poppins",
-                  textTransform: "capitalize",
-                }}
-                label={e === 1 ? "Administrativo" : e === 2 ? "Artistica" : e === 3 ? "Deportiva" : e === 4 ? "Enseñanza" : e === 5 ? "Laboratorio" : null}
-                {...a11yProps(e)}
-              />
+                {infra.map((e) => (
+                  <Tab
+                    style={{
+                      fontSize: "11px",
+                      fontFamily: "Poppins",
+                      textTransform: "capitalize",
+                    }}
+                    label={
+                      e === 1
+                        ? "Administrativo"
+                        : e === 2
+                        ? "Artistica"
+                        : e === 3
+                        ? "Deportiva"
+                        : e === 4
+                        ? "Enseñanza"
+                        : e === 5
+                        ? "Laboratorio"
+                        : null
+                    }
+                    {...a11yProps(e)}
+                  />
                 ))}
               </Tabs>
 
               <div className="flex text-xs w-full justify-between">
-                {oneSchool?.Infraestructuras?.some(e=>e.InfraestructuraTipoId === 1) && <TabPanel value={value} index={0}>
-                  <ul className="flex flex-col gap-3">
-                    {oneSchool?.Infraestructuras?.filter(e=>e.InfraestructuraTipoId === 1).map(e=>(
-                    <li className="flex items-center gap-3">
-                              {e.imagen.length > 0 ?                       <img src={e.imagen} alt={e.nombre_infraestructura} className="w-10"/> : <img src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png" alt={e.nombre_infraestructura} className="w-10"/>}
-                      {e.nombre_infraestructura}
-                    </li>
-                    ))}
-                  </ul>
-                </TabPanel>}
-                {oneSchool?.Infraestructuras?.some(e=>e.InfraestructuraTipoId === 2) && <TabPanel value={value} index={1}>
-                  <ul className="flex flex-col gap-3">
-                    {oneSchool?.Infraestructuras?.filter(e=>e.InfraestructuraTipoId === 2).map(e=>(
-                    <li className="flex items-center gap-3">
-                      {e.imagen.length > 0 ?                       <img src={e.imagen} alt={e.nombre_infraestructura} className="w-10"/> : <img src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png" alt={e.nombre_infraestructura} className="w-10"/>}
-                      {e.nombre_infraestructura}
-                    </li>
-                    ))}
-                  </ul>
-                </TabPanel>}
-                {oneSchool?.Infraestructuras?.some(e=>e.InfraestructuraTipoId === 3) && <TabPanel value={value} index={2}>
-                  <ul className="flex flex-col gap-3">
-                    {oneSchool?.Infraestructuras?.filter(e=>e.InfraestructuraTipoId === 3).map(e=>(
-                    <li className="flex items-center gap-3">
-                       {e.imagen.length > 0 ?                       <img src={e.imagen} alt={e.nombre_infraestructura} className="w-10"/> : <img src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png" alt={e.nombre_infraestructura} className="w-10"/>}
-                      {e.nombre_infraestructura}
-                    </li>
-                    ))}
-                  </ul>
-                </TabPanel>}
-                {oneSchool?.Infraestructuras?.some(e=>e.InfraestructuraTipoId === 4) && <TabPanel value={value} index={3}>
-                  <ul className="flex flex-col gap-3">
-                    {oneSchool?.Infraestructuras?.filter(e=>e.InfraestructuraTipoId === 4).map(e=>(
-                    <li className="flex items-center gap-3">
-                      {e.imagen.length > 0 ?                       <img src={e.imagen} alt={e.nombre_infraestructura} className="w-10"/> : <img src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png" alt={e.nombre_infraestructura} className="w-10"/>}
-                      {e.nombre_infraestructura}
-                    </li>
-                    ))}
-                  </ul>
-                </TabPanel>}
-                {oneSchool?.Infraestructuras?.some(e=>e.InfraestructuraTipoId === 5) && <TabPanel value={value} index={4}>
-                  <ul className="flex flex-col gap-3">
-                    {oneSchool?.Infraestructuras?.filter(e=>e.InfraestructuraTipoId === 5).map(e=>(
-                    <li className="flex items-center gap-3">
-                      {e.imagen.length > 0 ?                       <img src={e.imagen} alt={e.nombre_infraestructura} className="w-10"/> : <img src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png" alt={e.nombre_infraestructura} className="w-10"/>}
+                {oneSchool?.Infraestructuras?.some(
+                  (e) => e.InfraestructuraTipoId === 1
+                ) && (
+                  <TabPanel value={value} index={0}>
+                    <ul className="flex flex-col gap-3">
+                      {oneSchool?.Infraestructuras?.filter(
+                        (e) => e.InfraestructuraTipoId === 1
+                      ).map((e) => (
+                        <li className="flex items-center gap-3">
+                          {e.imagen.length > 0 ? (
+                            <img
+                              src={e.imagen}
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          ) : (
+                            <img
+                              src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png"
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          )}
+                          {e.nombre_infraestructura}
+                        </li>
+                      ))}
+                    </ul>
+                  </TabPanel>
+                )}
+                {oneSchool?.Infraestructuras?.some(
+                  (e) => e.InfraestructuraTipoId === 2
+                ) && (
+                  <TabPanel value={value} index={1}>
+                    <ul className="flex flex-col gap-3">
+                      {oneSchool?.Infraestructuras?.filter(
+                        (e) => e.InfraestructuraTipoId === 2
+                      ).map((e) => (
+                        <li className="flex items-center gap-3">
+                          {e.imagen.length > 0 ? (
+                            <img
+                              src={e.imagen}
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          ) : (
+                            <img
+                              src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png"
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          )}
+                          {e.nombre_infraestructura}
+                        </li>
+                      ))}
+                    </ul>
+                  </TabPanel>
+                )}
+                {oneSchool?.Infraestructuras?.some(
+                  (e) => e.InfraestructuraTipoId === 3
+                ) && (
+                  <TabPanel value={value} index={2}>
+                    <ul className="flex flex-col gap-3">
+                      {oneSchool?.Infraestructuras?.filter(
+                        (e) => e.InfraestructuraTipoId === 3
+                      ).map((e) => (
+                        <li className="flex items-center gap-3">
+                          {e.imagen.length > 0 ? (
+                            <img
+                              src={e.imagen}
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          ) : (
+                            <img
+                              src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png"
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          )}
+                          {e.nombre_infraestructura}
+                        </li>
+                      ))}
+                    </ul>
+                  </TabPanel>
+                )}
+                {oneSchool?.Infraestructuras?.some(
+                  (e) => e.InfraestructuraTipoId === 4
+                ) && (
+                  <TabPanel value={value} index={3}>
+                    <ul className="flex flex-col gap-3">
+                      {oneSchool?.Infraestructuras?.filter(
+                        (e) => e.InfraestructuraTipoId === 4
+                      ).map((e) => (
+                        <li className="flex items-center gap-3">
+                          {e.imagen.length > 0 ? (
+                            <img
+                              src={e.imagen}
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          ) : (
+                            <img
+                              src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png"
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          )}
+                          {e.nombre_infraestructura}
+                        </li>
+                      ))}
+                    </ul>
+                  </TabPanel>
+                )}
+                {oneSchool?.Infraestructuras?.some(
+                  (e) => e.InfraestructuraTipoId === 5
+                ) && (
+                  <TabPanel value={value} index={4}>
+                    <ul className="flex flex-col gap-3">
+                      {oneSchool?.Infraestructuras?.filter(
+                        (e) => e.InfraestructuraTipoId === 5
+                      ).map((e) => (
+                        <li className="flex items-center gap-3">
+                          {e.imagen.length > 0 ? (
+                            <img
+                              src={e.imagen}
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          ) : (
+                            <img
+                              src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png"
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          )}
 
-                      {e.nombre_infraestructura}
-                    </li>
-                    ))}
-                  </ul>
-                </TabPanel>}
+                          {e.nombre_infraestructura}
+                        </li>
+                      ))}
+                    </ul>
+                  </TabPanel>
+                )}
                 {/* <TabPanel value={value} index={0}>
                   <ul className="flex flex-col gap-3">
                     <li className="flex items-center gap-2">
@@ -757,11 +862,11 @@ function SchoolDetail() {
               </h2>
               <div className="flex text-xs w-full gap-5">
                 <ul className="grid grid-cols-2 grid-rows-5">
-                  {oneSchool?.Afiliacions?.map(ac=>(
-                                      <li className="text-black/60 flex items-center gap-3">
-                                      <img src={ac.logo} alt="" className="w-10" />
-                                      {ac.nombre_afiliacion}
-                                    </li>
+                  {oneSchool?.Afiliacions?.map((ac) => (
+                    <li className="text-black/60 flex items-center gap-3">
+                      <img src={ac.logo} alt="" className="w-10" />
+                      {ac.nombre_afiliacion}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -880,117 +985,45 @@ function SchoolDetail() {
                 {Horarios && (
                   <>
                     <p>Ver la disponibilidad horaria de este colegio </p>
-                    <HiChevronDown  data-aos-duration="400" data-aos='flip-down'/>
+                    <HiChevronDown
+                      data-aos-duration="400"
+                      data-aos="flip-down"
+                    />
                   </>
                 )}
                 {Horarios === false && (
                   <>
-                    <p>Ver la disponibilidad horaria de este colegio  </p>
-                    <HiChevronLeft   data-aos-duration="400" data-aos='flip-left' />
+                    <p>Ver la disponibilidad horaria de este colegio </p>
+                    <HiChevronLeft
+                      data-aos-duration="400"
+                      data-aos="flip-left"
+                    />
                   </>
                 )}
               </div>
               {Horarios && (
                 <>
                   <div className={style.Layout}>
-                    <div
-                      data-aos="zoom-in-left"
-                 
-                      data-aos-duration="400"
-                      className={style.tableHead}
-                    >
-                      <div className={style.tableTitleDiv}>
-                        <p className={style.tableTitle}>Dia</p>
-                      </div>
-                      <div className={style.tableTitleDiv}>
-                        <p className={style.tableTitle}>Desde</p>
-                      </div>
-                      <div className={style.tableTitleDiv}>
-                        <p className={style.tableTitle}>Hasta</p>
-                      </div>
-                      <div className={style.tableTitleDiv}>
-                        <p className={style.tableTitle}>Vacantes</p>
-                      </div>
-                      <div className={style.tableTitleDiv}>
-                        <p className={style.tableTitle}>Disponible</p>
-                      </div>
-                    </div>
+               
                     {ArrHorariosMockFormateado.map((ele) => {
                       return (
                         <>
-                          <div
-                            data-aos="zoom-in-left"
-                            data-aos-duration="700"
+                          <div 
+                          //si vacantes estan agotadas deberia aparecer todo en gris
+                            // data-aos="zoom-in-left"
+                            // data-aos-duration="700"
                             className={style.cardTable}
                           >
                             <div className={style.cardTable}>
                               <div className={style.itemTable}>
-                                {ele.vacantesDispo > 0 ? (
-                                  ` ${ele.dia} `
-                                ) : (
-                                  <p
-                                    style={{ fontSize: "12px", color: "grey" }}
-                                  >
-                                    {" "}
-                                    {ele.dia}{" "}
-                                  </p>
-                                )}
-                              </div>
-                              <div className={style.itemTable}>
-                                <p style={{ fontSize: "12px" }}>
-                                  {ele.vacantesDispo > 0 ? (
-                                    ` ${ele.horarios.desde} `
-                                  ) : (
-                                    <p
-                                      style={{
-                                        fontSize: "12px",
-                                        color: "grey",
-                                      }}
-                                    >
-                                      {" "}
-                                      {ele.horarios.desde}{" "}
-                                    </p>
-                                  )}
-                                </p>
-                              </div>
-                              <div className={style.itemTable}>
-                                <p style={{ fontSize: "12px" }}>
-                                  {ele.vacantesDispo > 0 ? (
-                                    ` ${ele.horarios.hasta} `
-                                  ) : (
-                                    <p
-                                      style={{
-                                        fontSize: "12px",
-                                        color: "grey",
-                                      }}
-                                    >
-                                      {ele.horarios.hasta}{" "}
-                                    </p>
-                                  )}
-                                </p>
-                              </div>
-                              <div className={style.itemTable}>
-                                {ele.vacantesDispo > 0 ? (
-                                  ` ${ele.vacantes} `
-                                ) : (
-                                  <p
-                                    style={{ fontSize: "12px", color: "grey" }}
-                                  >
-                                    {ele.vacantes}{" "}
-                                  </p>
-                                )}
-                              </div>
-
-                              <div className={style.itemTable}>
-                                {ele.vacantesDispo > 0 ? (
-                                  ` ${ele.vacantesDispo} `
-                                ) : (
-                                  <p
-                                    style={{ fontSize: "12px", color: "grey" }}
-                                  >
-                                    No disponible{" "}
-                                  </p>
-                                )}
+                               
+                                <p style={{ fontSize: "12px" }}>{ele.dia}</p>
+                                <div style={{display:'flex',gap:'10px'}}>
+                                   <p>{ele.horarios.desde}</p>
+                                   <p>/</p>
+                                <p>{ele.horarios.hasta}</p>
+                                </div>
+                               
                               </div>
                             </div>
                           </div>
@@ -1134,18 +1167,20 @@ function SchoolDetail() {
                 />
               </div>
             </div>
-            {oneSchool.video_url?.length > 0 &&             
-            <div
-              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
-              data-aos="zoom-in-left"
-              data-aos-duration="1500"
-              data-aos-mirror={false}
-            >
-              <h2 className="font-semibold text-xl">Video</h2>
-              <iframe className="w-full h-[300px] lg:h-[400px] " src={`${oneSchool.video_url.replace('watch?v=',"embed/")}`}>
-              </iframe>
-            </div>
-            }
+            {oneSchool.video_url?.length > 0 && (
+              <div
+                className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
+                data-aos="zoom-in-left"
+                data-aos-duration="1500"
+                data-aos-mirror={false}
+              >
+                <h2 className="font-semibold text-xl">Video</h2>
+                <iframe
+                  className="w-full h-[300px] lg:h-[400px] "
+                  src={`${oneSchool.video_url.replace("watch?v=", "embed/")}`}
+                ></iframe>
+              </div>
+            )}
             <form
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
               onSubmit={comentarioSubmit}

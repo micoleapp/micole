@@ -31,7 +31,7 @@ import {
   Autocomplete,
 } from "@react-google-maps/api";
 import { steps } from "../MockupInfo/Pasos";
-import { getVacantes, postHorariosVacantes} from "../redux/SchoolsActions"
+import { getVacantes, postHorariosVacantes } from "../redux/SchoolsActions";
 import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
@@ -49,6 +49,8 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TextField } from "@mui/material";
+import { AiOutlineIdcard } from "react-icons/ai";
+
 const libraries = ["places"];
 
 const containerStyle = {
@@ -104,7 +106,6 @@ function DashboardSchool() {
   const [completed, setCompleted] = React.useState({});
   const [allData, setAllData] = useState({});
 
-
   const dispatch = useDispatch();
   const {
     categories,
@@ -116,7 +117,7 @@ function DashboardSchool() {
     afiliaciones,
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
-  const id = user.id
+  const id = user.id;
   useEffect(() => {
     if (user) {
       dispatch(getSchoolDetail(user.id));
@@ -131,48 +132,53 @@ function DashboardSchool() {
       email: user.email ? user.email : "",
       telefono: user.telefono ? user.telefono : "",
       newEmail: "",
-      password : "",
+      password: "",
       newPassword: "",
-      repitPassword: ""
+      repitPassword: "",
     },
     mode: "onChange",
   });
   const OnSubmit = async (user) => {
-   if(user.newPassword !== user.repitPassword){
+    if (user.newPassword !== user.repitPassword) {
       Swal.fire("warning", "Las nuevas contraseñas no coinciden", "error");
       return;
-   }
-   if(password){
-      Swal.fire("Error", "Ingrese su contraseña para modificar algun campo", "warning");
+    }
+    if (password) {
+      Swal.fire(
+        "Error",
+        "Ingrese su contraseña para modificar algun campo",
+        "warning"
+      );
       return;
-   }
-   const data = {
+    }
+    const data = {
       email: user.email,
       newEmail: user.newEmail,
       telefono: user.telefono,
       password: user.password,
       newPassword: user.newPassword,
-   }
-   try {
-    axios.put(`/auth/${id}`, data)
-    .then(res=>{
-      Swal.fire("Exito", "Datos actualizados", "success");
-    })
-    .catch(err=>{
+    };
+    try {
+      axios
+        .put(`/auth/${id}`, data)
+        .then((res) => {
+          Swal.fire("Exito", "Datos actualizados", "success");
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: err.response.data.error,
+          });
+        });
+    } catch (error) {
       Swal.fire({
         icon: "error",
         title: "Algo salio mal",
-        text: err.response.data.error,
+        text: error.response,
       });
-    })
-  } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "Algo salio mal",
-      text: error.response,
-    });
-   }
-  }
+    }
+  };
 
   const totalSteps = () => {
     return steps.length;
@@ -251,7 +257,6 @@ function DashboardSchool() {
     setActiveStep(0);
     setCompleted({});
   };
-
 
   let libRef = React.useRef(libraries);
 
@@ -336,13 +341,18 @@ function DashboardSchool() {
     distrito: oneSchool?.Distrito ? oneSchool.Distrito : {},
     direccion: oneSchool?.direccion ? oneSchool.direccion : "",
     lat:
-      oneSchool?.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lat : 0,
+      oneSchool?.ubicacion?.length > 0
+        ? JSON.parse(oneSchool.ubicacion).lat
+        : 0,
     lng:
-      oneSchool?.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lng : 0,
+      oneSchool?.ubicacion?.length > 0
+        ? JSON.parse(oneSchool.ubicacion).lng
+        : 0,
     infraestructura: oneSchool?.Infraestructuras
       ? oneSchool.Infraestructuras
       : [],
-    afiliaciones: oneSchool?.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
+    afiliaciones:
+      oneSchool?.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
   };
 
   const [datosPrincipales, setDatosPrincipales] = useState(
@@ -460,7 +470,8 @@ function DashboardSchool() {
   }
 
   const initialMultimedia = {
-    image: oneSchool?.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "",
+    image:
+      oneSchool?.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "",
     images:
       oneSchool?.galeria_fotos?.length > 0
         ? JSON.parse(oneSchool.galeria_fotos)
@@ -608,7 +619,7 @@ function DashboardSchool() {
     });
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
-   
+
       horarios: {
         desde: stringyDate(day[Object.keys(day)][0]["$H"])
           .toString()
@@ -626,20 +637,20 @@ function DashboardSchool() {
       text: "Cambios guardados",
     });
     console.log(newDays);
-    dispatch(postHorariosVacantes(newDays))
+    dispatch(postHorariosVacantes(newDays));
   };
 
   const [spanOne, setSpanOne] = useState(false);
   const [spanTwo, setSpanTwo] = useState(false);
   const [activeUpOne, setActiveUpOne] = useState(true);
   const [activeUpTwo, setActiveUpTwo] = useState(true);
- 
-  const [seePassword,setSeePassword] = useState(false)
-  const [seeNewPassword,setSeeNewPassword] = useState(false)
+
+  const [seePassword, setSeePassword] = useState(false);
+  const [seeNewPassword, setSeeNewPassword] = useState(false);
 
   useEffect(() => {
-    dispatch(getVacantes(datosPrincipales.niveles))
-  }, [datosPrincipales.niveles])
+    dispatch(getVacantes(datosPrincipales.niveles));
+  }, [datosPrincipales.niveles]);
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -679,46 +690,79 @@ function DashboardSchool() {
           </button>
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
-              page == 1? "bg-[#0061dd] text-white" : null
+              page == 1 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => setPage(1)}
           >
-            <CiClock1               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+            <CiClock1
+              className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
                 page == 1 ? "text-white" : null
-              }`} />
-            <span               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+              }`}
+            />
+            <span
+              className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
                 page == 1 ? "text-white" : null
-              }`}>
+              }`}
+            >
               Horario para citas{" "}
             </span>
           </button>
+          <button
+            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+              page == 1 ? "bg-[#0061dd] text-white" : null
+            } `}
+            onClick={() => setPage(4)}
+          >
+            <AiOutlineIdcard
+              className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                page == 1 ? "text-white" : null
+              }`}
+            />
+            <span
+              className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                page == 1 ? "text-white" : null
+              }`}
+            >
+              Control de citas{" "}
+            </span>
+          </button>
+
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
               page == 2 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => setPage(2)}
           >
-            <BsWindowDock               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+            <BsWindowDock
+              className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
                 page == 2 ? "text-white" : null
-              }`} />
-            <span               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+              }`}
+            />
+            <span
+              className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
                 page == 2 ? "text-white" : null
-              }`}>
+              }`}
+            >
               Mi plan
             </span>
           </button>
+
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
               page == 3 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => setPage(3)}
           >
-            <GiHexagonalNut               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+            <GiHexagonalNut
+              className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
                 page == 3 ? "text-white" : null
-              }`} />
-            <span               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+              }`}
+            />
+            <span
+              className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
                 page == 3 ? "text-white" : null
-              }`}>
+              }`}
+            >
               Configuración
             </span>
           </button>
@@ -867,9 +911,12 @@ function DashboardSchool() {
                               key={category.id}
                               control={
                                 <Checkbox
-                                  checked={datosPrincipales?.categoria.length > 0 && datosPrincipales?.categoria
-                                    .map((e) => e.id)
-                                    .includes(category.id)}
+                                  checked={
+                                    datosPrincipales?.categoria.length > 0 &&
+                                    datosPrincipales?.categoria
+                                      .map((e) => e.id)
+                                      .includes(category.id)
+                                  }
                                   onChange={(event, target) => {
                                     if (target) {
                                       setDatosPrincipales({
@@ -2301,7 +2348,6 @@ function DashboardSchool() {
                           minTime={day[Object.keys(day)][0]}
                           maxTime={dayjs("2014-08-18T17:00:00")}
                         />
-                       
                       </div>
                     </div>
                   </div>
@@ -2321,15 +2367,18 @@ function DashboardSchool() {
         ) : page === 3 ? (
           <div className="flex flex-col gap-5 min-h-screen px-24">
             <h1 className="text-xl font-semibold">Datos Personales</h1>
-            <form className="flex flex-col gap-4" onSubmit={handleSubmit(OnSubmit)}>
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={handleSubmit(OnSubmit)}
+            >
               <div className="flex flex-col gap-2">
                 <label htmlFor="email" className="text-base font-medium">
                   Email Actual
                 </label>
                 <input
-                {...register("email",{
-                  required: true
-                })}
+                  {...register("email", {
+                    required: true,
+                  })}
                   disabled
                   type="email"
                   name="email"
@@ -2343,7 +2392,7 @@ function DashboardSchool() {
                   Nuevo Email
                 </label>
                 <input
-                {...register("newEmail")}
+                  {...register("newEmail")}
                   type="email"
                   name="newEmail"
                   id="newEmail"
@@ -2356,9 +2405,9 @@ function DashboardSchool() {
                   Telefono
                 </label>
                 <input
-                                {...register("telefono",{
-                                  required: true
-                                })}
+                  {...register("telefono", {
+                    required: true,
+                  })}
                   type="number"
                   name="telefono"
                   id="telefono"
@@ -2371,15 +2420,25 @@ function DashboardSchool() {
                   Contraseña actual
                 </label>
                 <div className="relative w-full lg:w-1/2">
-                <input
-                {...register("password")}
-                  type={seePassword ? "text" : "password"}
-                  name="password"
-                  id="password"
-                  className="p-3 rounded-md border-2 w-full outline-none"
-                  placeholder="Ingresa la contraseña"
-                />
-                {seePassword ? <BsEye onClick={()=>setSeePassword(!seePassword)} className="absolute cursor-pointer top-[35%] lg:top-[40%] right-5"/> : <BsEyeSlash onClick={()=>setSeePassword(!seePassword)} className="absolute top-[35%] lg:top-[40%] cursor-pointer right-5"/>}           
+                  <input
+                    {...register("password")}
+                    type={seePassword ? "text" : "password"}
+                    name="password"
+                    id="password"
+                    className="p-3 rounded-md border-2 w-full outline-none"
+                    placeholder="Ingresa la contraseña"
+                  />
+                  {seePassword ? (
+                    <BsEye
+                      onClick={() => setSeePassword(!seePassword)}
+                      className="absolute cursor-pointer top-[35%] lg:top-[40%] right-5"
+                    />
+                  ) : (
+                    <BsEyeSlash
+                      onClick={() => setSeePassword(!seePassword)}
+                      className="absolute top-[35%] lg:top-[40%] cursor-pointer right-5"
+                    />
+                  )}
                 </div>
               </div>
               <div className="flex flex-col gap-2">
@@ -2387,26 +2446,46 @@ function DashboardSchool() {
                   Contraseña nueva
                 </label>
                 <div className="relative w-full lg:w-1/2">
-                <input
-                {...register("newPassword")}
-                  type={seeNewPassword ? "text" : "password"}
-                  name="newPassword"
-                  id="newPassword"
-                  className="p-3 rounded-md border-2 w-full outline-none"
-                  placeholder="Ingresa la nueva contraseña"
-                />
-                {seeNewPassword ? <BsEye onClick={()=>setSeeNewPassword(!seeNewPassword)} className="absolute cursor-pointer top-[35%] lg:top-[40%] right-5"/> : <BsEyeSlash onClick={()=>setSeeNewPassword(!seeNewPassword)} className="absolute top-[35%] lg:top-[40%] cursor-pointer right-5"/>}           
+                  <input
+                    {...register("newPassword")}
+                    type={seeNewPassword ? "text" : "password"}
+                    name="newPassword"
+                    id="newPassword"
+                    className="p-3 rounded-md border-2 w-full outline-none"
+                    placeholder="Ingresa la nueva contraseña"
+                  />
+                  {seeNewPassword ? (
+                    <BsEye
+                      onClick={() => setSeeNewPassword(!seeNewPassword)}
+                      className="absolute cursor-pointer top-[35%] lg:top-[40%] right-5"
+                    />
+                  ) : (
+                    <BsEyeSlash
+                      onClick={() => setSeeNewPassword(!seeNewPassword)}
+                      className="absolute top-[35%] lg:top-[40%] cursor-pointer right-5"
+                    />
+                  )}
                 </div>
                 <div className="relative w-full lg:w-1/2">
-                <input
-                 {...register("repitPassword")}
-                  type={seeNewPassword ? "text" : "password"}
-                  name="repitPassword"
-                  id="repitPassword"
-                  className="p-3 rounded-md border-2 w-full outline-none"
-                  placeholder="Repeti la nueva contraseña"
-                />
-                {seeNewPassword ? <BsEye onClick={()=>setSeeNewPassword(!seeNewPassword)} className="absolute cursor-pointer top-[35%] lg:top-[40%] right-5"/> : <BsEyeSlash onClick={()=>setSeeNewPassword(!seeNewPassword)} className="absolute top-[35%] lg:top-[40%] cursor-pointer right-5"/>}           
+                  <input
+                    {...register("repitPassword")}
+                    type={seeNewPassword ? "text" : "password"}
+                    name="repitPassword"
+                    id="repitPassword"
+                    className="p-3 rounded-md border-2 w-full outline-none"
+                    placeholder="Repeti la nueva contraseña"
+                  />
+                  {seeNewPassword ? (
+                    <BsEye
+                      onClick={() => setSeeNewPassword(!seeNewPassword)}
+                      className="absolute cursor-pointer top-[35%] lg:top-[40%] right-5"
+                    />
+                  ) : (
+                    <BsEyeSlash
+                      onClick={() => setSeeNewPassword(!seeNewPassword)}
+                      className="absolute top-[35%] lg:top-[40%] cursor-pointer right-5"
+                    />
+                  )}
                 </div>
               </div>
               <button
@@ -2417,6 +2496,13 @@ function DashboardSchool() {
               </button>
             </form>
           </div>
+        ) : page === 4 ? (
+          <div className="min-h-screen">
+           
+            <DragAndDrop/>
+
+          </div>
+         
         ) : null}
       </section>
     </div>

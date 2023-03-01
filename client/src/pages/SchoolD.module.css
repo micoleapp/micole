@@ -1,47 +1,51 @@
-.Layout{
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding-bottom: 40px;
+.Layout {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 5px;
+  padding-bottom: 40px;
 }
 
-.tableHead{
-display: flex;
-justify-content: space-between;
-font-size: 12px;
-border-radius: 2px;
-width: 100%;
-height: 20px;
-background-color:#0061DF ;
-
+.tableHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  border-radius: 2px;
+  width: 100%;
+  height: 20px;
+  background-color: #0061df;
 }
 
-.tableTitleDiv{
-width: 100px;
-display: flex;
-justify-content: center;
+.tableTitleDiv {
+  width: 100px;
+  display: flex;
+  justify-content: center;
 }
 
-.tableTitle{
-    font-size: 12px;
-    color: #ffff;
+.tableTitle {
+  font-size: 12px;
+  color: #ffff;
 }
 
-.cardTable{
-display: flex;
-width: 100%;
-justify-content: space-between;
-font-size: 12px;
-flex-direction: row;
-gap: 2px;
-box-shadow: 0px 1px 2px rgba(34, 34, 34, 0.2);
+.cardTable {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+  font-size: 12px;
+  flex-direction: row;
+  gap: 2px;
+  box-shadow: 0px 1px 2px rgba(34, 34, 34, 0.2);
 }
 
-.itemTable{
-    width: 100%;
-    display: flex;
-    align-items: center;
+.itemTable {
+
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   height: 40px;
-    justify-content: center;
-
+  border: 0.2px solid #38383856;
+  justify-content: center;
 }
