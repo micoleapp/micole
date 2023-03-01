@@ -1897,7 +1897,7 @@ function DashboardSchool() {
                             icon={vacantes === 0 ? faArrowUp : faArrowDown}
                           />{" "}
                         </button>
-                        {vacantes === 0 && <GridVacantes />}
+                        {vacantes === 0 && <GridVacantes año={"2023"}/>}
                         <button
                           className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
                           onClick={() =>
@@ -1911,7 +1911,7 @@ function DashboardSchool() {
                             icon={vacantes === 1 ? faArrowUp : faArrowDown}
                           />{" "}
                         </button>
-                        {vacantes === 1 && <GridVacantes />}
+                        {vacantes === 1 && <GridVacantes año={"2024"} />}
                         <button
                           className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
                           onClick={() =>
@@ -1925,7 +1925,7 @@ function DashboardSchool() {
                             icon={vacantes === 2 ? faArrowUp : faArrowDown}
                           />{" "}
                         </button>
-                        {vacantes === 2 && <GridVacantes />}
+                        {vacantes === 2 && <GridVacantes año={"2025"}  />}
                       </div>
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
