@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const moment = require('moment');
 
 module.exports = (sequelize) => {
   sequelize.define(
@@ -10,14 +11,19 @@ module.exports = (sequelize) => {
         primaryKey: true,
       },
       fecha_cita: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notEmpty: {
             msg: 'El campo fecha_cita no puede estar vacío',
           },
           validarFecha: function (fecha) {
-            if (fecha < new Date()) {
+            if (!moment(fecha, 'DD/MM/YYYY').isValid()) {
+              throw new Error(
+                'El formato de la fecha debe ser DD/MM/YYYY'
+              );
+            }
+            if (moment(fecha, 'DD/MM/YYYY') < moment().startOf('day')) {
               throw new Error(
                 'La fecha de la cita debe ser en días posteriores al actual'
               );
@@ -26,14 +32,19 @@ module.exports = (sequelize) => {
         },
       },
       hora_cita: {
-        type: DataTypes.TIME,
+        type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notEmpty: {
             msg: 'El campo hora_cita no puede estar vacío',
           },
           validarHora: function (hora) {
-            if (hora < '00:00' || hora > '23:59') {
+            if (!moment(hora, 'HH:mm').isValid()) {
+              throw new Error(
+                'El formato de la hora debe ser HH:mm'
+              );
+            }
+            if (moment(hora, 'HH:mm') < moment().startOf('day')) {
               throw new Error(
                 'La hora de la cita debe estar entre 00:00 y 23:59'
               );
@@ -72,7 +83,6 @@ module.exports = (sequelize) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
         validate: {
           isEmail: {
             args: true,
@@ -82,11 +92,24 @@ module.exports = (sequelize) => {
       },
       telefono: {
         type: DataTypes.BIGINT,
-        unique: true,
         validate: {
           isInt: {
             args: true,
             msg: 'El número telefónico solo debe contener números',
+          },
+        },
+      },
+      estado: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'Solicitud',
+        validate: {
+          customValidator: (value) => {
+            const enums = ['Solicitud', 'Realizada', 'Aplicacion', 'Entrevista', 'VOfrecida', 'VAceptada'];
+            if (!enums.includes(value)) {
+              // Use Array.includes() to validate.
+              throw new Error('not a valid option');
+            }
           },
         },
       },
@@ -96,3 +119,4 @@ module.exports = (sequelize) => {
     }
   );
 };
+ 
