@@ -50,6 +50,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TextField } from "@mui/material";
 import { AiOutlineIdcard } from "react-icons/ai";
+import Cards from "../components/CardsDrgAndDrp/Cards";
 
 const libraries = ["places"];
 
@@ -2498,11 +2499,15 @@ function DashboardSchool() {
           </div>
         ) : page === 4 ? (
           <div className="min-h-screen">
-           
-            <DragAndDrop/>
+            <div style={{display:'flex',gap:'10px'}}>
+              <Cards icon="solicitud" text="Solicitudes de Citas" nro={2} />
+              <Cards icon="visualizacion" text="Visualizaciones" nro={2} />
+              <Cards icon="mensaje" text="Mensajes" nro={2} />
+              <Cards icon="comentario" text="Comentarios" nro={2} />
+            </div>
 
+            <DragAndDrop />
           </div>
-         
         ) : null}
       </section>
     </div>
