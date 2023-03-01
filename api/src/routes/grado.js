@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { getGradosByNivel } = require("../controllers/gradoController.js");
 const router = Router();
 const { Grado } = require("../db.js");
 
@@ -19,5 +20,8 @@ router.get("/", async (req, res) => {
     res.json({ err });
   }
 });
+
+
+router.post("/vacantes", getGradosByNivel);
 
 module.exports = router;

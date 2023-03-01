@@ -31,7 +31,7 @@ import {
   Autocomplete,
 } from "@react-google-maps/api";
 import { steps } from "../MockupInfo/Pasos";
-
+import { getVacantes, postHorariosVacantes} from "../redux/SchoolsActions"
 import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
@@ -103,7 +103,7 @@ function DashboardSchool() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [allData, setAllData] = useState({});
-  const [InputVacante, setInputVacante] = useState(0);
+
 
   const dispatch = useDispatch();
   const {
@@ -139,7 +139,11 @@ function DashboardSchool() {
   });
   const OnSubmit = async (user) => {
    if(user.newPassword !== user.repitPassword){
-      Swal.fire("Error", "Las nuevas contraseñas no coinciden", "error");
+      Swal.fire("warning", "Las nuevas contraseñas no coinciden", "error");
+      return;
+   }
+   if(password){
+      Swal.fire("Error", "Ingrese su contraseña para modificar algun campo", "warning");
       return;
    }
    const data = {
@@ -154,11 +158,18 @@ function DashboardSchool() {
     .then(res=>{
       Swal.fire("Exito", "Datos actualizados", "success");
     })
-   } catch (error) {
+    .catch(err=>{
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: err.response.data.error,
+      });
+    })
+  } catch (error) {
     Swal.fire({
       icon: "error",
       title: "Algo salio mal",
-      text: "No se pudo actualizar los datos",
+      text: error.response,
     });
    }
   }
@@ -240,9 +251,7 @@ function DashboardSchool() {
     setActiveStep(0);
     setCompleted({});
   };
-  const handlerVacanteInput = (e) => {
-    setInputVacante(e.target.value);
-  };
+
 
   let libRef = React.useRef(libraries);
 
@@ -304,36 +313,36 @@ function DashboardSchool() {
   };
 
   const initialDatosPrincipales = {
-    nombreColegio: oneSchool.nombre_colegio ? oneSchool.nombre_colegio : "",
-    descripcion: oneSchool.descripcion ? oneSchool.descripcion : "",
-    propuesta: oneSchool.propuesta_valor ? oneSchool.propuesta_valor : "",
-    categoria: oneSchool.Categoria ? oneSchool.Categoria : "",
-    nombreDirector: oneSchool.nombre_director ? oneSchool.nombre_director : "",
-    fundacion: oneSchool.fecha_fundacion
-      ? Number(oneSchool.fecha_fundacion)
+    nombreColegio: oneSchool?.nombre_colegio ? oneSchool.nombre_colegio : "",
+    descripcion: oneSchool?.descripcion ? oneSchool.descripcion : "",
+    propuesta: oneSchool?.propuesta_valor ? oneSchool.propuesta_valor : "",
+    categoria: oneSchool?.Categoria ? oneSchool.Categoria : "",
+    nombreDirector: oneSchool?.nombre_director ? oneSchool.nombre_director : "",
+    fundacion: oneSchool?.fecha_fundacion
+      ? Number(oneSchool?.fecha_fundacion)
       : null,
-    ruc: oneSchool.ruc ? Number(oneSchool.ruc) : null,
-    ugel: oneSchool.ugel ? Number(oneSchool.ugel) : null,
-    area: oneSchool.area ? Number(oneSchool.area) : null,
-    ingles: oneSchool.horas_idioma_extranjero
+    ruc: oneSchool?.ruc ? Number(oneSchool.ruc) : null,
+    ugel: oneSchool?.ugel ? Number(oneSchool.ugel) : null,
+    area: oneSchool?.area ? Number(oneSchool.area) : null,
+    ingles: oneSchool?.horas_idioma_extranjero
       ? Number(oneSchool.horas_idioma_extranjero)
       : null,
-    alumnos: oneSchool.numero_estudiantes
+    alumnos: oneSchool?.numero_estudiantes
       ? Number(oneSchool.numero_estudiantes)
       : null,
-    niveles: oneSchool.Nivels.length > 0 ? oneSchool.Nivels : [],
-    departamento: oneSchool.Departamento ? oneSchool.Departamento : {},
-    provincia: oneSchool.Provincium ? oneSchool.Provincium : {},
-    distrito: oneSchool.Distrito ? oneSchool.Distrito : {},
-    direccion: oneSchool.direccion ? oneSchool.direccion : "",
+    niveles: oneSchool?.Nivels?.length > 0 ? oneSchool.Nivels : [],
+    departamento: oneSchool?.Departamento ? oneSchool.Departamento : {},
+    provincia: oneSchool?.Provincium ? oneSchool.Provincium : {},
+    distrito: oneSchool?.Distrito ? oneSchool.Distrito : {},
+    direccion: oneSchool?.direccion ? oneSchool.direccion : "",
     lat:
-      oneSchool.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lat : 0,
+      oneSchool?.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lat : 0,
     lng:
-      oneSchool.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lng : 0,
-    infraestructura: oneSchool.Infraestructuras
+      oneSchool?.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lng : 0,
+    infraestructura: oneSchool?.Infraestructuras
       ? oneSchool.Infraestructuras
       : [],
-    afiliaciones: oneSchool.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
+    afiliaciones: oneSchool?.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
   };
 
   const [datosPrincipales, setDatosPrincipales] = useState(
@@ -451,26 +460,24 @@ function DashboardSchool() {
   }
 
   const initialMultimedia = {
-    image: oneSchool.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "",
+    image: oneSchool?.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "",
     images:
-      oneSchool.galeria_fotos?.length > 0
+      oneSchool?.galeria_fotos?.length > 0
         ? JSON.parse(oneSchool.galeria_fotos)
         : [],
-    video_url: oneSchool.video_url?.length > 0 ? oneSchool.video_url : "",
+    video_url: oneSchool?.video_url?.length > 0 ? oneSchool.video_url : "",
   };
 
   const [multimedia, setMultimedia] = useState(initialMultimedia);
 
   const initialPreviewOne =
-    oneSchool.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "";
+    oneSchool?.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "";
   const initialPreview =
-    oneSchool.galeria_fotos?.length > 0
+    oneSchool?.galeria_fotos?.length > 0
       ? JSON.parse(oneSchool.galeria_fotos)
       : [];
   const [preview, setPreview] = useState(initialPreview);
   const [previewOne, setPreviewOne] = useState(initialPreviewOne);
-
-  console.log(allData);
 
   useEffect(() => {
     if (files !== null) {
@@ -601,7 +608,7 @@ function DashboardSchool() {
     });
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
-      vacantesDispo: InputVacante,
+   
       horarios: {
         desde: stringyDate(day[Object.keys(day)][0]["$H"])
           .toString()
@@ -619,6 +626,7 @@ function DashboardSchool() {
       text: "Cambios guardados",
     });
     console.log(newDays);
+    dispatch(postHorariosVacantes(newDays))
   };
 
   const [spanOne, setSpanOne] = useState(false);
@@ -628,6 +636,10 @@ function DashboardSchool() {
  
   const [seePassword,setSeePassword] = useState(false)
   const [seeNewPassword,setSeeNewPassword] = useState(false)
+
+  useEffect(() => {
+    dispatch(getVacantes(datosPrincipales.niveles))
+  }, [datosPrincipales.niveles])
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -666,29 +678,47 @@ function DashboardSchool() {
             </span>
           </button>
           <button
-            className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
+            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+              page == 1? "bg-[#0061dd] text-white" : null
+            } `}
             onClick={() => setPage(1)}
           >
-            <CiClock1 className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
-            <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
+            <CiClock1               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                page == 1 ? "text-white" : null
+              }`} />
+            <span               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                page == 1 ? "text-white" : null
+              }`}>
               Horario para citas{" "}
             </span>
           </button>
           <button
-            className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
+            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+              page == 2 ? "bg-[#0061dd] text-white" : null
+            } `}
             onClick={() => setPage(2)}
           >
-            <BsWindowDock className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
-            <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
+            <BsWindowDock               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                page == 2 ? "text-white" : null
+              }`} />
+            <span               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                page == 2 ? "text-white" : null
+              }`}>
               Mi plan
             </span>
           </button>
           <button
-            className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
+            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+              page == 3 ? "bg-[#0061dd] text-white" : null
+            } `}
             onClick={() => setPage(3)}
           >
-            <GiHexagonalNut className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
-            <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
+            <GiHexagonalNut               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                page == 3 ? "text-white" : null
+              }`} />
+            <span               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                page == 3 ? "text-white" : null
+              }`}>
               Configuración
             </span>
           </button>
@@ -837,7 +867,7 @@ function DashboardSchool() {
                               key={category.id}
                               control={
                                 <Checkbox
-                                  checked={datosPrincipales.categoria
+                                  checked={datosPrincipales?.categoria.length > 0 && datosPrincipales?.categoria
                                     .map((e) => e.id)
                                     .includes(category.id)}
                                   onChange={(event, target) => {
@@ -1867,7 +1897,7 @@ function DashboardSchool() {
                             icon={vacantes === 0 ? faArrowUp : faArrowDown}
                           />{" "}
                         </button>
-                        {vacantes === 0 && <GridVacantes />}
+                        {vacantes === 0 && <GridVacantes año={"2023"}/>}
                         <button
                           className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
                           onClick={() =>
@@ -1881,7 +1911,7 @@ function DashboardSchool() {
                             icon={vacantes === 1 ? faArrowUp : faArrowDown}
                           />{" "}
                         </button>
-                        {vacantes === 1 && <GridVacantes />}
+                        {vacantes === 1 && <GridVacantes año={"2024"} />}
                         <button
                           className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
                           onClick={() =>
@@ -1895,7 +1925,7 @@ function DashboardSchool() {
                             icon={vacantes === 2 ? faArrowUp : faArrowDown}
                           />{" "}
                         </button>
-                        {vacantes === 2 && <GridVacantes />}
+                        {vacantes === 2 && <GridVacantes año={"2025"}  />}
                       </div>
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
@@ -2271,19 +2301,7 @@ function DashboardSchool() {
                           minTime={day[Object.keys(day)][0]}
                           maxTime={dayjs("2014-08-18T17:00:00")}
                         />
-                        <TextField
-                          // disabled
-                          Vacante
-                          className="w-[70px]"
-                          id="outlined-number"
-                          label="Vacantes"
-                          type="number"
-                          onChange={handlerVacanteInput}
-                          // value={InputVacante}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
+                       
                       </div>
                     </div>
                   </div>
