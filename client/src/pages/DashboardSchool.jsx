@@ -31,7 +31,7 @@ import {
   Autocomplete,
 } from "@react-google-maps/api";
 import { steps } from "../MockupInfo/Pasos";
-import { getVacantes} from "../redux/SchoolsActions"
+import { getVacantes, postHorariosVacantes} from "../redux/SchoolsActions"
 import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
@@ -103,7 +103,7 @@ function DashboardSchool() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [allData, setAllData] = useState({});
-  const [InputVacante, setInputVacante] = useState(0);
+
 
   const dispatch = useDispatch();
   const {
@@ -251,9 +251,7 @@ function DashboardSchool() {
     setActiveStep(0);
     setCompleted({});
   };
-  const handlerVacanteInput = (e) => {
-    setInputVacante(e.target.value);
-  };
+
 
   let libRef = React.useRef(libraries);
 
@@ -610,7 +608,7 @@ function DashboardSchool() {
     });
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
-      vacantesDispo: InputVacante,
+   
       horarios: {
         desde: stringyDate(day[Object.keys(day)][0]["$H"])
           .toString()
@@ -628,6 +626,7 @@ function DashboardSchool() {
       text: "Cambios guardados",
     });
     console.log(newDays);
+    dispatch(postHorariosVacantes(newDays))
   };
 
   const [spanOne, setSpanOne] = useState(false);
@@ -2302,19 +2301,7 @@ function DashboardSchool() {
                           minTime={day[Object.keys(day)][0]}
                           maxTime={dayjs("2014-08-18T17:00:00")}
                         />
-                        <TextField
-                          // disabled
-                          Vacante
-                          className="w-[70px]"
-                          id="outlined-number"
-                          label="Vacantes"
-                          type="number"
-                          onChange={handlerVacanteInput}
-                          // value={InputVacante}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
+                       
                       </div>
                     </div>
                   </div>

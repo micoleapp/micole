@@ -8,7 +8,9 @@ export const schoolsSlice = createSlice({
   name: "schools",
   initialState: {
     allschools: [],
-    oneSchool: {},
+    oneSchool: {
+      
+    },
     filtersSchools: [],
     paises: [],
     provincias: [],
@@ -106,7 +108,8 @@ export const schoolsSlice = createSlice({
     },
     isLoading: (state) => {
       state.loading = true
-    }
+    },
+
   }
 })
 
