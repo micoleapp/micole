@@ -22,6 +22,6 @@ router.get("/", async (req, res) => {
 });
 
 
-router.get("/vacantes", getGradosByNivel);
+router.post("/vacantes", getGradosByNivel);
 
 module.exports = router;
