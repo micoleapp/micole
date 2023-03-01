@@ -315,36 +315,36 @@ function DashboardSchool() {
   };
 
   const initialDatosPrincipales = {
-    nombreColegio: oneSchool.nombre_colegio ? oneSchool.nombre_colegio : "",
-    descripcion: oneSchool.descripcion ? oneSchool.descripcion : "",
-    propuesta: oneSchool.propuesta_valor ? oneSchool.propuesta_valor : "",
-    categoria: oneSchool.Categoria ? oneSchool.Categoria : "",
-    nombreDirector: oneSchool.nombre_director ? oneSchool.nombre_director : "",
-    fundacion: oneSchool.fecha_fundacion
-      ? Number(oneSchool.fecha_fundacion)
+    nombreColegio: oneSchool?.nombre_colegio ? oneSchool.nombre_colegio : "",
+    descripcion: oneSchool?.descripcion ? oneSchool.descripcion : "",
+    propuesta: oneSchool?.propuesta_valor ? oneSchool.propuesta_valor : "",
+    categoria: oneSchool?.Categoria ? oneSchool.Categoria : "",
+    nombreDirector: oneSchool?.nombre_director ? oneSchool.nombre_director : "",
+    fundacion: oneSchool?.fecha_fundacion
+      ? Number(oneSchool?.fecha_fundacion)
       : null,
-    ruc: oneSchool.ruc ? Number(oneSchool.ruc) : null,
-    ugel: oneSchool.ugel ? Number(oneSchool.ugel) : null,
-    area: oneSchool.area ? Number(oneSchool.area) : null,
-    ingles: oneSchool.horas_idioma_extranjero
+    ruc: oneSchool?.ruc ? Number(oneSchool.ruc) : null,
+    ugel: oneSchool?.ugel ? Number(oneSchool.ugel) : null,
+    area: oneSchool?.area ? Number(oneSchool.area) : null,
+    ingles: oneSchool?.horas_idioma_extranjero
       ? Number(oneSchool.horas_idioma_extranjero)
       : null,
-    alumnos: oneSchool.numero_estudiantes
+    alumnos: oneSchool?.numero_estudiantes
       ? Number(oneSchool.numero_estudiantes)
       : null,
-    niveles: oneSchool.Nivels.length > 0 ? oneSchool.Nivels : [],
-    departamento: oneSchool.Departamento ? oneSchool.Departamento : {},
-    provincia: oneSchool.Provincium ? oneSchool.Provincium : {},
-    distrito: oneSchool.Distrito ? oneSchool.Distrito : {},
-    direccion: oneSchool.direccion ? oneSchool.direccion : "",
+    niveles: oneSchool?.Nivels?.length > 0 ? oneSchool.Nivels : [],
+    departamento: oneSchool?.Departamento ? oneSchool.Departamento : {},
+    provincia: oneSchool?.Provincium ? oneSchool.Provincium : {},
+    distrito: oneSchool?.Distrito ? oneSchool.Distrito : {},
+    direccion: oneSchool?.direccion ? oneSchool.direccion : "",
     lat:
-      oneSchool.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lat : 0,
+      oneSchool?.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lat : 0,
     lng:
-      oneSchool.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lng : 0,
-    infraestructura: oneSchool.Infraestructuras
+      oneSchool?.ubicacion?.length > 0 ? JSON.parse(oneSchool.ubicacion).lng : 0,
+    infraestructura: oneSchool?.Infraestructuras
       ? oneSchool.Infraestructuras
       : [],
-    afiliaciones: oneSchool.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
+    afiliaciones: oneSchool?.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
   };
 
   const [datosPrincipales, setDatosPrincipales] = useState(
@@ -462,26 +462,24 @@ function DashboardSchool() {
   }
 
   const initialMultimedia = {
-    image: oneSchool.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "",
+    image: oneSchool?.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "",
     images:
-      oneSchool.galeria_fotos?.length > 0
+      oneSchool?.galeria_fotos?.length > 0
         ? JSON.parse(oneSchool.galeria_fotos)
         : [],
-    video_url: oneSchool.video_url?.length > 0 ? oneSchool.video_url : "",
+    video_url: oneSchool?.video_url?.length > 0 ? oneSchool.video_url : "",
   };
 
   const [multimedia, setMultimedia] = useState(initialMultimedia);
 
   const initialPreviewOne =
-    oneSchool.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "";
+    oneSchool?.primera_imagen?.length > 0 ? oneSchool.primera_imagen : "";
   const initialPreview =
-    oneSchool.galeria_fotos?.length > 0
+    oneSchool?.galeria_fotos?.length > 0
       ? JSON.parse(oneSchool.galeria_fotos)
       : [];
   const [preview, setPreview] = useState(initialPreview);
   const [previewOne, setPreviewOne] = useState(initialPreviewOne);
-
-  console.log(allData);
 
   useEffect(() => {
     if (files !== null) {
@@ -643,8 +641,6 @@ function DashboardSchool() {
   useEffect(() => {
     dispatch(getVacantes(datosPrincipales.niveles))
   }, [datosPrincipales.niveles])
-  
-  console.log(datosPrincipales)
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -872,7 +868,7 @@ function DashboardSchool() {
                               key={category.id}
                               control={
                                 <Checkbox
-                                  checked={datosPrincipales.categoria
+                                  checked={datosPrincipales?.categoria.length > 0 && datosPrincipales?.categoria
                                     .map((e) => e.id)
                                     .includes(category.id)}
                                   onChange={(event, target) => {

@@ -3,9 +3,9 @@ import {getVacantesGrados,getNiveles, cleanOneSchool,getSchools,getOneSchool,get
 
 export const getVacantes = (niveles) => (dispatch) => {
   dispatch(isLoading())
-  axios.get('/grados/vacantes',niveles)
+  axios.post('/grados/vacantes',{niveles})
   .then(res=>dispatch(getVacantesGrados(res.data)))
-  .catch(err=>dispatch(getError(err.message)))
+  .catch(err=>console.log(err))
 }
 
 export const getFilterHome = (distrito,grado,ingreso) => (dispatch) => {
