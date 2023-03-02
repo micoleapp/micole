@@ -24,19 +24,20 @@ import {
   faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-  getAllSchools,
   getAllDepartaments,
-  getAllDistrits
+  getAllDistrits,
+  getFilterHome,
+  getFilterListSchool
 } from "../redux/SchoolsActions";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 
+const yearNow = new Date().getFullYear();
+const Ingreso2 = [yearNow, yearNow+1, yearNow+2];
 
 const pageSize = 5;
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
 
 const types = ["Religoso", "Hombres", "Mujeres", "Mixtos"];
 function valuetext(value) {
@@ -59,8 +60,10 @@ function ListSchool() {
   const [gradoParams, setGradoParams] = React.useState(params.get("grado"))
   const [ingresoParams, setIngresoParams] = React.useState(params.get("ingreso"))
 
-  const [distritName, setDistritName] = React.useState([]);
-
+  const [distritName, setDistritName] = React.useState(distritParams !== 'false' ? [Number(distritParams)] : []);
+  const [gradoName, setGradoName] = React.useState(gradoParams !== 'false' ? [Number(gradoParams)] : []);
+  const [ingresoName, setIngresoName] = React.useState(ingresoParams !== 'false' ? [Number(ingresoParams)] : []);
+  const [categorias,setCategorias] = React.useState([])
   const [english, setEnglish] = React.useState(10);
 
   const handleChangeEnglish = (event, newValue) => {
@@ -110,11 +113,12 @@ function ListSchool() {
   });
 
   const dispatch = useDispatch();
-  const { filtersSchools:allschools, loading, distrits } = useSelector(
+  const { filtersSchools:allschools, loading, distrits,grados ,categories} = useSelector(
     (state) => state.schools
   );
+
     useEffect(() => {
-    dispatch(getAllSchools());
+    dispatch(getFilterHome(distritParams,gradoParams,ingresoParams))
     dispatch(getAllDepartaments())
     dispatch(getAllDistrits())
 
@@ -142,7 +146,25 @@ function ListSchool() {
 
   const [toggle, setToggle] = useState(false);
   const [toggleDistrits, setToggleDistrits] = useState(false);
+  const [toggleGrado, setToggleGrado] = useState(false);
   const [toggleTypes, setToggleTypes] = useState(false);
+  const [toggleAño, setToggleAño] = useState(false);
+
+  const data = {
+    distrits: distritName,
+    grados:gradoName,
+    tipos:categorias,
+    pension: [value1[0],value1[1]],
+    cuota:[value2[0],value2[1]],
+    rating,
+    ingles:english,
+    ingreso:ingresoName
+  }
+
+  const handleSubmitData = (e) => {
+    e.preventDefault();
+    dispatch(getFilterListSchool(data))
+  }
 
   return (
     <div className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "                 data-aos="fade-up" data-aos-duration='1000'>
@@ -198,21 +220,21 @@ function ListSchool() {
                         
                         checked={
                           Number(distritParams) === distrit.id ||
-                          distritName.includes(distrit.nombre_distrito)
+                          distritName.includes(distrit.id)
                         }
                           onChange={(event, target) => {
                             if (target) {
                               setDistritParams(distrit.id);
                               setDistritName([
                                 ...distritName,
-                                distrit.nombre_distrito,
+                                distrit.id,
                                
                               ]);
                             } else {
-                              setDistritParams(null);
+                              setDistritParams(false);
                               setDistritName(
                                 distritName.filter(
-                                  (dist) => dist !== distrit.nombre_distrito
+                                  (dist) => dist !== distrit.id
                                 )
                               );
                             }
@@ -244,8 +266,134 @@ function ListSchool() {
                 }
               >
                 <FormGroup>
-                  {types.map((type) => (
-                    <FormControlLabel control={<Checkbox />} label={type} />
+                  {categories.map((cat) => (
+                    <FormControlLabel control={<Checkbox 
+                    onChange={(event, target) => {
+                      if (target) {
+                        setCategorias([
+                          ...categorias,
+                          cat.id,
+                         
+                        ]);
+                      } else {
+                        setCategorias(
+                          categorias.filter(
+                            (dist) => dist !== cat.id
+                          )
+                        );
+                      }
+                    }}
+                    />} label={cat.nombre_categoria} />
+                  ))}
+                </FormGroup>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-5 z-50 ">
+                <Typography id="input-slider" gutterBottom fontWeight="bold">
+                  Grados
+                </Typography>
+                <button onClick={() => setToggleGrado(!toggleGrado)}>
+                  {" "}
+                  <FontAwesomeIcon
+                    size="lg"
+                    icon={toggleGrado ? faArrowUp : faArrowDown}
+                  />
+                </button>
+              </div>
+              <div
+                className={
+                  toggleGrado
+                    ? "block h-[200px] overflow-y-scroll"
+                    : "hidden"
+                }
+              >
+                <FormGroup>
+                  {grados?.map((grado) => (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                        
+                        checked={
+                          Number(gradoParams) === grado.id ||
+                          gradoName.includes(grado.id)
+                        }
+                          onChange={(event, target) => {
+                            if (target) {
+                              setGradoParams(grado.id);
+                              setGradoName([
+                                ...gradoName,
+                                grado.id,
+                               
+                              ]);
+                            } else {
+                              setGradoParams(false);
+                              setGradoName(
+                                gradoName.filter(
+                                  (dist) => dist !== grado.id
+                                )
+                              );
+                            }
+                          }}
+                        />
+                      }
+                      label={grado.nombre_grado}
+                    />
+                  ))}
+                </FormGroup>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-5 z-50 ">
+                <Typography id="input-slider" gutterBottom fontWeight="bold">
+                  Año de ingreso
+                </Typography>
+                <button onClick={() => setToggleAño(!toggleAño)}>
+                  {" "}
+                  <FontAwesomeIcon
+                    size="lg"
+                    icon={toggleAño ? faArrowUp : faArrowDown}
+                  />
+                </button>
+              </div>
+              <div
+                className={
+                  toggleAño
+                    ? "block h-[150px] overflow-y-scroll"
+                    : "hidden"
+                }
+              >
+                <FormGroup>
+                  {Ingreso2?.map((año) => (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                        
+                        checked={
+                          Number(ingresoParams) === año ||
+                          ingresoName.includes(año)
+                        }
+                          onChange={(event, target) => {
+                            if (target) {
+                              setIngresoParams(año);
+                              setIngresoName([
+                                ...ingresoName,
+                                año,
+                               
+                              ]);
+                            } else {
+                              setIngresoParams(false);
+                              setIngresoName(
+                                ingresoName.filter(
+                                  (dist) => dist !== año
+                                )
+                              );
+                            }
+                          }}
+                        />
+                      }
+                      label={año}
+                    />
                   ))}
                 </FormGroup>
               </div>
@@ -322,7 +470,7 @@ function ListSchool() {
                 {english} (Hrs/semana)
               </div>
             </div>
-            <button className="bg-[#0061dd] text-white w-full p-3 rounded-sm flex justify-center items-center gap-5">
+            <button onClick={handleSubmitData} className="bg-[#0061dd] text-white w-full p-3 rounded-sm flex justify-center items-center gap-5">
               <FontAwesomeIcon size="lg" icon={faSearch} />
               BUSCAR
             </button>
