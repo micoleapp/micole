@@ -49,6 +49,7 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TextField } from "@mui/material";
+const yearNow = new Date().getFullYear();
 const libraries = ["places"];
 
 const containerStyle = {
@@ -1881,8 +1882,7 @@ function DashboardSchool() {
                     </div>
                   )}
                   {activeStep === 3 && (
-                    <>
-                      <div className="w-full min-h-screen gap-2 flex flex-col">
+                      <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
                         <h1 className="text-2xl">Vacantes disponibles</h1>
                         <button
                           className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
@@ -1897,7 +1897,7 @@ function DashboardSchool() {
                             icon={vacantes === 0 ? faArrowUp : faArrowDown}
                           />{" "}
                         </button>
-                        {vacantes === 0 && <GridVacantes año={"2023"}/>}
+                        {vacantes === 0 && <GridVacantes año={yearNow}/>}
                         <button
                           className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
                           onClick={() =>
@@ -1911,7 +1911,7 @@ function DashboardSchool() {
                             icon={vacantes === 1 ? faArrowUp : faArrowDown}
                           />{" "}
                         </button>
-                        {vacantes === 1 && <GridVacantes año={"2024"} />}
+                        {vacantes === 1 && <GridVacantes año={yearNow+1} />}
                         <button
                           className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
                           onClick={() =>
@@ -1925,9 +1925,8 @@ function DashboardSchool() {
                             icon={vacantes === 2 ? faArrowUp : faArrowDown}
                           />{" "}
                         </button>
-                        {vacantes === 2 && <GridVacantes año={"2025"}  />}
-                      </div>
-                      <Box
+                        {vacantes === 2 && <GridVacantes año={yearNow+2}  />}
+                        <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
                         <Button
@@ -1958,7 +1957,8 @@ function DashboardSchool() {
                         </Button>
                       ))} */}
                       </Box>
-                    </>
+                      </div>
+
                   )}
                   {activeStep === 4 && (
                     <div className="flex flex-col gap-5">

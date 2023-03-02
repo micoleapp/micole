@@ -56,6 +56,8 @@ function ListSchool() {
   const params = new URLSearchParams(location.search);
 
   const [distritParams, setDistritParams] = React.useState(params.get("distrito"))
+  const [gradoParams, setGradoParams] = React.useState(params.get("grado"))
+  const [ingresoParams, setIngresoParams] = React.useState(params.get("ingreso"))
 
   const [distritName, setDistritName] = React.useState([]);
 
