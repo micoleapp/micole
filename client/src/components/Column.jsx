@@ -27,7 +27,7 @@ const Column = ({ column, tasks }) => {
                     className={`flex ${draggableSnapshot.isDragging ? "opacity-50" : "opacity-100"} mb-1 h-[110px] items-center flex-col justify-evenly text-black shadow-lg bg-white border rounded-md p-2`}
                   >
                    <div>
-                       <h2 >{task.content}</h2>
+                       <h2 >{task.nombre}</h2>
                    </div>
                  
                    <div style={{display:'flex'}}>
