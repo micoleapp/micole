@@ -31,10 +31,18 @@ export const getVacantes = (niveles) => (dispatch) => {
 export const getFilterHome = (distrito, grado, ingreso) => (dispatch) => {
   dispatch(isLoading());
   axios
-    .get(`/colegios?distrito=${distrito}&?grado=${grado}&?ingreso=${ingreso}`)
+    .get(`/colegios?distrito=${distrito}&grado=${grado}&ingreso=${ingreso}`)
     .then((res) => dispatch(getFilterSchool(res.data)))
     .catch((err) => dispatch(getError(err.message)));
 };
+
+export const getFilterListSchool = (data)=>(dispatch)=>{
+  dispatch(isLoading());
+  axios
+    .post("/colegios/filter", data)
+    .then((res) => dispatch(getFilterSchool(res.data)))
+    .catch((err) => dispatch(getError(err.message)));
+}
 
 export const getAllGrados = () => (dispatch) => {
   dispatch(isLoading());

@@ -92,7 +92,6 @@ router.get("/", async (req, res) => {
       }
       return false;
     }
-    console.log(typeof(distrito));
     distrito !== "false"
       ? (response = response.filter((c) => c.Distrito.id === Number(distrito)))
       : null;
