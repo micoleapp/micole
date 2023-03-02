@@ -92,14 +92,14 @@ router.get("/", async (req, res) => {
       }
       return false;
     }
-
-    distrito
+    console.log(typeof(distrito));
+    distrito !== "false"
       ? (response = response.filter((c) => c.Distrito.id === Number(distrito)))
       : null;
-    grado
+    grado !== "false"
       ? (response = response.filter((c) => filterByGrado(c.Vacantes, grado)))
       : null;
-    ingreso
+    ingreso !== "false"
       ? (response = response.filter((c) => filterByIngreso(c.Vacantes, ingreso)))
       : null;
 
