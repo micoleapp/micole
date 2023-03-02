@@ -12,7 +12,8 @@ const {
   Infraestructura,
   Afiliacion,
   Nivel,
-  Vacante
+  Vacante,
+  Grado,
 } = require("../db.js");
 
 // const getComponentData = require("../funciones/getComponentData.js");
@@ -33,6 +34,7 @@ router.get("/", async (req, res) => {
         {
           model: Vacante,
           attributes: ["año", "GradoId"],
+          include: [{ model: Grado, attributes: ["nombre_grado"] }],
         },
         {
           model: Idioma,
@@ -71,19 +73,36 @@ router.get("/", async (req, res) => {
       ],
     });
     response = cole;
-    // distrito=parseInt(distrito);
-    console.log(distrito);
-    console.log(grado);
-    console.log(ingreso);
-    // distrito
-    //   ? (response = response.filter((c) => c.Distrito.id === Number(distrito)))
-    //   : null;
+
+    function filterByGrado(array, grado) {
+      for (let i = 0; i < array.length; i++) {
+        console.log(array[i].GradoId === Number(grado));
+        if (array[i].GradoId === Number(grado)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    function filterByIngreso(array, ingreso) {
+      for (let i = 0; i < array.length; i++) {
+        console.log(array[i].año === Number(ingreso));
+        if (array[i].año === Number(ingreso)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    distrito
+      ? (response = response.filter((c) => c.Distrito.id === Number(distrito)))
+      : null;
     grado
-      ? (response = response.filter((c) => c.Vacantes[0]["GradoId"] === Number(grado)))
+      ? (response = response.filter((c) => filterByGrado(c.Vacantes, grado)))
       : null;
     ingreso
-      ? (response = response.filter((c) => c.Vacantes[0]["año"] === Number(ingreso)))
+      ? (response = response.filter((c) => filterByIngreso(c.Vacantes, ingreso)))
       : null;
+
     res.json(response);
   } catch (err) {
     res.json({ err });
@@ -101,6 +120,11 @@ router.get("/:Colegio_id", async (req, res) => {
         {
           model: Nivel,
           attributes: ["nombre_nivel", "id"],
+        },
+        {
+          model: Vacante,
+          attributes: ["año", "GradoId"],
+          include: [{ model: Grado, attributes: ["nombre_grado"] }],
         },
         {
           model: Idioma,
