@@ -152,8 +152,8 @@ function ListSchool() {
 
   const data = {
     distrits: distritName,
-    grados:gradoName,
-    tipos:categorias,
+    grado:gradoName,
+    tipo:categorias,
     pension: [value1[0],value1[1]],
     cuota:[value2[0],value2[1]],
     rating,
@@ -165,6 +165,8 @@ function ListSchool() {
     e.preventDefault();
     dispatch(getFilterListSchool(data))
   }
+
+  console.log(data)
 
   return (
     <div className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "                 data-aos="fade-up" data-aos-duration='1000'>
@@ -267,19 +269,16 @@ function ListSchool() {
               >
                 <FormGroup>
                   {categories.map((cat) => (
-                    <FormControlLabel control={<Checkbox 
+                    <FormControlLabel control={<Checkbox
+                    checked={categorias == cat.id}
+                      
                     onChange={(event, target) => {
                       if (target) {
-                        setCategorias([
-                          ...categorias,
-                          cat.id,
-                         
-                        ]);
+                        setCategorias(
+                          cat.id);
                       } else {
                         setCategorias(
-                          categorias.filter(
-                            (dist) => dist !== cat.id
-                          )
+                          null
                         );
                       }
                     }}
@@ -316,23 +315,16 @@ function ListSchool() {
                         
                         checked={
                           Number(gradoParams) === grado.id ||
-                          gradoName.includes(grado.id)
+                          gradoName == grado.id
                         }
                           onChange={(event, target) => {
                             if (target) {
                               setGradoParams(grado.id);
-                              setGradoName([
-                                ...gradoName,
-                                grado.id,
-                               
-                              ]);
+                              setGradoName(
+                                grado.id);
                             } else {
                               setGradoParams(false);
-                              setGradoName(
-                                gradoName.filter(
-                                  (dist) => dist !== grado.id
-                                )
-                              );
+                              setGradoName(null);
                             }
                           }}
                         />
@@ -371,23 +363,16 @@ function ListSchool() {
                         
                         checked={
                           Number(ingresoParams) === año ||
-                          ingresoName.includes(año)
+                          ingresoName == año
                         }
                           onChange={(event, target) => {
                             if (target) {
                               setIngresoParams(año);
-                              setIngresoName([
-                                ...ingresoName,
-                                año,
-                               
-                              ]);
+                              setIngresoName(
+                                año);
                             } else {
                               setIngresoParams(false);
-                              setIngresoName(
-                                ingresoName.filter(
-                                  (dist) => dist !== año
-                                )
-                              );
+                              setIngresoName(null);
                             }
                           }}
                         />
