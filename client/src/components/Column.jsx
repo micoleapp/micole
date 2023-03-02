@@ -1,7 +1,7 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Droppable } from "react-beautiful-dnd";
-
+import Chip from '@mui/material/Chip';
 const Column = ({ column, tasks }) => {
 
   return (
@@ -12,7 +12,8 @@ const Column = ({ column, tasks }) => {
       <Droppable droppableId={column.id}>
         {(droppableProvided, droppableSnapshot) => (
           <div
-            className="flex p-4 flex-1 flex-col gap-2"
+            // className="flex p-4 flex-1 flex-col gap-2"
+
             ref={droppableProvided.innerRef}
             {...droppableProvided.droppableProps}
           >
@@ -23,9 +24,17 @@ const Column = ({ column, tasks }) => {
                     ref={draggableProvided.innerRef}
                     {...draggableProvided.draggableProps}
                     {...draggableProvided.dragHandleProps}
-                    className={`flex ${draggableSnapshot.isDragging ? "opacity-50" : "opacity-100"} mb-1 h-[72px] items-center text-black shadow-lg bg-white border rounded-md p-2`}
+                    className={`flex ${draggableSnapshot.isDragging ? "opacity-50" : "opacity-100"} mb-1 h-[110px] items-center flex-col justify-evenly text-black shadow-lg bg-white border rounded-md p-2`}
                   >
-                    <h2 >{task.content}</h2>
+                   <div>
+                       <h2 >{task.content}</h2>
+                   </div>
+                 
+                   <div style={{display:'flex'}}>
+                          <Chip label={task.grado} />
+                    <Chip label={task.añoIngreso} />
+                   </div>
+              
                   </div>
                 )}
               </Draggable>

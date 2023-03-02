@@ -17,11 +17,59 @@ const reorderColumnList = (sourceCol, startIndex, endIndex) => {
 
 const initialData = {
   tasks: {
-    1: { id: 1, content: "Test de prueba 1" },
-    2: { id: 2, content: "Test de prueba 2" },
-    3: { id: 3, content: "Test de prueba 3" },
-    4: { id: 4, content: "Test de prueba 4" },
-    5: { id: 5, content: "Test de prueba 5" },
+    1: {
+      id: 1,
+      celular: 3496213123,
+      correo: "gorositopedro@gmail.com",
+      date: "03/03/2023",
+      modo: "Virtual",
+      nombre: "Aylen",
+      time: "20:14",
+    },
+    2: {
+      id: 2,
+      celular: 3496213123,
+      correo: "gorositopedro@gmail.com",
+      date: "04/03/2023",
+      modo: "Virtual",
+      nombre: "Nano",
+      time: "20:14",
+      añoIngreso: "2023",
+      grado: "1ro Primaria",
+    },
+    3: {
+      id: 3,
+      celular: 3496213123,
+      correo: "gorositopedro@gmail.com",
+      date: "12/03/2023",
+      modo: "Virtual",
+      nombre: "Enzo",
+      time: "20:14",
+      añoIngreso: "2023",
+      grado: "2ro Primaria",
+    },
+    4: {
+      id: 4,
+      celular: 3496213123,
+      correo: "gorositopedro@gmail.com",
+      date: "20/03/2023",
+      modo: "Virtual",
+      nombre: "Maximo",
+      time: "20:14",
+      añoIngreso: "2023",
+      grado: "3ro Primaria",
+    },
+    5: {
+      id: 5,
+      celular: 3496213123,
+      correo: "gorositopedro@gmail.com",
+      date: "02/03/2023",
+      modo: "Virtual",
+      nombre: "Roberto",
+      time: "20:14",
+      añoIngreso: "2023",
+      grado: "4ro Primaria",
+    },
   },
   columns: {
     "column-1": {
@@ -145,12 +193,10 @@ function DragAndDrop() {
       <div className="flex flex-col text-base py-2 w-full min-h-screen gap-5 duration-300  mb-6 bg-[#f6f7f8] text-[#0061dd]">
         <div className="flex items-center flex-col my-5 ">
           {/* aca van los select de año de ingreso y grado*/}
-        <div style={{display:'flex', width:'100%'}}>
-           <SelectCRM  label='Grado'/>
-            <SelectCRM  label='Año' />
-        </div>
-           
-         
+          <div style={{ display: "flex", width: "100%" }}>
+            <SelectCRM label="Grado" />
+            <SelectCRM label="Año" />
+          </div>
         </div>
         <div className="flex flex-col text-base lg:flex-row justify-between gap-5 px-4">
           {state.columnOrder.map((columnId) => {
