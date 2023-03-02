@@ -9,13 +9,7 @@ export default function Cards({ icon, text, nro }) {
     <div data-aos="fade-up" className={style.container}>
       <div className={style.divInfo}>
         <div
-          style={{
-            borderRadius: "50%",
-            boerder:'1px solid #000',
-            color: "#0061DF",
-            width: "50px",
-            height: "50px",
-          }}
+         className={style.divRedondo}
         >
           {icon === "solicitud" && (
             <BsCalendar4Week
