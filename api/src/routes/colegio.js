@@ -83,6 +83,7 @@ router.get("/", async (req, res) => {
       }
       return false;
     }
+
     function filterByIngreso(array, ingreso) {
       for (let i = 0; i < array.length; i++) {
         console.log(array[i].año === Number(ingreso));
@@ -92,6 +93,7 @@ router.get("/", async (req, res) => {
       }
       return false;
     }
+    
     distrito !== "false"
       ? (response = response.filter((c) => c.Distrito.id === Number(distrito)))
       : null;

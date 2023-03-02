@@ -26,13 +26,16 @@ import {
 import {
   getAllDepartaments,
   getAllDistrits,
-  getFilterHome
+  getFilterHome,
+  getFilterListSchool
 } from "../redux/SchoolsActions";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 
+const yearNow = new Date().getFullYear();
+const Ingreso2 = [yearNow, yearNow+1, yearNow+2];
 
 const pageSize = 5;
 
@@ -59,7 +62,8 @@ function ListSchool() {
 
   const [distritName, setDistritName] = React.useState(distritParams !== 'false' ? [Number(distritParams)] : []);
   const [gradoName, setGradoName] = React.useState(gradoParams !== 'false' ? [Number(gradoParams)] : []);
-
+  const [ingresoName, setIngresoName] = React.useState(ingresoParams !== 'false' ? [Number(ingresoParams)] : []);
+  const [categorias,setCategorias] = React.useState([])
   const [english, setEnglish] = React.useState(10);
 
   const handleChangeEnglish = (event, newValue) => {
@@ -109,7 +113,7 @@ function ListSchool() {
   });
 
   const dispatch = useDispatch();
-  const { filtersSchools:allschools, loading, distrits,grados } = useSelector(
+  const { filtersSchools:allschools, loading, distrits,grados ,categories} = useSelector(
     (state) => state.schools
   );
 
@@ -144,13 +148,23 @@ function ListSchool() {
   const [toggleDistrits, setToggleDistrits] = useState(false);
   const [toggleGrado, setToggleGrado] = useState(false);
   const [toggleTypes, setToggleTypes] = useState(false);
+  const [toggleAño, setToggleAño] = useState(false);
 
   const data = {
     distrits: distritName,
-    grados:gradoName
+    grados:gradoName,
+    tipos:categorias,
+    pension: [value1[0],value1[1]],
+    cuota:[value2[0],value2[1]],
+    rating,
+    ingles:english,
+    ingreso:ingresoName
   }
 
-  console.log(data)
+  const handleSubmitData = (e) => {
+    e.preventDefault();
+    dispatch(getFilterListSchool(data))
+  }
 
   return (
     <div className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "                 data-aos="fade-up" data-aos-duration='1000'>
@@ -252,8 +266,24 @@ function ListSchool() {
                 }
               >
                 <FormGroup>
-                  {types.map((type) => (
-                    <FormControlLabel control={<Checkbox />} label={type} />
+                  {categories.map((cat) => (
+                    <FormControlLabel control={<Checkbox 
+                    onChange={(event, target) => {
+                      if (target) {
+                        setCategorias([
+                          ...categorias,
+                          cat.id,
+                         
+                        ]);
+                      } else {
+                        setCategorias(
+                          categorias.filter(
+                            (dist) => dist !== cat.id
+                          )
+                        );
+                      }
+                    }}
+                    />} label={cat.nombre_categoria} />
                   ))}
                 </FormGroup>
               </div>
@@ -308,6 +338,61 @@ function ListSchool() {
                         />
                       }
                       label={grado.nombre_grado}
+                    />
+                  ))}
+                </FormGroup>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-5 z-50 ">
+                <Typography id="input-slider" gutterBottom fontWeight="bold">
+                  Año de ingreso
+                </Typography>
+                <button onClick={() => setToggleAño(!toggleAño)}>
+                  {" "}
+                  <FontAwesomeIcon
+                    size="lg"
+                    icon={toggleAño ? faArrowUp : faArrowDown}
+                  />
+                </button>
+              </div>
+              <div
+                className={
+                  toggleAño
+                    ? "block h-[150px] overflow-y-scroll"
+                    : "hidden"
+                }
+              >
+                <FormGroup>
+                  {Ingreso2?.map((año) => (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                        
+                        checked={
+                          Number(ingresoParams) === año ||
+                          ingresoName.includes(año)
+                        }
+                          onChange={(event, target) => {
+                            if (target) {
+                              setIngresoParams(año);
+                              setIngresoName([
+                                ...ingresoName,
+                                año,
+                               
+                              ]);
+                            } else {
+                              setIngresoParams(false);
+                              setIngresoName(
+                                ingresoName.filter(
+                                  (dist) => dist !== año
+                                )
+                              );
+                            }
+                          }}
+                        />
+                      }
+                      label={año}
                     />
                   ))}
                 </FormGroup>
@@ -385,7 +470,7 @@ function ListSchool() {
                 {english} (Hrs/semana)
               </div>
             </div>
-            <button className="bg-[#0061dd] text-white w-full p-3 rounded-sm flex justify-center items-center gap-5">
+            <button onClick={handleSubmitData} className="bg-[#0061dd] text-white w-full p-3 rounded-sm flex justify-center items-center gap-5">
               <FontAwesomeIcon size="lg" icon={faSearch} />
               BUSCAR
             </button>
