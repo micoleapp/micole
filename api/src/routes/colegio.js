@@ -11,7 +11,9 @@ const {
   Distrito,
   Infraestructura,
   Afiliacion,
-  Nivel
+  Nivel,
+  Vacante,
+  Grado,
 } = require("../db.js");
 
 // const getComponentData = require("../funciones/getComponentData.js");
@@ -19,7 +21,7 @@ const {
 
 //------- PEDIR TODOS LOS COLEGIOS A LA BD--------
 router.get("/", async (req, res) => {
-  //   const { brand, category, priceMin, priceMax } = req.query;
+  const { distrito, grado, ingreso } = req.query;
   let response = [];
   try {
     let cole;
@@ -27,7 +29,12 @@ router.get("/", async (req, res) => {
       include: [
         {
           model: Nivel,
-          attributes: ["nombre_nivel","id"],
+          attributes: ["nombre_nivel", "id"],
+        },
+        {
+          model: Vacante,
+          attributes: ["año", "GradoId"],
+          include: [{ model: Grado, attributes: ["nombre_grado"] }],
         },
         {
           model: Idioma,
@@ -66,12 +73,43 @@ router.get("/", async (req, res) => {
       ],
     });
     response = cole;
+
+    function filterByGrado(array, grado) {
+      for (let i = 0; i < array.length; i++) {
+        console.log(array[i].GradoId === Number(grado));
+        if (array[i].GradoId === Number(grado)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    function filterByIngreso(array, ingreso) {
+      for (let i = 0; i < array.length; i++) {
+        console.log(array[i].año === Number(ingreso));
+        if (array[i].año === Number(ingreso)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    distrito
+      ? (response = response.filter((c) => c.Distrito.id === Number(distrito)))
+      : null;
+    grado
+      ? (response = response.filter((c) => filterByGrado(c.Vacantes, grado)))
+      : null;
+    ingreso
+      ? (response = response.filter((c) => filterByIngreso(c.Vacantes, ingreso)))
+      : null;
+
     res.json(response);
   } catch (err) {
     res.json({ err });
   }
 });
 
+//------- PEDIR UNO DE LOS COLEGIOS POR ID--------
 router.get("/:Colegio_id", async (req, res) => {
   const { Colegio_id } = req.params;
 
@@ -81,7 +119,12 @@ router.get("/:Colegio_id", async (req, res) => {
       include: [
         {
           model: Nivel,
-          attributes: ["nombre_nivel","id"],
+          attributes: ["nombre_nivel", "id"],
+        },
+        {
+          model: Vacante,
+          attributes: ["año", "GradoId"],
+          include: [{ model: Grado, attributes: ["nombre_grado"] }],
         },
         {
           model: Idioma,
@@ -112,21 +155,31 @@ router.get("/:Colegio_id", async (req, res) => {
         },
         {
           model: Categoria,
-          attributes: ["id", "nombre_categoria","imagen_categoria","logo_categoria"],
+          attributes: [
+            "id",
+            "nombre_categoria",
+            "imagen_categoria",
+            "logo_categoria",
+          ],
           through: {
             attributes: [],
           },
         },
         {
           model: Infraestructura,
-          attributes: ["id", "nombre_infraestructura", "InfraestructuraTipoId","imagen"],
+          attributes: [
+            "id",
+            "nombre_infraestructura",
+            "InfraestructuraTipoId",
+            "imagen",
+          ],
           through: {
             attributes: [],
           },
         },
         {
           model: Afiliacion,
-          attributes: ["id", "nombre_afiliacion", "Afiliacion_tipo_Id","logo"],
+          attributes: ["id", "nombre_afiliacion", "Afiliacion_tipo_Id", "logo"],
           through: {
             attributes: [],
           },
@@ -140,7 +193,7 @@ router.get("/:Colegio_id", async (req, res) => {
   }
 });
 
-//--------------------PUT  UN PRODUCTO DEL ALMACEN--------------------
+//--------------------PUT  UN COLEGIO POR ID-------
 router.put("/:id", async (req, res) => {
   console.log(req.body);
   try {
@@ -165,10 +218,10 @@ router.put("/:id", async (req, res) => {
       provincia,
       infraestructura,
       niveles,
-      afiliaciones
+      afiliaciones,
     } = req.body;
     let video_url = multimedia.video_url;
-    let primera_imagen = multimedia.image
+    let primera_imagen = multimedia.image;
     let galeria_fotos = JSON.stringify(multimedia.images);
     const ubicacion = { lat, lng };
     const editedColegio = await Colegio.update(
@@ -196,7 +249,7 @@ router.put("/:id", async (req, res) => {
       { where: { id: id } }
     );
     const colegio = await Colegio.findByPk(id);
-    if (colegio === null) { 
+    if (colegio === null) {
       console.log("Not found!");
     } else {
       await colegio.setInfraestructuras(infraestructura.map((i) => i.id));
