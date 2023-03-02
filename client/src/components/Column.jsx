@@ -6,8 +6,8 @@ const Column = ({ column, tasks }) => {
 
   return (
     <div className="rounded-md bg-white shadow-md border h-min w-full flex flex-col">
-      <div className="flex items-center bg-[#0061dd] py-2 rounded-t-md px-2 mb-2">
-        <h1 className="text-2xl text-white">{column.title}</h1>
+      <div className="flex items-center  bg-[#0061dd] py-2 rounded-t-md px-2 mb-2 h-20">
+        <h1 className="text-sm text-white">{column.title}</h1>
       </div>
       <Droppable droppableId={column.id}>
         {(droppableProvided, droppableSnapshot) => (
@@ -25,7 +25,7 @@ const Column = ({ column, tasks }) => {
                     {...draggableProvided.dragHandleProps}
                     className={`flex ${draggableSnapshot.isDragging ? "opacity-50" : "opacity-100"} mb-1 h-[72px] items-center text-black shadow-lg bg-white border rounded-md p-2`}
                   >
-                    <h2>{task.content}</h2>
+                    <h2 >{task.content}</h2>
                   </div>
                 )}
               </Draggable>

@@ -26,22 +26,46 @@ const initialData = {
   columns: {
     "column-1": {
       id: "column-1",
-      title: "TO-DO",
+      title: "Solicitud de cita",
       taskIds: [1, 2, 3, 4],
     },
     "column-2": {
       id: "column-2",
-      title: "IN-PROGRESS",
-      taskIds: [5],
+      title: "Cita realizada",
+      taskIds: [],
     },
     "column-3": {
       id: "column-3",
-      title: "COMPLETED",
+      title: "Aplicacion",
+      taskIds: [],
+    },
+    "column-4": {
+      id: "column-4",
+      title: "Entrevista con el director",
+      taskIds: [],
+    },
+    "column-5": {
+      id: "column-5",
+      title: "Vacante ofrecida",
+      taskIds: [],
+    },
+    "column-6": {
+      id: "column-6",
+      title: "Vacante aceptada",
       taskIds: [],
     },
   },
   // Facilitate reordering of the columns
-  columnOrder: ["column-1", "column-2", "column-3"],
+  columnOrder: [
+    "column-1",
+    "column-2",
+    "column-3",
+    "column-4",
+    ,
+    "column-5",
+    ,
+    "column-6",
+  ],
 };
 
 function DragAndDrop() {
@@ -109,20 +133,24 @@ function DragAndDrop() {
 
     setState(newState);
 
-    alert(`Moviste la tarea ${removed} desde ${sourceCol.title} hacia ${destinationCol.title}! \nTu tarea es ${JSON.stringify(state.tasks[removed])}`)
+    alert(
+      `Moviste la tarea ${removed} desde ${sourceCol.title} hacia ${
+        destinationCol.title
+      }! \nTu tarea es ${JSON.stringify(state.tasks[removed])}`
+    );
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex flex-col py-2 w-full min-h-screen gap-5 duration-300  mb-6 bg-[#f6f7f8] text-[#0061dd]">
+    <DragDropContext  Scrollable onDragEnd={onDragEnd}>
+      <div className="flex flex-col text-base py-2 w-full min-h-screen gap-5 duration-300  mb-6 bg-[#f6f7f8] text-[#0061dd]">
         <div className="flex items-center flex-col my-5 ">
-          <h1 className="font-extrabold text-transparent text-4xl bg-clip-text bg-gradient-to-r from-sky-300 to-blue-600">Drag and drop</h1>
+          {/* aca van los select de año de ingreso y grado*/}
         </div>
-        <div className="flex flex-col lg:flex-row justify-between gap-5 px-4">
+        <div className="flex flex-col text-base lg:flex-row justify-between gap-5 px-4">
           {state.columnOrder.map((columnId) => {
             const column = state.columns[columnId];
             const tasks = column.taskIds.map((taskId) => state.tasks[taskId]);
-            return <Column key={column.id} column={column} tasks={tasks} />;
+            return <Column key={column.id} column={column} tasks={tasks}  />;
           })}
         </div>
       </div>
