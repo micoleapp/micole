@@ -1,7 +1,7 @@
 import React from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Column from "./Column";
-
+import SelectCRM from "./CardsDrgAndDrp/SelectsCRM/SelectsCRM";
 const reorderColumnList = (sourceCol, startIndex, endIndex) => {
   const newTaskIds = Array.from(sourceCol.taskIds);
   const [removed] = newTaskIds.splice(startIndex, 1);
@@ -141,16 +141,23 @@ function DragAndDrop() {
   };
 
   return (
-    <DragDropContext  Scrollable onDragEnd={onDragEnd}>
+    <DragDropContext Scrollable onDragEnd={onDragEnd}>
       <div className="flex flex-col text-base py-2 w-full min-h-screen gap-5 duration-300  mb-6 bg-[#f6f7f8] text-[#0061dd]">
         <div className="flex items-center flex-col my-5 ">
           {/* aca van los select de año de ingreso y grado*/}
+        <div style={{display:'flex', width:'100%'}}>
+           <SelectCRM  label='Grado'/>
+            <SelectCRM  label='Año' />
+        </div>
+           
+         
         </div>
         <div className="flex flex-col text-base lg:flex-row justify-between gap-5 px-4">
           {state.columnOrder.map((columnId) => {
             const column = state.columns[columnId];
             const tasks = column.taskIds.map((taskId) => state.tasks[taskId]);
-            return <Column key={column.id} column={column} tasks={tasks}  />;
+
+            return <Column key={column.id} column={column} tasks={tasks} />;
           })}
         </div>
       </div>
