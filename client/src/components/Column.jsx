@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 import Typography from "@mui/material/Typography";
+import NavTabs from "./Tabs/TabsCita";
 
 const style = {
   position: "absolute",
@@ -110,9 +111,8 @@ const Column = ({ column, tasks }) => {
                                 id="keep-mounted-modal-description"
                                 sx={{ mt: 2 }}
                               >
-                                <div  style={{backgroundColor:'#FFF',width:'100%'}}>
-                                  
-                                  <div
+                          
+                                <div
                                     style={{
                                       display: "flex",
                                       flexDirection: "column",
@@ -126,33 +126,10 @@ const Column = ({ column, tasks }) => {
                                       src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
                                       alt=""
                                     />
+                                             <h1>{task.nombre}</h1>
+                                    <div/>
+                                 <NavTabs task={task} />
 
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-
-                                        margin: "0px",
-                                        width: "100%",
-                                        alignItems: "center",
-                                      }}
-                                    >
-                                      <h1>{task.nombre}</h1>
-                                      {/* <p>{task.correo}</p> */}
-                                      {/* <p>{task.celular}</p> */}
-                                    </div>
-                                  </div>
-                                
-                                 <div >
-                                    <p> Dia : {task.date}</p>
-                                  <p> Modalidad : {task.modo}</p>
-                                  <p> Hora : {task.time}</p>
-                                  <p>Grado : {task.grado}</p>
-                                  <p>Ingreso : {task.añoIngreso}</p>
-                                  <p>
-                                    Documentos : <Chip label="1/2" />
-                                  </p>
-                                 </div>
                                 
                                 </div>
                               </Typography>
