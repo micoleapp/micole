@@ -34,6 +34,7 @@ export default function NavTabs({ task }) {
         <TabPanel value="2" >
             <div style={{minHeight:'120px'}}>
             <p>Documentos : 2 de 5</p>
+            
             </div>
         </TabPanel>
         <TabPanel value="3">
