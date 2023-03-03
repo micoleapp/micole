@@ -81,7 +81,7 @@ const {
   Vacante,
   Grado,
   Nivel,
-  Disponibilidad,
+  Horario,
   Afiliacion_tipo,
   Afiliacion,
   Cita
@@ -197,7 +197,10 @@ Colegio.belongsTo(Plan_Pago, {
   foreignKey: "PlanPagoId",
 });
 
-Disponibilidad.belongsTo(Colegio, {
+Colegio.hasMany(Horario, {
+  foreignKey: "ColegioId",
+});
+Horario.belongsTo(Colegio, {
   foreignKey: "ColegioId",
 });
 
