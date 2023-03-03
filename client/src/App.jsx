@@ -30,7 +30,6 @@ function App() {
   const { error: errorSchool } = useSelector((state) => state.schools);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getAllCategories());
     dispatch(getAllGrados());
