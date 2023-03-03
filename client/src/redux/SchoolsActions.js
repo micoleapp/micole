@@ -28,10 +28,10 @@ export const getVacantes = (niveles) => (dispatch) => {
     .catch((err) => console.log(err));
 };
 
-export const getFilterHome = (distrito, grado, ingreso) => (dispatch) => {
+export const getFilterHome = (distritos, grado, ingreso) => (dispatch) => {
   dispatch(isLoading());
   axios
-    .get(`/colegios?distrito=${distrito}&grado=${grado}&ingreso=${ingreso}`)
+    .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}`)
     .then((res) => dispatch(getFilterSchool(res.data)))
     .catch((err) => dispatch(getError(err.message)));
 };
