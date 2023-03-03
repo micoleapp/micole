@@ -15,14 +15,16 @@ const {
   Vacante,
   Grado,
 } = require("../db.js");
+const { Op } = require("sequelize");
 
 // const getComponentData = require("../funciones/getComponentData.js");
 // const ratingProm = require("../funciones/ratingProm.js");
 
 //------- PEDIR TODOS LOS COLEGIOS A LA BD--------
 router.get("/", async (req, res) => {
-  const { distrito, grado, ingreso } = req.query;
+  const { distritos, grado, ingreso } = req.query;
   let response = [];
+  const arrayDistritos = distritos !== "false" ? distritos.split(',') : null;
   try {
     let cole;
     cole = await Colegio.findAll({
@@ -71,10 +73,15 @@ router.get("/", async (req, res) => {
           },
         },
       ],
+      where: {
+        ...(arrayDistritos && {[Op.or]: arrayDistritos.map(distrito => ({ DistritoId: distrito }))}),
+        ...(grado && grado !== "false" && { "$Vacantes.GradoId$": grado }),
+        ...(ingreso && ingreso !== "false" && { "$Vacantes.año$": ingreso })
+      }
     });
     response = cole;
 
-    function filterByGrado(array, grado) {
+/*     function filterByGrado(array, grado) {
       for (let i = 0; i < array.length; i++) {
         console.log(array[i].GradoId === Number(grado));
         if (array[i].GradoId === Number(grado)) {
@@ -103,9 +110,10 @@ router.get("/", async (req, res) => {
     ingreso !== "false"
       ? (response = response.filter((c) => filterByIngreso(c.Vacantes, ingreso)))
       : null;
-
+ */
     res.json(response);
   } catch (err) {
+    console.log(err);
     res.json({ err });
   }
 });
