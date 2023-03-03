@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clannDetailid, getSchoolDetail } from "../redux/SchoolsActions";
 import banner from "../assets/ejemplobanner.png";
@@ -109,6 +109,14 @@ const ArrHorariosMockFormateado = [
 function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool } = useSelector((state) => state.schools);
+  const location = useLocation();
+
+  const params = new URLSearchParams(location.search);
+
+  const [gradoParams, setGradoParams] = React.useState(params.get("grado"))
+  const [ingresoParams, setIngresoParams] = React.useState(params.get("ingreso"))
+
+  console.log(gradoParams, ingresoParams)
 
   const stringyDate = (date) => {
     if (date.toString().length === 1) {

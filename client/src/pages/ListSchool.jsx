@@ -577,7 +577,7 @@ function ListSchool() {
                         <div className="flex flex-col justify-between">
                           <h1>Numero: {school.telefono}</h1>
                           <Link
-                            to={`/schooldetail/${school.id}`}
+                            to={`/schooldetail/${school.id}?grado=${gradoName}&ingreso=${ingresoName}`}
                             className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center font-semibold"
                           >
                             VER DETALLE
