@@ -1,9 +1,5 @@
 import React, { useEffect } from "react";
 import style from "./Home.module.css";
-import fondoHome from "../../assets/Home_img.png";
-import Icon_directo from "./svg/Icon_directo";
-import Icon_recomendacion from "./svg/Icon_recomendacion";
-import Icon_school from "./svg/Icon_school";
 import CardsOne from "../../components/CardsOne";
 import GroupSchool from "../../assets/GroupSchool.png";
 import VectorPeople from "../../assets/VectorPeople.png";
@@ -11,17 +7,11 @@ import VectorTalk from "../../assets/VectorTalk.png";
 import Carrusel from "../../components/Carrusel/Carrusel";
 import FiltrosHome from "../../components/FiltrosHome/FiltrosHome";
 import { useNavigate, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllDepartaments, getAllDistrits, getAllSchools } from "../../redux/SchoolsActions";
 
 function Home() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   useEffect(() => {
     navigate("/");
-    dispatch(getAllSchools());
-    dispatch(getAllDepartaments())
-    dispatch(getAllDistrits())
   }, []);
 
   return (

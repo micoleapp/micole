@@ -25,7 +25,8 @@ const { Op } = require('sequelize');
 router.get('/', async (req, res) => {
   const { distritos, grado, ingreso } = req.query;
   let response = [];
-  const arrayDistritos = distritos && distritos !== 'false' ? distritos.split(',') : null;
+  const arrayDistritos =
+    distritos && distritos !== 'false' ? distritos.split(',') : null;
   try {
     let cole;
     cole = await Colegio.findAll({
@@ -97,6 +98,7 @@ router.get('/', async (req, res) => {
       }
       return false;
     }
+
     function filterByIngreso(array, ingreso) {
       for (let i = 0; i < array.length; i++) {
         console.log(array[i].año === Number(ingreso));
@@ -106,7 +108,7 @@ router.get('/', async (req, res) => {
       }
       return false;
     }
-    console.log(typeof(distrito));
+    
     distrito !== "false"
       ? (response = response.filter((c) => c.Distrito.id === Number(distrito)))
       : null;
@@ -209,6 +211,110 @@ router.get('/:Colegio_id', async (req, res) => {
     res.json(cole);
   } catch (err) {
     res.json({ err });
+  }
+});
+
+/* {
+  distrits: Array(4) [ 1, 2, 3, 4 ],
+  grado: 4,
+  tipo: 7,
+  pension: Array(2) [ 20, 71 ],
+  cuota: Array(2) [ 20, 86 ],
+  rating: 5.5,
+  ingles: 6,
+  ingreso: 2024
+} */
+/* 
+{
+  distrits: [],
+  grado: null,
+  tipo: null,
+  pension: Array(2) [ 20, 71 ],
+  cuota: Array(2) [ 20, 86 ],
+  rating: null,
+  ingles: 6,
+  ingreso: null
+}
+ */
+router.post('/filter', async (req, res) => {
+  const { distrits, grado, tipo, pension, cuota, rating, ingles, ingreso } =
+    req.body;
+  try {
+    let cole;
+    cole = await Colegio.findAll({
+      include: [
+        {
+          model: Nivel,
+          attributes: ['nombre_nivel', 'id'],
+        },
+        {
+          model: Vacante,
+          include: [{ model: Grado, attributes: ['nombre_grado'] }],
+        },
+        {
+          model: Idioma,
+          attributes: ['nombre_idioma', 'id'],
+          through: {
+            attributes: [],
+          },
+        },
+        {
+          model: Pais,
+          attributes: ['id', 'nombre_pais'],
+        },
+        {
+          model: Departamento,
+          attributes: ['id', 'nombre_departamento'],
+        },
+        {
+          model: Provincia,
+          attributes: ['id', 'nombre_provincia'],
+        },
+        {
+          model: Distrito,
+          attributes: ['id', 'nombre_distrito'],
+        },
+        {
+          model: Plan_Pago,
+          attributes: ['id', 'nombre_plan_pago'],
+        },
+        {
+          model: Horario,
+          attributes: ['dia', 'horarios'],
+        },
+        {
+          model: Categoria,
+          attributes: ['id', 'nombre_categoria'],
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+      where: {
+        ...(distrits && {
+          [Op.or]: distrits.map((distrito) => ({ DistritoId: distrito })),
+        }),
+        ...(grado && { '$Vacantes.GradoId$': grado }),
+        ...(ingreso && { '$Vacantes.año$': ingreso }),
+        ...(pension && {
+          '$Vacantes.cuota_pension$': {
+            [Op.between]: [pension[0], pension[1]],
+          },
+        }),
+        ...(cuota && {
+          '$Vacantes.cuota_ingreso$': { [Op.between]: [cuota[0], cuota[1]] },
+        }),
+        ...(tipo && { '$Categoria.id$': tipo }),
+        ...(ingles && { $horas_idioma_extranjero$: { [Op.lte]: ingles } }),
+        ...(rating && { $rating$: { [Op.gte]: rating } }),
+      },
+    });
+    response = cole;
+    res.json(response);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message,
+    });
   }
 });
 
