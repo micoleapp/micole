@@ -25,6 +25,8 @@ const initialData = {
       modo: "Virtual",
       nombre: "Aylen",
       time: "20:14",
+      añoIngreso: "2023",
+      grado: "4ro Primaria",
     },
     2: {
       id: 2,
@@ -54,7 +56,7 @@ const initialData = {
       correo: "gorositopedro@gmail.com",
       date: "20/03/2023",
       modo: "Virtual",
-      nombre: "Maximo",
+      nombre: "Maximo Gutierrez",
       time: "20:14",
       añoIngreso: "2023",
       grado: "3ro Primaria",
