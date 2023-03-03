@@ -622,7 +622,7 @@ function DashboardSchool() {
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
 
-      horarios: {
+      horarios:[ {
         desde: stringyDate(day[Object.keys(day)][0]["$H"])
           .toString()
           .concat(":")
@@ -631,7 +631,7 @@ function DashboardSchool() {
           .toString()
           .concat(":")
           .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
-      },
+      }],
     }));
     Swal.fire({
       icon: "success",
