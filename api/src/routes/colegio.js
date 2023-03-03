@@ -1,4 +1,4 @@
-const { Router } = require("express");
+const { Router } = require('express');
 const router = Router();
 const {
   Pais,
@@ -14,74 +14,81 @@ const {
   Nivel,
   Vacante,
   Grado,
-} = require("../db.js");
-const { Op } = require("sequelize");
+  Horario,
+} = require('../db.js');
+const { Op } = require('sequelize');
 
 // const getComponentData = require("../funciones/getComponentData.js");
 // const ratingProm = require("../funciones/ratingProm.js");
 
 //------- PEDIR TODOS LOS COLEGIOS A LA BD--------
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   const { distritos, grado, ingreso } = req.query;
   let response = [];
-  const arrayDistritos = distritos !== "false" ? distritos.split(',') : null;
+  const arrayDistritos = distritos && distritos !== 'false' ? distritos.split(',') : null;
   try {
     let cole;
     cole = await Colegio.findAll({
       include: [
         {
           model: Nivel,
-          attributes: ["nombre_nivel", "id"],
+          attributes: ['nombre_nivel', 'id'],
         },
         {
           model: Vacante,
-          attributes: ["año", "GradoId"],
-          include: [{ model: Grado, attributes: ["nombre_grado"] }],
+          attributes: ['año', 'GradoId'],
+          include: [{ model: Grado, attributes: ['nombre_grado'] }],
         },
         {
           model: Idioma,
-          attributes: ["nombre_idioma", "id"],
+          attributes: ['nombre_idioma', 'id'],
           through: {
             attributes: [],
           },
         },
         {
           model: Pais,
-          attributes: ["id", "nombre_pais"],
+          attributes: ['id', 'nombre_pais'],
         },
         {
           model: Departamento,
-          attributes: ["id", "nombre_departamento"],
+          attributes: ['id', 'nombre_departamento'],
         },
         {
           model: Provincia,
-          attributes: ["id", "nombre_provincia"],
+          attributes: ['id', 'nombre_provincia'],
         },
         {
           model: Distrito,
-          attributes: ["id", "nombre_distrito"],
+          attributes: ['id', 'nombre_distrito'],
         },
         {
           model: Plan_Pago,
-          attributes: ["id", "nombre_plan_pago"],
+          attributes: ['id', 'nombre_plan_pago'],
+        },
+        {
+          model: Horario,
+          attributes: ['dia', 'horarios'],
         },
         {
           model: Categoria,
-          attributes: ["id", "nombre_categoria"],
+          attributes: ['id', 'nombre_categoria'],
           through: {
             attributes: [],
           },
         },
       ],
       where: {
-        ...(arrayDistritos && {[Op.or]: arrayDistritos.map(distrito => ({ DistritoId: distrito }))}),
-        ...(grado && grado !== "false" && { "$Vacantes.GradoId$": grado }),
-        ...(ingreso && ingreso !== "false" && { "$Vacantes.año$": ingreso })
-      }
+        ...(arrayDistritos && {
+          [Op.or]: arrayDistritos.map((distrito) => ({ DistritoId: distrito })),
+        }),
+        ...(grado && grado !== 'false' && { '$Vacantes.GradoId$': grado }),
+        ...(ingreso && ingreso !== 'false' && { '$Vacantes.año$': ingreso }),
+      },
     });
-    response = cole;
 
-/*     function filterByGrado(array, grado) {
+    response = cole;
+    /*     function filterByGrado(array, grado) {
       for (let i = 0; i < array.length; i++) {
         console.log(array[i].GradoId === Number(grado));
         if (array[i].GradoId === Number(grado)) {
@@ -118,7 +125,7 @@ router.get("/", async (req, res) => {
 });
 
 //------- PEDIR UNO DE LOS COLEGIOS POR ID--------
-router.get("/:Colegio_id", async (req, res) => {
+router.get('/:Colegio_id', async (req, res) => {
   const { Colegio_id } = req.params;
 
   try {
@@ -127,47 +134,51 @@ router.get("/:Colegio_id", async (req, res) => {
       include: [
         {
           model: Nivel,
-          attributes: ["nombre_nivel", "id"],
+          attributes: ['nombre_nivel', 'id'],
         },
         {
           model: Vacante,
-          attributes: ["año", "GradoId"],
-          include: [{ model: Grado, attributes: ["nombre_grado"] }],
+          attributes: ['año', 'GradoId'],
+          include: [{ model: Grado, attributes: ['nombre_grado'] }],
         },
         {
           model: Idioma,
-          attributes: ["nombre_idioma", "id"],
+          attributes: ['nombre_idioma', 'id'],
           through: {
             attributes: [],
           },
         },
         {
           model: Pais,
-          attributes: ["id", "nombre_pais"],
+          attributes: ['id', 'nombre_pais'],
         },
         {
           model: Departamento,
-          attributes: ["id", "nombre_departamento"],
+          attributes: ['id', 'nombre_departamento'],
         },
         {
           model: Provincia,
-          attributes: ["id", "nombre_provincia"],
+          attributes: ['id', 'nombre_provincia'],
         },
         {
           model: Distrito,
-          attributes: ["id", "nombre_distrito", "ProvinciaId"],
+          attributes: ['id', 'nombre_distrito', 'ProvinciaId'],
         },
         {
           model: Plan_Pago,
-          attributes: ["id", "nombre_plan_pago"],
+          attributes: ['id', 'nombre_plan_pago'],
+        },
+        {
+          model: Horario,
+          attributes: ['id', 'dia', 'horarios'],
         },
         {
           model: Categoria,
           attributes: [
-            "id",
-            "nombre_categoria",
-            "imagen_categoria",
-            "logo_categoria",
+            'id',
+            'nombre_categoria',
+            'imagen_categoria',
+            'logo_categoria',
           ],
           through: {
             attributes: [],
@@ -176,10 +187,10 @@ router.get("/:Colegio_id", async (req, res) => {
         {
           model: Infraestructura,
           attributes: [
-            "id",
-            "nombre_infraestructura",
-            "InfraestructuraTipoId",
-            "imagen",
+            'id',
+            'nombre_infraestructura',
+            'InfraestructuraTipoId',
+            'imagen',
           ],
           through: {
             attributes: [],
@@ -187,7 +198,7 @@ router.get("/:Colegio_id", async (req, res) => {
         },
         {
           model: Afiliacion,
-          attributes: ["id", "nombre_afiliacion", "Afiliacion_tipo_Id", "logo"],
+          attributes: ['id', 'nombre_afiliacion', 'Afiliacion_tipo_Id', 'logo'],
           through: {
             attributes: [],
           },
@@ -202,7 +213,7 @@ router.get("/:Colegio_id", async (req, res) => {
 });
 
 //--------------------PUT  UN COLEGIO POR ID-------
-router.put("/:id", async (req, res) => {
+router.put('/:id', async (req, res) => {
   console.log(req.body);
   try {
     const { id } = req.params;
@@ -258,7 +269,7 @@ router.put("/:id", async (req, res) => {
     );
     const colegio = await Colegio.findByPk(id);
     if (colegio === null) {
-      console.log("Not found!");
+      console.log('Not found!');
     } else {
       await colegio.setInfraestructuras(infraestructura.map((i) => i.id));
       await colegio.setCategoria(categoria.map((c) => c.id));
