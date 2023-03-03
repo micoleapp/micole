@@ -98,6 +98,7 @@ const Column = ({ column, tasks }) => {
                             onClose={handleClose}
                             aria-labelledby="keep-mounted-modal-title"
                             aria-describedby="keep-mounted-modal-description"
+                          
                           >
                             <Box sx={style}>
                               <Typography
@@ -111,26 +112,23 @@ const Column = ({ column, tasks }) => {
                                 id="keep-mounted-modal-description"
                                 sx={{ mt: 2 }}
                               >
-                          
                                 <div
-                                    style={{
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      gap: "20px",
-                                      width: "100%",
-                                      alignItems: "center",
-                                    }}
-                                  >
-                                    <img
-                                      style={{ width: "70px", height: "70px" }}
-                                      src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
-                                      alt=""
-                                    />
-                                             <h1>{task.nombre}</h1>
-                                    <div/>
-                                 <NavTabs task={task} />
-
-                                
+                                  style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: "20px",
+                                    width: "100%",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <img
+                                    style={{ width: "70px", height: "70px" }}
+                                    src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
+                                    alt=""
+                                  />
+                                  <h1>{task.nombre}</h1>
+                                  <div />
+                                  <NavTabs task={task} />
                                 </div>
                               </Typography>
                             </Box>
