@@ -17,7 +17,6 @@ import {
   getAfiliaciones,
   getGrados,
   getFilterSchool,
- 
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
