@@ -262,6 +262,8 @@ function SchoolDetail() {
     new Set(oneSchool?.Infraestructuras?.map((e) => e.InfraestructuraTipoId))
   );
 
+  const {lat,lng } = JSON.parse(oneSchool.ubicacion)
+
   return (
     <div className="bg-[#f6f7f8]">
       <img
@@ -431,7 +433,7 @@ function SchoolDetail() {
                   </li>
                 </ul>
               </div>
-              <Maps />
+              <Maps lat={lat} lng={lng} />
             </div>
             <div
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"

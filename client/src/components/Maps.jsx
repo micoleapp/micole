@@ -9,7 +9,7 @@ const containerStyle = {
 const libraries = ["places"];
 
 
-function Maps() {
+function Maps({lat,lng}) {
   let libRef = React.useRef(libraries);
 
   const { isLoaded } = useJsApiLoader({
@@ -19,14 +19,9 @@ function Maps() {
   });
 
   const [center,setCenter] = React.useState({
-    lat: 0,
-    lng: 0
+    lat,
+    lng
   })
-    
-  React.useEffect(()=>{
-    setCenter({  lat: -12.0939685,
-      lng: -76.9501867})
-  },[])
   
 
   const [map, setMap] = React.useState(null)
