@@ -2,8 +2,8 @@ const { Vacante, Grado, Colegio } = require('../db');
 
 const getVacantes = async (req, res, next) => {
   try {
-    const totalVacantes = await Vacante.count();
-    if (totalVacantes === 0) {
+    const total = await Vacante.count();
+    if (total === 0) {
       return next({
         statusCode: 404,
         message: 'No hay registros en la DB',
@@ -28,44 +28,49 @@ const getVacantes = async (req, res, next) => {
 };
 
 const createVacante = async (req, res, next) => {
-  const {
-    alumnos_matriculados,
-    cuota_pension,
-    cuota_ingreso,
-    matricula,
-    capacidad,
-    GradoId,
-    año
-  } = req.body;
+  const { data } = req.body;
+  const tokenUser = req.user;
   try {
-    const authColegio = await Colegio.findOne({ where: { idAuth: req.user.id } });
-    if (!authColegio) {
-      return next({
-        statusCode: 400,
-        message: 'Debes tener permisos de Colegio para crear Vacantes.',
-      });
-    }
-    const vacanteExists = await Vacante.findOne({
-      where: { ColegioId: authColegio.id, GradoId },
+    const authColegio = await Colegio.findOne({
+      where: { idAuth: tokenUser.id },
     });
-    if (vacanteExists) {
-      return next({
-        statusCode: 400,
-        message: 'El registro de vacante para el grado ya existe',
+    const año = data.año;
+    delete data.año;
+    for (const [gradoId, valores] of Object.entries(data)) {
+      const vacante = await Vacante.findOne({
+        where: {
+          ColegioId: authColegio.id,
+          GradoId: gradoId,
+          año: año
+        },
       });
+      if (vacante) {
+        await vacante.update({
+          alumnos_matriculados: valores.alumnos,
+          matricula: valores.matricula,
+          cuota_pension: valores.cuota_pension,
+          cuota_ingreso: valores.cuota_ingreso,
+          capacidad: valores.capacidad,
+          año: año,
+        });
+      } else {
+        await Vacante.create({
+          alumnos_matriculados: valores.alumnos,
+          matricula: valores.matricula,
+          cuota_pension: valores.cuota_pension,
+          cuota_ingreso: valores.cuota_ingreso,
+          capacidad: valores.capacidad,
+          año: año,
+          ColegioId: authColegio.id,
+          GradoId: gradoId,
+        });
+      }
     }
-    const newVacante = await Vacante.create({  
-      alumnos_matriculados,
-      cuota_pension,
-      cuota_ingreso, 
-      matricula,
-      capacidad,
-      ColegioId: authColegio.id,
-      GradoId,
-      año
-    });
-    res.status(200).json(newVacante);
+    res
+      .status(200)
+      .send({ message: 'Los registros se guardaron correctamente' });
   } catch (error) {
+    console.log(error);
     return next(error);
   }
 };

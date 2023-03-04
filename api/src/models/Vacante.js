@@ -11,7 +11,6 @@ module.exports = (sequelize) => {
       },
       alumnos_matriculados: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         validate: {
           notEmpty: {
             msg: 'El campo alumnos_matriculados no puede estar vacío',
@@ -27,7 +26,6 @@ module.exports = (sequelize) => {
       },
       matricula: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
         validate: {
           notEmpty: {
             msg: 'El campo matricula no puede estar vacío',
@@ -43,7 +41,6 @@ module.exports = (sequelize) => {
       },
       cuota_pension: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
         validate: {
           notEmpty: {
             msg: 'El campo cuota_pension no puede estar vacío',
@@ -59,7 +56,6 @@ module.exports = (sequelize) => {
       },
       cuota_ingreso: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
         validate: {
           notEmpty: {
             msg: 'El campo cuota_ingreso no puede estar vacío',
@@ -75,7 +71,6 @@ module.exports = (sequelize) => {
       },
       capacidad: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         validate: {
           notEmpty: {
             msg: 'El campo capacidad no puede estar vacío',
@@ -94,7 +89,6 @@ module.exports = (sequelize) => {
       },
       año: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         validate: {
           esAnioValido(value) {
             const anioActual = new Date().getFullYear();
