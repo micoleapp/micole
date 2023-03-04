@@ -22,7 +22,8 @@ import {
   getAllPaises,
   getAllNiveles,
   getAllAfiliaciones,
-  getAllGrados
+  getAllGrados,
+  getAllSchools
 } from "./redux/SchoolsActions";
 import RequireAuth from "./components/RequireAuth";
 
@@ -40,6 +41,7 @@ function App() {
     dispatch(getAllPaises());
     dispatch(getAllNiveles());
     dispatch(getAllAfiliaciones());
+    dispatch(getAllSchools())
     dispatch(getUserByToken());
   }, []);
 

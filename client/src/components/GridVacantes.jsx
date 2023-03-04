@@ -33,7 +33,7 @@ export default function GridVacantes({ año }) {
             <th scope="col" className="px-6 py-5 text-center">
               Grado
             </th>
-            <th scope="col" className="px-6 text-center">
+            <th scope="col" className="px-6 text-center">0g
               Capacidad <br /> Disponible
             </th>
             <th scope="col" className="px-6 text-center">

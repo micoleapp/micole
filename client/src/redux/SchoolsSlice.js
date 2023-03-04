@@ -8,9 +8,7 @@ export const schoolsSlice = createSlice({
   name: "schools",
   initialState: {
     allschools: [],
-    oneSchool: {
-      
-    },
+    oneSchool: {},
     filtersSchools: [],
     paises: [],
     provincias: [],

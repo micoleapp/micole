@@ -64,7 +64,7 @@ function ListSchool() {
   const [gradoName, setGradoName] = React.useState(gradoParams !== 'false' ? [Number(gradoParams)] : []);
   const [ingresoName, setIngresoName] = React.useState(ingresoParams !== 'false' ? [Number(ingresoParams)] : []);
   const [categorias,setCategorias] = React.useState([])
-  const [english, setEnglish] = React.useState(10);
+  const [english, setEnglish] = React.useState(200);
 
   const handleChangeEnglish = (event, newValue) => {
     setEnglish(newValue);
@@ -72,9 +72,9 @@ function ListSchool() {
 
   const [type, setType] = React.useState("");
 
-  const [value1, setValue1] = React.useState([20, 37]);
+  const [value1, setValue1] = React.useState([0, 4000]);
 
-  const [rating, setRating] = React.useState(10);
+  const [rating, setRating] = React.useState(0);
 
   const handleChange1 = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -88,7 +88,7 @@ function ListSchool() {
     }
   };
 
-  const [value2, setValue2] = React.useState([20, 37]);
+  const [value2, setValue2] = React.useState([0, 4000]);
 
   const handleChange2 = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -166,7 +166,10 @@ function ListSchool() {
     dispatch(getFilterListSchool(data))
   }
 
-  console.log(data)
+  useEffect(() => {
+    dispatch(getFilterListSchool(data))
+  }, [distritName,gradoName,categorias,value1,value2,rating,english,ingresoName])
+  
 
   return (
     <div className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "                 data-aos="fade-up" data-aos-duration='1000'>
@@ -174,7 +177,7 @@ function ListSchool() {
         Encuentra el colegio ideal
       </h1>
       <div className="flex flex-col lg:flex-row p-5 gap-10 m-5 ">
-        <section className={`lg:w-1/4 w-full flex flex-col gap-5 rounded-md relative ${!toggle ? "h-[110px] " : "h-[770px] "} duration-300 lg:h-min bg-white shadow-lg p-10 `}>
+        <section className={`lg:w-1/4 w-full flex flex-col gap-5 rounded-md relative duration-300 lg:h-min bg-white shadow-lg p-10 `}>
           <h2 className="font-semibold text-2xl drop-shadow-md">Filtros</h2>
           <button
             className="absolute block lg:hidden left-0 right-0"
@@ -278,7 +281,7 @@ function ListSchool() {
                           cat.id);
                       } else {
                         setCategorias(
-                          null
+                          []
                         );
                       }
                     }}
@@ -324,7 +327,7 @@ function ListSchool() {
                                 grado.id);
                             } else {
                               setGradoParams(false);
-                              setGradoName(null);
+                              setGradoName([]);
                             }
                           }}
                         />
@@ -372,7 +375,7 @@ function ListSchool() {
                                 año);
                             } else {
                               setIngresoParams(false);
-                              setIngresoName(null);
+                              setIngresoName([]);
                             }
                           }}
                         />
@@ -446,7 +449,7 @@ function ListSchool() {
               <Slider
                 aria-label="English"
                 min={0}
-                max={10}
+                max={200}
                 value={english}
                 onChange={handleChangeEnglish}
                 valueLabelDisplay="auto"
