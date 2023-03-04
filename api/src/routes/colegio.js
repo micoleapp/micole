@@ -296,12 +296,12 @@ router.post('/filter', async (req, res) => {
         }),
         ...(grado.length !== 0  && { '$Vacantes.GradoId$': grado }),
         ...(ingreso.length !== 0  && { '$Vacantes.año$': ingreso }),
-        ...(pension && {
+        ...(pension.length !== 0 && {
           '$Vacantes.cuota_pension$': {
             [Op.between]: [pension[0], pension[1]],
           },
         }),
-        ...(cuota && {
+        ...(cuota.length !== 0 && {
           '$Vacantes.cuota_ingreso$': { [Op.between]: [cuota[0], cuota[1]] },
         }),
         ...(tipo.length !== 0  && { '$Categoria.id$': tipo }),
