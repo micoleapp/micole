@@ -305,8 +305,8 @@ router.post('/filter', async (req, res) => {
           '$Vacantes.cuota_ingreso$': { [Op.between]: [cuota[0], cuota[1]] },
         }),
         ...(tipo.length !== 0  && { '$Categoria.id$': tipo }),
-        ...(ingles && { $horas_idioma_extranjero$: { [Op.lte]: ingles } }),
-        ...(rating && { $rating$: { [Op.gte]: rating } }),
+        ...(ingles && { '$horas_idioma_extranjero$': { [Op.lte]: ingles } }),
+        ...(rating && { '$rating$': { [Op.gte]: rating } }),
       },
     });
     response = cole;

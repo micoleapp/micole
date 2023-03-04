@@ -48,7 +48,7 @@ function valuetext2(value) {
   return `${value}°C`;
 }
 
-const minDistance = 10;
+const minDistance = 100;
 function ListSchool() {
 
 
@@ -397,6 +397,9 @@ function ListSchool() {
                 valueLabelDisplay="auto"
                 getAriaValueText={valuetext}
                 disableSwap
+                step={100}
+                min={0}
+                max={4000}
               />
               <div className="flex w-full gap-5 justify-around">
                 <div className="bg-[#edf4fe] rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center">
@@ -418,6 +421,9 @@ function ListSchool() {
                 valueLabelDisplay="auto"
                 getAriaValueText={valuetext2}
                 disableSwap
+                step={100}
+                min={0}
+                max={4000}
               />
               <div className="flex w-full gap-5 justify-around">
                 <div className="bg-[#edf4fe] rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center">
