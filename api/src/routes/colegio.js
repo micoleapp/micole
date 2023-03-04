@@ -237,8 +237,8 @@ router.get('/:Colegio_id', async (req, res) => {
 }
  */
 router.post('/filter', async (req, res) => {
-  const { distrits, grado, tipo, pension, cuota, rating, ingles, ingreso } =
-    req.body;
+    const { distrits, grado, tipo, pension, cuota, rating, ingles, ingreso } = req.body;
+    console.log(req.body)
   try {
     let cole;
     cole = await Colegio.findAll({
@@ -291,22 +291,22 @@ router.post('/filter', async (req, res) => {
         },
       ],
       where: {
-        ...(distrits && {
-          [Op.or]: distrits.map((distrito) => ({ DistritoId: distrito })),
+        ...(distrits.length !== 0 && {
+        [Op.or]: distrits.map((distrito) => ({ DistritoId: distrito })),
         }),
-        ...(grado && { '$Vacantes.GradoId$': grado }),
-        ...(ingreso && { '$Vacantes.año$': ingreso }),
-        ...(pension && {
+        ...(grado.length !== 0  && { '$Vacantes.GradoId$': grado }),
+        ...(ingreso.length !== 0  && { '$Vacantes.año$': ingreso }),
+        ...(pension.length !== 0 && {
           '$Vacantes.cuota_pension$': {
             [Op.between]: [pension[0], pension[1]],
           },
         }),
-        ...(cuota && {
+        ...(cuota.length !== 0 && {
           '$Vacantes.cuota_ingreso$': { [Op.between]: [cuota[0], cuota[1]] },
         }),
-        ...(tipo && { '$Categoria.id$': tipo }),
-        ...(ingles && { $horas_idioma_extranjero$: { [Op.lte]: ingles } }),
-        ...(rating && { $rating$: { [Op.gte]: rating } }),
+        ...(tipo.length !== 0  && { '$Categoria.id$': tipo }),
+        ...(ingles && { '$horas_idioma_extranjero$': { [Op.lte]: ingles } }),
+        ...(rating && { '$rating$': { [Op.gte]: rating } }),
       },
     });
     response = cole;
