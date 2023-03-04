@@ -8,8 +8,9 @@ import ContentLoader from "react-content-loader";
 import { Rating, Typography, Pagination, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useInView } from "framer-motion"
+import Swal from "sweetalert2";
 import {
   faCamera,
   faPlayCircle,
@@ -51,6 +52,7 @@ function valuetext2(value) {
 const minDistance = 100;
 function ListSchool() {
 
+  const navigate = useNavigate()
 
   const location = useLocation();
 
@@ -74,7 +76,7 @@ function ListSchool() {
 
   const [value1, setValue1] = React.useState([0, 4000]);
 
-  const [rating, setRating] = React.useState(0);
+  const [rating, setRating] = React.useState(null);
 
   const handleChange1 = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -154,8 +156,10 @@ function ListSchool() {
     distrits: distritName,
     grado:gradoName,
     tipo:categorias,
-    pension: [value1[0],value1[1]],
-    cuota:[value2[0],value2[1]],
+    pension: [],
+    cuota: [],
+    // pension: [value1[0],value1[1]],
+    // cuota:[value2[0],value2[1]],
     rating,
     ingles:english,
     ingreso:ingresoName
@@ -170,6 +174,20 @@ function ListSchool() {
     dispatch(getFilterListSchool(data))
   }, [distritName,gradoName,categorias,value1,value2,rating,english,ingresoName])
   
+  console.log(gradoName,ingresoName)
+
+  const goToDetails = (id) =>{
+    if(gradoName.length === 0 || ingresoName.length === 0){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Debes seleccionar un grado y un año de ingreso',
+      })
+      return
+    }else{
+      navigate(`/schooldetail/${id}?grado=${gradoName}&ingreso=${ingresoName}`)
+    }
+  }
 
   return (
     <div className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "                 data-aos="fade-up" data-aos-duration='1000'>
@@ -511,6 +529,7 @@ function ListSchool() {
                   data-aos="zoom-in-left"
                     key={school.id}
                     className={`flex border rounded-md shadow-md bg-white p-2 items-center gap-2 flex-col md:flex-row`}
+                    data-aos-mirror={false}
                   >
 
                     {" "}
@@ -585,12 +604,15 @@ function ListSchool() {
                         </div>
                         <div className="flex flex-col justify-between">
                           <h1>Numero: {school.telefono}</h1>
-                          <Link
+                          <button onClick={()=>goToDetails(school.id)} className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center font-semibold">
+                            VER DETALLE
+                          </button>
+                          {/* <Link
                             to={`/schooldetail/${school.id}?grado=${gradoName}&ingreso=${ingresoName}`}
                             className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center font-semibold"
                           >
                             VER DETALLE
-                          </Link>
+                          </Link> */}
                         </div>
                       </div>
 

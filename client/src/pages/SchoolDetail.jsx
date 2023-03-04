@@ -108,7 +108,7 @@ const ArrHorariosMockFormateado = [
 ];
 function SchoolDetail() {
   const { id } = useParams();
-  const { oneSchool } = useSelector((state) => state.schools);
+  const { oneSchool , grados } = useSelector((state) => state.schools);
   const location = useLocation();
 
   const params = new URLSearchParams(location.search);
@@ -116,8 +116,9 @@ function SchoolDetail() {
   const [gradoParams, setGradoParams] = React.useState(params.get("grado"))
   const [ingresoParams, setIngresoParams] = React.useState(params.get("ingreso"))
 
-  console.log(gradoParams, ingresoParams)
-
+  console.log(gradoParams)
+  console.log(ingresoParams)
+  const {nombre_grado} = grados.find(grado=> grado.id == gradoParams)
   const stringyDate = (date) => {
     if (date.toString().length === 1) {
       return "0" + date++;
@@ -287,10 +288,10 @@ function SchoolDetail() {
                     5 vacantes
                   </span>
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
-                    2do grado
+                    {nombre_grado}
                   </span>
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
-                    2022
+                    {ingresoParams}
                   </span>
                 </div>
               </div>
@@ -331,22 +332,20 @@ function SchoolDetail() {
                   {oneSchool.numero_estudiantes} Alumnos
                 </span>
               </div>
-              <div className="flex flex-col gap-2 text-center">
-                <FontAwesomeIcon
-                  size="lg"
-                  color="rgb(156 163 175)"
-                  icon={faPaperclip}
-                />
-                <span className="text-sm text-gray-400"> Mixto</span>
+              {oneSchool?.Categoria?.map((cat)=>(
+              <div className="flex flex-col items-center gap-2 text-center">
+                <img src={cat.logo_categoria} alt="logo_categoria" className="w-4 object-cover invert-[40%] drop-shadow-md"/>
+                <span className="text-sm text-gray-400">{cat.nombre_categoria} </span>
               </div>
-              <div className="flex flex-col gap-2 text-center">
+              ))}
+              {/* <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
                   size="lg"
                   color="rgb(156 163 175)"
                   icon={faDoorOpen}
                 />
                 <span className="text-sm text-gray-400">2 Salones</span>
-              </div>
+              </div> */}
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
                   size="lg"
@@ -414,10 +413,10 @@ function SchoolDetail() {
                     </span>
                     {oneSchool?.Distrito?.nombre_distrito}
                   </li>
-                  <li className="text-black/60">
+                  {/* <li className="text-black/60">
                     <span className="font-semibold text-black ">Zip: </span>
                     365448
-                  </li>
+                  </li> */}
                 </ul>
                 <ul className="flex flex-col gap-3">
                   <li className="text-black/60">
@@ -428,7 +427,7 @@ function SchoolDetail() {
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Pais: </span>
-                    United State
+                    Peru
                   </li>
                 </ul>
               </div>
@@ -442,7 +441,7 @@ function SchoolDetail() {
             >
               <h2 className="font-semibold text-xl">Detalles del Colegio</h2>
               <div className="flex text-xs w-full flex-col lg:flex-row gap-3 justify-between">
-                <ul className="flex flex-col gap-3">
+                <ul className="grid grid-cols-3 w-full gap-3">
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">RUC: </span>
                     {oneSchool.ruc}
@@ -459,19 +458,7 @@ function SchoolDetail() {
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Niveles: </span>
-                    Inicial, primaria, secundaria
-                  </li>
-                </ul>
-                <ul className="flex flex-col gap-3">
-                  <li className="text-black/60">
-                    <span className="font-semibold text-black ">
-                      Profesores:{" "}
-                    </span>
-                    8
-                  </li>
-                  <li className="text-black/60">
-                    <span className="font-semibold text-black ">Salones: </span>
-                    3
+                    {oneSchool.Nivels?.map(nivel=>nivel.nombre_nivel).join(', ')}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
@@ -481,6 +468,19 @@ function SchoolDetail() {
                   </li>
                 </ul>
                 <ul className="flex flex-col gap-3">
+                  {/* <li className="text-black/60">
+                    <span className="font-semibold text-black ">
+                      Profesores:{" "}
+                    </span>
+                    8
+                  </li>
+                  <li className="text-black/60">
+                    <span className="font-semibold text-black ">Salones: </span>
+                    3
+                  </li> */}
+
+                </ul>
+                {/* <ul className="flex flex-col gap-3">
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
                       Tipo de educacion:{" "}
@@ -497,7 +497,7 @@ function SchoolDetail() {
                     </span>
                     Urbana
                   </li>
-                </ul>
+                </ul> */}
               </div>
             </div>
             <div
@@ -879,7 +879,7 @@ function SchoolDetail() {
                 </ul>
               </div>
             </div>
-            <div
+            {/* <div
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
               data-aos="zoom-in-right"
               data-aos-duration="1500"
@@ -976,7 +976,7 @@ function SchoolDetail() {
                   <small className="text-black/50">400 reviews</small>
                 </ul>
               </ul>
-            </div>
+            </div> */}
           </section>
           <section className="right mt-5  flex flex-col gap-8 w-full">
             <div
@@ -1145,9 +1145,7 @@ function SchoolDetail() {
             </div>
             <div
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
-              data-aos="zoom-in-left"
-              data-aos-duration="1500"
-              data-aos-mirror={false}
+
             >
               <h2 className="font-semibold text-xl">Galeria</h2>
               {oneSchool.hasOwnProperty("galeria_fotos") && (
@@ -1183,10 +1181,13 @@ function SchoolDetail() {
                 data-aos-mirror={false}
               >
                 <h2 className="font-semibold text-xl">Video</h2>
-                <iframe
+                {/* <video
                   className="w-full h-[300px] lg:h-[400px] "
                   src={`${oneSchool.video_url.replace("watch?v=", "embed/")}`}
-                ></iframe>
+                ></video> */}
+                <video className="w-full h-[300px] lg:h-[400px]" controls>
+                  <source src={oneSchool.video_url} type="video/mp4"/>
+                </video>
               </div>
             )}
             <form
