@@ -35,13 +35,13 @@ export const getFilterHome = (distritos, grado, ingreso) => (dispatch) => {
     .catch((err) => dispatch(getError(err.message)));
 };
 
-export const getFilterListSchool = (data)=>(dispatch)=>{
+export const getFilterListSchool = (data) => (dispatch) => {
   dispatch(isLoading());
   axios
     .post("/colegios/filter", data)
     .then((res) => dispatch(getFilterSchool(res.data)))
     .catch((err) => dispatch(getError(err.message)));
-}
+};
 
 export const getAllGrados = () => (dispatch) => {
   dispatch(isLoading());
@@ -149,8 +149,17 @@ export const postHorariosVacantes = (horarios) => (dispatch) => {
   dispatch(isLoading());
   const ColegioId = localStorage.getItem("id");
   axios
-    .post("/disponibilidad", { horarios}, {ColegioId})
+    .post("/disponibilidad", { horarios }, { ColegioId })
     // .then(res=>dispatch((res.data)))
     .catch((err) => console.log(err));
 };
 
+export const postCita = (cita) => (dispatch) => {
+  const { celular, correo, date, time, modo, nombre } = cita;
+  const ColegioId = localStorage.getItem("id");
+  dispatch(isLoading());
+  axios
+    .post("/citas", { celular, correo, date, time, modo, nombre,ColegioId })
+    // .then((res) => dispatch(getVacantesGrados(res.data)))
+    .catch((err) => console.log(err));
+};

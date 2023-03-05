@@ -2362,7 +2362,7 @@ function DashboardSchool() {
             >
               Guardar Cambios
             </button>
-            <DragAndDrop />
+        
           </div>
         ) : page === 2 ? (
           <div className="min-h-screen">Plan</div>

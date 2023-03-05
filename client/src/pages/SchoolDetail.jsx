@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { clannDetailid, getAllGrados, getSchoolDetail } from "../redux/SchoolsActions";
+import { clannDetailid, getAllGrados, getSchoolDetail, postCita } from "../redux/SchoolsActions";
 import banner from "../assets/ejemplobanner.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logo from "../assets/premium.png";
@@ -201,7 +201,7 @@ console.log(grados)
     }
     console.log(cita)
 
-    axios.post("http://localhost:3000/citas", { cita, id});
+   dispatch(postCita(cita))
   };
 
   const handleModo = () => {
@@ -278,12 +278,12 @@ console.log(grados)
   const [lat, setLat] = useState(0)
   const [lng, setLng] = useState(0)
 
-  useEffect(() => {
-    if(oneSchool){
-      setLat(JSON.parse(oneSchool?.ubicacion)?.lat)
-      setLng(JSON.parse(oneSchool?.ubicacion)?.lng)
-    }
-  },[])
+  // useEffect(() => {
+  //   if(oneSchool){
+  //     setLat(JSON.parse(oneSchool?.ubicacion)?.lat)
+  //     setLng(JSON.parse(oneSchool?.ubicacion)?.lng)
+  //   }
+  // },[])
 
   return (
     <div className="bg-[#f6f7f8]">
