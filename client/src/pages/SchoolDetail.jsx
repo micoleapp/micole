@@ -262,7 +262,15 @@ function SchoolDetail() {
     new Set(oneSchool?.Infraestructuras?.map((e) => e.InfraestructuraTipoId))
   );
 
-  const {lat,lng } = JSON.parse(oneSchool.ubicacion)
+  const [lat, setLat] = useState(0)
+  const [lng, setLng] = useState(0)
+
+  useEffect(() => {
+    if(oneSchool){
+      setLat(JSON.parse(oneSchool?.ubicacion)?.lat)
+      setLng(JSON.parse(oneSchool?.ubicacion)?.lng)
+    }
+  },[])
 
   return (
     <div className="bg-[#f6f7f8]">

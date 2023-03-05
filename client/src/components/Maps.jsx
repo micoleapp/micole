@@ -23,6 +23,12 @@ function Maps({lat,lng}) {
     lng
   })
   
+  React.useEffect(() => {
+    setCenter({
+      lat,
+      lng
+    })
+  },[lat,lng])
 
   const [map, setMap] = React.useState(null)
   const onLoad = React.useCallback(function callback(map) {

@@ -125,6 +125,7 @@ function DashboardSchool() {
       dispatch(getSchoolDetail(user.id));
     }
   }, [allData]);
+
   const {
     register,
     handleSubmit,

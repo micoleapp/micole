@@ -1,3 +1,4 @@
+import axios from 'axios';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -128,7 +129,7 @@ export default function GridVacantes({ año }) {
         </tbody>
       </table>
     </div>
-      <button type='button' onClick={handleSubmit} className='flex mx-auto bg-[#0061dd] p-5 text-white rounded-md'>Enviar formulario del año: {año}</button>
+      <button onClick={handleSubmit} className='flex mx-auto bg-[#0061dd] p-5 text-white rounded-md'>Enviar formulario del año: {año}</button>
     </>
   );
 }
