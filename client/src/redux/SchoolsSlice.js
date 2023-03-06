@@ -107,7 +107,7 @@ export const schoolsSlice = createSlice({
     },
 
     cleanOneSchool: (state, action) => {
-      state.oneSchool = [];
+      state.oneSchool = {};
       (state.loading = false), (state.error = "");
     },
     getError: (state, action) => {

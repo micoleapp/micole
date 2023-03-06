@@ -46,7 +46,7 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
         src={firstImage}
         alt=""
         onClick={() => setImage(firstImage)}
-        className="cursor-pointer rounded-md"
+        className="cursor-pointer rounded-md h-24"
       />
       <div className="flex gap-5 mt-2 overflow-x-scroll w-full pb-2">
         {gallery?.map((item, index) => (
@@ -110,12 +110,6 @@ function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool , grados } = useSelector((state) => state.schools);
   const location = useLocation();
-  // const dispatch =useDispatch()
-useEffect(() => {
-  dispatch(getAllGrados())
-
-
-}, [])
 
 
   const params = new URLSearchParams(location.search);
@@ -139,8 +133,15 @@ console.log(grados)
 
   const dispatch = useDispatch();
   useEffect(() => {
+  dispatch(getAllGrados())
     dispatch(getSchoolDetail(id));
+    return () => {
+      dispatch(clannDetailid());
+    }
   }, []);
+
+  
+
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -278,12 +279,14 @@ console.log(grados)
   const [lat, setLat] = useState(0)
   const [lng, setLng] = useState(0)
 
+    console.log(oneSchool)
+
   useEffect(() => {
-    if(oneSchool){
+    if(oneSchool.ubicacion){
       setLat(JSON.parse(oneSchool?.ubicacion)?.lat)
       setLng(JSON.parse(oneSchool?.ubicacion)?.lng)
     }
-  },[])
+  },[oneSchool])
 
   return (
     <div className="bg-[#f6f7f8]">
@@ -343,7 +346,7 @@ console.log(grados)
             </div>
           </div>
           <div className="mt-5 gap-5 flex justify-between items-start lg:items-center flex-col lg:flex-row">
-            <div className="flex gap-5 items-start">
+            <div className="flex gap-5 flex-col items-start">
               {" "}
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon

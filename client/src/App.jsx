@@ -24,9 +24,11 @@ import {
   getAllAfiliaciones,
   getAllGrados,
   getAllSchools,
-  getCita
+
 } from "./redux/SchoolsActions";
+
 import RequireAuth from "./components/RequireAuth";
+import { getCita } from "./redux/CitasActions";
 
 function App() {
   const { error: errorSchool } = useSelector((state) => state.schools);

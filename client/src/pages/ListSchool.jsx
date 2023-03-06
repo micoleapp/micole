@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -9,7 +9,7 @@ import { Rating, Typography, Pagination, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useInView } from "framer-motion"
+import { useInView } from "framer-motion";
 import Swal from "sweetalert2";
 import {
   faCamera,
@@ -28,7 +28,7 @@ import {
   getAllDepartaments,
   getAllDistrits,
   getFilterHome,
-  getFilterListSchool
+  getFilterListSchool,
 } from "../redux/SchoolsActions";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -36,7 +36,7 @@ import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 
 const yearNow = new Date().getFullYear();
-const Ingreso2 = [yearNow, yearNow+1, yearNow+2];
+const Ingreso2 = [yearNow, yearNow + 1, yearNow + 2];
 
 const pageSize = 5;
 
@@ -51,21 +51,30 @@ function valuetext2(value) {
 
 const minDistance = 100;
 function ListSchool() {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const location = useLocation();
 
   const params = new URLSearchParams(location.search);
 
-  const [distritParams, setDistritParams] = React.useState(params.get("distrito"))
-  const [gradoParams, setGradoParams] = React.useState(params.get("grado"))
-  const [ingresoParams, setIngresoParams] = React.useState(params.get("ingreso"))
+  const [distritParams, setDistritParams] = React.useState(
+    params.get("distrito")
+  );
+  const [gradoParams, setGradoParams] = React.useState(params.get("grado"));
+  const [ingresoParams, setIngresoParams] = React.useState(
+    params.get("ingreso")
+  );
 
-  const [distritName, setDistritName] = React.useState(distritParams !== 'false' ? [Number(distritParams)] : []);
-  const [gradoName, setGradoName] = React.useState(gradoParams !== 'false' ? [Number(gradoParams)] : []);
-  const [ingresoName, setIngresoName] = React.useState(ingresoParams !== 'false' ? [Number(ingresoParams)] : []);
-  const [categorias,setCategorias] = React.useState([])
+  const [distritName, setDistritName] = React.useState(
+    distritParams !== "false" ? [Number(distritParams)] : []
+  );
+  const [gradoName, setGradoName] = React.useState(
+    gradoParams !== "false" ? [Number(gradoParams)] : []
+  );
+  const [ingresoName, setIngresoName] = React.useState(
+    ingresoParams !== "false" ? [Number(ingresoParams)] : []
+  );
+  const [categorias, setCategorias] = React.useState([]);
   const [english, setEnglish] = React.useState(200);
 
   const handleChangeEnglish = (event, newValue) => {
@@ -115,18 +124,20 @@ function ListSchool() {
   });
 
   const dispatch = useDispatch();
-  const { filtersSchools:allschools, loading, distrits,grados ,categories} = useSelector(
-    (state) => state.schools
-  );
+  const {
+    filtersSchools: allschools,
+    loading,
+    distrits,
+    grados,
+    categories,
+  } = useSelector((state) => state.schools);
 
-    useEffect(() => {
-    dispatch(getFilterHome(distritParams,gradoParams,ingresoParams))
-    dispatch(getAllDepartaments())
-    dispatch(getAllDistrits())
-
+  useEffect(() => {
+    dispatch(getFilterHome(distritParams, gradoParams, ingresoParams));
+    dispatch(getAllDepartaments());
+    dispatch(getAllDistrits());
   }, []);
   const [disabledPage, setDisabledPage] = useState(false);
-  
 
   useEffect(() => {
     const schools = allschools.slice(pagination.from, pagination.to);
@@ -154,48 +165,63 @@ function ListSchool() {
 
   const data = {
     distrits: distritName,
-    grado:gradoName,
-    tipo:categorias,
+    grado: gradoName,
+    tipo: categorias,
     pension: [],
     cuota: [],
     // pension: [value1[0],value1[1]],
     // cuota:[value2[0],value2[1]],
     rating,
-    ingles:english,
-    ingreso:ingresoName
-  }
+    ingles: english,
+    ingreso: ingresoName,
+  };
 
   const handleSubmitData = (e) => {
     e.preventDefault();
-    dispatch(getFilterListSchool(data))
-  }
+    dispatch(getFilterListSchool(data));
+  };
 
   useEffect(() => {
-    dispatch(getFilterListSchool(data))
-  }, [distritName,gradoName,categorias,value1,value2,rating,english,ingresoName])
-  
-  console.log(gradoName,ingresoName)
+    dispatch(getFilterListSchool(data));
+  }, [
+    distritName,
+    gradoName,
+    categorias,
+    value1,
+    value2,
+    rating,
+    english,
+    ingresoName,
+  ]);
 
-  const goToDetails = (id) =>{
-    if(gradoName.length === 0 || ingresoName.length === 0){
+  console.log(gradoName, ingresoName);
+
+  const goToDetails = (id) => {
+    if (gradoName.length === 0 || ingresoName.length === 0) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Debes seleccionar un grado y un año de ingreso',
-      })
-      return
-    }else{
-      navigate(`/schooldetail/${id}?grado=${gradoName}&ingreso=${ingresoName}`)
+        icon: "error",
+        title: "Oops...",
+        text: "Debes seleccionar un grado y un año de ingreso",
+      });
+      return;
+    } else {
+      navigate(`/schooldetail/${id}?grado=${gradoName}&ingreso=${ingresoName}`);
     }
-  }
+  };
 
   return (
-    <div className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "                 data-aos="fade-up" data-aos-duration='1000'>
+    <div
+      className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "
+      data-aos="fade-up"
+      data-aos-duration="1000"
+    >
       <h1 className="text-center mt-2 text-2xl font-semibold drop-shadow-md">
         Encuentra el colegio ideal
       </h1>
       <div className="flex flex-col lg:flex-row p-5 gap-10 m-5 ">
-        <section className={`lg:w-1/4 w-full flex flex-col gap-5 rounded-md relative duration-300 lg:h-min bg-white shadow-lg p-10 `}>
+        <section
+          className={`lg:w-1/4 w-full flex flex-col gap-5 rounded-md relative duration-300 lg:h-min bg-white shadow-lg p-10 `}
+        >
           <h2 className="font-semibold text-2xl drop-shadow-md">Filtros</h2>
           <button
             className="absolute block lg:hidden left-0 right-0"
@@ -240,19 +266,14 @@ function ListSchool() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                        
-                        checked={
-                          Number(distritParams) === distrit.id ||
-                          distritName.includes(distrit.id)
-                        }
+                          checked={
+                            Number(distritParams) === distrit.id ||
+                            distritName.includes(distrit.id)
+                          }
                           onChange={(event, target) => {
                             if (target) {
                               setDistritParams(distrit.id);
-                              setDistritName([
-                                ...distritName,
-                                distrit.id,
-                               
-                              ]);
+                              setDistritName([...distritName, distrit.id]);
                             } else {
                               setDistritParams(false);
                               setDistritName(
@@ -290,20 +311,21 @@ function ListSchool() {
               >
                 <FormGroup>
                   {categories.map((cat) => (
-                    <FormControlLabel control={<Checkbox
-                    checked={categorias == cat.id}
-                      
-                    onChange={(event, target) => {
-                      if (target) {
-                        setCategorias(
-                          cat.id);
-                      } else {
-                        setCategorias(
-                          []
-                        );
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={categorias == cat.id}
+                          onChange={(event, target) => {
+                            if (target) {
+                              setCategorias(cat.id);
+                            } else {
+                              setCategorias([]);
+                            }
+                          }}
+                        />
                       }
-                    }}
-                    />} label={cat.nombre_categoria} />
+                      label={cat.nombre_categoria}
+                    />
                   ))}
                 </FormGroup>
               </div>
@@ -323,9 +345,7 @@ function ListSchool() {
               </div>
               <div
                 className={
-                  toggleGrado
-                    ? "block h-[200px] overflow-y-scroll"
-                    : "hidden"
+                  toggleGrado ? "block h-[200px] overflow-y-scroll" : "hidden"
                 }
               >
                 <FormGroup>
@@ -333,16 +353,14 @@ function ListSchool() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                        
-                        checked={
-                          Number(gradoParams) === grado.id ||
-                          gradoName == grado.id
-                        }
+                          checked={
+                            Number(gradoParams) === grado.id ||
+                            gradoName == grado.id
+                          }
                           onChange={(event, target) => {
                             if (target) {
                               setGradoParams(grado.id);
-                              setGradoName(
-                                grado.id);
+                              setGradoName(grado.id);
                             } else {
                               setGradoParams(false);
                               setGradoName([]);
@@ -371,9 +389,7 @@ function ListSchool() {
               </div>
               <div
                 className={
-                  toggleAño
-                    ? "block h-[150px] overflow-y-scroll"
-                    : "hidden"
+                  toggleAño ? "block h-[150px] overflow-y-scroll" : "hidden"
                 }
               >
                 <FormGroup>
@@ -381,16 +397,13 @@ function ListSchool() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                        
-                        checked={
-                          Number(ingresoParams) === año ||
-                          ingresoName == año
-                        }
+                          checked={
+                            Number(ingresoParams) === año || ingresoName == año
+                          }
                           onChange={(event, target) => {
                             if (target) {
                               setIngresoParams(año);
-                              setIngresoName(
-                                año);
+                              setIngresoName(año);
                             } else {
                               setIngresoParams(false);
                               setIngresoName([]);
@@ -482,7 +495,10 @@ function ListSchool() {
                 {english} (Hrs/semana)
               </div>
             </div>
-            <button onClick={handleSubmitData} className="bg-[#0061dd] text-white w-full p-3 rounded-sm flex justify-center items-center gap-5">
+            <button
+              onClick={handleSubmitData}
+              className="bg-[#0061dd] text-white w-full p-3 rounded-sm flex justify-center items-center gap-5"
+            >
               <FontAwesomeIcon size="lg" icon={faSearch} />
               BUSCAR
             </button>
@@ -519,133 +535,144 @@ function ListSchool() {
               </Select>
             </FormControl>
           </div>
-
+          {pagination?.data?.length === 0 && <h1>No hay colegios que coincidan con esos filtros</h1> }
           <div className="flex flex-col gap-5">
             {!loading
-              ? pagination?.data?.map((school , index) => {
-                
-                return (
-                  <div
-                  data-aos="zoom-in-left"
-                    key={school.id}
-                    className={`flex border rounded-md shadow-md bg-white p-2 items-center gap-2 flex-col md:flex-row`}
-                    data-aos-mirror={false}
-                  >
-
-                    {" "}
-                    <div className="relative">
-                      <img
-                        src={school.primera_imagen}
-                        alt={school.title}
-                        className="w-[400px] h-64 object-cover"
-                      />
-                      <span className="absolute bg-[#0061dd] text-white p-1 px-2 rounded-md top-3 left-3">
-                        DESTACADOs
-                      </span>
-                      <span className="absolute animate-bounce bg-black/80 text-white p-1 px-2 rounded-md top-14 xl:top-3 xl:right-3 ml-3 w-fit">
-                        9 VACANTES
-                      </span>
-                      <div className="flex absolute gap-5 text-white bottom-3 left-3 bg-black/50 p-2 rounded-md">
-                        <span className="flex hover:scale-110 duration-200 cursor-pointer items-center gap-2">
-                          <FontAwesomeIcon size="lg" icon={faCamera} />
-                          {/*{JSON.parse(school.galeria_imagenes).length}*/}
+              ? pagination?.data?.map((school, index) => {
+                  return (
+                    <div
+                      data-aos="zoom-in-left"
+                      key={school.id}
+                      className={`flex border rounded-md shadow-md bg-white p-2 items-center gap-2 flex-col md:flex-row`}
+                      data-aos-mirror={false}
+                    >
+                      {" "}
+                      <div className="relative">
+                        <img
+                          src={school.primera_imagen}
+                          alt={school.title}
+                          className="w-[400px] h-64 object-cover"
+                        />
+                        <span className="absolute bg-[#0061dd] text-white p-1 px-2 rounded-md top-3 left-3">
+                          DESTACADO
                         </span>
-                        <span className="flex hover:scale-110 duration-200 cursor-pointer items-center gap-2">
-                          {" "}
-                          <FontAwesomeIcon size="lg" icon={faPlayCircle} />
-                          {/*{JSON.parse(school.video_url).length}*/}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="w-full p-5  flex flex-col justify-between gap-5 drop-shadow-md">
-                      <div className="flex justify-between gap-4 xl:gap-0 flex-col xl:flex-row">
-                        <div className="flex flex-col gap-4">
-                          <div className="flex flex-col w-fit gap-2">
-                            <h1 className="font-semibold text-lg">
-                              {school.nombre_colegio}{" "}
-                            </h1>
-                            <small className="text-gray-400">
-                              {school.direccion}{" "}
-                            </small>
-                          </div>
-                          <div className="flex w-fit gap-10">
-                            <div className="flex flex-col text-center">
-                              <FontAwesomeIcon
-                                size="lg"
-                                color="rgb(156 163 175)"
-                                icon={faUsers}
-                              />
-                              <span className="text-sm text-gray-400">
-                                {school.numero_estudiantes} Alumnos
-                              </span>
-                            </div>
-                            <div className="flex flex-col text-center">
-                              <FontAwesomeIcon
-                                size="lg"
-                                color="rgb(156 163 175)"
-                                icon={faPaperclip}
-                              />
-                              <span className="text-sm text-gray-400">
-                                {" "}
-                                Mixto
-                              </span>
-                            </div>
-                            <div className="flex flex-col text-center">
-                              <FontAwesomeIcon
-                                size="lg"
-                                color="rgb(156 163 175)"
-                                icon={faDoorOpen}
-                              />
-                              <span className="text-sm text-gray-400">
-                                2 Salones
-                              </span>
-                            </div>
-                          </div>
+                        {school?.Vacantes?.length > 0 && (ingresoName && gradoName) && (school?.Vacantes?.filter(vac=>vac.GradoId === gradoName && vac.año === ingresoName)[0]?.hasOwnProperty('capacidad')) && (school?.Vacantes?.filter(vac=>vac.GradoId === gradoName && vac.año === ingresoName)[0]?.hasOwnProperty('año')) && <span className="absolute animate-bounce bg-black/80 text-white p-1 px-2 rounded-md top-14 xl:top-3 xl:right-3 ml-3 w-fit">
+                          {school?.Vacantes?.length > 0 && (ingresoName && gradoName) && (school?.Vacantes?.filter(vac=>vac.GradoId === gradoName && vac.año === ingresoName)[0].hasOwnProperty('capacidad')) && (school?.Vacantes?.filter(vac=>vac.GradoId === gradoName && vac.año === ingresoName)[0].hasOwnProperty('año')) && school?.Vacantes?.filter(vac=>vac.GradoId === gradoName && vac.año === ingresoName)[0].capacidad - school?.Vacantes?.filter(vac=>vac.GradoId === gradoName && vac.año === ingresoName)[0].alumnos_matriculados }
+                        </span>}
+                       
+                        <div className="flex absolute gap-5 text-white bottom-3 left-3 bg-black/50 p-2 rounded-md">
+                          <span className="flex hover:scale-110 duration-200 cursor-pointer items-center gap-2">
+                            <FontAwesomeIcon size="lg" icon={faCamera} />
+                            {school.galeria_imagenes && JSON.parse(school.galeria_imagenes).length}
+                          </span>
+                          <span className="flex hover:scale-110 duration-200 cursor-pointer items-center gap-2">
+                            {" "}
+                            <FontAwesomeIcon size="lg" icon={faPlayCircle} />
+                            {/*{JSON.parse(school.video_url).length}*/}
+                          </span>
                         </div>
-                        <div className="flex flex-col justify-between">
-                          <h1>Numero: {school.telefono}</h1>
-                          <button onClick={()=>goToDetails(school.id)} className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center font-semibold">
-                            VER DETALLE
-                          </button>
-                          {/* <Link
+                      </div>
+                      <div className="w-full p-5  flex flex-col justify-between gap-5 drop-shadow-md">
+                        <div className="flex justify-between gap-4 xl:gap-0 flex-col xl:flex-row">
+                          <div className="flex flex-col gap-4">
+                            <div className="flex flex-col w-fit gap-2">
+                              <h1 className="font-semibold text-lg">
+                                {school.nombre_colegio}{" "}
+                              </h1>
+                              <small className="text-gray-400">
+                                {school.direccion}{" "}
+                              </small>
+                            </div>
+                            <div className="flex items-center justify-center w-fit gap-10">
+                              <div className="flex flex-col items-center gap-2 text-center">
+                                <FontAwesomeIcon
+                                  size="lg"
+                                  color="rgb(156 163 175)"
+                                  icon={faUsers}
+                                />
+                                <span className="text-sm text-gray-400">
+                                  {school.numero_estudiantes} Alumnos
+                                </span>
+                              </div>
+                              {school?.Categoria?.map((cat) => (
+                                <div className="flex flex-col items-center gap-2 text-center">
+                                  <img
+                                    src={cat.logo_categoria}
+                                    alt="logo_categoria"
+                                    className="w-4 object-cover invert-[40%] drop-shadow-md"
+                                  />
+                                  <span className="text-sm text-gray-400">
+                                    {cat.nombre_categoria}{" "}
+                                  </span>
+                                </div>
+                              ))}
+                              {/* <div className="flex flex-col text-center">
+                                <FontAwesomeIcon
+                                  size="lg"
+                                  color="rgb(156 163 175)"
+                                  icon={faDoorOpen}
+                                />
+                                <span className="text-sm text-gray-400">
+                                  2 Salones
+                                </span>
+                              </div> */}
+                            </div>
+                          </div>
+                          <div className="flex flex-col justify-between">
+                            <h1>Numero: {school.telefono}</h1>
+                            <button
+                              onClick={() => goToDetails(school.id)}
+                              className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center font-semibold"
+                            >
+                              VER DETALLE
+                            </button>
+                            {/* <Link
                             to={`/schooldetail/${school.id}?grado=${gradoName}&ingreso=${ingresoName}`}
                             className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center font-semibold"
                           >
                             VER DETALLE
                           </Link> */}
+                          </div>
                         </div>
-                      </div>
 
-                      <hr />
+                        <hr />
 
-                      <div className="flex justify-between items-center">
-                        <div className="flex flex-col">
-                          <small>Cuota de ingreso: S/ {school.price} </small>
-                          <span className="font-semibold">
-                            S/ {school.price * 100}/mes
-                          </span>
-                        </div>
-                        <div className="flex gap-5">
-                          <FontAwesomeIcon
-                            size="lg"
-                            icon={faUpRightAndDownLeftFromCenter}
-                            className="hover:scale-110 duration-200 cursor-pointer"
-                          />
-                          <FontAwesomeIcon
-                            size="lg"
-                            icon={faCirclePlus}
-                            className="hover:scale-110 duration-200 cursor-pointer"
-                          />
-                          <FontAwesomeIcon
-                            size="lg"
-                            icon={faHeart}
-                            className="hover:scale-110 duration-200 cursor-pointer"
-                          />
+                        <div className="flex justify-between items-center">
+                          <div className="flex flex-col">
+                            <small>Cuota de ingreso: S/ {school.price} </small>
+                            <span className="font-semibold">
+                              S/ {school.price * 100}/mes
+                            </span>
+                          </div>
+                          <div className="flex gap-5">
+                            <Rating
+                              name="simple-controlled"
+                              value={school.rating}
+                              readOnly
+                              max={10}
+                            />
+                          </div>
+                          {/* <div className="flex gap-5">
+                            <FontAwesomeIcon
+                              size="lg"
+                              icon={faUpRightAndDownLeftFromCenter}
+                              className="hover:scale-110 duration-200 cursor-pointer"
+                            />
+                            <FontAwesomeIcon
+                              size="lg"
+                              icon={faCirclePlus}
+                              className="hover:scale-110 duration-200 cursor-pointer"
+                            />
+                            <FontAwesomeIcon
+                              size="lg"
+                              icon={faHeart}
+                              className="hover:scale-110 duration-200 cursor-pointer"
+                            />
+                          </div> */}
                         </div>
                       </div>
                     </div>
-                  </div>
-                )
+                  );
                 })
               : items.map((item, key) => (
                   <ContentLoader

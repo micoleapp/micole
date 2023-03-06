@@ -17,7 +17,7 @@ import {
   getAfiliaciones,
   getGrados,
   getFilterSchool,
-  getCitas
+  getCitas,
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -160,20 +160,23 @@ export const postCita = (cita) => (dispatch) => {
   const ColegioId = localStorage.getItem("id");
   dispatch(isLoading());
   axios
-    .post("/citas", { celular, correo, date, time, modo, nombre,ColegioId })
+    .post("/citas", { celular, correo, date, time, modo, nombre, ColegioId })
     // .then((res) => dispatch(getVacantesGrados(res.data)))
     .catch((err) => console.log(err));
 };
+
+
 export const getCita = () => (dispatch) => {
   dispatch(isLoading());
-  const token= localStorage.getItem("token");
-  const ColegioId = localStorage.getItem("id");
-  const tokenUser = {
-    id:ColegioId,
-    token:token
-  }
+  const token = localStorage.getItem("token");
   axios
-    .get(`/citas/${tokenUser}`)
+    .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
     .then((res) => dispatch(getCitas(res.data)))
-    .catch((err) => dispatch(getError(err.message)));
+    .catch((err) => {
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: err.response.data.error,
+      });
+    });
 };
