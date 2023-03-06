@@ -278,12 +278,12 @@ console.log(grados)
   const [lat, setLat] = useState(0)
   const [lng, setLng] = useState(0)
 
-  // useEffect(() => {
-  //   if(oneSchool){
-  //     setLat(JSON.parse(oneSchool?.ubicacion)?.lat)
-  //     setLng(JSON.parse(oneSchool?.ubicacion)?.lng)
-  //   }
-  // },[])
+  useEffect(() => {
+    if(oneSchool){
+      setLat(JSON.parse(oneSchool?.ubicacion)?.lat)
+      setLng(JSON.parse(oneSchool?.ubicacion)?.lng)
+    }
+  },[])
 
   return (
     <div className="bg-[#f6f7f8]">
