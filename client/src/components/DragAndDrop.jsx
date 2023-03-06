@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Column from "./Column";
 import SelectCRM from "./CardsDrgAndDrp/SelectsCRM/SelectsCRM";
+import { useDispatch, useSelector } from "react-redux";
+import { getCita } from "../redux/SchoolsActions";
+
 const reorderColumnList = (sourceCol, startIndex, endIndex) => {
   const newTaskIds = Array.from(sourceCol.taskIds);
   const [removed] = newTaskIds.splice(startIndex, 1);
+  const { citas } = useSelector((state) => state.schools);
   newTaskIds.splice(endIndex, 0, removed);
 
   const newColumn = {
@@ -120,6 +124,12 @@ const initialData = {
 
 function DragAndDrop() {
   const [state, setState] = React.useState(initialData);
+ 
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCita());
+  }, []);
 
   const onDragEnd = (result) => {
     const { destination, source } = result;

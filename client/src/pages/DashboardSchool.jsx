@@ -125,6 +125,7 @@ function DashboardSchool() {
       dispatch(getSchoolDetail(user.id));
     }
   }, [allData]);
+
   const {
     register,
     handleSubmit,
@@ -653,6 +654,12 @@ function DashboardSchool() {
   useEffect(() => {
     dispatch(getVacantes(datosPrincipales.niveles));
   }, [datosPrincipales.niveles]);
+
+  const [vacantesOffOne,setVacantesOffOne] = useState(true)
+  const [vacantesOffTwo,setVacantesOffTwo] = useState(true)
+  const [vacantesOffThree,setVacantesOffThree] = useState(true)
+
+  console.log(vacantesOffThree)
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -1932,6 +1939,7 @@ function DashboardSchool() {
                   {activeStep === 3 && (
                       <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
                         <h1 className="text-2xl">Vacantes disponibles</h1>
+                        <small>Debera enviar el formulario de al menos 1 de los 3 años antes de continuar</small>
                         <button
                           className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
                           onClick={() =>
@@ -1945,7 +1953,7 @@ function DashboardSchool() {
                             icon={vacantes === 0 ? faArrowUp : faArrowDown}
                           />{" "}
                         </button>
-                        {vacantes === 0 && <GridVacantes año={yearNow}/>}
+                        {vacantes === 0 && <GridVacantes setVacantesOff={setVacantesOffOne} año={yearNow}/>}
                         <button
                           className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
                           onClick={() =>
@@ -1959,7 +1967,7 @@ function DashboardSchool() {
                             icon={vacantes === 1 ? faArrowUp : faArrowDown}
                           />{" "}
                         </button>
-                        {vacantes === 1 && <GridVacantes año={yearNow+1} />}
+                        {vacantes === 1 && <GridVacantes setVacantesOff={setVacantesOffTwo} año={yearNow+1} />}
                         <button
                           className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
                           onClick={() =>
@@ -1973,7 +1981,7 @@ function DashboardSchool() {
                             icon={vacantes === 2 ? faArrowUp : faArrowDown}
                           />{" "}
                         </button>
-                        {vacantes === 2 && <GridVacantes año={yearNow+2}  />}
+                        {vacantes === 2 && <GridVacantes setVacantesOff={setVacantesOffThree} año={yearNow+2}  />}
                         <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
@@ -1986,7 +1994,7 @@ function DashboardSchool() {
                           Back
                         </Button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button onClick={handleCompleteVacantes} sx={{ mr: 1 }}>
+                        <Button disabled={vacantesOffOne && vacantesOffTwo && vacantesOffThree} onClick={handleCompleteVacantes} sx={{ mr: 1 }}>
                           Next
                         </Button>
                         {/* {activeStep !== steps.length &&
@@ -2361,7 +2369,7 @@ function DashboardSchool() {
             >
               Guardar Cambios
             </button>
-            <DragAndDrop />
+        
           </div>
         ) : page === 2 ? (
           <div className="min-h-screen">Plan</div>

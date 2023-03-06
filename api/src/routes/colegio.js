@@ -37,8 +37,7 @@ router.get('/', async (req, res) => {
         },
         {
           model: Vacante,
-          attributes: ['año', 'GradoId'],
-          include: [{ model: Grado, attributes: ['nombre_grado'] }],
+          include: [{ model: Grado }],
         },
         {
           model: Idioma,
@@ -73,7 +72,12 @@ router.get('/', async (req, res) => {
         },
         {
           model: Categoria,
-          attributes: ['id', 'nombre_categoria'],
+          attributes: [
+            'id',
+            'nombre_categoria',
+            'imagen_categoria',
+            'logo_categoria',
+          ],
           through: {
             attributes: [],
           },
@@ -140,8 +144,7 @@ router.get('/:Colegio_id', async (req, res) => {
         },
         {
           model: Vacante,
-          attributes: ['año', 'GradoId'],
-          include: [{ model: Grado, attributes: ['nombre_grado'] }],
+          include: [{ model: Grado}],
         },
         {
           model: Idioma,
@@ -292,21 +295,21 @@ router.post('/filter', async (req, res) => {
       ],
       where: {
         ...(distrits.length !== 0 && {
-        [Op.or]: distrits.map((distrito) => ({ DistritoId: distrito })),
-        }),
-        ...(grado.length !== 0  && { '$Vacantes.GradoId$': grado }),
-        ...(ingreso.length !== 0  && { '$Vacantes.año$': ingreso }),
-        ...(pension.length !== 0 && {
-          '$Vacantes.cuota_pension$': {
-            [Op.between]: [pension[0], pension[1]],
-          },
-        }),
-        ...(cuota.length !== 0 && {
-          '$Vacantes.cuota_ingreso$': { [Op.between]: [cuota[0], cuota[1]] },
-        }),
-        ...(tipo.length !== 0  && { '$Categoria.id$': tipo }),
-        ...(ingles && { '$horas_idioma_extranjero$': { [Op.lte]: ingles } }),
-        ...(rating && { '$rating$': { [Op.gte]: rating } }),
+          [Op.or]: distrits.map((distrito) => ({ DistritoId: distrito })),
+          }),
+          ...(grado.length !== 0  && { '$Vacantes.GradoId$': grado }),
+          ...(ingreso.length !== 0  && { '$Vacantes.año$': ingreso }),
+          ...(pension.length !== 0 && {
+            '$Vacantes.cuota_pension$': {
+              [Op.between]: [pension[0], pension[1]],
+            },
+          }),
+          ...(cuota.length !== 0 && {
+            '$Vacantes.cuota_ingreso$': { [Op.between]: [cuota[0], cuota[1]] },
+          }),
+          ...(tipo.length !== 0  && { '$Categoria.id$': tipo }),
+          ...(ingles && { '$horas_idioma_extranjero$': { [Op.lte]: ingles } }),
+          ...(rating && { '$rating$': { [Op.gte]: rating } }),
       },
     });
     response = cole;

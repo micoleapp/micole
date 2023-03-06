@@ -6,7 +6,7 @@ import { FiMail } from "react-icons/fi";
 import style from "./Cards.module.css";
 export default function Cards({ icon, text, nro }) {
   return (
-    <div data-aos="fade-up" className={style.container}>
+    <div  className={style.container}>
       <div className={style.divInfo}>
         <div
          className={style.divRedondo}

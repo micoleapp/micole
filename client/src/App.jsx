@@ -23,9 +23,12 @@ import {
   getAllNiveles,
   getAllAfiliaciones,
   getAllGrados,
-  getAllSchools
+  getAllSchools,
+
 } from "./redux/SchoolsActions";
+
 import RequireAuth from "./components/RequireAuth";
+import { getCita } from "./redux/CitasActions";
 
 function App() {
   const { error: errorSchool } = useSelector((state) => state.schools);
@@ -43,6 +46,7 @@ function App() {
     dispatch(getAllAfiliaciones());
     dispatch(getAllSchools())
     dispatch(getUserByToken());
+    dispatch(getCita())
   }, []);
 
   useEffect(() => {

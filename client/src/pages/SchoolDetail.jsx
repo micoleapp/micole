@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { clannDetailid, getSchoolDetail } from "../redux/SchoolsActions";
+import { clannDetailid, getAllGrados, getSchoolDetail, postCita } from "../redux/SchoolsActions";
 import banner from "../assets/ejemplobanner.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logo from "../assets/premium.png";
@@ -46,7 +46,7 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
         src={firstImage}
         alt=""
         onClick={() => setImage(firstImage)}
-        className="cursor-pointer rounded-md"
+        className="cursor-pointer rounded-md h-24"
       />
       <div className="flex gap-5 mt-2 overflow-x-scroll w-full pb-2">
         {gallery?.map((item, index) => (
@@ -108,16 +108,19 @@ const ArrHorariosMockFormateado = [
 ];
 function SchoolDetail() {
   const { id } = useParams();
-  const { oneSchool } = useSelector((state) => state.schools);
+  const { oneSchool , grados } = useSelector((state) => state.schools);
   const location = useLocation();
+
 
   const params = new URLSearchParams(location.search);
 
   const [gradoParams, setGradoParams] = React.useState(params.get("grado"))
   const [ingresoParams, setIngresoParams] = React.useState(params.get("ingreso"))
-
-  console.log(gradoParams, ingresoParams)
-
+console.log(grados)
+  console.log(gradoParams)
+  console.log(ingresoParams)
+  const nombre_grado = grados.find(grado=> grado.id == gradoParams).nombre_grado
+  console.log(nombre_grado)
   const stringyDate = (date) => {
     if (date.toString().length === 1) {
       return "0" + date++;
@@ -130,8 +133,15 @@ function SchoolDetail() {
 
   const dispatch = useDispatch();
   useEffect(() => {
+  dispatch(getAllGrados())
     dispatch(getSchoolDetail(id));
+    return () => {
+      dispatch(clannDetailid());
+    }
   }, []);
+
+  
+
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -175,6 +185,10 @@ function SchoolDetail() {
     nombre: "",
     celular: "",
     correo: "",
+    añoIngreso:ingresoParams,
+    grado:nombre_grado,
+    
+    
   });
 
   const handleSubmit = (e) => {
@@ -186,8 +200,9 @@ function SchoolDetail() {
     ) {
       return alert("Llena todos los campos para poder continuar");
     }
-    console.log(cita, id )
-    axios.post("http://localhost:3000/citas", { cita, id });
+    console.log(cita)
+
+   dispatch(postCita(cita))
   };
 
   const handleModo = () => {
@@ -261,6 +276,18 @@ function SchoolDetail() {
     new Set(oneSchool?.Infraestructuras?.map((e) => e.InfraestructuraTipoId))
   );
 
+  const [lat, setLat] = useState(0)
+  const [lng, setLng] = useState(0)
+
+    console.log(oneSchool)
+
+  useEffect(() => {
+    if(oneSchool.ubicacion){
+      setLat(JSON.parse(oneSchool?.ubicacion)?.lat)
+      setLng(JSON.parse(oneSchool?.ubicacion)?.lng)
+    }
+  },[oneSchool])
+
   return (
     <div className="bg-[#f6f7f8]">
       <img
@@ -287,10 +314,10 @@ function SchoolDetail() {
                     5 vacantes
                   </span>
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
-                    2do grado
+                    {nombre_grado}
                   </span>
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
-                    2022
+                    {ingresoParams}
                   </span>
                 </div>
               </div>
@@ -319,7 +346,7 @@ function SchoolDetail() {
             </div>
           </div>
           <div className="mt-5 gap-5 flex justify-between items-start lg:items-center flex-col lg:flex-row">
-            <div className="flex gap-5 items-start">
+            <div className="flex gap-5 flex-col items-start">
               {" "}
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
@@ -331,22 +358,20 @@ function SchoolDetail() {
                   {oneSchool.numero_estudiantes} Alumnos
                 </span>
               </div>
-              <div className="flex flex-col gap-2 text-center">
-                <FontAwesomeIcon
-                  size="lg"
-                  color="rgb(156 163 175)"
-                  icon={faPaperclip}
-                />
-                <span className="text-sm text-gray-400"> Mixto</span>
+              {oneSchool?.Categoria?.map((cat)=>(
+              <div className="flex flex-col items-center gap-2 text-center">
+                <img src={cat.logo_categoria} alt="logo_categoria" className="w-4 object-cover invert-[40%] drop-shadow-md"/>
+                <span className="text-sm text-gray-400">{cat.nombre_categoria} </span>
               </div>
-              <div className="flex flex-col gap-2 text-center">
+              ))}
+              {/* <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
                   size="lg"
                   color="rgb(156 163 175)"
                   icon={faDoorOpen}
                 />
                 <span className="text-sm text-gray-400">2 Salones</span>
-              </div>
+              </div> */}
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
                   size="lg"
@@ -414,10 +439,10 @@ function SchoolDetail() {
                     </span>
                     {oneSchool?.Distrito?.nombre_distrito}
                   </li>
-                  <li className="text-black/60">
+                  {/* <li className="text-black/60">
                     <span className="font-semibold text-black ">Zip: </span>
                     365448
-                  </li>
+                  </li> */}
                 </ul>
                 <ul className="flex flex-col gap-3">
                   <li className="text-black/60">
@@ -428,11 +453,11 @@ function SchoolDetail() {
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Pais: </span>
-                    United State
+                    Peru
                   </li>
                 </ul>
               </div>
-              <Maps />
+              <Maps lat={lat} lng={lng} />
             </div>
             <div
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
@@ -442,7 +467,7 @@ function SchoolDetail() {
             >
               <h2 className="font-semibold text-xl">Detalles del Colegio</h2>
               <div className="flex text-xs w-full flex-col lg:flex-row gap-3 justify-between">
-                <ul className="flex flex-col gap-3">
+                <ul className="grid grid-cols-3 w-full gap-3">
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">RUC: </span>
                     {oneSchool.ruc}
@@ -459,19 +484,7 @@ function SchoolDetail() {
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Niveles: </span>
-                    Inicial, primaria, secundaria
-                  </li>
-                </ul>
-                <ul className="flex flex-col gap-3">
-                  <li className="text-black/60">
-                    <span className="font-semibold text-black ">
-                      Profesores:{" "}
-                    </span>
-                    8
-                  </li>
-                  <li className="text-black/60">
-                    <span className="font-semibold text-black ">Salones: </span>
-                    3
+                    {oneSchool.Nivels?.map(nivel=>nivel.nombre_nivel).join(', ')}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
@@ -481,6 +494,19 @@ function SchoolDetail() {
                   </li>
                 </ul>
                 <ul className="flex flex-col gap-3">
+                  {/* <li className="text-black/60">
+                    <span className="font-semibold text-black ">
+                      Profesores:{" "}
+                    </span>
+                    8
+                  </li>
+                  <li className="text-black/60">
+                    <span className="font-semibold text-black ">Salones: </span>
+                    3
+                  </li> */}
+
+                </ul>
+                {/* <ul className="flex flex-col gap-3">
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
                       Tipo de educacion:{" "}
@@ -497,7 +523,7 @@ function SchoolDetail() {
                     </span>
                     Urbana
                   </li>
-                </ul>
+                </ul> */}
               </div>
             </div>
             <div
@@ -879,7 +905,7 @@ function SchoolDetail() {
                 </ul>
               </div>
             </div>
-            <div
+            {/* <div
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
               data-aos="zoom-in-right"
               data-aos-duration="1500"
@@ -976,7 +1002,7 @@ function SchoolDetail() {
                   <small className="text-black/50">400 reviews</small>
                 </ul>
               </ul>
-            </div>
+            </div> */}
           </section>
           <section className="right mt-5  flex flex-col gap-8 w-full">
             <div
@@ -1145,9 +1171,7 @@ function SchoolDetail() {
             </div>
             <div
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
-              data-aos="zoom-in-left"
-              data-aos-duration="1500"
-              data-aos-mirror={false}
+
             >
               <h2 className="font-semibold text-xl">Galeria</h2>
               {oneSchool.hasOwnProperty("galeria_fotos") && (
@@ -1183,10 +1207,13 @@ function SchoolDetail() {
                 data-aos-mirror={false}
               >
                 <h2 className="font-semibold text-xl">Video</h2>
-                <iframe
+                {/* <video
                   className="w-full h-[300px] lg:h-[400px] "
                   src={`${oneSchool.video_url.replace("watch?v=", "embed/")}`}
-                ></iframe>
+                ></video> */}
+                <video className="w-full h-[300px] lg:h-[400px]" controls>
+                  <source src={oneSchool.video_url} type="video/mp4"/>
+                </video>
               </div>
             )}
             <form
