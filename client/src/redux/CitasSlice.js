@@ -63,14 +63,19 @@ export const citasSlice = createSlice({
             modo: ele.modalidad,
             nombre: ele.nombre,
             time: ele.hora_cita,
+            estado: ele.estado,
             añoIngreso: "",
             grado: "",
           },
         };
       });
-     
       state.tasks = Object.assign({}, ...data),
-      state.columns ={...state.columns,... columns["column-1"].taskIds=  data.map((ele, index)=> index)}
+      state.columns["column-1"].taskIds = action.payload.filter((ele)=> ele.estado === 'Solicitud' ).map((e,i)=>i),
+      state.columns["column-2"].taskIds = action.payload.filter((ele)=> ele.estado === 'Realizada' ).map((e,i)=>i),
+      state.columns["column-3"].taskIds = action.payload.filter((ele)=> ele.estado === 'Aplicacion' ).map((e,i)=>i),
+      state.columns["column-4"].taskIds = action.payload.filter((ele)=> ele.estado === 'Entrevista' ).map((e,i)=>i),
+      state.columns["column-5"].taskIds = action.payload.filter((ele)=> ele.estado === 'VOfrecida' ).map((e,i)=>i),
+      state.columns["column-6"].taskIds = action.payload.filter((ele)=> ele.estado === 'VAceptada' ).map((e,i)=>i)
     },
   },
 });
