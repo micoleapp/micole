@@ -63,14 +63,32 @@ export const citasSlice = createSlice({
             modo: ele.modalidad,
             nombre: ele.nombre,
             time: ele.hora_cita,
+            estado: ele.estado,
             añoIngreso: "",
             grado: "",
           },
         };
       });
-     
-      state.tasks = Object.assign({}, ...data),
-      state.columns ={...state.columns,... columns["column-1"].taskIds=  data.map((ele, index)=> index)}
+
+      state.tasks = Object.assign({}, ...data)
+      state.columns["column-1"].taskIds = data
+        .filter((ele, index) => ele[index]?.estado === "Solicitud")
+        .map((ele) => Object.values(ele)[0].id);
+      state.columns["column-2"].taskIds = data
+        .filter((ele, index) => ele[index]?.estado === "Realizada")
+        .map((ele) => Object.values(ele)[0].id);
+        state.columns["column-3"].taskIds = data
+        .filter((ele, index) => ele[index]?.estado === "Aplicacion")
+        .map((ele) => Object.values(ele)[0].id);
+      state.columns["column-4"].taskIds = data
+        .filter((ele, index) => ele[index]?.estado === "Entrevista")
+        .map((ele) => Object.values(ele)[0].id);
+        state.columns["column-5"].taskIds = data
+        .filter((ele, index) => ele[index]?.estado === "VOfrecida")
+        .map((ele) => Object.values(ele)[0].id);
+      state.columns["column-6"].taskIds = data
+        .filter((ele, index) => ele[index]?.estado === "VAceptada")
+        .map((ele) => Object.values(ele)[0].id);
     },
   },
 });
