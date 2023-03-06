@@ -37,8 +37,7 @@ router.get('/', async (req, res) => {
         },
         {
           model: Vacante,
-          attributes: ['año', 'GradoId'],
-          include: [{ model: Grado, attributes: ['nombre_grado'] }],
+          include: [{ model: Grado }],
         },
         {
           model: Idioma,
@@ -140,8 +139,7 @@ router.get('/:Colegio_id', async (req, res) => {
         },
         {
           model: Vacante,
-          attributes: ['año', 'GradoId'],
-          include: [{ model: Grado, attributes: ['nombre_grado'] }],
+          include: [{ model: Grado}],
         },
         {
           model: Idioma,
