@@ -535,7 +535,7 @@ function ListSchool() {
               </Select>
             </FormControl>
           </div>
-          {pagination.data.length === 0 && <h1>No hay colegios que coincidan con esos filtros</h1> }
+          {pagination?.data?.length === 0 && <h1>No hay colegios que coincidan con esos filtros</h1> }
           <div className="flex flex-col gap-5">
             {!loading
               ? pagination?.data?.map((school, index) => {
