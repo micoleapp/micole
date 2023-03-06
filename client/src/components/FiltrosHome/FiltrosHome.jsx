@@ -129,11 +129,6 @@ const handleValueAño =(event)=>{
           </FormControl>
         </div>
 
-        <div className={style.masFiltros} onClick={toggleFilters}>
-          <Icon_filters_home />
-          <p> Mas filtros</p>
-        </div>
-
         <div className={style.container_button}>
           <Link to={`/listschool?distrito=${Distrito}&grado=${Grado}&ingreso=${Ingreso}`}>
             <button onClick={()=>dispatch(getFilterHome(Distrito,Grado,Ingreso))}>Buscar</button>

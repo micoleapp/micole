@@ -72,7 +72,12 @@ router.get('/', async (req, res) => {
         },
         {
           model: Categoria,
-          attributes: ['id', 'nombre_categoria'],
+          attributes: [
+            'id',
+            'nombre_categoria',
+            'imagen_categoria',
+            'logo_categoria',
+          ],
           through: {
             attributes: [],
           },
