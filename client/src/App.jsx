@@ -23,7 +23,8 @@ import {
   getAllNiveles,
   getAllAfiliaciones,
   getAllGrados,
-  getAllSchools
+  getAllSchools,
+  getCita
 } from "./redux/SchoolsActions";
 import RequireAuth from "./components/RequireAuth";
 
@@ -43,6 +44,7 @@ function App() {
     dispatch(getAllAfiliaciones());
     dispatch(getAllSchools())
     dispatch(getUserByToken());
+    dispatch(getCita())
   }, []);
 
   useEffect(() => {
