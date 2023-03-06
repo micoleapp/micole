@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { clannDetailid, getSchoolDetail } from "../redux/SchoolsActions";
+import { clannDetailid, getAllGrados, getSchoolDetail, postCita } from "../redux/SchoolsActions";
 import banner from "../assets/ejemplobanner.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logo from "../assets/premium.png";
@@ -110,15 +110,23 @@ function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool , grados } = useSelector((state) => state.schools);
   const location = useLocation();
+  // const dispatch =useDispatch()
+useEffect(() => {
+  dispatch(getAllGrados())
+
+
+}, [])
+
 
   const params = new URLSearchParams(location.search);
 
   const [gradoParams, setGradoParams] = React.useState(params.get("grado"))
   const [ingresoParams, setIngresoParams] = React.useState(params.get("ingreso"))
-
+console.log(grados)
   console.log(gradoParams)
   console.log(ingresoParams)
-  const {nombre_grado} = grados.find(grado=> grado.id == gradoParams)
+  const nombre_grado = grados.find(grado=> grado.id == gradoParams).nombre_grado
+  console.log(nombre_grado)
   const stringyDate = (date) => {
     if (date.toString().length === 1) {
       return "0" + date++;
@@ -176,6 +184,10 @@ function SchoolDetail() {
     nombre: "",
     celular: "",
     correo: "",
+    añoIngreso:ingresoParams,
+    grado:nombre_grado,
+    
+    
   });
 
   const handleSubmit = (e) => {
@@ -187,8 +199,9 @@ function SchoolDetail() {
     ) {
       return alert("Llena todos los campos para poder continuar");
     }
-    console.log(cita, id )
-    axios.post("http://localhost:3000/citas", { cita, id });
+    console.log(cita)
+
+   dispatch(postCita(cita))
   };
 
   const handleModo = () => {
