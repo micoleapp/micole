@@ -6,7 +6,7 @@ export const citasSlice = createSlice({
     tasks: null,
 
     columns: {
-      "column-1": {
+     "column-1": {
         id: "column-1",
         title: "Solicitud de cita",
         taskIds: [],
@@ -68,7 +68,9 @@ export const citasSlice = createSlice({
           },
         };
       });
-      state.tasks = Object.assign({}, ...data)
+     
+      state.tasks = Object.assign({}, ...data),
+      state.columns ={...state.columns,... columns["column-1"].taskIds=  data.map((ele, index)=> index)}
     },
   },
 });
