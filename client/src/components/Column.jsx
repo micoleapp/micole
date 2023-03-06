@@ -8,6 +8,8 @@ import Modal from "@mui/material/Modal";
 
 import Typography from "@mui/material/Typography";
 import NavTabs from "./Tabs/TabsCita";
+import { useSelect } from "@mui/base";
+import { useSelector } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -19,12 +21,12 @@ const style = {
   border: "none",
   boxShadow: 24,
   borderRadius: "8px",
-  // backgroundColor:'#0D76EF',
   p: 4,
 };
 
 const Column = ({ column, tasks }) => {
-  // const [OpenDetail, setOpenDetail] = useState(false);
+
+  
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

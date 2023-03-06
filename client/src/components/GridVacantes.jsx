@@ -6,12 +6,10 @@ import Swal from "sweetalert2";
 export default function GridVacantes({ año, setVacantesOff }) {
   const { vacantesGrados } = useSelector((state) => state.schools);
   const { token, oneSchool } = useSelector((state) => state.auth);
-  
+
   const [datos, setDatos] = React.useState({ año });
 
-
   const handleChange = (e) => {
-    
     setDatos({
       ...datos,
       [e.target.id]: { ...datos[e.target.id], [e.target.name]: e.target.value },
@@ -20,34 +18,30 @@ export default function GridVacantes({ año, setVacantesOff }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-        setVacantesOff(false);
-        try {
-          axios
-            .post(
-              `/vacantes`,
-              { data: datos },
-              { headers: { Authorization: `Bearer ${token}` } }
-            )
-            .then((res) => {
-              Swal.fire(
-                "Success",
-                "Formulario enviado correctamente",
-                "success"
-              );
-            })
-            .catch((err) => {
-              Swal.fire({
-                icon: "error",
-                title: "Algo salio mal",
-                text: err.response.data.error,
-              });
-            });
-        } catch (error) {
-          console.log(error);
-        }
-  };  
+    setVacantesOff(false);
+    try {
+      axios
+        .post(
+          `/vacantes`,
+          { data: datos },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then((res) => {
+          Swal.fire("Success", "Formulario enviado correctamente", "success");
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: err.response.data.error,
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  console.log(datos)
+  console.log(datos);
 
   return (
     <>
@@ -128,12 +122,12 @@ export default function GridVacantes({ año, setVacantesOff }) {
                           oneSchool?.Vacantes?.filter(
                             (el) => el.GradoId === vac.GradoId && el.año === año
                           ).map((el) => el.alumnos_matriculados)
-                          
                     }
                     defaultValue={
                       oneSchool?.Vacantes?.filter(
                         (el) => el.GradoId === vac.GradoId && el.año === año
-                      ).map((el) => el.capacidad) - oneSchool?.Vacantes?.filter(
+                      ).map((el) => el.capacidad) -
+                      oneSchool?.Vacantes?.filter(
                         (el) => el.GradoId === vac.GradoId && el.año === año
                       ).map((el) => el.alumnos_matriculados)
                     }
