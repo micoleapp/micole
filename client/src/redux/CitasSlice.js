@@ -70,7 +70,7 @@ export const citasSlice = createSlice({
         };
       });
 
-      state.tasks = Object.assign({}, ...data)
+     /*  state.tasks = Object.assign({}, ...data)
       state.columns["column-1"].taskIds = data
         .filter((ele, index) => ele[index]?.estado === "Solicitud")
         .map((ele) => Object.values(ele)[0].id);
@@ -88,7 +88,16 @@ export const citasSlice = createSlice({
         .map((ele) => Object.values(ele)[0].id);
       state.columns["column-6"].taskIds = data
         .filter((ele, index) => ele[index]?.estado === "VAceptada")
-        .map((ele) => Object.values(ele)[0].id);
+        .map((ele) => Object.values(ele)[0].id); */
+
+      state.tasks = Object.assign({}, ...data),
+      state.columns["column-1"].taskIds = action.payload.filter((ele)=> ele.estado === 'Solicitud' ).map((e,i)=>i),
+      state.columns["column-2"].taskIds = action.payload.filter((ele)=> ele.estado === 'Realizada' ).map((e,i)=>i),
+      state.columns["column-3"].taskIds = action.payload.filter((ele)=> ele.estado === 'Aplicacion' ).map((e,i)=>i),
+      state.columns["column-4"].taskIds = action.payload.filter((ele)=> ele.estado === 'Entrevista' ).map((e,i)=>i),
+      state.columns["column-5"].taskIds = action.payload.filter((ele)=> ele.estado === 'VOfrecida' ).map((e,i)=>i),
+      state.columns["column-6"].taskIds = action.payload.filter((ele)=> ele.estado === 'VAceptada' ).map((e,i)=>i)
+
     },
   },
 });
