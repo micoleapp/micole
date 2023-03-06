@@ -99,6 +99,9 @@ module.exports = (sequelize) => {
           },
         },
       },
+      añoIngreso: {
+        type: DataTypes.STRING,
+      },
       estado: {
         type: DataTypes.STRING,
         allowNull: false,
