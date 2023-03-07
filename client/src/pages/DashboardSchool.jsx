@@ -24,6 +24,11 @@ import Confetti from "react-confetti";
 import DragAndDrop from "../components/DragAndDrop";
 import GridVacantes from "../components/GridVacantes";
 import Swal from "sweetalert2";
+import MoveToInboxOutlinedIcon from "@mui/icons-material/MoveToInboxOutlined";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
+import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
+
 import {
   GoogleMap,
   useJsApiLoader,
@@ -52,6 +57,8 @@ import { TextField } from "@mui/material";
 const yearNow = new Date().getFullYear();
 import { AiOutlineIdcard } from "react-icons/ai";
 import Cards from "../components/CardsDrgAndDrp/Cards";
+import CardCitas from "../components/CardsCitas/CardCitas";
+import SelectCitasAg from "../components/CardsCitas/SelectCitasAgendadas/SelectCitasAg";
 
 const libraries = ["places"];
 
@@ -623,16 +630,18 @@ function DashboardSchool() {
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
 
-      horarios:[ {
-        desde: stringyDate(day[Object.keys(day)][0]["$H"])
-          .toString()
-          .concat(":")
-          .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
-        hasta: stringyDate(day[Object.keys(day)][1]["$H"])
-          .toString()
-          .concat(":")
-          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
-      }],
+      horarios: [
+        {
+          desde: stringyDate(day[Object.keys(day)][0]["$H"])
+            .toString()
+            .concat(":")
+            .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
+          hasta: stringyDate(day[Object.keys(day)][1]["$H"])
+            .toString()
+            .concat(":")
+            .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
+        },
+      ],
     }));
     Swal.fire({
       icon: "success",
@@ -655,11 +664,11 @@ function DashboardSchool() {
     dispatch(getVacantes(datosPrincipales.niveles));
   }, [datosPrincipales.niveles]);
 
-  const [vacantesOffOne,setVacantesOffOne] = useState(true)
-  const [vacantesOffTwo,setVacantesOffTwo] = useState(true)
-  const [vacantesOffThree,setVacantesOffThree] = useState(true)
+  const [vacantesOffOne, setVacantesOffOne] = useState(true);
+  const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
+  const [vacantesOffThree, setVacantesOffThree] = useState(true);
 
-  console.log(vacantesOffThree)
+  console.log(vacantesOffThree);
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -722,17 +731,17 @@ function DashboardSchool() {
             } `}
             onClick={() => setPage(5)}
           >
-            <CiClock1
+            <MoveToInboxOutlinedIcon
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
                 page == 5 ? "text-white" : null
               }`}
             />
             <span
               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
-                page == 5? "text-white" : null
+                page == 5 ? "text-white" : null
               }`}
             >
-             Citas Agendadas{" "}
+              Citas Agendadas{" "}
             </span>
           </button>
           <button
@@ -1956,52 +1965,70 @@ function DashboardSchool() {
                     </div>
                   )}
                   {activeStep === 3 && (
-                      <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
-                        <h1 className="text-2xl">Vacantes disponibles</h1>
-                        <small>Debera enviar el formulario de al menos 1 de los 3 años antes de continuar</small>
-                        <button
-                          className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
-                          onClick={() =>
-                            vacantes === 0 ? setVacantes(null) : setVacantes(0)
-                          }
-                        >
-                          {" "}
-                          <span>2023</span>{" "}
-                          <FontAwesomeIcon
-                            size="lg"
-                            icon={vacantes === 0 ? faArrowUp : faArrowDown}
-                          />{" "}
-                        </button>
-                        {vacantes === 0 && <GridVacantes setVacantesOff={setVacantesOffOne} año={yearNow}/>}
-                        <button
-                          className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
-                          onClick={() =>
-                            vacantes === 1 ? setVacantes(null) : setVacantes(1)
-                          }
-                        >
-                          {" "}
-                          <span>2024</span>{" "}
-                          <FontAwesomeIcon
-                            size="lg"
-                            icon={vacantes === 1 ? faArrowUp : faArrowDown}
-                          />{" "}
-                        </button>
-                        {vacantes === 1 && <GridVacantes setVacantesOff={setVacantesOffTwo} año={yearNow+1} />}
-                        <button
-                          className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
-                          onClick={() =>
-                            vacantes === 2 ? setVacantes(null) : setVacantes(2)
-                          }
-                        >
-                          {" "}
-                          <span>2025</span>{" "}
-                          <FontAwesomeIcon
-                            size="lg"
-                            icon={vacantes === 2 ? faArrowUp : faArrowDown}
-                          />{" "}
-                        </button>
-                        {vacantes === 2 && <GridVacantes setVacantesOff={setVacantesOffThree} año={yearNow+2}  />}
-                        <Box
+                    <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
+                      <h1 className="text-2xl">Vacantes disponibles</h1>
+                      <small>
+                        Debera enviar el formulario de al menos 1 de los 3 años
+                        antes de continuar
+                      </small>
+                      <button
+                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                        onClick={() =>
+                          vacantes === 0 ? setVacantes(null) : setVacantes(0)
+                        }
+                      >
+                        {" "}
+                        <span>2023</span>{" "}
+                        <FontAwesomeIcon
+                          size="lg"
+                          icon={vacantes === 0 ? faArrowUp : faArrowDown}
+                        />{" "}
+                      </button>
+                      {vacantes === 0 && (
+                        <GridVacantes
+                          setVacantesOff={setVacantesOffOne}
+                          año={yearNow}
+                        />
+                      )}
+                      <button
+                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                        onClick={() =>
+                          vacantes === 1 ? setVacantes(null) : setVacantes(1)
+                        }
+                      >
+                        {" "}
+                        <span>2024</span>{" "}
+                        <FontAwesomeIcon
+                          size="lg"
+                          icon={vacantes === 1 ? faArrowUp : faArrowDown}
+                        />{" "}
+                      </button>
+                      {vacantes === 1 && (
+                        <GridVacantes
+                          setVacantesOff={setVacantesOffTwo}
+                          año={yearNow + 1}
+                        />
+                      )}
+                      <button
+                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                        onClick={() =>
+                          vacantes === 2 ? setVacantes(null) : setVacantes(2)
+                        }
+                      >
+                        {" "}
+                        <span>2025</span>{" "}
+                        <FontAwesomeIcon
+                          size="lg"
+                          icon={vacantes === 2 ? faArrowUp : faArrowDown}
+                        />{" "}
+                      </button>
+                      {vacantes === 2 && (
+                        <GridVacantes
+                          setVacantesOff={setVacantesOffThree}
+                          año={yearNow + 2}
+                        />
+                      )}
+                      <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
                         <Button
@@ -2013,7 +2040,13 @@ function DashboardSchool() {
                           Back
                         </Button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button disabled={vacantesOffOne && vacantesOffTwo && vacantesOffThree} onClick={handleCompleteVacantes} sx={{ mr: 1 }}>
+                        <Button
+                          disabled={
+                            vacantesOffOne && vacantesOffTwo && vacantesOffThree
+                          }
+                          onClick={handleCompleteVacantes}
+                          sx={{ mr: 1 }}
+                        >
                           Next
                         </Button>
                         {/* {activeStep !== steps.length &&
@@ -2032,8 +2065,7 @@ function DashboardSchool() {
                         </Button>
                       ))} */}
                       </Box>
-                      </div>
-
+                    </div>
                   )}
                   {activeStep === 4 && (
                     <div className="flex flex-col gap-5">
@@ -2388,7 +2420,6 @@ function DashboardSchool() {
             >
               Guardar Cambios
             </button>
-        
           </div>
         ) : page === 2 ? (
           <div className="min-h-screen">Plan</div>
@@ -2526,7 +2557,7 @@ function DashboardSchool() {
           </div>
         ) : page === 4 ? (
           <div className="min-h-screen">
-            <div style={{display:'flex',gap:'10px'}}>
+            <div style={{ display: "flex", gap: "10px" }}>
               <Cards icon="solicitud" text="Solicitudes de Citas" nro={2} />
               <Cards icon="visualizacion" text="Visualizaciones" nro={2} />
               <Cards icon="mensaje" text="Mensajes" nro={2} />
@@ -2535,7 +2566,37 @@ function DashboardSchool() {
 
             <DragAndDrop />
           </div>
-        ) : page === 5 ?  <div className="min-h-screen">Citas Agendadas</div> :null}
+        ) : page === 5 ? (
+          <div className="min-h-screen">
+            <h1>Citas</h1>
+            <div style={{ display: "flex", width: "100%", gap: "10px", alignItems:'center' }}>
+              <div>
+                <Button startIcon={<StarBorderIcon />} variant="outlined">
+                  Favorito
+                </Button>
+              </div>
+              <div>
+                <Button startIcon={<DraftsOutlinedIcon />} variant="outlined">
+                  Confirmados
+                </Button>
+              </div>
+              <div>
+                <Button
+                  startIcon={<MailOutlineOutlinedIcon />}
+                  variant="outlined"
+                >
+                  Sin Conformar
+                </Button>
+              </div>
+            <div>
+              <SelectCitasAg/>
+            </div>
+            </div>
+            <div>
+              <CardCitas/>
+            </div>
+          </div>
+        ) : null}
       </section>
     </div>
   );
