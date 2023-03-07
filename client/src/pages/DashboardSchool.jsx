@@ -2585,7 +2585,7 @@ function DashboardSchool() {
                   startIcon={<MailOutlineOutlinedIcon />}
                   variant="outlined"
                 >
-                  Sin Conformar
+                  Sin Confirmar
                 </Button>
               </div>
             <div>
