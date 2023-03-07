@@ -7,7 +7,7 @@ import { useState } from "react";
 
 export default function NavTabs({ task }) {
   const [value, setValue] = useState("1");
-  const { celular, correo, date, modo, nombre, time, añoIngreso, grado } = task;
+console.log(task)
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -24,34 +24,25 @@ export default function NavTabs({ task }) {
         </Box>
         <TabPanel value="1">
           <div>
-            <p> Dia : {date}</p>
-            <p> Modalidad : {modo}</p>
-            <p> Hora : {time}</p>
-            <p>Grado : {grado}</p>
-            <p>Ingreso : {añoIngreso}</p>
+            <p> Dia : {task.date}</p>
+            <p> Modalidad : {task.modo}</p>
+            <p> Hora : {task.time}</p>
+            <p>Grado : {task.grado}</p>
+            <p>Ingreso : {task.añoIngreso}</p>
           </div>
         </TabPanel>
-        <TabPanel value="2" >
-            <div style={{minHeight:'120px'}}>
+        <TabPanel value="2">
+          <div style={{ minHeight: "120px" }}>
             <p>Documentos : 2 de 5</p>
-            
-            </div>
+          </div>
         </TabPanel>
         <TabPanel value="3">
-          <div style={{minHeight:'120px'}}>
-            <p>Correo : {correo}</p>
-            <p> Celular : {celular}</p>
+          <div style={{ minHeight: "120px" }}>
+            <p>Correo : {task.correo}</p>
+            <p> Celular : {task.celular}</p>
           </div>
         </TabPanel>
       </TabContext>
     </Box>
   );
 }
-//   celular,
-//   correo,
-//   date,
-//   modo,
-//   nombre,
-//   time,
-//   añoIngreso,
-//   grado,

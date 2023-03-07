@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import NavTabs from "./Tabs/TabsCita";
 import { useSelect } from "@mui/base";
 import { useSelector } from "react-redux";
+import ModalCita from "./Tabs/ModalCita/ModalCita";
 
 const style = {
   position: "absolute",
@@ -25,8 +26,6 @@ const style = {
 };
 
 const Column = ({ column, tasks }) => {
-
-  
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -93,48 +92,8 @@ const Column = ({ column, tasks }) => {
                       </div>
                       {open && (
                         <div>
-                          {/* <Button onClick={handleOpen}>Open modal</Button> */}
-                          <Modal
-                            keepMounted
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="keep-mounted-modal-title"
-                            aria-describedby="keep-mounted-modal-description"
-                          
-                          >
-                            <Box sx={style}>
-                              <Typography
-                                id="keep-mounted-modal-title"
-                                variant="h6"
-                                component="h2"
-                              >
-                                Cita Agendada
-                              </Typography>
-                              <Typography
-                                id="keep-mounted-modal-description"
-                                sx={{ mt: 2 }}
-                              >
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: "20px",
-                                    width: "100%",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <img
-                                    style={{ width: "70px", height: "70px" }}
-                                    src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
-                                    alt=""
-                                  />
-                                  <h1>{task.nombre}</h1>
-                                  <div />
-                                  <NavTabs task={task} />
-                                </div>
-                              </Typography>
-                            </Box>
-                          </Modal>
+                      
+                          <ModalCita handleClose={handleClose} open={open} task={task} />
                         </div>
                       )}
                     </div>

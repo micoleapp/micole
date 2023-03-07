@@ -8,7 +8,8 @@ import { getCita } from "../redux/SchoolsActions";
 const reorderColumnList = (sourceCol, startIndex, endIndex) => {
   const newTaskIds = Array.from(sourceCol.taskIds);
   const [removed] = newTaskIds.splice(startIndex, 1);
-  const { citas } = useSelector((state) => state.schools);
+  const { tasks,columns, columnOrder} = useSelector((state) => state.citas);
+
   newTaskIds.splice(endIndex, 0, removed);
 
   const newColumn = {
@@ -124,7 +125,7 @@ const initialData = {
 
 function DragAndDrop() {
   const [state, setState] = React.useState(initialData);
- 
+  const { tasks,columns, columnOrder} = useSelector((state) => state.citas);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -133,7 +134,7 @@ function DragAndDrop() {
 
   const onDragEnd = (result) => {
     const { destination, source } = result;
-
+    const { tasks,columns, columnOrder} = useSelector((state) => state.citas);
     // If user tries to drop in an unknown destination
     if (!destination) return;
 
@@ -146,8 +147,8 @@ function DragAndDrop() {
     }
 
     // If the user drops within the same column but in a different positoin
-    const sourceCol = state.columns[source.droppableId];
-    const destinationCol = state.columns[destination.droppableId];
+    const sourceCol =columns[source.droppableId];
+    const destinationCol =columns[destination.droppableId];
 
     if (sourceCol.id === destinationCol.id) {
       const newColumn = reorderColumnList(
@@ -166,7 +167,7 @@ function DragAndDrop() {
       setState(newState);
       return;
     }
-
+console.log(sourceCol)
     // If the user moves from one column to another
     const startTaskIds = Array.from(sourceCol.taskIds);
     const [removed] = startTaskIds.splice(source.index, 1);
@@ -196,10 +197,10 @@ function DragAndDrop() {
     alert(
       `Moviste la tarea ${removed} desde ${sourceCol.title} hacia ${
         destinationCol.title
-      }! \nTu tarea es ${JSON.stringify(state.tasks[removed])}`
+      }! \nTu tarea es ${JSON.stringify(tasks[removed])}`
     );
   };
-
+console.log(tasks)
   return (
     <DragDropContext Scrollable onDragEnd={onDragEnd}>
       <div className="flex flex-col text-base py-2 w-full min-h-screen gap-5 duration-300  mb-6 bg-[#f6f7f8] text-[#0061dd]">
@@ -211,11 +212,12 @@ function DragAndDrop() {
           </div>
         </div>
         <div className="flex flex-col text-base lg:flex-row justify-between gap-5 px-4">
-          {state.columnOrder.map((columnId) => {
-            const column = state.columns[columnId];
-            const tasks = column.taskIds.map((taskId) => state.tasks[taskId]);
-
-            return <Column key={column.id} column={column} tasks={tasks} />;
+          {columnOrder?.map((columnId) => {
+            const column = columns[columnId];
+            console.log(columns[columnId])
+            const tasksArr =  columns[columnId].taskIds.map((taskIds) => tasks[taskIds]);
+            console.log(tasksArr)
+            return <Column key={column.id} column={column} tasks={tasksArr} />;
           })}
         </div>
       </div>
