@@ -5,7 +5,7 @@ export const citasSlice = createSlice({
   initialState: {
     tasks: null,
     columns: {
-     "column-1": {
+      "column-1": {
         id: "column-1",
         title: "Solicitud de cita",
         taskIds: [],
@@ -50,9 +50,9 @@ export const citasSlice = createSlice({
   },
   reducers: {
     getCitas: (state, action) => {
-      console.log(action.payload);
-
-      const data = action.payload.map((ele, index) => {
+      const citasActivas = action.payload.CitasActivas;
+      console.log(citasActivas);
+      const data = citasActivas.map((ele, index) => {
         return {
           [index]: {
             id: index,
@@ -63,13 +63,13 @@ export const citasSlice = createSlice({
             nombre: ele.nombre,
             time: ele.hora_cita,
             estado: ele.estado,
-            añoIngreso: "2023",
-            grado: "1ro - Primaria",
+            añoIngreso: ele. añoIngreso,
+            grado: ele.grado,
           },
         };
       });
 
-     /*  state.tasks = Object.assign({}, ...data)
+   state.tasks = Object.assign({}, ...data)
       state.columns["column-1"].taskIds = data
         .filter((ele, index) => ele[index]?.estado === "Solicitud")
         .map((ele) => Object.values(ele)[0].id);
@@ -87,34 +87,45 @@ export const citasSlice = createSlice({
         .map((ele) => Object.values(ele)[0].id);
       state.columns["column-6"].taskIds = data
         .filter((ele, index) => ele[index]?.estado === "VAceptada")
-        .map((ele) => Object.values(ele)[0].id); */
+        .map((ele) => Object.values(ele)[0].id); 
 
-      state.tasks = Object.assign({}, ...data),
-      state.columns["column-1"].taskIds = action.payload.filter((ele)=> ele.estado === 'Solicitud' ).map((e,i)=>i),
-      state.columns["column-2"].taskIds = action.payload.filter((ele)=> ele.estado === 'Realizada' ).map((e,i)=>i),
-      state.columns["column-3"].taskIds = action.payload.filter((ele)=> ele.estado === 'Aplicacion' ).map((e,i)=>i),
-      state.columns["column-4"].taskIds = action.payload.filter((ele)=> ele.estado === 'Entrevista' ).map((e,i)=>i),
-      state.columns["column-5"].taskIds = action.payload.filter((ele)=> ele.estado === 'VOfrecida' ).map((e,i)=>i),
-      state.columns["column-6"].taskIds = action.payload.filter((ele)=> ele.estado === 'VAceptada' ).map((e,i)=>i)
-
+      // (state.tasks = Object.assign({}, ...data)),
+      // (state.columns["column-1"].taskIds = action.payload
+      //     .filter((ele) => ele.estado === "Solicitud")
+      //     .map((e, i) => i)),
+      // (state.columns["column-2"].taskIds = action.payload
+      //     .filter((ele) => ele.estado === "Realizada")
+      //     .map((e, i) => i)),
+      // (state.columns["column-3"].taskIds = action.payload
+      //     .filter((ele) => ele.estado === "Aplicacion")
+      //     .map((e, i) => i)),
+      // (state.columns["column-4"].taskIds = action.payload
+      //     .filter((ele) => ele.estado === "Entrevista")
+      //     .map((e, i) => i)),
+      // (state.columns["column-5"].taskIds = action.payload
+      //     .filter((ele) => ele.estado === "VOfrecida")
+      //     .map((e, i) => i)),
+      //   (state.columns["column-6"].taskIds = action.payload
+      //     .filter((ele) => ele.estado === "VAceptada")
+      //     .map((e, i) => i));
     },
-    updateTasks: (state,action) =>{
-      state.tasks = action.payload
+    updateTasks: (state, action) => {
+      state.tasks = action.payload;
     },
-    updateColumns: (state,action) =>{
-      state.columns = action.payload
+    updateColumns: (state, action) => {
+      state.columns = action.payload;
     },
-    getError: (state,action) => {
-      state.error = action.payload,
-      state.loading = false,
-      state.success = false
+    getError: (state, action) => {
+      (state.error = action.payload),
+        (state.loading = false),
+        (state.success = false);
     },
     isLoading: (state) => {
-      state.loading = true
-    }
+      state.loading = true;
+    },
   },
 });
 
-export const { getCitas,updateTasks ,updateColumns, getError,isLoading} = citasSlice.actions;
+export const { getCitas, updateTasks, updateColumns, getError, isLoading } =
+  citasSlice.actions;
 export default citasSlice.reducer;
-
