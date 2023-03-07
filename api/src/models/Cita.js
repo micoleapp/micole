@@ -102,6 +102,11 @@ module.exports = (sequelize) => {
       añoIngreso: {
         type: DataTypes.STRING,
       },
+      activo: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       estado: {
         type: DataTypes.STRING,
         allowNull: false,
