@@ -64,8 +64,8 @@ export const citasSlice = createSlice({
             nombre: ele.nombre,
             time: ele.hora_cita,
             estado: ele.estado,
-            añoIngreso: "",
-            grado: "",
+            añoIngreso: "2023",
+            grado: "1ro - Primaria",
           },
         };
       });
