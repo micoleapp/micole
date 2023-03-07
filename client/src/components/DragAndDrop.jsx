@@ -21,106 +21,106 @@ const reorderColumnList = (sourceCol, startIndex, endIndex) => {
 };
 
 const initialData = {
-  tasks: {
-    1: {
-      id: 1,
-      celular: 3496213123,
-      correo: "gorositopedro@gmail.com",
-      date: "03/03/2023",
-      modo: "Virtual",
-      nombre: "Aylen",
-      time: "20:14",
-      añoIngreso: "2023",
-      grado: "4ro Primaria",
-    },
-    2: {
-      id: 2,
-      celular: 3496213123,
-      correo: "gorositopedro@gmail.com",
-      date: "04/03/2023",
-      modo: "Virtual",
-      nombre: "Nano",
-      time: "20:14",
-      añoIngreso: "2023",
-      grado: "1ro Primaria",
-    },
-    3: {
-      id: 3,
-      celular: 3496213123,
-      correo: "gorositopedro@gmail.com",
-      date: "12/03/2023",
-      modo: "Virtual",
-      nombre: "Enzo",
-      time: "20:14",
-      añoIngreso: "2023",
-      grado: "2ro Primaria",
-    },
-    4: {
-      id: 4,
-      celular: 3496213123,
-      correo: "gorositopedro@gmail.com",
-      date: "20/03/2023",
-      modo: "Virtual",
-      nombre: "Maximo Gutierrez",
-      time: "20:14",
-      añoIngreso: "2023",
-      grado: "3ro Primaria",
-    },
-    5: {
-      id: 5,
-      celular: 3496213123,
-      correo: "gorositopedro@gmail.com",
-      date: "02/03/2023",
-      modo: "Virtual",
-      nombre: "Roberto",
-      time: "20:14",
-      añoIngreso: "2023",
-      grado: "4ro Primaria",
-    },
-  },
-  columns: {
-    "column-1": {
-      id: "column-1",
-      title: "Solicitud de cita",
-      taskIds: [1, 2, 3, 4],
-    },
-    "column-2": {
-      id: "column-2",
-      title: "Cita realizada",
-      taskIds: [],
-    },
-    "column-3": {
-      id: "column-3",
-      title: "Aplicacion",
-      taskIds: [],
-    },
-    "column-4": {
-      id: "column-4",
-      title: "Entrevista con el director",
-      taskIds: [],
-    },
-    "column-5": {
-      id: "column-5",
-      title: "Vacante ofrecida",
-      taskIds: [],
-    },
-    "column-6": {
-      id: "column-6",
-      title: "Vacante aceptada",
-      taskIds: [],
-    },
-  },
-  // Facilitate reordering of the columns
-  columnOrder: [
-    "column-1",
-    "column-2",
-    "column-3",
-    "column-4",
-    ,
-    "column-5",
-    ,
-    "column-6",
-  ],
+  // tasks: {
+  //   1: {
+  //     id: 1,
+  //     celular: 3496213123,
+  //     correo: "gorositopedro@gmail.com",
+  //     date: "03/03/2023",
+  //     modo: "Virtual",
+  //     nombre: "Aylen",
+  //     time: "20:14",
+  //     añoIngreso: "2023",
+  //     grado: "4ro Primaria",
+  //   },
+  //   2: {
+  //     id: 2,
+  //     celular: 3496213123,
+  //     correo: "gorositopedro@gmail.com",
+  //     date: "04/03/2023",
+  //     modo: "Virtual",
+  //     nombre: "Nano",
+  //     time: "20:14",
+  //     añoIngreso: "2023",
+  //     grado: "1ro Primaria",
+  //   },
+  //   3: {
+  //     id: 3,
+  //     celular: 3496213123,
+  //     correo: "gorositopedro@gmail.com",
+  //     date: "12/03/2023",
+  //     modo: "Virtual",
+  //     nombre: "Enzo",
+  //     time: "20:14",
+  //     añoIngreso: "2023",
+  //     grado: "2ro Primaria",
+  //   },
+  //   4: {
+  //     id: 4,
+  //     celular: 3496213123,
+  //     correo: "gorositopedro@gmail.com",
+  //     date: "20/03/2023",
+  //     modo: "Virtual",
+  //     nombre: "Maximo Gutierrez",
+  //     time: "20:14",
+  //     añoIngreso: "2023",
+  //     grado: "3ro Primaria",
+  //   },
+  //   5: {
+  //     id: 5,
+  //     celular: 3496213123,
+  //     correo: "gorositopedro@gmail.com",
+  //     date: "02/03/2023",
+  //     modo: "Virtual",
+  //     nombre: "Roberto",
+  //     time: "20:14",
+  //     añoIngreso: "2023",
+  //     grado: "4ro Primaria",
+  //   },
+  // },
+  // columns: {
+  //   "column-1": {
+  //     id: "column-1",
+  //     title: "Solicitud de cita",
+  //     taskIds: [1, 2, 3, 4],
+  //   },
+  //   "column-2": {
+  //     id: "column-2",
+  //     title: "Cita realizada",
+  //     taskIds: [],
+  //   },
+  //   "column-3": {
+  //     id: "column-3",
+  //     title: "Aplicacion",
+  //     taskIds: [],
+  //   },
+  //   "column-4": {
+  //     id: "column-4",
+  //     title: "Entrevista con el director",
+  //     taskIds: [],
+  //   },
+  //   "column-5": {
+  //     id: "column-5",
+  //     title: "Vacante ofrecida",
+  //     taskIds: [],
+  //   },
+  //   "column-6": {
+  //     id: "column-6",
+  //     title: "Vacante aceptada",
+  //     taskIds: [],
+  //   },
+  // },
+  // // Facilitate reordering of the columns
+  // columnOrder: [
+  //   "column-1",
+  //   "column-2",
+  //   "column-3",
+  //   "column-4",
+  //   ,
+  //   "column-5",
+  //   ,
+  //   "column-6",
+  // ],
 };
 
 function DragAndDrop() {
@@ -217,7 +217,7 @@ console.log(tasks)
             console.log(columns[columnId])
             const tasksArr =  columns[columnId].taskIds.map((taskIds) => tasks[taskIds]);
             console.log(tasksArr)
-            return <Column key={column.id} column={column} tasks={tasksArr} />;
+            return <Column key={column.id} column={column} tasksArr={tasksArr} />;
           })}
         </div>
       </div>

@@ -25,15 +25,17 @@ const style = {
   p: 4,
 };
 
-const Column = ({ column, tasks }) => {
+const Column = ({ column, tasksArr }) => {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  console.log(tasks);
-  const handleClick = () => {
-    setOpenDetail(true);
-  };
+  const [value, setValue] = React.useState("");
+  const handleOpen = (event) => {
+    setOpen(true);
+    console.log(event.target.value);
 
+  };
+  const handleClose = () => setOpen(false);
+  console.log(tasksArr);
+console.log(value)
   return (
     <>
       <div className="rounded-md bg-white shadow-md border h-min w-full flex flex-col">
@@ -48,7 +50,7 @@ const Column = ({ column, tasks }) => {
               ref={droppableProvided.innerRef}
               {...droppableProvided.droppableProps}
             >
-              {tasks.map((task, index) => (
+              {tasksArr.map((task, index) => (
                 <Draggable
                   key={task.id}
                   draggableId={`${task.id}`}
@@ -76,7 +78,11 @@ const Column = ({ column, tasks }) => {
                         <h2>{task.nombre}</h2>
                         <div>
                           <Chip
-                            onClick={handleOpen}
+                         onClick={() => {
+                          setOpen(true);
+                          setValue(task);
+                        }}
+                            value={`${task.id}`}
                             label="+"
                             size="small"
                             style={{
@@ -90,16 +96,19 @@ const Column = ({ column, tasks }) => {
                         <Chip label={task.grado} />
                         <Chip label={task.añoIngreso} />
                       </div>
-                      {open && (
-                        <div>
-                      
-                          <ModalCita handleClose={handleClose} open={open} task={task} />
-                        </div>
-                      )}
                     </div>
                   )}
                 </Draggable>
               ))}
+              {open && (
+                <div>
+                  <ModalCita
+                    handleClose={handleClose}
+                    open={open}
+                    task={value}
+                  />
+                </div>
+              )}
               {droppableProvided.placeholder}
             </div>
           )}
