@@ -43,7 +43,17 @@ const getCitaById = async (req, res, next) => {
 };
 
 const createCita = async (req, res, next) => {
-  const { celular, correo, date, time, modo, nombre, añoIngreso, grado, ColegioId } = req.body;
+  const {
+    celular,
+    correo,
+    date,
+    time,
+    modo,
+    nombre,
+    añoIngreso,
+    grado,
+    ColegioId,
+  } = req.body;
   try {
     const ifExists = await Cita.findOne({
       where: { email: correo, fecha_cita: date, ColegioId },
@@ -54,7 +64,7 @@ const createCita = async (req, res, next) => {
         message: "El email ya cuenta con una cita con este Colegio.",
       });
     }
-    const gradoId = await Grado.findOne({where:{nombre_grado: grado}});
+    const gradoId = await Grado.findOne({ where: { nombre_grado: grado } });
     const newCita = await Cita.create({
       fecha_cita: date,
       hora_cita: time,
@@ -77,6 +87,7 @@ const createCita = async (req, res, next) => {
 const changeStatusCita = async (req, res, next) => {
   const { idCita } = req.params;
   const { estado } = req.body;
+
   try {
     const cita = await Cita.findByPk(idCita);
     if (!cita) {
@@ -97,9 +108,33 @@ const changeStatusCita = async (req, res, next) => {
   }
 };
 
+const changeActivoCita = async (req, res, next) => {
+  const { idCita } = req.params;
+  const { activo } = req.body;
+  try {
+    const cita = await Cita.findByPk(idCita);
+    if (!cita) {
+      return next({
+        statusCode: 400,
+        message: 'El registro no existe.',
+      });
+    }
+    await Cita.update(
+      {
+        activo,
+      },
+      { where: { id: idCita } }
+    );
+    res.status(200).send('Se activo la Cita.');
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getCitas,
   getCitaById,
   createCita,
   changeStatusCita,
+  changeActivoCita,
 };
