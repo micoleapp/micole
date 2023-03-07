@@ -17,7 +17,7 @@ import {
   getAfiliaciones,
   getGrados,
   getFilterSchool,
-  getCitas,
+  getCitasAgendado,
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -166,12 +166,12 @@ export const postCita = (cita) => (dispatch) => {
 };
 
 
-export const getCita = () => (dispatch) => {
+export const getCitaAgendadas = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
   axios
     .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
-    .then((res) => dispatch(getCitas(res.data)))
+    .then((res) => dispatch(getCitasAgendado(res.data)))
     .catch((err) => {
       Swal.fire({
         icon: "error",
