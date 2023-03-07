@@ -240,6 +240,13 @@ Cita.belongsTo(Colegio, {
   foreignKey: 'ColegioId',
 });
 
+Grado.hasMany(Cita, {
+  foreignKey: 'GradoId',
+});
+Cita.belongsTo(Grado, {
+  foreignKey: 'GradoId',
+});
+
 Infraestructura_tipo.hasMany(Infraestructura);
 Infraestructura.belongsTo(Infraestructura_tipo);
 

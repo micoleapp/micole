@@ -13,7 +13,7 @@ const getCitas = async (req, res, next) => {
     const include = { include: { model: Colegio } };
     const CitasActivas = await Cita.findAll({ where: { ColegioId: user.id, activo: true }, ...include });
     const CitasInactivas = await Cita.findAll({ where: { ColegioId: user.id, activo: false }, ...include });
-    res.status(200).send({CitasActivas, CitasInactivas });
+    res.status(200).send({ CitasActivas, CitasInactivas });
   } catch (error) {
     return next(error);
   }
@@ -62,6 +62,7 @@ const createCita = async (req, res, next) => {
       });
     }
     const gradoId = await Grado.findOne({ where: { nombre_grado: grado } });
+    console.log(gradoId);
     const newCita = await Cita.create({
       fecha_cita: date,
       hora_cita: time,
@@ -70,7 +71,7 @@ const createCita = async (req, res, next) => {
       email: correo,
       telefono: celular,
       añoIngreso,
-      grado: gradoId.id,
+      GradoId: gradoId.id,
       ColegioId,
     });
     res.status(200).json(newCita);
