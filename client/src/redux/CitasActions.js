@@ -26,7 +26,7 @@ export const updateColumn = (newColumn) => (dispatch) => {
 export const putCita = ({ idCita }) =>(dispatch) => {
     dispatch(isLoading());
     axios
-      .put(`/citas/${idCita}`, { estado:true})
+      .put(`/activo/${idCita}`, { activo:true})
       // .then((res) => dispatch(getCitas(res.data)))
       .catch((err) => {
         dispatch(getError(err.response.data.error));

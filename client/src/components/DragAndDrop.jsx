@@ -38,7 +38,7 @@ const reorderColumnList = (sourceCol, startIndex, endIndex) => {
 function DragAndDrop() {
   const { tasks, columns, columnOrder } = useSelector((state) => state.citas);
   const [state, setState] = React.useState({ tasks, columns, columnOrder });
-
+  const dispatch = useDispatch();
   const onDragEnd = (result) => {
     const { destination, source } = result;
 
@@ -108,8 +108,11 @@ function DragAndDrop() {
         destinationCol.title
       }! \nTu tarea es ${JSON.stringify(tasks[removed])}`
     );
+    console.log(sourceCol.id);
+    console.log(destinationCol.id);
   };
   console.log(tasks);
+
   return (
     <DragDropContext Scrollable onDragEnd={onDragEnd}>
       <div className="flex flex-col text-base py-2 w-full min-h-screen gap-5 duration-300  mb-6 bg-[#f6f7f8] text-[#0061dd]">
