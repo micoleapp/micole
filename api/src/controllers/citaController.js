@@ -1,4 +1,4 @@
-const { Cita, Colegio } = require('../db');
+const { Cita, Colegio, Grado } = require('../db');
 
 const getCitas = async (req, res, next) => {
   const tokenUser = req.user;
@@ -43,7 +43,7 @@ const getCitaById = async (req, res, next) => {
 };
 
 const createCita = async (req, res, next) => {
-  const { celular, correo, date, time, modo, nombre, ColegioId } = req.body;
+  const { celular, correo, date, time, modo, nombre, añoIngreso, grado, ColegioId } = req.body;
   try {
     const ifExists = await Cita.findOne({
       where: { email: correo, fecha_cita: date, ColegioId },
@@ -54,6 +54,7 @@ const createCita = async (req, res, next) => {
         message: 'El email ya cuenta con una cita con este Colegio.',
       });
     }
+    const gradoId = await Grado.findOne({where:{nombre_grado: grado}});
     const newCita = await Cita.create({
       fecha_cita: date,
       hora_cita: time,
@@ -61,6 +62,8 @@ const createCita = async (req, res, next) => {
       nombre: nombre,
       email: correo,
       telefono: celular,
+      añoIngreso,
+      grado: gradoId.id,
       ColegioId,
     });
     res.status(200).json(newCita);
