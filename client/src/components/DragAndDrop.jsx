@@ -134,7 +134,7 @@ function DragAndDrop() {
 
   const onDragEnd = (result) => {
     const { destination, source } = result;
-    const { tasks,columns, columnOrder} = useSelector((state) => state.citas);
+    // const { tasks,columns, columnOrder} = useSelector((state) => state.citas);
     // If user tries to drop in an unknown destination
     if (!destination) return;
 
@@ -160,7 +160,7 @@ function DragAndDrop() {
       const newState = {
         ...state,
         columns: {
-          ...state.columns,
+          ...columns,
           [newColumn.id]: newColumn,
         },
       };

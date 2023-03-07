@@ -718,18 +718,37 @@ function DashboardSchool() {
           </button>
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
-              page == 1 ? "bg-[#0061dd] text-white" : null
+              page == 5 ? "bg-[#0061dd] text-white" : null
+            } `}
+            onClick={() => setPage(5)}
+          >
+            <CiClock1
+              className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                page == 5 ? "text-white" : null
+              }`}
+            />
+            <span
+              className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                page == 5? "text-white" : null
+              }`}
+            >
+             Citas Agendadas{" "}
+            </span>
+          </button>
+          <button
+            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+              page == 4 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => setPage(4)}
           >
             <AiOutlineIdcard
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
-                page == 1 ? "text-white" : null
+                page == 4 ? "text-white" : null
               }`}
             />
             <span
               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
-                page == 1 ? "text-white" : null
+                page == 4 ? "text-white" : null
               }`}
             >
               Control de citas{" "}
@@ -2248,7 +2267,7 @@ function DashboardSchool() {
             </div>
           </Box>
         ) : page === 1 ? (
-          <div>
+          <div className="min-h-screen">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <div className="grid lg:grid-cols-3 w-full grid-cols-2">
                 {daysWithTime.map((day, index) => (
@@ -2516,7 +2535,7 @@ function DashboardSchool() {
 
             <DragAndDrop />
           </div>
-        ) : null}
+        ) : page === 5 ?  <div className="min-h-screen">Citas Agendadas</div> :null}
       </section>
     </div>
   );
