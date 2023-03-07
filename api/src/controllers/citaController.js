@@ -10,9 +10,15 @@ const getCitas = async (req, res, next) => {
         message: 'El usuario no es un Colegio',
       });
     }
-    const include = { include: { model: Colegio } };
-    const CitasActivas = await Cita.findAll({ where: { ColegioId: user.id, activo: true }, ...include });
-    const CitasInactivas = await Cita.findAll({ where: { ColegioId: user.id, activo: false }, ...include });
+    const include = { include: [{ model: Colegio }, { model: Grado }] };
+    const CitasActivas = await Cita.findAll({
+      where: { ColegioId: user.id, activo: true },
+      ...include,
+    });
+    const CitasInactivas = await Cita.findAll({
+      where: { ColegioId: user.id, activo: false },
+      ...include,
+    });
     res.status(200).send({ CitasActivas, CitasInactivas });
   } catch (error) {
     return next(error);
@@ -23,9 +29,14 @@ const getCitaById = async (req, res, next) => {
   const { idCita } = req.params;
   try {
     const cita = await Cita.findByPk(idCita, {
-      include: {
-        model: Colegio,
-      },
+      include: [
+        {
+          model: Colegio,
+        },
+        {
+          model: Grado,
+        },
+      ],
     });
     if (!cita) {
       return next({
