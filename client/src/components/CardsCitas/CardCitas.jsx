@@ -11,15 +11,15 @@ import { Button } from "@mui/material";
 import { putCita } from "../../redux/CitasActions";
 export default function CardCitas() {
   const { citasAgendadas } = useSelector((state) => state.schools);
-  const [idCita, setidCita] = useState("");
+  const [idCita, setIdCita] = useState("");
   const [Estado, setEstado] = useState("");
   console.log(citasAgendadas);
-  
-  const dispatch =useDispatch()
+
+  const dispatch = useDispatch();
   const handlerPutStateCita = () => {
     console.log(idCita);
-  const estado = "Pendiente"
-    dispatch(putCita(idCita,estado))
+
+    dispatch(putCita(idCita));
   };
   return (
     <>
@@ -136,8 +136,9 @@ export default function CardCitas() {
                   <div>
                     <Button
                       onClick={(event) => {
-                        handlerPutStateCita();
-                        setidCita(cita.id);
+                        setIdCita(cita.id);
+                         handlerPutStateCita(event)
+
                         // setEstado(cita.estado);
                       }}
                       variant="contained"

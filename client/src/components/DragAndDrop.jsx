@@ -102,7 +102,7 @@ function DragAndDrop() {
     };
     dispatch(updateColumn(newState.columns));
     setState(newState);
-
+console.log(newState.columns)
     alert(
       `Moviste la tarea ${removed} desde ${sourceCol.title} hacia ${
         destinationCol.title

@@ -23,11 +23,12 @@ export const updateTask = (newTask) => (dispatch) => {
 export const updateColumn = (newColumn) => (dispatch) => {
   dispatch(updateColumns(newColumn));
 }
-export const putCita = ({ idCita }) =>(dispatch) => {
-    dispatch(isLoading());
+export const putCita = ( idCita ) =>(dispatch) => {
+  console.log(idCita)
+  dispatch(isLoading());
     axios
-      .put(`/activo/${idCita}`, { activo:true})
-      // .then((res) => dispatch(getCitas(res.data)))
+      .put(`/citas/activo/${idCita}`, {activo: true})
+      .then((res) => console.log(res.data))
       .catch((err) => {
         dispatch(getError(err.response.data.error));
         Swal.fire({
