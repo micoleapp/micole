@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCitas } from "./CitasSlice";
+import { getCitas,updateTasks,updateColumns } from "./CitasSlice";
 
 export const getCita = () => (dispatch) => {
 
@@ -11,3 +11,10 @@ export const getCita = () => (dispatch) => {
    console.log(err)
     });
 };
+
+export const updateTask = (newTask) => (dispatch) => {
+  dispatch(updateTasks(newTask));
+}
+export const updateColumn = (newColumn) => (dispatch) => {
+  dispatch(updateColumns(newColumn));
+}

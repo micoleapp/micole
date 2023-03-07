@@ -4,7 +4,6 @@ export const citasSlice = createSlice({
   name: "citas",
   initialState: {
     tasks: null,
-
     columns: {
      "column-1": {
         id: "column-1",
@@ -99,9 +98,15 @@ export const citasSlice = createSlice({
       state.columns["column-6"].taskIds = action.payload.filter((ele)=> ele.estado === 'VAceptada' ).map((e,i)=>i)
 
     },
+    updateTasks: (state,action) =>{
+      state.tasks = action.payload
+    },
+    updateColumns: (state,action) =>{
+      state.columns = action.payload
+    }
   },
 });
 
-export const { getCitas } = citasSlice.actions;
+export const { getCitas,updateTasks ,updateColumns} = citasSlice.actions;
 export default citasSlice.reducer;
 

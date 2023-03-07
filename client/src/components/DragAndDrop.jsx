@@ -4,11 +4,26 @@ import Column from "./Column";
 import SelectCRM from "./CardsDrgAndDrp/SelectsCRM/SelectsCRM";
 import { useDispatch, useSelector } from "react-redux";
 import { getCita } from "../redux/SchoolsActions";
+import {updateTask,updateColumn} from "../redux/CitasActions"
+// const reorderColumnList = (sourceCol, startIndex, endIndex) => {
+//   const newTaskIds = Array.from(sourceCol.taskIds);
+ 
+//   const [removed] = newTaskIds.splice(startIndex, 1);
+
+//   newTaskIds.splice(endIndex, 0, removed);
+//   console.log(newTaskIds)
+//   const newColumn = {
+//     ...sourceCol,
+//     taskIds: newTaskIds,
+//   };
+
+//   return newColumn;
+// };
 
 const reorderColumnList = (sourceCol, startIndex, endIndex) => {
-  const newTaskIds = Array.from(sourceCol.taskIds);
+  const newTaskIds = [...sourceCol.taskIds];
+
   const [removed] = newTaskIds.splice(startIndex, 1);
-  const { tasks,columns, columnOrder} = useSelector((state) => state.citas);
 
   newTaskIds.splice(endIndex, 0, removed);
 
@@ -124,8 +139,8 @@ const initialData = {
 };
 
 function DragAndDrop() {
-  const [state, setState] = React.useState(initialData);
   const { tasks,columns, columnOrder} = useSelector((state) => state.citas);
+  const [state, setState] = React.useState({tasks,columns,columnOrder});
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -147,8 +162,9 @@ function DragAndDrop() {
     }
 
     // If the user drops within the same column but in a different positoin
-    const sourceCol =columns[source.droppableId];
-    const destinationCol =columns[destination.droppableId];
+    const sourceCol = columns[source.droppableId];
+
+    const destinationCol = columns[destination.droppableId];
 
     if (sourceCol.id === destinationCol.id) {
       const newColumn = reorderColumnList(
@@ -156,7 +172,6 @@ function DragAndDrop() {
         source.index,
         destination.index
       );
-
       const newState = {
         ...state,
         columns: {
@@ -164,10 +179,12 @@ function DragAndDrop() {
           [newColumn.id]: newColumn,
         },
       };
+      dispatch(updateColumn(newState.columns))
+      
       setState(newState);
       return;
     }
-console.log(sourceCol)
+
     // If the user moves from one column to another
     const startTaskIds = Array.from(sourceCol.taskIds);
     const [removed] = startTaskIds.splice(source.index, 1);
@@ -191,7 +208,7 @@ console.log(sourceCol)
         [newEndCol.id]: newEndCol,
       },
     };
-
+    dispatch(updateColumn(newState.columns))
     setState(newState);
 
     alert(
