@@ -156,15 +156,24 @@ export const postHorariosVacantes = (horarios) => (dispatch) => {
 };
 
 export const postCita = (cita) => (dispatch) => {
-  const { celular, correo, date, time, modo, nombre } = cita;
+  const { celular, correo, date, time, modo, nombre, añoIngreso, grado } = cita;
   const ColegioId = localStorage.getItem("id");
   dispatch(isLoading());
   axios
-    .post("/citas", { celular, correo, date, time, modo, nombre, ColegioId })
+    .post("/citas", {
+      celular,
+      correo,
+      date,
+      time,
+      modo,
+      nombre,
+      ColegioId,
+      añoIngreso,
+      grado,
+    })
     // .then((res) => dispatch(getVacantesGrados(res.data)))
     .catch((err) => console.log(err));
 };
-
 
 export const getCitaAgendadas = () => (dispatch) => {
   dispatch(isLoading());

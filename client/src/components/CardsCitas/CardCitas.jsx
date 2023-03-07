@@ -27,7 +27,7 @@ export default function CardCitas() {
 
   useEffect(() => {
     dispatch(getCitaAgendadas);
-  }, [citasAgendadas]);
+  }, [idCita]);
 
   return (
     <>
