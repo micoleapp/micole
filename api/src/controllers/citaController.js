@@ -10,13 +10,10 @@ const getCitas = async (req, res, next) => {
         message: "El usuario no es un Colegio",
       });
     }
-    const CitasByUser = await Cita.findAll({
-      where: { ColegioId: user.id },
-      include: {
-        model: Colegio,
-      },
-    });
-    res.status(200).send(CitasByUser);
+    const include = { include: { model: Colegio } };
+    const CitasActivas = await Cita.findAll({ where: { ColegioId: user.id, activo: true }, ...include });
+    const CitasInactivas = await Cita.findAll({ where: { ColegioId: user.id, activo: false }, ...include });
+    res.status(200).send({CitasActivas, CitasInactivas });
   } catch (error) {
     return next(error);
   }
