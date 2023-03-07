@@ -23,10 +23,10 @@ export const updateTask = (newTask) => (dispatch) => {
 export const updateColumn = (newColumn) => (dispatch) => {
   dispatch(updateColumns(newColumn));
 }
-export const putCita = ({ idCita, estado }) =>(dispatch) => {
+export const putCita = ({ idCita }) =>(dispatch) => {
     dispatch(isLoading());
     axios
-      .put(`/citas/${idCita}`, { estado:'Pendiente'})
+      .put(`/citas/${idCita}`, { estado:true})
       // .then((res) => dispatch(getCitas(res.data)))
       .catch((err) => {
         dispatch(getError(err.response.data.error));

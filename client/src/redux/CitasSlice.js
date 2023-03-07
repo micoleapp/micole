@@ -103,10 +103,18 @@ export const citasSlice = createSlice({
     },
     updateColumns: (state,action) =>{
       state.columns = action.payload
+    },
+    getError: (state,action) => {
+      state.error = action.payload,
+      state.loading = false,
+      state.success = false
+    },
+    isLoading: (state) => {
+      state.loading = true
     }
   },
 });
 
-export const { getCitas,updateTasks ,updateColumns} = citasSlice.actions;
+export const { getCitas,updateTasks ,updateColumns, getError,isLoading} = citasSlice.actions;
 export default citasSlice.reducer;
 
