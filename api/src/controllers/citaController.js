@@ -1,4 +1,4 @@
-const { Cita, Colegio } = require('../db');
+const { Cita, Colegio } = require("../db");
 
 const getCitas = async (req, res, next) => {
   const tokenUser = req.user;
@@ -7,7 +7,7 @@ const getCitas = async (req, res, next) => {
     if (!user) {
       return next({
         statusCode: 400,
-        message: 'El usuario no es un Colegio',
+        message: "El usuario no es un Colegio",
       });
     }
     const CitasByUser = await Cita.findAll({
@@ -33,7 +33,7 @@ const getCitaById = async (req, res, next) => {
     if (!cita) {
       return next({
         statusCode: 400,
-        message: 'El registro no existe.',
+        message: "El registro no existe.",
       });
     }
     res.status(200).send(cita);
@@ -43,7 +43,17 @@ const getCitaById = async (req, res, next) => {
 };
 
 const createCita = async (req, res, next) => {
-  const { celular, correo, date, time, modo, nombre, ColegioId } = req.body;
+  const {
+    celular,
+    correo,
+    date,
+    time,
+    modo,
+    nombre,
+    añoIngreso,
+    grado,
+    ColegioId,
+  } = req.body;
   try {
     const ifExists = await Cita.findOne({
       where: { email: correo, fecha_cita: date, ColegioId },
@@ -51,7 +61,7 @@ const createCita = async (req, res, next) => {
     if (ifExists) {
       return next({
         statusCode: 400,
-        message: 'El email ya cuenta con una cita con este Colegio.',
+        message: "El email ya cuenta con una cita con este Colegio.",
       });
     }
     const newCita = await Cita.create({
@@ -61,8 +71,10 @@ const createCita = async (req, res, next) => {
       nombre: nombre,
       email: correo,
       telefono: celular,
+
       ColegioId,
     });
+   
     res.status(200).json(newCita);
   } catch (error) {
     console.log(error);
@@ -78,7 +90,7 @@ const changeStatusCita = async (req, res, next) => {
     if (!cita) {
       return next({
         statusCode: 400,
-        message: 'El registro no existe.',
+        message: "El registro no existe.",
       });
     }
     await Cita.update(
@@ -87,7 +99,7 @@ const changeStatusCita = async (req, res, next) => {
       },
       { where: { id: idCita } }
     );
-    res.status(200).send('El estado de la cita se ha modificado.');
+    res.status(200).send("El estado de la cita se ha modificado.");
   } catch (error) {
     return next(error);
   }

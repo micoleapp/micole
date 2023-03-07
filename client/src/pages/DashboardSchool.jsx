@@ -28,6 +28,7 @@ import MoveToInboxOutlinedIcon from "@mui/icons-material/MoveToInboxOutlined";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
+import style from "./Dashboard.module.css"
 
 import {
   GoogleMap,
@@ -2567,9 +2568,9 @@ function DashboardSchool() {
             <DragAndDrop />
           </div>
         ) : page === 5 ? (
-          <div className="min-h-screen">
+          <div className=" min-h-screen">
             <h1>Citas</h1>
-            <div style={{ display: "flex", width: "100%", gap: "10px", alignItems:'center' }}>
+            <div className={style.containerBtn} >
               <div>
                 <Button startIcon={<StarBorderIcon />} variant="outlined">
                   Favorito
