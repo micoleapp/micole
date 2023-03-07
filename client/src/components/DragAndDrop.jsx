@@ -214,9 +214,9 @@ console.log(tasks)
         <div className="flex flex-col text-base lg:flex-row justify-between gap-5 px-4">
           {columnOrder?.map((columnId) => {
             const column = columns[columnId];
-            console.log(columns[columnId])
+         
             const tasksArr =  columns[columnId].taskIds.map((taskIds) => tasks[taskIds]);
-            console.log(tasksArr)
+           
             return <Column key={column.id} column={column} tasksArr={tasksArr} />;
           })}
         </div>

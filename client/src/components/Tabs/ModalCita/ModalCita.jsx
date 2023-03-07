@@ -11,7 +11,7 @@ const style = {
     border: "none",
     boxShadow: 24,
     borderRadius: "8px",
-    p: 4,
+    p: 2,
   };
 
 export default function ModalCita({task,handleClose, open}) {
@@ -42,7 +42,7 @@ export default function ModalCita({task,handleClose, open}) {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "20px",
+            gap: "10px",
             width: "100%",
             alignItems: "center",
           }}
