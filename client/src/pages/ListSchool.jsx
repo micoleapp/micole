@@ -64,6 +64,8 @@ function ListSchool() {
   const [ingresoParams, setIngresoParams] = React.useState(
     params.get("ingreso")
   );
+  
+  const [categoriaParam,setCategoriaParam] = React.useState(params.get('categoria'))
 
   const [distritName, setDistritName] = React.useState(
     distritParams !== "false" ? [Number(distritParams)] : []
@@ -74,6 +76,7 @@ function ListSchool() {
   const [ingresoName, setIngresoName] = React.useState(
     ingresoParams !== "false" ? [Number(ingresoParams)] : []
   );
+
   const [categorias, setCategorias] = React.useState([]);
   const [english, setEnglish] = React.useState(200);
 
@@ -140,8 +143,10 @@ function ListSchool() {
   const [disabledPage, setDisabledPage] = useState(false);
 
   useEffect(() => {
+    
     const schools = allschools.slice(pagination.from, pagination.to);
     setPagination({ ...pagination, count: allschools.length, data: schools });
+     
   }, [allschools, pagination.from, pagination.to]);
 
   const handlePageChange = (event, page) => {
@@ -312,11 +317,13 @@ function ListSchool() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={categorias == cat.id}
+                          checked={categorias == cat.id || categoriaParam == cat.id}
                           onChange={(event, target) => {
                             if (target) {
+                              setCategoriaParam(cat.id);
                               setCategorias(cat.id);
                             } else {
+                              setCategoriaParam(null)
                               setCategorias([]);
                             }
                           }}

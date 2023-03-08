@@ -6,13 +6,24 @@ import VectorPeople from "../../assets/VectorPeople.png";
 import VectorTalk from "../../assets/VectorTalk.png";
 import Carrusel from "../../components/Carrusel/Carrusel";
 import FiltrosHome from "../../components/FiltrosHome/FiltrosHome";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useRef } from 'react';
 
 function Home() {
-  const navigate = useNavigate();
-  useEffect(() => {
-    navigate("/");
-  }, []);
+
+  const navigate = useNavigate()
+
+  const location = useLocation();
+
+  const params = new URLSearchParams(location.search);
+
+  const myDivRef = useRef(null);
+
+  useEffect(()=>{
+    if(params.get("categorias") !== null) {
+      myDivRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+    }
+  },[params.get("categorias")])
 
   return (
     <>
@@ -59,7 +70,7 @@ function Home() {
           </div>
         </section>
 
-        <div className={style.container_categorias}>
+        <div ref={myDivRef} className={style.container_categorias}>
           <h1 className={style.title}>
             Explora nuestras categorías de colegios
           </h1>
