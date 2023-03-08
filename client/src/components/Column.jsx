@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import NavTabs from "./Tabs/TabsCita";
 import { useSelect } from "@mui/base";
 import { useSelector } from "react-redux";
+
 import ModalCita from "./Tabs/ModalCita/ModalCita";
 
 const style = {
@@ -26,16 +27,16 @@ const style = {
 };
 
 const Column = ({ column, tasksArr }) => {
+  const { grados } = useSelector((state) => state.schools);
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
   const handleOpen = (event) => {
     setOpen(true);
     console.log(event.target.value);
-
   };
   const handleClose = () => setOpen(false);
   console.log(tasksArr);
-console.log(value)
+  console.log(value);
   return (
     <>
       <div className="rounded-md bg-white shadow-md border h-min w-full flex flex-col">
@@ -79,10 +80,10 @@ console.log(value)
                         <h2>{task.nombre}</h2>
                         <div>
                           <Chip
-                         onClick={() => {
-                          setOpen(true);
-                          setValue(task);
-                        }}
+                            onClick={() => {
+                              setOpen(true);
+                              setValue(task);
+                            }}
                             value={`${task.id}`}
                             label="+"
                             size="small"
@@ -94,7 +95,12 @@ console.log(value)
                         </div>
                       </div>
                       <div style={{ display: "flex" }}>
-                        <Chip label={task.grado} />
+                        {grados &&
+                          grados.map((ele) => {
+                            if (ele.id === task.grado) {
+                              return <Chip label={ele.nombre_grado} />;
+                            }
+                          })}
                         <Chip label={task.añoIngreso} />
                       </div>
                     </div>

@@ -13,10 +13,10 @@ import { getCitaAgendadas } from "../../redux/SchoolsActions";
 export default function CardCitas() {
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [idCita, setIdCita] = useState("");
-  const [grado, setGrado] = useState("");
+
   console.log(citasAgendadas);
- console.log(grados.find((ele)=> ele.id === 1).nombre_grado)
-//  let lpm =  grados.find((type) => type.id === 0 ).nombre_grado
+
+
 
   const dispatch = useDispatch();
   const handlerPutStateCita = () => {
@@ -63,11 +63,18 @@ export default function CardCitas() {
                       <div>
                         <div className={style.divNombreGrado}>
                           <p>{cita.nombre}</p>
-                        {
-                        
-                        // setGrado(  grados.find((ele)=> ele.id === cita.grado ).nombre_grado)
-                        }
-                          {/* cita.grado */} 
+                          {
+                            grados &&
+                              grados.map((ele) => {
+                                console.log(ele.id === cita.GradoId);
+                                if (ele.id === cita.GradoId) {
+                                  return <p>{ele.nombre_grado}</p>;
+                                }
+                              })
+
+                            // setGrado(  grados.find((ele)=> ele.id ===cita.GradoId ))
+                          }
+                          {/* cita.grado */}
                         </div>
 
                         <div className={style.itemDiv}>

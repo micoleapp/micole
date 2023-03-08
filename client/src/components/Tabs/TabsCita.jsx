@@ -12,7 +12,10 @@ import Chip from "@mui/material/node/Chip";
 import { Button } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import { useSelector } from "react-redux";
+
 export default function NavTabs({ task }) {
+  const { grados } = useSelector((state) => state.schools);
   const [value, setValue] = useState("1");
   console.log(task);
   const handleChange = (event, newValue) => {
@@ -51,7 +54,13 @@ export default function NavTabs({ task }) {
               <p> Hora {task.time}</p>
             </div>
             <div style={{ display: "flex", gap: "10px" }}>
-              <Chip label={task.grado} color="primary" />
+            
+              {grados &&
+                          grados.map((ele) => {
+                            if (ele.id === task.grado) {
+                              return <Chip label={ele.nombre_grado} color="primary"  />;
+                            }
+                          })}
               <Chip label={task.añoIngreso} color="primary" />
             </div>
             <div

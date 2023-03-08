@@ -64,7 +64,7 @@ export const citasSlice = createSlice({
             time: ele.hora_cita,
             estado: ele.estado,
             añoIngreso: ele. añoIngreso,
-            grado: ele.grado,
+            grado: ele.GradoId,
           },
         };
       });
