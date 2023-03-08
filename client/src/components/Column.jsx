@@ -94,7 +94,7 @@ const Column = ({ column, tasksArr }) => {
                           />
                         </div>
                       </div>
-                      <div style={{ display: "flex" }}>
+                      <div style={{ display: "flex",flexDirection:'column' }}>
                         {grados &&
                           grados.map((ele) => {
                             if (ele.id === task.grado) {

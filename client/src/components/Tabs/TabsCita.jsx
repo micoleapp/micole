@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 export default function NavTabs({ task }) {
   const { grados } = useSelector((state) => state.schools);
   const [value, setValue] = useState("1");
-  console.log(task);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
