@@ -56,6 +56,7 @@ export const citasSlice = createSlice({
         return {
           [index]: {
             id: index,
+            idCita:ele.id,
             celular: ele.telefono,
             correo: ele.email,
             date: ele.fecha_cita,
