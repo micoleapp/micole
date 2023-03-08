@@ -264,7 +264,7 @@ console.log(grados)
     axios.post("http://localhost:3000/review", comentario);
   };
 
-  const disableWeekends = (date) => {
+  const disableWeekends = (date,dayColegio) => {
     return date.day() === 0 || date.day() === 6;
   };
   const [Horarios, setHorarios] = useState(false);

@@ -167,13 +167,11 @@ function ListSchool() {
     distrits: distritName,
     grado: gradoName,
     tipo: categorias,
-    pension: [],
-    cuota: [],
-    // pension: [value1[0],value1[1]],
-    // cuota:[value2[0],value2[1]],
+    pension: [value1[0],value1[1]],
+    cuota:[value2[0],value2[1]],
     rating,
     ingles: english,
-    ingreso: ingresoName,
+    ingreso: ingresoName
   };
 
   const handleSubmitData = (e) => {
