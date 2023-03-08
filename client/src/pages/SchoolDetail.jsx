@@ -5,6 +5,8 @@ import { clannDetailid, getAllGrados, getSchoolDetail, postCita } from "../redux
 import banner from "../assets/ejemplobanner.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logo from "../assets/premium.png";
+import Swal from "sweetalert2";
+
 import {
   faDoorOpen,
   faHeart,
@@ -251,6 +253,14 @@ console.log(grados)
     ratingPrecio,
   ]);
 
+/*{
+    "nombre": "Jorge Lopez",
+      "email": "jlopez@gmail.com",
+      "comentario": "Excelente Colegio...",
+      "rating": 7.5,
+      "ColegioId": "f2aba1d5-3d86-4c5b-b18c-0b1f30ef98f9"
+}*/
+
   const comentarioSubmit = (e) => {
     e.preventDefault();
     if (
@@ -261,7 +271,26 @@ console.log(grados)
     ) {
       return alert("Llena todos los campos para poder continuar");
     }
-    axios.post("http://localhost:3000/review", comentario);
+    try {
+      axios.post('/reviews',{...comentario,idColegio:id})
+      .then(res=>{
+        Swal.fire(
+          'Gracias por tu comentario!',
+          'Tu comentario ha sido enviado',
+          'success'
+        )
+      })
+      .catch(err=>{
+        Swal.fire(
+          'Error!',
+          'Ha ocurrido un error',
+          'error'
+        )
+      })
+    } catch (error) {
+      console.log(error)
+    }
+
   };
 
   const disableWeekends = (date,dayColegio) => {

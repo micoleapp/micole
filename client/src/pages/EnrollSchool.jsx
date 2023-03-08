@@ -9,6 +9,10 @@ import { Link, useLocation } from "react-router-dom";
 import {  getAllDistrits} from "../redux/SchoolsActions";
 import ModalInscripcion from "../components/ModalInscripcion/ModalInscripcion";
 import { useDispatch } from "react-redux";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { useRef } from 'react';
+
 function EnrollSchool() {
   const location = useLocation();
   const [OpenRegister, setOpenRegister] = useState(false);
@@ -17,6 +21,8 @@ function EnrollSchool() {
     plan: "",
     price: 0,
   });
+  const myDivRef = useRef(null);
+
   const toggleInscripcion = () => {
     setOpenRegister(true);
   };
@@ -28,6 +34,33 @@ function EnrollSchool() {
       setOpenRegister(true)
     }
   },[])
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = {
+      name: e.target.colegio.value,
+      email: e.target.email.value,
+      ruc: e.target.ruc.value,
+      celular: e.target.celular.value,
+    }
+    try {
+      axios.post('/informes', data)
+      .then(res=>{
+        Swal.fire("Exito", "Datos enviados exitosamente", "success");
+      })
+      .catch(err=>{
+        Swal.fire({
+          icon: "error",
+          title: "Algo salio mal",
+          text: err.response.data.error,
+        });
+      })
+    } catch (error) {
+      console.log(error)
+    }
+
+    console.log(data)
+  }
   
   return (
     <div>
@@ -60,7 +93,7 @@ function EnrollSchool() {
           />
         )}
 
-        <button className="px-4 py-1 rounded-md text-[#0061dd] bg-white font-semibold" data-aos="fade-up" data-aos-delay="300"   data-aos-mirror={false}>
+        <button onClick={()=>myDivRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })} className="px-4 py-1 rounded-md text-[#0061dd] bg-white font-semibold" data-aos="fade-up" data-aos-delay="300"   data-aos-mirror={false}>
           ¡Quiero más información por el momento!
         </button>
       </header>
@@ -150,30 +183,34 @@ admisión simple y eficiente"
           ¿Prefieres usar otro medio de pago? Usa una billetera virtual
         </button>
       </section>
-      <section className="bg-[url('./assets/enroll2.png')] flex justify-center items-center text-center">
-        <form className="flex flex-col bg-white m-14 h-[500px] p-5 w-[400px] justify-evenly items-center rounded-md"  data-aos="zoom-in" data-aos-delay="600" data-aos-mirror={false}>
+      <section ref={myDivRef} className="bg-[url('./assets/enroll2.png')] flex justify-center items-center text-center">
+        <form className="flex flex-col bg-white m-14 h-[500px] p-5 w-[400px] justify-evenly items-center rounded-md"  data-aos="zoom-in" data-aos-delay="600" data-aos-mirror={false} onSubmit={handleSubmit}>
           <img src={Logo} alt="logoblanco" className="object-cover w-40" />
           <h1 className="text-[#037dda] font-bold text-xl">
             Completa tus datos
           </h1>
           <input
             type="text"
+            name="colegio"
             className="border py-2 w-full text-center rounded-md shadow-md outline-none"
             placeholder="Nombre del colegio"
           />
           <input
             type="email"
+            name="email"
             className="border py-2 w-full text-center rounded-md shadow-md outline-none"
             placeholder="Correo Electrónico"
           />
           <input
-            type="text"
+            type="number"
+            name="ruc"
             className="border py-2 w-full text-center rounded-md shadow-md outline-none"
             placeholder="RUC"
           />
           <input
-            type="text"
+            type="number"
             className="border py-2 w-full text-center rounded-md shadow-md outline-none"
+            name="celular"
             placeholder="Celular"
           />
           <button
