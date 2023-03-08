@@ -815,7 +815,7 @@ function DashboardSchool() {
           </button>
         </ul>
       </section>
-      <section className="right w-full bg-[#f6f7f8] p-5 lg:px-32 lg:py-12">
+      <section className="right w-full bg-[#f6f7f8] p-5 lg:px-31 lg:py-12">
         {page === 0 ? (
           <Box sx={{ width: "100%", height: "100%" }}>
             <Stepper
