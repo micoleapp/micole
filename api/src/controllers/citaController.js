@@ -139,10 +139,29 @@ const changeActivoCita = async (req, res, next) => {
   }
 };
 
+const deleteCita = async (req, res, next) => {
+  const { idCita } = req.params;
+  try {
+    const cita = await Cita.findByPk(idCita);
+    if (!cita) {
+      return next({
+        statusCode: 400,
+        message: 'El registro no existe.',
+      });
+    }
+    await Cita.destroy( { where: { id: idCita } }
+    );
+    res.status(200).send('Se eliminó la Cita.');
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getCitas,
   getCitaById,
   createCita,
   changeStatusCita,
   changeActivoCita,
+  deleteCita
 };
