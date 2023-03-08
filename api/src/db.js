@@ -247,6 +247,13 @@ Cita.belongsTo(Grado, {
   foreignKey: 'GradoId',
 });
 
+Colegio.hasMany(Review, {
+  foreignKey: 'ColegioId',
+});
+Review.belongsTo(Colegio, {
+  foreignKey: 'ColegioId',
+});
+
 Infraestructura_tipo.hasMany(Infraestructura);
 Infraestructura.belongsTo(Infraestructura_tipo);
 
