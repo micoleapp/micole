@@ -1,32 +1,17 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
+
 import { Draggable } from "react-beautiful-dnd";
 import { Droppable } from "react-beautiful-dnd";
 import Chip from "@mui/material/Chip";
-
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-
-import Typography from "@mui/material/Typography";
-import NavTabs from "./Tabs/TabsCita";
-import { useSelect } from "@mui/base";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import ModalCita from "./Tabs/ModalCita/ModalCita";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "none",
-  boxShadow: 24,
-  borderRadius: "8px",
-  p: 4,
-};
-
 const Column = ({ column, tasksArr }) => {
+  const { citasAgendadas } = useSelector((state) => state.schools);
+  const dispatch = useDispatch();
+
+
   const { grados } = useSelector((state) => state.schools);
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -35,8 +20,12 @@ const Column = ({ column, tasksArr }) => {
     console.log(event.target.value);
   };
   const handleClose = () => setOpen(false);
-  console.log(tasksArr);
-  console.log(value);
+
+  // React.useEffect(() => {
+  //   dispatch(getCitas());
+    
+  // }, [citasAgendadas.CitasActivas?.length]);
+
   return (
     <>
       <div className="rounded-md bg-white shadow-md border max-w-xs h-min w-full flex flex-col">
@@ -94,7 +83,13 @@ const Column = ({ column, tasksArr }) => {
                           />
                         </div>
                       </div>
-                      <div style={{ display: "flex",flexDirection:'column',gap:'5px' }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "5px",
+                        }}
+                      >
                         {grados &&
                           grados.map((ele) => {
                             if (ele.id === task.grado) {

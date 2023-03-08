@@ -12,12 +12,18 @@ import Chip from "@mui/material/node/Chip";
 import { Button } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCita } from "../../redux/CitasActions";
 
 export default function NavTabs({ task }) {
   const { grados } = useSelector((state) => state.schools);
   const [value, setValue] = useState("1");
 
+  const dispatch = useDispatch();
+  const handleDeleteCita = (id) => {
+    console.log(id);
+    dispatch(deleteCita(id));
+  };
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -54,13 +60,12 @@ export default function NavTabs({ task }) {
               <p> Hora {task.time}</p>
             </div>
             <div style={{ display: "flex", gap: "10px" }}>
-            
               {grados &&
-                          grados.map((ele) => {
-                            if (ele.id === task.grado) {
-                              return <Chip label={ele.nombre_grado} color="primary"  />;
-                            }
-                          })}
+                grados.map((ele) => {
+                  if (ele.id === task.grado) {
+                    return <Chip label={ele.nombre_grado} color="primary" />;
+                  }
+                })}
               <Chip label={task.añoIngreso} color="primary" />
             </div>
             <div
@@ -73,6 +78,7 @@ export default function NavTabs({ task }) {
             >
               <Button
                 variant="contained"
+                onClick={() => handleDeleteCita(task.idCita)}
                 style={{
                   background: "#c01616",
                   width: "100%",
