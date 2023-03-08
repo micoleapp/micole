@@ -2558,7 +2558,7 @@ function DashboardSchool() {
           </div>
         ) : page === 4 ? (
           <div className="min-h-screen">
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div className={style.layout}  style={{ display: "flex", gap: "10px" }}>
               <Cards icon="solicitud" text="Solicitudes de Citas" nro={2} />
               <Cards icon="visualizacion" text="Visualizaciones" nro={2} />
               <Cards icon="mensaje" text="Mensajes" nro={2} />

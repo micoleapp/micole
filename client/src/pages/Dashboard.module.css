@@ -1,3 +1,11 @@
+
+.layout{
+    display: flex;
+    gap:10px;
+  flex-direction: row;
+  
+  }
+  
 .containerBtn{
 display: flex;
 flex-direction: row;
@@ -10,5 +18,7 @@ gap:10px
     .containerBtn{
         flex-direction: column;
     }
-
+    .layout{
+        flex-direction: column;
+    }
   }
