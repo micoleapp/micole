@@ -102,8 +102,7 @@ function DragAndDrop() {
         [newEndCol.id]: newEndCol,
       },
     };
-    console.log(newState.columns)
-    console.log(newState.tasks)
+    console.log(tasks[removed])
     dispatch(updateColumn(newState.columns));
 
     setState(newState);
@@ -116,7 +115,6 @@ console.log(newState.columns)
     console.log(sourceCol.id);
     console.log(destinationCol.id);
   };
-  console.log(tasks);
 
   return (
     <DragDropContext Scrollable onDragEnd={onDragEnd}>
