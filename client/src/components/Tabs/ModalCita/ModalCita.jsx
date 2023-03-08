@@ -20,7 +20,7 @@ export default function ModalCita({ task, handleClose, open }) {
  
   const { tasks } = useSelector((state) => state.citas);
 
-console.log(citasAgendadas.CitasActivas)
+
 
 
   console.log(task);
