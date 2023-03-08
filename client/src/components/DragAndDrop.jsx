@@ -5,6 +5,7 @@ import SelectCRM from "./CardsDrgAndDrp/SelectsCRM/SelectsCRM";
 import { useDispatch, useSelector } from "react-redux";
 
 import { updateTask, updateColumn } from "../redux/CitasActions";
+import { updateTasks } from "../redux/CitasSlice";
 // const reorderColumnList = (sourceCol, startIndex, endIndex) => {
 //   const newTaskIds = Array.from(sourceCol.taskIds);
 
@@ -71,6 +72,7 @@ function DragAndDrop() {
           [newColumn.id]: newColumn,
         },
       };
+     
       dispatch(updateColumn(newState.columns));
 
       setState(newState);
@@ -100,7 +102,10 @@ function DragAndDrop() {
         [newEndCol.id]: newEndCol,
       },
     };
+    console.log(newState.columns)
+    console.log(newState.tasks)
     dispatch(updateColumn(newState.columns));
+
     setState(newState);
 console.log(newState.columns)
     alert(

@@ -18,9 +18,11 @@ export const getCita = () => (dispatch) => {
 };
 
 export const updateTask = (newTask) => (dispatch) => {
+  console.log(newTask)
   dispatch(updateTasks(newTask));
 }
 export const updateColumn = (newColumn) => (dispatch) => {
+  console.log(newColumn)
   dispatch(updateColumns(newColumn));
 }
 export const putCita = ( idCita ) =>(dispatch) => {
