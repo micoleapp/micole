@@ -115,7 +115,8 @@ function DashboardSchool() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [allData, setAllData] = useState({});
-
+  const [Filtro, setFiltro] = useState('');
+  console.log(Filtro)
   const dispatch = useDispatch();
   const {
     categories,
@@ -2572,17 +2573,17 @@ function DashboardSchool() {
             <h1>Citas</h1>
             <div className={style.containerBtn} >
               <div>
-                <Button startIcon={<StarBorderIcon />} variant="outlined">
-                  Favorito
+                <Button onClick={()=>setFiltro('')} startIcon={<StarBorderIcon />} variant="outlined">
+                  Todos
                 </Button>
               </div>
               <div>
-                <Button startIcon={<DraftsOutlinedIcon />} variant="outlined">
+                <Button onClick={()=>setFiltro('Confirmados')} startIcon={<DraftsOutlinedIcon />} variant="outlined">
                   Confirmados
                 </Button>
               </div>
               <div>
-                <Button
+                <Button onClick={()=>setFiltro('SinConfirmar')}
                   startIcon={<MailOutlineOutlinedIcon />}
                   variant="outlined"
                 >
@@ -2594,7 +2595,7 @@ function DashboardSchool() {
             </div>
             </div>
             <div>
-              <CardCitas/>
+              <CardCitas filtros={Filtro}/>
             </div>
           </div>
         ) : null}
