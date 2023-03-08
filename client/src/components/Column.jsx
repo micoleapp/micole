@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from "react";
-
+import { getCita } from "../redux/CitasActions";
 import { Draggable } from "react-beautiful-dnd";
 import { Droppable } from "react-beautiful-dnd";
 import Chip from "@mui/material/Chip";
@@ -21,10 +21,10 @@ const Column = ({ column, tasksArr }) => {
   };
   const handleClose = () => setOpen(false);
 
-  // React.useEffect(() => {
-  //   dispatch(getCitas());
+  React.useEffect(() => {
+    dispatch(getCita());
     
-  // }, [citasAgendadas.CitasActivas?.length]);
+  }, [citasAgendadas.CitasActivas?.length]);
 
   return (
     <>
