@@ -16,56 +16,92 @@ const style = {
   p: 2,
 };
 
-export default function ModalDeleteCita({ IdCita,  handleClose }) {
-//   const [open, setOpen] = useState(false);
-//   const handleClose = () => setOpen(false);
+export default function ModalDeleteCita({ IdCita, handleClose }) {
+  const [openExito, setOpenExito] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleDeleteCita = () => {
     dispatch(deleteCita(IdCita));
-    handleClose(true)
+    setOpenExito(true);
+   
   };
 
+const handleFinalizar =()=>{
+ handleClose(true)
+}
+
   return (
-    <Modal
-      keepMounted
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="keep-mounted-modal-title"
-      aria-describedby="keep-mounted-modal-description"
-    >
-      <Box sx={style}>
-        <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-          Cancelar Cita
-        </Typography>
-        <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "20px",
-              flexDirection: "column",
-            }}
-          >
-            <h1> Estas seguro de canclear esta cita ? </h1>
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "space-evenly",
-              }}
-            >
-              <Button variant="contained" onClick={handleDeleteCita}>
-                Si
-              </Button>
-              <Button variant="contained" >
-                Cancelar
-              </Button>
-            </div>
-          </div>
-        </Typography>
-      </Box>
-    </Modal>
+    <Box>
+      <Modal
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={style}>
+     {  openExito === false &&   <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+            Cancelar Cita
+          </Typography>}
+          <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+            {openExito === false && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "20px",
+                  flexDirection: "column",
+                }}
+              >
+                <h1> Estas seguro de canclear esta cita ? </h1>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <Button variant="contained" onClick={handleDeleteCita}>
+                    Si
+                  </Button>
+                  <Button variant="contained">Cancelar</Button>
+                </div>
+              </div>
+            )}
+            {openExito === true && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "20px",
+                  flexDirection: "column",
+                }}
+              >
+               <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+            Cita Cancelada con Exito!
+          </Typography>
+                <p style={{textAlign:'center'}}>
+                  Enviaremos un correo a la familia avisando que la cita ha sido
+                  cancelada
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                
+                  <Button variant="contained"onClick={handleFinalizar} >Finalizar</Button>
+                </div>
+              </div>
+            )}
+          </Typography>
+        </Box>
+      </Modal>
+    </Box>
   );
 }
