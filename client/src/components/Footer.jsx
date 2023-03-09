@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF ,faTwitter, faInstagram, faLinkedinIn , faTelegram } from "@fortawesome/free-brands-svg-icons";
 import Logo from '../assets/logo1.png'
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 function Footer() {
   const [toggle,setToggle] = useState(false)
   const handleToggle = () => {
@@ -60,7 +61,8 @@ function Footer() {
         <li className="font-bold text-xl z-50 flex items-center gap-2 cursor-pointer sm:cursor-default" onClick={()=>setToggleMenuMenu(!toggleMenuMenu)}>Menu<FontAwesomeIcon className="block sm:hidden" icon={toggleMenuMenu ? faChevronUp : faChevronDown} /></li>
         <ul className={`flex duration-200 flex-col gap-5 sm:translate-y-0 -translate-y-full h-0 static ${toggleMenuMenu ? "translate-y-0 h-max" : "opacity-0 sm:opacity-100"}`}>
         <li className='hover-underline-animation w-min cursor-default'>Inicio</li>
-        <li className='hover-underline-animation w-min cursor-default'>Categorías</li>
+        <li className='hover-underline-animation w-min cursor-default'>        <Link to={"/?categorias=1"}>
+        Categorias</Link></li>
         <li className='hover-underline-animation w-min cursor-default'>Nosotros</li>
         <li className='hover-underline-animation w-min cursor-default'>Blog</li>
         <li className='hover-underline-animation w-min cursor-default'>Contacto</li>

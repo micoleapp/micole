@@ -17,6 +17,7 @@ const getReviews = async (req, res, next) => {
 
 const createReview = async (req, res, next) => {
   const { nombre, email, comentario, rating, ColegioId } = req.body;
+  console.log(req.body)
   try {
     const colegio = await Colegio.findByPk(ColegioId);
     const reviews = await Review.findAll({ where: { ColegioId } });

@@ -50,12 +50,12 @@ function NavBar() {
       <div className={style.container}>
         <div className={style.items}>
           <p className={`${style.p} hover-underline-animation`}>Inicio</p>
-          <p
+          <Link
             className={`${style.p} hover-underline-animation`}
-            onClick={ToggleCategory}
+            to={"/?categorias=1"}
           >
             Categorias
-          </p>
+          </Link>
           <p className={`${style.p} hover-underline-animation`}>BLOG</p>
           <p
             className={`${style.p} hover-underline-animation`}

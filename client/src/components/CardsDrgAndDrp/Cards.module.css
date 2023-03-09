@@ -1,3 +1,4 @@
+
 .container {
     display: flex;
     width: 100%;
@@ -37,4 +38,12 @@
     box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
     height: 50px;
     justify-content: center;
+}
+
+@media (max-width: 500px) {
+
+.container {
+
+  justify-content:space-evenly;
+}
 }

@@ -3,12 +3,29 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Column from "./Column";
 import SelectCRM from "./CardsDrgAndDrp/SelectsCRM/SelectsCRM";
 import { useDispatch, useSelector } from "react-redux";
-import { getCita } from "../redux/SchoolsActions";
+
+import { updateTask, updateColumn } from "../redux/CitasActions";
+
+// const reorderColumnList = (sourceCol, startIndex, endIndex) => {
+//   const newTaskIds = Array.from(sourceCol.taskIds);
+
+//   const [removed] = newTaskIds.splice(startIndex, 1);
+
+//   newTaskIds.splice(endIndex, 0, removed);
+//   console.log(newTaskIds)
+//   const newColumn = {
+//     ...sourceCol,
+//     taskIds: newTaskIds,
+//   };
+
+//   return newColumn;
+// };
 
 const reorderColumnList = (sourceCol, startIndex, endIndex) => {
-  const newTaskIds = Array.from(sourceCol.taskIds);
+  const newTaskIds = [...sourceCol.taskIds];
+
   const [removed] = newTaskIds.splice(startIndex, 1);
-  const { citas } = useSelector((state) => state.schools);
+
   newTaskIds.splice(endIndex, 0, removed);
 
   const newColumn = {
@@ -19,118 +36,10 @@ const reorderColumnList = (sourceCol, startIndex, endIndex) => {
   return newColumn;
 };
 
-const initialData = {
-  tasks: {
-    1: {
-      id: 1,
-      celular: 3496213123,
-      correo: "gorositopedro@gmail.com",
-      date: "03/03/2023",
-      modo: "Virtual",
-      nombre: "Aylen",
-      time: "20:14",
-      añoIngreso: "2023",
-      grado: "4ro Primaria",
-    },
-    2: {
-      id: 2,
-      celular: 3496213123,
-      correo: "gorositopedro@gmail.com",
-      date: "04/03/2023",
-      modo: "Virtual",
-      nombre: "Nano",
-      time: "20:14",
-      añoIngreso: "2023",
-      grado: "1ro Primaria",
-    },
-    3: {
-      id: 3,
-      celular: 3496213123,
-      correo: "gorositopedro@gmail.com",
-      date: "12/03/2023",
-      modo: "Virtual",
-      nombre: "Enzo",
-      time: "20:14",
-      añoIngreso: "2023",
-      grado: "2ro Primaria",
-    },
-    4: {
-      id: 4,
-      celular: 3496213123,
-      correo: "gorositopedro@gmail.com",
-      date: "20/03/2023",
-      modo: "Virtual",
-      nombre: "Maximo Gutierrez",
-      time: "20:14",
-      añoIngreso: "2023",
-      grado: "3ro Primaria",
-    },
-    5: {
-      id: 5,
-      celular: 3496213123,
-      correo: "gorositopedro@gmail.com",
-      date: "02/03/2023",
-      modo: "Virtual",
-      nombre: "Roberto",
-      time: "20:14",
-      añoIngreso: "2023",
-      grado: "4ro Primaria",
-    },
-  },
-  columns: {
-    "column-1": {
-      id: "column-1",
-      title: "Solicitud de cita",
-      taskIds: [1, 2, 3, 4],
-    },
-    "column-2": {
-      id: "column-2",
-      title: "Cita realizada",
-      taskIds: [],
-    },
-    "column-3": {
-      id: "column-3",
-      title: "Aplicacion",
-      taskIds: [],
-    },
-    "column-4": {
-      id: "column-4",
-      title: "Entrevista con el director",
-      taskIds: [],
-    },
-    "column-5": {
-      id: "column-5",
-      title: "Vacante ofrecida",
-      taskIds: [],
-    },
-    "column-6": {
-      id: "column-6",
-      title: "Vacante aceptada",
-      taskIds: [],
-    },
-  },
-  // Facilitate reordering of the columns
-  columnOrder: [
-    "column-1",
-    "column-2",
-    "column-3",
-    "column-4",
-    ,
-    "column-5",
-    ,
-    "column-6",
-  ],
-};
-
 function DragAndDrop() {
-  const [state, setState] = React.useState(initialData);
- 
-
+  const { tasks, columns, columnOrder } = useSelector((state) => state.citas);
+  const [state, setState] = React.useState({ tasks, columns, columnOrder });
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getCita());
-  }, []);
-
   const onDragEnd = (result) => {
     const { destination, source } = result;
 
@@ -146,8 +55,9 @@ function DragAndDrop() {
     }
 
     // If the user drops within the same column but in a different positoin
-    const sourceCol = state.columns[source.droppableId];
-    const destinationCol = state.columns[destination.droppableId];
+    const sourceCol = columns[source.droppableId];
+
+    const destinationCol = columns[destination.droppableId];
 
     if (sourceCol.id === destinationCol.id) {
       const newColumn = reorderColumnList(
@@ -155,14 +65,15 @@ function DragAndDrop() {
         source.index,
         destination.index
       );
-
       const newState = {
         ...state,
         columns: {
-          ...state.columns,
+          ...columns,
           [newColumn.id]: newColumn,
         },
       };
+      dispatch(updateColumn(newState.columns));
+
       setState(newState);
       return;
     }
@@ -190,14 +101,18 @@ function DragAndDrop() {
         [newEndCol.id]: newEndCol,
       },
     };
-
+    dispatch(updateColumn(newState.columns));
+    // const taskId = tasks[removed]
+    // const NuevoEstado = destinationCol.estado 
+    dispatch(updateTask(tasks[removed],destinationCol.estado ));
     setState(newState);
 
     alert(
       `Moviste la tarea ${removed} desde ${sourceCol.title} hacia ${
         destinationCol.title
-      }! \nTu tarea es ${JSON.stringify(state.tasks[removed])}`
+      }! \nTu tarea es ${JSON.stringify(tasks[removed])}`
     );
+
   };
 
   return (
@@ -211,11 +126,16 @@ function DragAndDrop() {
           </div>
         </div>
         <div className="flex flex-col text-base lg:flex-row justify-between gap-5 px-4">
-          {state.columnOrder.map((columnId) => {
-            const column = state.columns[columnId];
-            const tasks = column.taskIds.map((taskId) => state.tasks[taskId]);
+          {columnOrder?.map((columnId) => {
+            const column = columns[columnId];
 
-            return <Column key={column.id} column={column} tasks={tasks} />;
+            const tasksArr = columns[columnId].taskIds.map(
+              (taskIds) => tasks[taskIds]
+            );
+
+            return (
+              <Column key={column.id} column={column} tasksArr={tasksArr} />
+            );
           })}
         </div>
       </div>

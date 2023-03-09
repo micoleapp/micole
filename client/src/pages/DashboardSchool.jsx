@@ -24,6 +24,12 @@ import Confetti from "react-confetti";
 import DragAndDrop from "../components/DragAndDrop";
 import GridVacantes from "../components/GridVacantes";
 import Swal from "sweetalert2";
+import MoveToInboxOutlinedIcon from "@mui/icons-material/MoveToInboxOutlined";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
+import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
+import style from "./Dashboard.module.css"
+
 import {
   GoogleMap,
   useJsApiLoader,
@@ -52,6 +58,8 @@ import { TextField } from "@mui/material";
 const yearNow = new Date().getFullYear();
 import { AiOutlineIdcard } from "react-icons/ai";
 import Cards from "../components/CardsDrgAndDrp/Cards";
+import CardCitas from "../components/CardsCitas/CardCitas";
+import SelectCitasAg from "../components/CardsCitas/SelectCitasAgendadas/SelectCitasAg";
 
 const libraries = ["places"];
 
@@ -107,7 +115,8 @@ function DashboardSchool() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [allData, setAllData] = useState({});
-
+  const [Filtro, setFiltro] = useState('');
+  console.log(Filtro)
   const dispatch = useDispatch();
   const {
     categories,
@@ -623,16 +632,18 @@ function DashboardSchool() {
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
 
-      horarios:[ {
-        desde: stringyDate(day[Object.keys(day)][0]["$H"])
-          .toString()
-          .concat(":")
-          .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
-        hasta: stringyDate(day[Object.keys(day)][1]["$H"])
-          .toString()
-          .concat(":")
-          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
-      }],
+      horarios: [
+        {
+          desde: stringyDate(day[Object.keys(day)][0]["$H"])
+            .toString()
+            .concat(":")
+            .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
+          hasta: stringyDate(day[Object.keys(day)][1]["$H"])
+            .toString()
+            .concat(":")
+            .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
+        },
+      ],
     }));
     Swal.fire({
       icon: "success",
@@ -655,11 +666,11 @@ function DashboardSchool() {
     dispatch(getVacantes(datosPrincipales.niveles));
   }, [datosPrincipales.niveles]);
 
-  const [vacantesOffOne,setVacantesOffOne] = useState(true)
-  const [vacantesOffTwo,setVacantesOffTwo] = useState(true)
-  const [vacantesOffThree,setVacantesOffThree] = useState(true)
+  const [vacantesOffOne, setVacantesOffOne] = useState(true);
+  const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
+  const [vacantesOffThree, setVacantesOffThree] = useState(true);
 
-  console.log(vacantesOffThree)
+  console.log(vacantesOffThree);
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -718,18 +729,37 @@ function DashboardSchool() {
           </button>
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
-              page == 1 ? "bg-[#0061dd] text-white" : null
+              page == 5 ? "bg-[#0061dd] text-white" : null
+            } `}
+            onClick={() => setPage(5)}
+          >
+            <MoveToInboxOutlinedIcon
+              className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                page == 5 ? "text-white" : null
+              }`}
+            />
+            <span
+              className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                page == 5 ? "text-white" : null
+              }`}
+            >
+              Citas Agendadas{" "}
+            </span>
+          </button>
+          <button
+            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+              page == 4 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => setPage(4)}
           >
             <AiOutlineIdcard
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
-                page == 1 ? "text-white" : null
+                page == 4 ? "text-white" : null
               }`}
             />
             <span
               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
-                page == 1 ? "text-white" : null
+                page == 4 ? "text-white" : null
               }`}
             >
               Control de citas{" "}
@@ -786,7 +816,7 @@ function DashboardSchool() {
           </button>
         </ul>
       </section>
-      <section className="right w-full bg-[#f6f7f8] p-5 lg:px-32 lg:py-12">
+      <section className="right w-full bg-[#f6f7f8] p-5 lg:px-31 lg:py-12">
         {page === 0 ? (
           <Box sx={{ width: "100%", height: "100%" }}>
             <Stepper
@@ -1937,52 +1967,70 @@ function DashboardSchool() {
                     </div>
                   )}
                   {activeStep === 3 && (
-                      <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
-                        <h1 className="text-2xl">Vacantes disponibles</h1>
-                        <small>Debera enviar el formulario de al menos 1 de los 3 años antes de continuar</small>
-                        <button
-                          className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
-                          onClick={() =>
-                            vacantes === 0 ? setVacantes(null) : setVacantes(0)
-                          }
-                        >
-                          {" "}
-                          <span>2023</span>{" "}
-                          <FontAwesomeIcon
-                            size="lg"
-                            icon={vacantes === 0 ? faArrowUp : faArrowDown}
-                          />{" "}
-                        </button>
-                        {vacantes === 0 && <GridVacantes setVacantesOff={setVacantesOffOne} año={yearNow}/>}
-                        <button
-                          className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
-                          onClick={() =>
-                            vacantes === 1 ? setVacantes(null) : setVacantes(1)
-                          }
-                        >
-                          {" "}
-                          <span>2024</span>{" "}
-                          <FontAwesomeIcon
-                            size="lg"
-                            icon={vacantes === 1 ? faArrowUp : faArrowDown}
-                          />{" "}
-                        </button>
-                        {vacantes === 1 && <GridVacantes setVacantesOff={setVacantesOffTwo} año={yearNow+1} />}
-                        <button
-                          className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
-                          onClick={() =>
-                            vacantes === 2 ? setVacantes(null) : setVacantes(2)
-                          }
-                        >
-                          {" "}
-                          <span>2025</span>{" "}
-                          <FontAwesomeIcon
-                            size="lg"
-                            icon={vacantes === 2 ? faArrowUp : faArrowDown}
-                          />{" "}
-                        </button>
-                        {vacantes === 2 && <GridVacantes setVacantesOff={setVacantesOffThree} año={yearNow+2}  />}
-                        <Box
+                    <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
+                      <h1 className="text-2xl">Vacantes disponibles</h1>
+                      <small>
+                        Debera enviar el formulario de al menos 1 de los 3 años
+                        antes de continuar
+                      </small>
+                      <button
+                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                        onClick={() =>
+                          vacantes === 0 ? setVacantes(null) : setVacantes(0)
+                        }
+                      >
+                        {" "}
+                        <span>2023</span>{" "}
+                        <FontAwesomeIcon
+                          size="lg"
+                          icon={vacantes === 0 ? faArrowUp : faArrowDown}
+                        />{" "}
+                      </button>
+                      {vacantes === 0 && (
+                        <GridVacantes
+                          setVacantesOff={setVacantesOffOne}
+                          año={yearNow}
+                        />
+                      )}
+                      <button
+                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                        onClick={() =>
+                          vacantes === 1 ? setVacantes(null) : setVacantes(1)
+                        }
+                      >
+                        {" "}
+                        <span>2024</span>{" "}
+                        <FontAwesomeIcon
+                          size="lg"
+                          icon={vacantes === 1 ? faArrowUp : faArrowDown}
+                        />{" "}
+                      </button>
+                      {vacantes === 1 && (
+                        <GridVacantes
+                          setVacantesOff={setVacantesOffTwo}
+                          año={yearNow + 1}
+                        />
+                      )}
+                      <button
+                        className="flex font-semibold justify-between items-center bg-white p-2 rounded-md shadow-md"
+                        onClick={() =>
+                          vacantes === 2 ? setVacantes(null) : setVacantes(2)
+                        }
+                      >
+                        {" "}
+                        <span>2025</span>{" "}
+                        <FontAwesomeIcon
+                          size="lg"
+                          icon={vacantes === 2 ? faArrowUp : faArrowDown}
+                        />{" "}
+                      </button>
+                      {vacantes === 2 && (
+                        <GridVacantes
+                          setVacantesOff={setVacantesOffThree}
+                          año={yearNow + 2}
+                        />
+                      )}
+                      <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
                         <Button
@@ -1994,7 +2042,13 @@ function DashboardSchool() {
                           Back
                         </Button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button disabled={vacantesOffOne && vacantesOffTwo && vacantesOffThree} onClick={handleCompleteVacantes} sx={{ mr: 1 }}>
+                        <Button
+                          disabled={
+                            vacantesOffOne && vacantesOffTwo && vacantesOffThree
+                          }
+                          onClick={handleCompleteVacantes}
+                          sx={{ mr: 1 }}
+                        >
                           Next
                         </Button>
                         {/* {activeStep !== steps.length &&
@@ -2013,8 +2067,7 @@ function DashboardSchool() {
                         </Button>
                       ))} */}
                       </Box>
-                      </div>
-
+                    </div>
                   )}
                   {activeStep === 4 && (
                     <div className="flex flex-col gap-5">
@@ -2248,7 +2301,7 @@ function DashboardSchool() {
             </div>
           </Box>
         ) : page === 1 ? (
-          <div>
+          <div className="min-h-screen">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <div className="grid lg:grid-cols-3 w-full grid-cols-2">
                 {daysWithTime.map((day, index) => (
@@ -2369,7 +2422,6 @@ function DashboardSchool() {
             >
               Guardar Cambios
             </button>
-        
           </div>
         ) : page === 2 ? (
           <div className="min-h-screen">Plan</div>
@@ -2507,7 +2559,7 @@ function DashboardSchool() {
           </div>
         ) : page === 4 ? (
           <div className="min-h-screen">
-            <div style={{display:'flex',gap:'10px'}}>
+            <div className={style.layout}  style={{ display: "flex", gap: "10px" }}>
               <Cards icon="solicitud" text="Solicitudes de Citas" nro={2} />
               <Cards icon="visualizacion" text="Visualizaciones" nro={2} />
               <Cards icon="mensaje" text="Mensajes" nro={2} />
@@ -2515,6 +2567,36 @@ function DashboardSchool() {
             </div>
 
             <DragAndDrop />
+          </div>
+        ) : page === 5 ? (
+          <div className=" min-h-screen">
+            <h1>Citas</h1>
+            <div className={style.containerBtn} >
+              <div>
+                <Button onClick={()=>setFiltro('')} startIcon={<StarBorderIcon />} variant="outlined">
+                  Todos
+                </Button>
+              </div>
+              <div>
+                <Button onClick={()=>setFiltro('Confirmados')} startIcon={<DraftsOutlinedIcon />} variant="outlined">
+                  Confirmados
+                </Button>
+              </div>
+              <div>
+                <Button onClick={()=>setFiltro('SinConfirmar')}
+                  startIcon={<MailOutlineOutlinedIcon />}
+                  variant="outlined"
+                >
+                  Sin Confirmar
+                </Button>
+              </div>
+            <div>
+              {/* <SelectCitasAg/> */}
+            </div>
+            </div>
+            <div>
+              <CardCitas filtros={Filtro}/>
+            </div>
           </div>
         ) : null}
       </section>

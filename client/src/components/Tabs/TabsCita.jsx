@@ -4,10 +4,26 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { useState } from "react";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import PersonPinIcon from "@mui/icons-material/PersonPin";
+import LaptopWindowsIcon from "@mui/icons-material/LaptopWindows";
+import EventIcon from "@mui/icons-material/Event";
+import Chip from "@mui/material/node/Chip";
+import { Button } from "@mui/material";
+import PhoneIcon from "@mui/icons-material/Phone";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCita } from "../../redux/CitasActions";
 
 export default function NavTabs({ task }) {
+  const { grados } = useSelector((state) => state.schools);
   const [value, setValue] = useState("1");
-  const { celular, correo, date, modo, nombre, time, añoIngreso, grado } = task;
+
+  const dispatch = useDispatch();
+  const handleDeleteCita = (id) => {
+    console.log(id);
+    dispatch(deleteCita(id));
+  };
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -23,35 +39,76 @@ export default function NavTabs({ task }) {
           </TabList>
         </Box>
         <TabPanel value="1">
-          <div>
-            <p> Dia : {date}</p>
-            <p> Modalidad : {modo}</p>
-            <p> Hora : {time}</p>
-            <p>Grado : {grado}</p>
-            <p>Ingreso : {añoIngreso}</p>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "15px" }}
+          >
+            <div style={{ display: "flex", gap: "10px" }}>
+              <EventIcon style={{ color: "grey" }} />
+              <p> Dia {task.date}</p>
+            </div>
+            <div style={{ display: "flex", gap: "10px" }}>
+              {task.modo === "Virtual" && (
+                <LaptopWindowsIcon style={{ color: "grey" }} />
+              )}
+              {task.modo === "Presencial" && (
+                <PersonPinIcon style={{ color: "grey" }} />
+              )}
+              <p> Modalidad {task.modo}</p>
+            </div>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <AccessTimeIcon style={{ color: "grey" }} />
+              <p> Hora {task.time}</p>
+            </div>
+            <div style={{ display: "flex", gap: "10px" }}>
+              {grados &&
+                grados.map((ele) => {
+                  if (ele.id === task.grado) {
+                    return <Chip label={ele.nombre_grado} color="primary" />;
+                  }
+                })}
+              <Chip label={task.añoIngreso} color="primary" />
+            </div>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                variant="contained"
+                onClick={() => handleDeleteCita(task.idCita)}
+                style={{
+                  background: "#c01616",
+                  width: "100%",
+                  fontFamily: "Poppins",
+                  fontWeight: "600",
+                }}
+              >
+                Cancelar Cita
+              </Button>
+            </div>
           </div>
         </TabPanel>
-        <TabPanel value="2" >
-            <div style={{minHeight:'120px'}}>
+        <TabPanel value="2">
+          <div style={{ minHeight: "120px" }}>
             <p>Documentos : 2 de 5</p>
-            
-            </div>
+          </div>
         </TabPanel>
         <TabPanel value="3">
-          <div style={{minHeight:'120px'}}>
-            <p>Correo : {correo}</p>
-            <p> Celular : {celular}</p>
+          <div style={{ minHeight: "120px" }}>
+            <div style={{ display: "flex", gap: "20px" }}>
+              <MailOutlineIcon style={{ color: "grey" }} />
+              <p>{task.correo}</p>
+            </div>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <PhoneIcon style={{ color: "grey" }} n />
+              <p> {task.celular}</p>
+            </div>
           </div>
         </TabPanel>
       </TabContext>
     </Box>
   );
 }
-//   celular,
-//   correo,
-//   date,
-//   modo,
-//   nombre,
-//   time,
-//   añoIngreso,
-//   grado,
