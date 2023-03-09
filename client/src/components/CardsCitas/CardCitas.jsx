@@ -37,9 +37,7 @@ export default function CardCitas({ filtros }) {
   };
   console.log(Activas);
 
-  useEffect(() => {
-    dispatch(getCitaAgendadas);
-  }, []);
+
 
   return (
     <>
