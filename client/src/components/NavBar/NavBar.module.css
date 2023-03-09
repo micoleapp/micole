@@ -3,6 +3,7 @@
   align-items: center;
   background: #0061df;
   justify-content: space-between;
+
 }
 .img {
   object-fit: cover;
@@ -55,9 +56,20 @@
   cursor: pointer;
 }
 
+
+.burguerMenu{
+  display: none;
+}
+
+
 @media (max-width: 800px) {
+
+  .burguerMenu{
+    display: flex;
+  }
   .layout {
     justify-content: center;
+    flex-direction: row-reverse;
   }
   .container {
     width: auto;

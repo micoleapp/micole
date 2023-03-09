@@ -1,11 +1,11 @@
 const { Router } = require("express");
 const userRouter = Router();
 
-const { getUsers, getUserbyId, deleteUserbyId } = require("../controllers/userController");
-const { requireAdmin, requireAuth } = require("../middlewares/auth");
+const { getUsers, getUserById, deleteUserById } = require("../controllers/userController");
+const { requireAuth } = require("../middlewares/auth");
 
 userRouter.get("/", requireAuth, getUsers);
-userRouter.get("/:id", requireAuth, getUserbyId);
-userRouter.delete("/:id", requireAuth,  deleteUserbyId);
+userRouter.get("/:idUser", requireAuth, getUserById);
+userRouter.delete("/:idUser", requireAuth,  deleteUserById);
 
 module.exports = userRouter;

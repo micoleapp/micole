@@ -1,14 +1,14 @@
-require('dotenv').config();
-const { Sequelize } = require('sequelize');
-const fs = require('fs');
-const path = require('path');
+require("dotenv").config();
+const { Sequelize } = require("sequelize");
+const fs = require("fs");
+const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT } = process.env;
 
 const sequelize =
-  process.env.NODE_ENV === 'production'
+  process.env.NODE_ENV === "production"
     ? new Sequelize({
         database: DB_NAME,
-        dialect: 'postgres',
+        dialect: "postgres",
         host: DB_HOST,
         port: DB_PORT,
         username: DB_USER,
@@ -43,13 +43,13 @@ const basename = path.basename(__filename);
 const modelDefiners = [];
 
 // Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
-fs.readdirSync(path.join(__dirname, '/models'))
+fs.readdirSync(path.join(__dirname, "/models"))
   .filter(
     (file) =>
-      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
+      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
   )
   .forEach((file) => {
-    modelDefiners.push(require(path.join(__dirname, '/models', file)));
+    modelDefiners.push(require(path.join(__dirname, "/models", file)));
   });
 
 // Injectamos la conexion (sequelize) a todos los modelos
@@ -75,72 +75,183 @@ const {
   Idioma,
   Infraestructura,
   Infraestructura_tipo,
+  Categoria,
   Review,
   User,
+  Vacante,
+  Grado,
+  Nivel,
+  Horario,
+  Afiliacion_tipo,
+  Afiliacion,
+  Cita
 } = sequelize.models;
 
 // Aca vendrian las relaciones
-Colegio.belongsToMany(Idioma, { through: 'Colegio_Idioma', timestamps: false });
-Idioma.belongsToMany(Colegio, { through: 'Colegio_Idioma', timestamps: false });
+Colegio.belongsToMany(Idioma, { through: "Colegio_Idioma", timestamps: false });
+Idioma.belongsToMany(Colegio, { through: "Colegio_Idioma", timestamps: false });
 
 //------RELACION DE AUTENTICACION-----
-User.belongsTo(Auth, { foreignKey: 'idAuth', onDelete: 'CASCADE' });
-Colegio.belongsTo(Auth, { foreignKey: 'idAuth', onDelete: 'CASCADE' });
+User.belongsTo(Auth, { foreignKey: "idAuth" });
+Colegio.belongsTo(Auth, { foreignKey: "idAuth" });
+
 //------RELACIONES DE UBICACION------
 Pais.hasMany(Colegio, {
-  foreignKey: 'PaisId',
+  foreignKey: "PaisId",
 });
 Colegio.belongsTo(Pais, {
-  foreignKey: 'PaisId',
+  foreignKey: "PaisId",
 });
 
 Departamento.hasMany(Colegio, {
-  foreignKey: 'DepartamentoId',
+  foreignKey: "DepartamentoId",
 });
 Colegio.belongsTo(Departamento, {
-  foreignKey: 'DepartamentoId',
+  foreignKey: "DepartamentoId",
 });
 
 Provincia.hasMany(Colegio, {
-  foreignKey: 'ProvinciaId',
+  foreignKey: "ProvinciaId",
 });
 Colegio.belongsTo(Provincia, {
-  foreignKey: 'ProvinciaId',
+  foreignKey: "ProvinciaId",
 });
 
 Distrito.hasMany(Colegio, {
-  foreignKey: 'DistritoId',
+  foreignKey: "DistritoId",
 });
 Colegio.belongsTo(Distrito, {
-  foreignKey: 'DistritoId',
+  foreignKey: "DistritoId",
 });
 
-Departamento.hasMany(Provincia);
-Provincia.belongsTo(Departamento);
+Departamento.hasMany(Provincia, {
+  foreignKey: "DepartamentoId",
+});
+Provincia.belongsTo(Departamento, {
+  foreignKey: "DepartamentoId",
+});
 
 Provincia.hasMany(Distrito, {
-  foreignKey: 'ProvinciaId',
+  foreignKey: "ProvinciaId",
 });
 Distrito.belongsTo(Provincia, {
-  foreignKey: 'ProvinciaId',
+  foreignKey: "ProvinciaId",
+});
+
+Nivel.hasMany(Grado, {
+  foreignKey: "NivelId",
+});
+Grado.belongsTo(Nivel, {
+  foreignKey: "NivelId",
+});
+
+Colegio.belongsToMany(Nivel, {
+  through: "Colegio_Nivel",
+  timestamps: false,
+});
+Nivel.belongsToMany(Colegio, {
+  through: "Colegio_Nivel",
+  timestamps: false,
 });
 
 Colegio.belongsToMany(Infraestructura, {
-  through: 'Colegio_Infraestructura',
+  through: "Colegio_Infraestructura",
   timestamps: false,
 });
 Infraestructura.belongsToMany(Colegio, {
-  through: 'Colegio_Infraestructura',
+  through: "Colegio_Infraestructura",
   timestamps: false,
+});
+
+Colegio.belongsToMany(Nivel, {
+  through: 'Colegio_Nivel',
+  timestamps: false,
+});
+Nivel.belongsToMany(Colegio, {
+  through: 'Colegio_Nivel',
+  timestamps: false,
+});
+
+Colegio.belongsToMany(Afiliacion, {
+  through: 'Colegio_Afiliacion',
+  timestamps: false,
+});
+Afiliacion.belongsToMany(Colegio, {
+  through: 'Colegio_Afiliacion',
+  timestamps: false,
+});
+
+Nivel.hasMany(Grado, {
+  foreignKey: 'NivelId',
+});
+Grado.belongsTo(Nivel, {
+  foreignKey: 'NivelId',
 });
 
 //------RELACIONES ADMINISTRATIVAS------
 
 Plan_Pago.hasMany(Colegio, {
-  foreignKey: 'PlanPagoId',
+  foreignKey: "PlanPagoId",
 });
 Colegio.belongsTo(Plan_Pago, {
-  foreignKey: 'PlanPagoId',
+  foreignKey: "PlanPagoId",
+});
+
+Colegio.hasMany(Horario, {
+  foreignKey: "ColegioId",
+});
+Horario.belongsTo(Colegio, {
+  foreignKey: "ColegioId",
+});
+
+Colegio.belongsToMany(Categoria, {
+  through: "Colegio_Categoria",
+  timestamps: false,
+});
+Categoria.belongsToMany(Colegio, {
+  through: "Colegio_Categoria",
+  timestamps: false,
+});
+
+Colegio.hasMany(Vacante, {
+  foreignKey: "ColegioId",
+});
+Vacante.belongsTo(Colegio, {
+  foreignKey: "ColegioId",
+});
+Grado.hasMany(Vacante, {
+  foreignKey: "GradoId",
+});
+Vacante.belongsTo(Grado, {
+  foreignKey: "GradoId",
+});
+
+Afiliacion_tipo.hasMany(Afiliacion, {
+  foreignKey: 'Afiliacion_tipo_Id',
+});
+Afiliacion.belongsTo(Afiliacion_tipo, {
+  foreignKey: 'Afiliacion_tipo_Id',
+});
+
+Colegio.hasMany(Cita, {
+  foreignKey: 'ColegioId',
+});
+Cita.belongsTo(Colegio, {
+  foreignKey: 'ColegioId',
+});
+
+Grado.hasMany(Cita, {
+  foreignKey: 'GradoId',
+});
+Cita.belongsTo(Grado, {
+  foreignKey: 'GradoId',
+});
+
+Colegio.hasMany(Review, {
+  foreignKey: 'ColegioId',
+});
+Review.belongsTo(Colegio, {
+  foreignKey: 'ColegioId',
 });
 
 Infraestructura_tipo.hasMany(Infraestructura);

@@ -3,14 +3,18 @@ import { createSlice } from "@reduxjs/toolkit";
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
-    token:localStorage.hasOwnProperty('token') ? localStorage.getItem('token') : "",
-    isAuth: localStorage.hasOwnProperty('token') ? true : false ,
+    token: localStorage.hasOwnProperty('token') ? localStorage.getItem('token') : "",
+    isAuth: false ,
     user: null,
+    oneSchool: null,
     success: null,
     error: "",
     loading: false
   },
   reducers : {
+    getSchool: (state,action) => {
+      state.oneSchool = action.payload
+    },
     getUser: (state,action) => {
       state.loading = false,
       state.success = true,
@@ -28,14 +32,17 @@ export const authSlice = createSlice({
       state.loading = false,
       state.success = true,
       state.user = action.payload,
-      state.error = ""
+      state.error = ""  
+      state.token = localStorage.getItem('token')
     },
     logoutUser: (state) => {
       state.isAuth = false,
       state.loading = false,
-      state.success = true,
+      state.success = null,
       state.user = null,
-      state.error = ""
+      state.error = "",
+      state.oneSchool = null,
+      state.token = ""
     },
     updateUser: (state,action) => {
       state.loading = false,
@@ -54,6 +61,6 @@ export const authSlice = createSlice({
   }
 })
 
-export const {getUser,registerUser,loginUser,logoutUser,getError,isLoading,updateUser} = authSlice.actions
+export const {getSchool,getUser,registerUser,loginUser,logoutUser,getError,isLoading,updateUser} = authSlice.actions
 
 export default authSlice.reducer

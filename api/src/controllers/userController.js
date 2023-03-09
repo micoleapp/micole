@@ -11,7 +11,7 @@ const getUsers = async (req, res, next) => {
     if (totalUsers === 0) {
       return next({
         statusCode: 404,
-        message: 'No hay usuarios en la DB',
+        message: 'No hay registros en la DB',
       });
     }
     const pagination = getPagination(url, page, limit, totalUsers);
@@ -37,10 +37,10 @@ const getUsers = async (req, res, next) => {
   }
 };
 
-const getUserbyId = async (req, res, next) => {
-  const { id } = req.params;
+const getUserById = async (req, res, next) => {
+  const { idUser } = req.params;
   try {
-    const user = await User.findByPk(id, {
+    const user = await User.findByPk(idUser, {
       include: {
         model: Auth,
         attributes: ['email', 'rol'],
@@ -49,7 +49,7 @@ const getUserbyId = async (req, res, next) => {
     if (!user) {
       return next({
         statusCode: 404,
-        message: 'El usuario solicitado no existe',
+        message: 'El registro solicitado no existe',
       });
     }
     res.status(200).send(user);
@@ -58,20 +58,20 @@ const getUserbyId = async (req, res, next) => {
   }
 };
 
-const deleteUserbyId = async (req, res, next) => {
-  const { id } = req.params;
+const deleteUserById = async (req, res, next) => {
+  const { idUser } = req.params;
   try {
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(idUser);
     if (!user) {
       return next({
         statusCode: 404,
-        message: 'El usuario ha eliminar no existe',
+        message: 'El registro ha eliminar no existe',
       });
     }
     const idAuth = user.idAuth;
     await User.destroy({ where: { id } });
     await Auth.destroy({ where: { id: idAuth } });
-    res.status(200).send('El usuario ha sido eliminado con éxito');
+    res.status(200).send('El registro ha sido eliminado con éxito');
   } catch (error) {
     return next(error);
   }
@@ -79,6 +79,6 @@ const deleteUserbyId = async (req, res, next) => {
 
 module.exports = {
   getUsers,
-  getUserbyId,
-  deleteUserbyId,
+  getUserById,
+  deleteUserById,
 };

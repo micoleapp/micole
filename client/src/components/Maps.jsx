@@ -6,24 +6,29 @@ const containerStyle = {
   height: '400px'
 };
 
+const libraries = ["places"];
 
 
-function Maps() {
+function Maps({lat,lng}) {
+  let libRef = React.useRef(libraries);
+
   const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyB9qHB47v8fOmLUiByTvWinUehYqALI6q4"
-  })
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyB9qHB47v8fOmLUiByTvWinUehYqALI6q4",
+    libraries: libRef.current,
+  });
 
   const [center,setCenter] = React.useState({
-    lat: 0,
-    lng: 0
+    lat,
+    lng
   })
   
-  React.useEffect(()=>{
-    setCenter({  lat: -12.0939685,
-      lng: -76.9501867})
-  },[])
-  
+  React.useEffect(() => {
+    setCenter({
+      lat,
+      lng
+    })
+  },[lat,lng])
 
   const [map, setMap] = React.useState(null)
   const onLoad = React.useCallback(function callback(map) {

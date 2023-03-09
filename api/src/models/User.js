@@ -13,13 +13,13 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          isAlpha: {
-            args: true,
-            msg: 'El nombre solo puede contener letras',
+          is: {
+            args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+            msg: 'El nombre solo puede contener letras, acentos, tildes y espacios',
           },
           len: {
-            args: [2, 50],
-            msg: 'El nombre debe tener entre 2 y 50 letras',
+            args: [3, 60],
+            msg: 'El nombre debe tener entre 3 y 60 letras',
           },
         },
       },
@@ -27,13 +27,13 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          isAlpha: {
-            args: true,
-            msg: 'Los apellidos solo pueden contener letras',
+          is: {
+            args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+            msg: 'El apellido solo puede contener letras, acentos, tildes y espacios',
           },
           len: {
-            args: [5, 50],
-            msg: 'Los apellidos deben tener entre 2 y 50 letras',
+            args: [6, 60],
+            msg: 'El apellido debe tener entre 6 y 60 letras',
           },
         },
       },

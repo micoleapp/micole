@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getSchoolDetail } from "../redux/SchoolsActions";
+import {
+  clannDetailid,
+  getAllGrados,
+  getSchoolDetail,
+  postCita,
+} from "../redux/SchoolsActions";
 import banner from "../assets/ejemplobanner.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logo from "../assets/premium.png";
+import Swal from "sweetalert2";
+
 import {
   faDoorOpen,
   faHeart,
@@ -34,99 +41,96 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers";
-
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import { borderRadius } from "@mui/system";
-
-function srcset(image, size, rows = 1, cols = 1) {
-  return {
-    src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${
-      size * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
-  };
-}
-
-function QuiltedImageList({setImage}) {
+import axios from "axios";
+import { fontSize } from "@mui/system";
+import style from "./SchoolD.module.css";
+import { HiChevronDown } from "react-icons/hi";
+import { HiChevronLeft } from "react-icons/hi";
+function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
-    <ImageList
-      sx={{ width: "100%", height: 450, margin: 'auto' }}
-      variant="quilted"
-      cols={4}
-      rowHeight={121}
-    >
-      {itemData.map((item,index) => (
-        
-        <ImageListItem key={item.img}>
+    <div className="w-full px-4">
+      <img
+        src={firstImage}
+        alt=""
+        onClick={() => setImage(firstImage)}
+        className="cursor-pointer rounded-md h-24"
+      />
+      <div className="flex gap-5 mt-2 overflow-x-scroll w-full pb-2">
+        {gallery?.map((item, index) => (
           <img
-            {...srcset(item.img, 121)}
-            alt={item.title}
-            loading="lazy"
-            className="cursor-pointer z-25 object-cover rounded-md"
-            onClick={()=>setImage(item.img)}
+            key={index}
+            src={item}
+            className="cursor-pointer z-25 object-cover h-24 rounded-md"
+            onClick={() => setImage(item)}
           />
-        </ImageListItem>
-      ))}
-    </ImageList>
+        ))}
+      </div>
+    </div>
   );
 }
 
-const itemData = [
+const ArrHorariosMockQuevaALBack = [
+  { Lunes: ["08:30", "13:00", true] },
+  { Martes: ["10:30", "13:00", true] },
+  { Miercoles: ["09:30", "13:00", true] },
+  { Jueves: ["07:30", "13:00", false] },
+  { Viernes: ["11:30", "13:00", false] },
+];
+const ArrHorariosMockFormateado = [
   {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Breakfast'
+    dia: "Lunes",
+    horarios: { desde: "08:30", hasta: "13:00" },
+    disponibilidad: false,
+    vacantesDispo: 2,
+    vacantes: "20",
   },
   {
-    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    title: 'Burger',
+    dia: "Martes",
+    horarios: { desde: "10:30", hasta: "13:00" },
+    disponibilidad: true,
+    vacantesDispo: 3,
+    vacantes: "5",
   },
   {
-    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    title: 'Camera',
+    dia: "Miercoles",
+    horarios: { desde: "09:30", hasta: "13:00" },
+    disponibilidad: true,
+    vacantesDispo: 1,
+    vacantes: "3",
   },
   {
-    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    title: 'Coffee'
+    dia: "Jueves",
+    horarios: { desde: "11:30", hasta: "13:00" },
+    disponibilidad: false,
+    vacantesDispo: 0,
+    vacantes: "6",
   },
   {
-    img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    title: 'Hats'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-    title: 'Honey',
-    author: '@arwinneil'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-    title: 'Basketball',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-    title: 'Fern',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-    title: 'Mushrooms'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-    title: 'Tomato basil',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-    title: 'Sea star',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-    title: 'Bike'
+    dia: "Viernes",
+    horarios: { desde: "08:30", hasta: "13:00" },
+    disponibilidad: false,
+    vacantesDispo: 0,
+    vacantes: "10",
   },
 ];
 function SchoolDetail() {
   const { id } = useParams();
-  const { oneSchool } = useSelector((state) => state.schools);
+  const { oneSchool, grados } = useSelector((state) => state.schools);
+  const location = useLocation();
 
+  const params = new URLSearchParams(location.search);
+
+  const [gradoParams, setGradoParams] = React.useState(params.get("grado"));
+  const [ingresoParams, setIngresoParams] = React.useState(
+    params.get("ingreso")
+  );
+  console.log(grados);
+  console.log(gradoParams);
+  console.log(ingresoParams);
+  const nombre_grado = grados.find(
+    (grado) => grado.id == gradoParams
+  ).nombre_grado;
+  console.log(nombre_grado);
   const stringyDate = (date) => {
     if (date.toString().length === 1) {
       return "0" + date++;
@@ -135,12 +139,17 @@ function SchoolDetail() {
     }
   };
 
-  const [image,setImage] = useState(null)
+  const [image, setImage] = useState(null);
 
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(getAllGrados());
     dispatch(getSchoolDetail(id));
+    return () => {
+      dispatch(clannDetailid());
+    };
   }, []);
+
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -184,24 +193,22 @@ function SchoolDetail() {
     nombre: "",
     celular: "",
     correo: "",
+    añoIngreso: ingresoParams,
+    grado: nombre_grado,
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
-      e.target["name"].value === "" ||
+      e.target["nombre"].value === "" ||
       e.target["cel"].value === "" ||
       e.target["email"].value === ""
     ) {
       return alert("Llena todos los campos para poder continuar");
     }
-    setCita({
-      ...cita,
-      nombre: e.target["name"].value,
-      celular: e.target["cel"].value,
-      correo: e.target["email"].value,
-    });
     console.log(cita);
+
+    dispatch(postCita(cita));
   };
 
   const handleModo = () => {
@@ -212,38 +219,149 @@ function SchoolDetail() {
     });
   };
 
+  const [ratingNivel, setRatingNivel] = useState(0);
+  const [ratingAtencion, setRatingAtencion] = useState(0);
+  const [ratingInfraestructura, setRatingInfraestructura] = useState(0);
+  const [ratingUbicacion, setRatingUbicacion] = useState(0);
+  const [ratingLimpieza, setRatingLimpieza] = useState(0);
+  const [ratingPrecio, setRatingPrecio] = useState(0);
+
+  const [comentario, setComentario] = useState({
+    rating: 0,
+    nombre: "",
+    email: "",
+    comentario: "",
+  });
+
+  useEffect(() => {
+    setComentario({
+      ...comentario,
+      rating: Number(
+        (
+          (ratingNivel +
+            ratingAtencion +
+            ratingInfraestructura +
+            ratingUbicacion +
+            ratingLimpieza +
+            ratingPrecio) /
+          6
+        ).toFixed(2)
+      ),
+    });
+  }, [
+    ratingNivel,
+    ratingAtencion,
+    ratingInfraestructura,
+    ratingUbicacion,
+    ratingLimpieza,
+    ratingPrecio,
+  ]);
+
+  /*{
+    "nombre": "Jorge Lopez",
+      "email": "jlopez@gmail.com",
+      "comentario": "Excelente Colegio...",
+      "rating": 7.5,
+      "ColegioId": "f2aba1d5-3d86-4c5b-b18c-0b1f30ef98f9"
+}*/
+
+  console.log(localStorage.getItem("id") === id);
+
+  const comentarioSubmit = (e) => {
+    e.preventDefault();
+    if (
+      e.target["name"].value === "" ||
+      e.target["email"].value === "" ||
+      e.target["comentario"].value === "" ||
+      comentario.rating === 0.0
+    ) {
+      return alert("Llena todos los campos para poder continuar");
+    }
+    if (localStorage.getItem("id") === id) {
+      Swal.fire("Error!", "No puedes comentar mas de una vez", "error");
+      return
+    }
+    try {
+      axios
+        .post("/reviews", { ...comentario, ColegioId: id })
+        .then((res) => {
+          Swal.fire(
+            "Gracias por tu comentario!",
+            "Tu comentario ha sido enviado",
+            "success"
+          );
+          localStorage.setItem("id", id);
+        })
+        .catch((err) => {
+          Swal.fire("Error!", "Ha ocurrido un error", "error");
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const disableWeekends = (date, dayColegio) => {
+    return date.day() === 0 || date.day() === 6;
+  };
+  const [Horarios, setHorarios] = useState(false);
+  const toggleHorarios = () => {
+    setHorarios(!Horarios);
+  };
+
+  let infra = Array.from(
+    new Set(oneSchool?.Infraestructuras?.map((e) => e.InfraestructuraTipoId))
+  );
+
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
+
+  console.log(oneSchool);
+
+  useEffect(() => {
+    if (oneSchool.ubicacion) {
+      setLat(JSON.parse(oneSchool?.ubicacion)?.lat);
+      setLng(JSON.parse(oneSchool?.ubicacion)?.lng);
+    }
+  }, [oneSchool]);
 
   return (
     <div className="bg-[#f6f7f8]">
       <img
-        src={banner}
+        src={oneSchool.primera_imagen}
         alt="banner"
         className="object-cover w-full h-[500px]"
       />
-      <div className="p-8 px-5 lg:px-[100px]">
+      <div
+        className="p-8 px-5 lg:px-[100px]"
+        data-aos-mirror={false}
+        data-aos="fade-up"
+        data-aos-duration="1000"
+      >
         <div className="header drop-shadow-md">
-          <h1 className="text-2xl  font-semibold">Colegio Los Alamos</h1>
+          <h1 className="text-2xl  font-semibold">
+            {oneSchool.nombre_escuela}
+          </h1>
           <div>
             <div className="flex justify-between flex-col gap-5 lg:flex-row mt-2 lg:mt-0">
-              <div className="flex gap-5 items-start lg:items-center flex-col lg:flex-row text-black/70">
-                <h2>Calle Estados Unidos 721, Jesus Maria</h2>
-                <div className="flex gap-5 items-center">
+              <div className="flex gap-5 lg:items-center justify-center flex-col lg:flex-row text-black/70">
+                <h2 className="text-center">{oneSchool.direccion} </h2>
+                <div className="flex gap-5 lg:flex-row flex-col justify-center w-full items-center">
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
                     5 vacantes
                   </span>
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
-                    2do grado
+                    {nombre_grado}
                   </span>
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
-                    2022
+                    {ingresoParams}
                   </span>
                 </div>
               </div>
-              <div className="flex items-center gap-5 text-black/70">
+              <div className="flex flex-col lg:flex-row justify-center items-center gap-5 text-black/70">
                 <span className="flex items-center gap-2">
                   {" "}
                   <FontAwesomeIcon
-                    size="md"
+                    size="lg"
                     color="rgb(156 163 175)"
                     className="bg-white rounded-full p-3"
                     icon={faShare}
@@ -253,7 +371,7 @@ function SchoolDetail() {
                 <span className="flex items-center gap-2">
                   {" "}
                   <FontAwesomeIcon
-                    size="md"
+                    size="lg"
                     className="bg-white rounded-full p-3"
                     color="rgb(156 163 175)"
                     icon={faHeart}
@@ -264,7 +382,7 @@ function SchoolDetail() {
             </div>
           </div>
           <div className="mt-5 gap-5 flex justify-between items-start lg:items-center flex-col lg:flex-row">
-            <div className="flex gap-5 items-start">
+            <div className="flex lg:flex-row flex-col gap-5 items-center justify-center lg:justify-start lg:w-full lg:items-start">
               {" "}
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
@@ -272,31 +390,39 @@ function SchoolDetail() {
                   color="rgb(156 163 175)"
                   icon={faUsers}
                 />
-                <span className="text-sm text-gray-400">368 Alumnos</span>
+                <span className="text-sm text-gray-400">
+                  {oneSchool.numero_estudiantes} Alumnos
+                </span>
               </div>
-              <div className="flex flex-col gap-2 text-center">
-                <FontAwesomeIcon
-                  size="lg"
-                  color="rgb(156 163 175)"
-                  icon={faPaperclip}
-                />
-                <span className="text-sm text-gray-400"> Mixto</span>
-              </div>
-              <div className="flex flex-col gap-2 text-center">
+              {oneSchool?.Categoria?.map((cat) => (
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <img
+                    src={cat.logo_categoria}
+                    alt="logo_categoria"
+                    className="w-4 object-cover invert-[40%] drop-shadow-md"
+                  />
+                  <span className="text-sm text-gray-400">
+                    {cat.nombre_categoria}{" "}
+                  </span>
+                </div>
+              ))}
+              {/* <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
                   size="lg"
                   color="rgb(156 163 175)"
                   icon={faDoorOpen}
                 />
                 <span className="text-sm text-gray-400">2 Salones</span>
-              </div>
+              </div> */}
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
                   size="lg"
                   color="rgb(156 163 175)"
                   icon={faCalendar}
                 />
-                <span className="text-sm text-gray-400">2 Salones</span>
+                <span className="text-sm text-gray-400">
+                  Fundación: {oneSchool.fecha_fundacion}{" "}
+                </span>
               </div>
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
@@ -304,7 +430,9 @@ function SchoolDetail() {
                   color="rgb(156 163 175)"
                   icon={faSchool}
                 />
-                <span className="text-sm text-gray-400">2 Salones</span>
+                <span className="text-sm text-gray-400">
+                  UGEL: {oneSchool.ugel}{" "}
+                </span>
               </div>
             </div>
             <div>
@@ -315,18 +443,21 @@ function SchoolDetail() {
         </div>
         <main className="flex gap-5 flex-col lg:flex-row">
           <section className="left mt-5 flex flex-col gap-8 w-full">
-            <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md">
+            <div
+              className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Descripcion</h2>
-              <p className="text-black/60 text-base">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque
-                dolores dolorum facilis tempore ut, voluptatibus perferendis!
-                Nihil amet maiores mollitia est aspernatur consequatur placeat
-                velit quae dolorem ex vitae repellendus sunt quis numquam
-                corrupti minima nam, officiis totam odio repellat cupiditate
-                soluta adipisci nemo veniam.{" "}
-              </p>
+              <p className="text-black/60 text-base">{oneSchool.descripcion}</p>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Ubicacion</h2>
               <div className="flex text-xs w-full justify-between">
                 <ul className="flex flex-col gap-3">
@@ -334,13 +465,13 @@ function SchoolDetail() {
                     <span className="font-semibold text-black ">
                       Direccion:{" "}
                     </span>
-                    329 Queensberry Street
+                    {oneSchool.direccion}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
                       Departamento:{" "}
                     </span>
-                    New Jersey State
+                    {oneSchool?.Departamento?.nombre_departamento}
                   </li>
                 </ul>
                 <ul className="flex flex-col gap-3">
@@ -348,53 +479,66 @@ function SchoolDetail() {
                     <span className="font-semibold text-black ">
                       Distrito:{" "}
                     </span>
-                    Jersey City
+                    {oneSchool?.Distrito?.nombre_distrito}
                   </li>
-                  <li className="text-black/60">
+                  {/* <li className="text-black/60">
                     <span className="font-semibold text-black ">Zip: </span>
                     365448
-                  </li>
+                  </li> */}
                 </ul>
                 <ul className="flex flex-col gap-3">
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
                       Provincia:{" "}
                     </span>
-                    Greenville
+                    {oneSchool?.Provincium?.nombre_provincia}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Pais: </span>
-                    United State
+                    Peru
                   </li>
                 </ul>
               </div>
-              <Maps />
+              <Maps lat={lat} lng={lng} />
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Detalles del Colegio</h2>
               <div className="flex text-xs w-full flex-col lg:flex-row gap-3 justify-between">
-                <ul className="flex flex-col gap-3">
+                <ul className="grid grid-cols-3 w-full gap-3">
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">RUC: </span>
-                    128380912879
+                    {oneSchool.ruc}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Area: </span>
-                    1560 Sq Ft
+                    {oneSchool.area}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
                       Fundacion:{" "}
                     </span>
-                    2021-09-14
+                    {oneSchool.fecha_fundacion}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Niveles: </span>
-                    Inicial, primaria, secundaria
+                    {oneSchool.Nivels?.map((nivel) => nivel.nombre_nivel).join(
+                      ", "
+                    )}
+                  </li>
+                  <li className="text-black/60">
+                    <span className="font-semibold text-black ">
+                      Director:{" "}
+                    </span>
+                    {oneSchool.nombre_director}
                   </li>
                 </ul>
                 <ul className="flex flex-col gap-3">
-                  <li className="text-black/60">
+                  {/* <li className="text-black/60">
                     <span className="font-semibold text-black ">
                       Profesores:{" "}
                     </span>
@@ -403,15 +547,9 @@ function SchoolDetail() {
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Salones: </span>
                     3
-                  </li>
-                  <li className="text-black/60">
-                    <span className="font-semibold text-black ">
-                      Director:{" "}
-                    </span>
-                    Juan Perez
-                  </li>
+                  </li> */}
                 </ul>
-                <ul className="flex flex-col gap-3">
+                {/* <ul className="flex flex-col gap-3">
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
                       Tipo de educacion:{" "}
@@ -428,23 +566,28 @@ function SchoolDetail() {
                     </span>
                     Urbana
                   </li>
-                </ul>
+                </ul> */}
               </div>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md">
+            <div
+              className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">
                 Propuesta Valor Educativo
               </h2>
               <p className="text-black/60 text-base">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque
-                dolores dolorum facilis tempore ut, voluptatibus perferendis!
-                Nihil amet maiores mollitia est aspernatur consequatur placeat
-                velit quae dolorem ex vitae repellendus sunt quis numquam
-                corrupti minima nam, officiis totam odio repellat cupiditate
-                soluta adipisci nemo veniam.{" "}
+                {oneSchool.propuesta_valor}
               </p>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Infraestructura</h2>
               <Tabs
                 value={value}
@@ -454,71 +597,174 @@ function SchoolDetail() {
                 scrollButtons
                 allowScrollButtonsMobile
               >
-                <Tab
-                  style={{
-                    fontSize: "11px",
-                    fontFamily: "Poppins",
-                    textTransform: "capitalize",
-                  }}
-                  label="Administrativa"
-                  {...a11yProps(0)}
-                />
-                <Tab
-                  style={{
-                    fontSize: "11px",
-                    fontFamily: "Poppins",
-                    textTransform: "capitalize",
-                  }}
-                  label="Artistica"
-                  {...a11yProps(1)}
-                />
-                <Tab
-                  style={{
-                    fontSize: "11px",
-                    fontFamily: "Poppins",
-                    textTransform: "capitalize",
-                  }}
-                  label="Deportiva"
-                  {...a11yProps(2)}
-                />
-                {/* <Tab
-                  style={{
-                    fontSize: "16px",
-                    fontFamily: "Poppins"
-                  }}
-                  label="Toggles"
-                  {...a11yProps(3)}
-                />*/}
-                <Tab
-                  style={{
-                    fontSize: "11px",
-                    fontFamily: "Poppins",
-                    textTransform: "capitalize",
-                  }}
-                  label="Enseñanza"
-                  {...a11yProps(3)}
-                />
-                <Tab
-                  style={{
-                    fontSize: "11px",
-                    fontFamily: "Poppins",
-                    textTransform: "capitalize",
-                  }}
-                  label="Laboratorio"
-                  {...a11yProps(4)}
-                />
-                {/*<Tab
-                  style={{
-                    fontSize: "16px",
-                    fontFamily: "Poppins"
-                  }}
-                  label="AWS S3 Config"
-                  {...a11yProps(5)}
-                />*/}
+                {infra.map((e) => (
+                  <Tab
+                    style={{
+                      fontSize: "11px",
+                      fontFamily: "Poppins",
+                      textTransform: "capitalize",
+                    }}
+                    label={
+                      e === 1
+                        ? "Administrativo"
+                        : e === 2
+                        ? "Artistica"
+                        : e === 3
+                        ? "Deportiva"
+                        : e === 4
+                        ? "Enseñanza"
+                        : e === 5
+                        ? "Laboratorio"
+                        : null
+                    }
+                    {...a11yProps(e)}
+                  />
+                ))}
               </Tabs>
 
               <div className="flex text-xs w-full justify-between">
-                <TabPanel value={value} index={0}>
+                {oneSchool?.Infraestructuras?.some(
+                  (e) => e.InfraestructuraTipoId === 1
+                ) && (
+                  <TabPanel value={value} index={0}>
+                    <ul className="flex flex-col gap-3">
+                      {oneSchool?.Infraestructuras?.filter(
+                        (e) => e.InfraestructuraTipoId === 1
+                      ).map((e) => (
+                        <li className="flex items-center gap-3">
+                          {e.imagen.length > 0 ? (
+                            <img
+                              src={e.imagen}
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          ) : (
+                            <img
+                              src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png"
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          )}
+                          {e.nombre_infraestructura}
+                        </li>
+                      ))}
+                    </ul>
+                  </TabPanel>
+                )}
+                {oneSchool?.Infraestructuras?.some(
+                  (e) => e.InfraestructuraTipoId === 2
+                ) && (
+                  <TabPanel value={value} index={1}>
+                    <ul className="flex flex-col gap-3">
+                      {oneSchool?.Infraestructuras?.filter(
+                        (e) => e.InfraestructuraTipoId === 2
+                      ).map((e) => (
+                        <li className="flex items-center gap-3">
+                          {e.imagen.length > 0 ? (
+                            <img
+                              src={e.imagen}
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          ) : (
+                            <img
+                              src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png"
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          )}
+                          {e.nombre_infraestructura}
+                        </li>
+                      ))}
+                    </ul>
+                  </TabPanel>
+                )}
+                {oneSchool?.Infraestructuras?.some(
+                  (e) => e.InfraestructuraTipoId === 3
+                ) && (
+                  <TabPanel value={value} index={2}>
+                    <ul className="flex flex-col gap-3">
+                      {oneSchool?.Infraestructuras?.filter(
+                        (e) => e.InfraestructuraTipoId === 3
+                      ).map((e) => (
+                        <li className="flex items-center gap-3">
+                          {e.imagen.length > 0 ? (
+                            <img
+                              src={e.imagen}
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          ) : (
+                            <img
+                              src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png"
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          )}
+                          {e.nombre_infraestructura}
+                        </li>
+                      ))}
+                    </ul>
+                  </TabPanel>
+                )}
+                {oneSchool?.Infraestructuras?.some(
+                  (e) => e.InfraestructuraTipoId === 4
+                ) && (
+                  <TabPanel value={value} index={3}>
+                    <ul className="flex flex-col gap-3">
+                      {oneSchool?.Infraestructuras?.filter(
+                        (e) => e.InfraestructuraTipoId === 4
+                      ).map((e) => (
+                        <li className="flex items-center gap-3">
+                          {e.imagen.length > 0 ? (
+                            <img
+                              src={e.imagen}
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          ) : (
+                            <img
+                              src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png"
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          )}
+                          {e.nombre_infraestructura}
+                        </li>
+                      ))}
+                    </ul>
+                  </TabPanel>
+                )}
+                {oneSchool?.Infraestructuras?.some(
+                  (e) => e.InfraestructuraTipoId === 5
+                ) && (
+                  <TabPanel value={value} index={4}>
+                    <ul className="flex flex-col gap-3">
+                      {oneSchool?.Infraestructuras?.filter(
+                        (e) => e.InfraestructuraTipoId === 5
+                      ).map((e) => (
+                        <li className="flex items-center gap-3">
+                          {e.imagen.length > 0 ? (
+                            <img
+                              src={e.imagen}
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          ) : (
+                            <img
+                              src="https://es.digi.com/getattachment/products/networking/infrastructure-management/icon-im-usbconnectivity.png"
+                              alt={e.nombre_infraestructura}
+                              className="w-10"
+                            />
+                          )}
+
+                          {e.nombre_infraestructura}
+                        </li>
+                      ))}
+                    </ul>
+                  </TabPanel>
+                )}
+                {/* <TabPanel value={value} index={0}>
                   <ul className="flex flex-col gap-3">
                     <li className="flex items-center gap-2">
                       {" "}
@@ -679,45 +925,35 @@ function SchoolDetail() {
                       Compartir
                     </li>
                   </ul>
-                </TabPanel>
+                </TabPanel> */}
               </div>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">
                 Acreditaciones / Certificaciones / Asosiaciones
               </h2>
               <div className="flex text-xs w-full gap-5">
-                <ul className="flex flex-col gap-5">
-                  <li className="text-black/60 flex items-center gap-3">
-                    <img src={logo} alt="" className="w-10" />
-                    Great Place to Study
-                  </li>
-                  <li className="text-black/60 flex items-center gap-3">
-                    <img src={logo} alt="" className="w-10" />
-                    Great Place to Study
-                  </li>{" "}
-                  <li className="text-black/60 flex items-center gap-3">
-                    <img src={logo} alt="" className="w-10" />
-                    Great Place to Study
-                  </li>
-                </ul>
-                <ul className="flex flex-col gap-5">
-                  <li className="text-black/60 flex items-center gap-3">
-                    <img src={logo} alt="" className="w-10" />
-                    Great Place to Study
-                  </li>
-                  <li className="text-black/60 flex items-center gap-3">
-                    <img src={logo} alt="" className="w-10" />
-                    Great Place to Study
-                  </li>
-                  <li className="text-black/60 flex items-center gap-3">
-                    <img src={logo} alt="" className="w-10" />
-                    Great Place to Study
-                  </li>
+                <ul className="grid grid-cols-2 grid-rows-5">
+                  {oneSchool?.Afiliacions?.map((ac) => (
+                    <li className="text-black/60 flex items-center gap-3">
+                      <img src={ac.logo} alt="" className="w-10" />
+                      {ac.nombre_afiliacion}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
+            {/* <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
+              data-aos="zoom-in-right"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Lugares cercanos</h2>
               <h3 className="font-medium text-lg flex items-center gap-2">
                 {" "}
@@ -809,21 +1045,79 @@ function SchoolDetail() {
                   <small className="text-black/50">400 reviews</small>
                 </ul>
               </ul>
-            </div>
+            </div> */}
           </section>
           <section className="right mt-5  flex flex-col gap-8 w-full">
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
+            <div
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
+              data-aos="zoom-in-left"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
               <h2 className="font-semibold text-xl">Solicitar una visita</h2>
+              <div
+                onClick={toggleHorarios}
+                style={{ display: "flex", gap: "10px", alignItems: "center" }}
+              >
+                {Horarios && (
+                  <>
+                    <p>Ver la disponibilidad horaria de este colegio </p>
+                    <HiChevronDown
+                      data-aos-duration="400"
+                      data-aos="flip-down"
+                    />
+                  </>
+                )}
+                {Horarios === false && (
+                  <>
+                    <p>Ver la disponibilidad horaria de este colegio </p>
+                    <HiChevronLeft
+                      data-aos-duration="400"
+                      data-aos="flip-left"
+                    />
+                  </>
+                )}
+              </div>
+              {Horarios && (
+                <>
+                  <div className={style.Layout}>
+                    {ArrHorariosMockFormateado.map((ele) => {
+                      return (
+                        <>
+                          <div
+                            //si vacantes estan agotadas deberia aparecer todo en gris
+                            // data-aos="zoom-in-left"
+                            // data-aos-duration="700"
+                            className={style.cardTable}
+                          >
+                            <div className={style.cardTable}>
+                              <div className={style.itemTable}>
+                                <p style={{ fontSize: "12px" }}>{ele.dia}</p>
+                                <div style={{ display: "flex", gap: "10px" }}>
+                                  <p>{ele.horarios.desde}</p>
+                                  <p>/</p>
+                                  <p>{ele.horarios.hasta}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <div className="flex w-full justify-between flex-col gap-4 lg:flex-row">
                   <MobileDatePicker
                     label="Elejir fecha"
                     inputFormat="DD/MM/YYYY"
                     value={date}
+                    shouldDisableDate={disableWeekends}
                     onChange={handleChangeDate}
                     renderInput={(params) => <TextField {...params} />}
                     disablePast
-                    
                   />
                   <div className="flex flex-col gap-2">
                     <MobileTimePicker
@@ -835,9 +1129,10 @@ function SchoolDetail() {
                       minutesStep={15}
                       minTime={dayjs("2014-08-18T08:00:00")}
                       maxTime={dayjs("2014-08-18T17:00:00")}
-                      
                     />
-                    <small className="text-black/50">08:00 - 17:00 / Intervalo 15 min</small>
+                    <small className="text-black/50">
+                      08:00 - 17:00 / Intervalo 15 min
+                    </small>
                   </div>
                 </div>
               </LocalizationProvider>
@@ -867,18 +1162,26 @@ function SchoolDetail() {
                 </div>
                 <div className="flex w-full gap-5 justify-between">
                   <input
-                    name="name"
+                    name="nombre"
                     type="text"
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Nombre"
+                    onChange={(e) => {
+                      setCita({ ...cita, nombre: e.target.value });
+                    }}
+                    required
                   />
                   <input
                     name="cel"
-                    type="text"
-                    pattern="[0-9]{8,12}"
+                    type="number"
+                    pattern="[0-9]{8,15}"
+                    required
                     title="Solo se permiten numeros y entre 8 y 10 caracteres"
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Celular"
+                    onChange={(e) => {
+                      setCita({ ...cita, celular: Number(e.target.value) });
+                    }}
                   />
                 </div>
                 <input
@@ -886,6 +1189,10 @@ function SchoolDetail() {
                   type="email"
                   className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                   placeholder="Correo"
+                  onChange={(e) => {
+                    setCita({ ...cita, correo: e.target.value });
+                  }}
+                  required
                 />
                 <button
                   type="submit"
@@ -903,13 +1210,199 @@ function SchoolDetail() {
               </p>
             </div>
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
-            <h2 className="font-semibold text-xl">Galeria</h2>
-            <QuiltedImageList setImage={setImage} />
-            <div className={`fixed top-0 left-0 z-50 bg-black/90 w-full h-full ${image ? "block" : "hidden"}`}>
-              <button onClick={()=>setImage(null)} className="absolute top-2 right-4 z-[100] text-white">Atras</button>
-              <img src={image} alt="" className="absolute border-4 top-1/2 left-1/2 -translate-x-1/2 rounded-md -translate-y-1/2 block max-w-[80%] max-h-[80%] object-cover "/>
+              <h2 className="font-semibold text-xl">Galeria</h2>
+              {oneSchool.hasOwnProperty("galeria_fotos") && (
+                <QuiltedImageList
+                  firstImage={oneSchool.primera_imagen}
+                  gallery={JSON.parse(oneSchool.galeria_fotos)}
+                  setImage={setImage}
+                />
+              )}
+              <div
+                className={`fixed top-0 left-0 z-50 bg-black/90 w-full h-full ${
+                  image ? "block" : "hidden"
+                }`}
+              >
+                <button
+                  onClick={() => setImage(null)}
+                  className="absolute top-2 right-4 z-[100] text-white"
+                >
+                  Atras
+                </button>
+                <img
+                  src={image}
+                  alt=""
+                  className="absolute border-4 top-1/2 left-1/2 -translate-x-1/2 rounded-md -translate-y-1/2 block max-w-[80%] max-h-[80%] object-cover"
+                />
+              </div>
             </div>
-            </div>
+            {oneSchool.video_url?.length > 0 && (
+              <div
+                className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
+                data-aos="zoom-in-left"
+                data-aos-duration="1500"
+                data-aos-mirror={false}
+              >
+                <h2 className="font-semibold text-xl">Video</h2>
+                {/* <video
+                  className="w-full h-[300px] lg:h-[400px] "
+                  src={`${oneSchool.video_url.replace("watch?v=", "embed/")}`}
+                ></video> */}
+                <video className="w-full h-[300px] lg:h-[400px]" controls>
+                  <source src={oneSchool.video_url} type="video/mp4" />
+                </video>
+              </div>
+            )}
+            <form
+              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
+              onSubmit={comentarioSubmit}
+              data-aos="zoom-in-left"
+              data-aos-duration="1500"
+              data-aos-mirror={false}
+            >
+              <h2 className="font-semibold text-xl">Deja tu comentario</h2>
+              <div className="flex flex-col lg:grid grid-cols-2 text-black/70">
+                <div>
+                  <h2>Nivel de enseñanza</h2>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingNivel}
+                    max={10}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setRatingNivel(newValue);
+                    }}
+                  />
+                </div>
+                <div>
+                  <h2>Atención al cliente</h2>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingAtencion}
+                    max={10}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setRatingAtencion(newValue);
+                    }}
+                  />
+                </div>
+                <div>
+                  <h2>Infraestructura</h2>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingInfraestructura}
+                    max={10}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setRatingInfraestructura(newValue);
+                    }}
+                  />
+                </div>
+                <div>
+                  <h2>Ubicación</h2>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingUbicacion}
+                    max={10}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setRatingUbicacion(newValue);
+                    }}
+                  />
+                </div>
+                <div>
+                  <h2>Limpieza</h2>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingLimpieza}
+                    max={10}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setRatingLimpieza(newValue);
+                    }}
+                  />
+                </div>
+                <div>
+                  <h2>Precio</h2>
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingPrecio}
+                    max={10}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setRatingPrecio(newValue);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="flex items-center">
+                <h2>Total: </h2>
+                <Rating
+                  id="rating"
+                  name="simple-controlled"
+                  value={
+                    (ratingNivel +
+                      ratingAtencion +
+                      ratingInfraestructura +
+                      ratingUbicacion +
+                      ratingLimpieza +
+                      ratingPrecio) /
+                    6
+                  }
+                  max={10}
+                  precision={0.5}
+                  readOnly
+                />
+              </div>
+              <div className="flex w-full gap-5 justify-between">
+                <input
+                  name="name"
+                  type="text"
+                  className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                  placeholder="Nombre"
+                  required
+                  onChange={(e) => {
+                    setComentario({
+                      ...comentario,
+                      nombre: e.target.value,
+                    });
+                  }}
+                />
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                  placeholder="Email"
+                  onChange={(e) => {
+                    setComentario({
+                      ...comentario,
+                      email: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <textarea
+                name="comentario"
+                type="text"
+                required
+                className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                placeholder="Escribe tu comentario"
+                rows={5}
+                onChange={(e) => {
+                  setComentario({
+                    ...comentario,
+                    comentario: e.target.value,
+                  });
+                }}
+              />
+              <button
+                type="submit"
+                className="p-3 bg-[#0061dd] text-white rounded-md hover:bg-[#0759c3] duration-300"
+              >
+                Enviar reseña
+              </button>
+            </form>
           </section>
         </main>
       </div>

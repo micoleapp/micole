@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./ModalInscripcion.module.css";
 import CloseButton from "./svg/CloseButton";
 import FormInscripcion from "../FormInscripcion/FormInscripcion";
@@ -10,46 +10,42 @@ export default function ModalInscripcion({
   handleClosePayment,
   OpenPaymentPLan,
 }) {
-  const { isAuth } = useSelector((state) => state.auth);
-console.log( OpenPaymentPLan.price)
-  const [OpenPayment, setOpenPayment] = useState(true);
-  const [OpenLogin, setOpenLogin] = useState(false);
+  const { isAuth , success } = useSelector((state) => state.auth);
+  console.log(OpenPaymentPLan.price);
   const [OpenRegister, setOpenRegister] = useState(true);
+  const [OpenLogin, setOpenLogin] = useState(false);
 
   const toggleClose = () => {
     handleClose(false);
     handleClosePayment({
       ...OpenPaymentPLan,
       state: false,
+      price: 0,
+      plan: "",
     });
   };
+  
   return (
     <div className={style.Overlay}>
-      <div style={{ paddingTop: "40px", marginBottom: "20px" }}>
-        <div className={style.contenedorModal}>
+      <div className="">
+        <div data-aos="fade-down" className={style.contenedorModal}>
           <div className={style.DivCloseButton}>
             <div onClick={toggleClose}>
               <CloseButton />
             </div>
           </div>
-          {OpenPayment === false &&
-            OpenLogin === false &&
-            isAuth === false &&
-            OpenRegister === true && (
-              <FormInscripcion
-                handlerOpenLogin={setOpenLogin}
-                handlerOpenPayment={setOpenPayment}
-              />
-            )}
+          {OpenLogin === false && isAuth === false && OpenRegister === true && (
+            <FormInscripcion handlerOpenLogin={setOpenLogin} />
+          )}
           <div>
-            {OpenPayment === true && (
+            {isAuth === true && (
               <Payment
                 plan={OpenPaymentPLan?.plan}
                 price={OpenPaymentPLan?.price}
               />
             )}
           </div>
-          <div>{OpenLogin === true && <FormLogin />}</div>
+          <div>{OpenLogin === true && isAuth === false && <FormLogin setOpenLogin={setOpenLogin} OpenLogin={OpenLogin} />}</div>
         </div>
       </div>
     </div>

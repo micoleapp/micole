@@ -15,12 +15,23 @@ import.meta.env.MODE === "development"
   ? (axios.defaults.baseURL = "http://localhost:3001")
   : (axios.defaults.baseURL = "url produccion");
 
+let previusTitle = document.title
+
+window.addEventListener('blur',()=>{
+  previusTitle = document.title
+  document.title = "No te vayas aún, Vuelve!!! "
+})
+
+window.addEventListener('focus',()=>{
+  document.title = previusTitle
+})
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <>
       <Provider store={store}>
         <HashRouter>
           <App />
         </HashRouter>
       </Provider>
-  </React.StrictMode>
+  </>
 );

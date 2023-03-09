@@ -10,7 +10,8 @@ function CardsTwo({
   plan,
   premium,
   standard,
-  handlerOpen
+  handlerOpen,
+  duration
 }) {
   const handlerPlan = () => {
     handlerOpen({
@@ -20,7 +21,8 @@ function CardsTwo({
     })
   };
   return (
-    <div className="relative">
+    <div className="relative"            data-aos="flip-right"
+    data-aos-mirror={false} data-aos-delay={duration}>
       <div
         className={`text-white group py-5 ${
           standard ? "border-4 shadow-xl" : "border-2"

@@ -67,3 +67,27 @@
     border-radius: 10px;  
   }
   
+.leftshadow{
+  box-shadow: 3px 3px 19px -2px rgba(0,0,0,0.38);
+  -webkit-box-shadow: 2px 2px 15px -2px rgba(0,0,0,0.38);
+  -moz-box-shadow: 2px 2px 15px -2px rgba(0,0,0,0.38);
+}
+
+.file-select input[type="file"] {
+  visibility: hidden;
+}
+
+[data-aos="fade-left"] {
+  opacity: 0;
+  transition-property: opacity;
+}
+[data-aos="fade-left"].aos-animate {
+  opacity: 0;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+input[type=number] { -moz-appearance:textfield; }

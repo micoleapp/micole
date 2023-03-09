@@ -1,0 +1,24 @@
+
+.layout{
+    display: flex;
+    gap:10px;
+  flex-direction: row;
+  
+  }
+  
+.containerBtn{
+display: flex;
+flex-direction: row;
+align-items: center;
+gap:10px
+}
+  
+@media (max-width: 700px) {
+
+    .containerBtn{
+        flex-direction: column;
+    }
+    .layout{
+        flex-direction: column;
+    }
+  }
