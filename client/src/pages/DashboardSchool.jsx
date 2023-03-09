@@ -2302,120 +2302,120 @@ function DashboardSchool() {
           </Box>
         ) : page === 1 ? (
           <div className="min-h-screen">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <div className="grid lg:grid-cols-3 w-full grid-cols-2">
-                {daysWithTime.map((day, index) => (
-                  <div className="my-3">
-                    <FormControlLabel
-                      label={Object.keys(day)}
-                      control={
-                        <Checkbox
-                          checked={day[Object.keys(day)][2]}
-                          onChange={(event, target) => {
-                            if (target) {
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <div className="grid lg:grid-cols-3 w-full grid-cols-2">
+                  {daysWithTime.map((day, index) => (
+                    <div className="my-3">
+                      <FormControlLabel
+                        label={Object.keys(day)}
+                        control={
+                          <Checkbox
+                            checked={day[Object.keys(day)][2]}
+                            onChange={(event, target) => {
+                              if (target) {
+                                setDaysWithTime([
+                                  ...daysWithTime.slice(0, index),
+                                  {
+                                    [Object.keys(day)]: [
+                                      day[Object.keys(day)][0],
+                                      day[Object.keys(day)][1],
+                                      true,
+                                    ],
+                                  },
+                                  ...daysWithTime.slice(index + 1),
+                                ]);
+                              } else {
+                                setDaysWithTime([
+                                  ...daysWithTime.slice(0, index),
+                                  {
+                                    [Object.keys(day)]: [
+                                      day[Object.keys(day)][0],
+                                      day[Object.keys(day)][1],
+                                      false,
+                                    ],
+                                  },
+                                  ...daysWithTime.slice(index + 1),
+                                ]);
+                              }
+                            }}
+                          />
+                        }
+                      />
+                      <div className="flex flex-col gap-3">
+                        <small className="font-semibold">
+                          {[
+                            stringyDate(
+                              day[Object.keys(day)][0]["$H"]
+                            ).toString(),
+                            stringyDate(
+                              day[Object.keys(day)][0]["$m"]
+                            ).toString(),
+                          ].join(":")}{" "}
+                          -{" "}
+                          {[
+                            stringyDate(
+                              day[Object.keys(day)][1]["$H"]
+                            ).toString(),
+                            stringyDate(
+                              day[Object.keys(day)][1]["$m"]
+                            ).toString(),
+                          ].join(":")}{" "}
+                        </small>
+                        <div className="flex gap-2">
+                          <MobileTimePicker
+                            label="Desde"
+                            disabled={!day[Object.keys(day)][2]}
+                            className="w-[70px]"
+                            value={day[Object.keys(day)][0]}
+                            renderInput={(params) => <TextField {...params} />}
+                            ampm={false}
+                            onChange={(newValue) => {
                               setDaysWithTime([
                                 ...daysWithTime.slice(0, index),
                                 {
                                   [Object.keys(day)]: [
-                                    day[Object.keys(day)][0],
+                                    newValue,
                                     day[Object.keys(day)][1],
                                     true,
                                   ],
                                 },
                                 ...daysWithTime.slice(index + 1),
                               ]);
-                            } else {
+                            }}
+                            minutesStep={60}
+                            minTime={dayjs("2014-08-18T08:00:00")}
+                            maxTime={day[Object.keys(day)][1]}
+                          />
+                          <MobileTimePicker
+                            label="Hasta"
+                            disabled={!day[Object.keys(day)][2]}
+                            className="w-[70px] "
+                            onChange={(newValue) => {
                               setDaysWithTime([
                                 ...daysWithTime.slice(0, index),
                                 {
                                   [Object.keys(day)]: [
                                     day[Object.keys(day)][0],
-                                    day[Object.keys(day)][1],
-                                    false,
+                                    newValue,
+                                    true,
                                   ],
                                 },
                                 ...daysWithTime.slice(index + 1),
                               ]);
-                            }
-                          }}
-                        />
-                      }
-                    />
-                    <div className="flex flex-col gap-3">
-                      <small className="font-semibold">
-                        {[
-                          stringyDate(
-                            day[Object.keys(day)][0]["$H"]
-                          ).toString(),
-                          stringyDate(
-                            day[Object.keys(day)][0]["$m"]
-                          ).toString(),
-                        ].join(":")}{" "}
-                        -{" "}
-                        {[
-                          stringyDate(
-                            day[Object.keys(day)][1]["$H"]
-                          ).toString(),
-                          stringyDate(
-                            day[Object.keys(day)][1]["$m"]
-                          ).toString(),
-                        ].join(":")}{" "}
-                      </small>
-                      <div className="flex gap-2">
-                        <MobileTimePicker
-                          label="Desde"
-                          disabled={!day[Object.keys(day)][2]}
-                          className="w-[70px]"
-                          value={day[Object.keys(day)][0]}
-                          renderInput={(params) => <TextField {...params} />}
-                          ampm={false}
-                          onChange={(newValue) => {
-                            setDaysWithTime([
-                              ...daysWithTime.slice(0, index),
-                              {
-                                [Object.keys(day)]: [
-                                  newValue,
-                                  day[Object.keys(day)][1],
-                                  true,
-                                ],
-                              },
-                              ...daysWithTime.slice(index + 1),
-                            ]);
-                          }}
-                          minutesStep={60}
-                          minTime={dayjs("2014-08-18T08:00:00")}
-                          maxTime={day[Object.keys(day)][1]}
-                        />
-                        <MobileTimePicker
-                          label="Hasta"
-                          disabled={!day[Object.keys(day)][2]}
-                          className="w-[70px] "
-                          onChange={(newValue) => {
-                            setDaysWithTime([
-                              ...daysWithTime.slice(0, index),
-                              {
-                                [Object.keys(day)]: [
-                                  day[Object.keys(day)][0],
-                                  newValue,
-                                  true,
-                                ],
-                              },
-                              ...daysWithTime.slice(index + 1),
-                            ]);
-                          }}
-                          value={day[Object.keys(day)][1]}
-                          renderInput={(params) => <TextField {...params} />}
-                          ampm={false}
-                          minutesStep={60}
-                          minTime={day[Object.keys(day)][0]}
-                          maxTime={dayjs("2014-08-18T17:00:00")}
-                        />
+                            }}
+                            value={day[Object.keys(day)][1]}
+                            renderInput={(params) => <TextField {...params} />}
+                            ampm={false}
+                            minutesStep={60}
+                            minTime={day[Object.keys(day)][0]}
+                            maxTime={dayjs("2014-08-18T17:00:00")}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </LocalizationProvider>
+                  ))}
+                </div>
+              </LocalizationProvider>
             <button
               onClick={handleSubmitCitas}
               className="flex mx-auto my-5 bg-[#0061dd] text-white p-2 rounded-md shadow-md"
