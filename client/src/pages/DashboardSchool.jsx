@@ -116,7 +116,7 @@ function DashboardSchool() {
   useEffect(() => {
    dispatch(getCitaAgendadas())
 
-  }, [citasAgendadas.CitasInactivas.length])
+  }, [citasAgendadas.CitasInactivas?.length])
   const { width, height } = useWindowSize();
   const [page, setPage] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
