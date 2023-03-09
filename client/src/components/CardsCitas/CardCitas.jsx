@@ -21,17 +21,18 @@ export default function CardCitas({ filtros }) {
 
   const dispatch = useDispatch();
   const handlerPutStateCita = (iD) => {
-    console.log(idCita);
+    console.log(iD);
 
-    dispatch(putCita(iD));
-     const CitasConfirmadas = Citas.CitasInactivas.find((ele) => ele.id !== iD);
+    // dispatch(putCita(iD));
+    const CitasConfirmadas = Citas.CitasInactivas.find((ele) => ele.id === iD);
+
     const citasSinConfirmar = Citas.CitasInactivas.filter(
       (ele) => ele.id !== iD
     );
-   
-    setInactivas(citasSinConfirmar, CitasConfirmadas);
+    console.log(citasSinConfirmar);
+    setInactivas(citasSinConfirmar);
     // setActivas(Inactivas.find((ele)=> ele.id === idCita))
-    setActivas([...Activas,CitasConfirmadas]);
+    setActivas([...Activas, CitasConfirmadas]);
     setIdCita("");
   };
   console.log(Activas);
@@ -168,11 +169,8 @@ export default function CardCitas({ filtros }) {
                       </div>
                       <div>
                         <Button
-                          onClick={(event) => {
-                            setIdCita(cita.id);
-                            handlerPutStateCita(event);
-
-                            // setEstado(cita.estado);
+                          onClick={() => {
+                            handlerPutStateCita(cita.id);
                           }}
                           variant="contained"
                         >
@@ -184,7 +182,7 @@ export default function CardCitas({ filtros }) {
                 );
               })}
             {Activas &&
-              Citas.Activas?.map((cita) => {
+              Activas?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -306,11 +304,8 @@ export default function CardCitas({ filtros }) {
                       </div>
                       <div>
                         <Button
-                          onClick={(event) => {
-                            setIdCita(cita.id);
-                            handlerPutStateCita(event);
-
-                            // setEstado(cita.estado);
+                          onClick={() => {
+                            handlerPutStateCita(cita.id);
                           }}
                           variant="contained"
                           disabled
@@ -468,11 +463,8 @@ export default function CardCitas({ filtros }) {
                       </div>
                       <div>
                         <Button
-                          onClick={(event) => {
-                            // setIdCita(cita.id);
+                          onClick={() => {
                             handlerPutStateCita(cita.id);
-
-                            // setEstado(cita.estado);
                           }}
                           variant="contained"
                         >
@@ -487,7 +479,7 @@ export default function CardCitas({ filtros }) {
         )}
         {filtros === "Confirmados" && (
           <div className={style.layout}>
-            {Activas && Citas.Activas?.length === 0 && (
+            {Activas && Activas?.length === 0 && (
               <>
                 <div
                   style={{
@@ -505,8 +497,8 @@ export default function CardCitas({ filtros }) {
               </>
             )}
 
-            {Activas&&
-              Citas.Activas?.map((cita) => {
+            {Activas &&
+              Activas?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -628,11 +620,8 @@ export default function CardCitas({ filtros }) {
                       </div>
                       <div>
                         <Button
-                          onClick={(event) => {
-                            setIdCita(cita.id);
-                            handlerPutStateCita(event);
-
-                            // setEstado(cita.estado);
+                          onClick={() => {
+                            handlerPutStateCita(cita.id);
                           }}
                           variant="contained"
                           disabled
