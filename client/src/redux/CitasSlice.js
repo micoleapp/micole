@@ -8,31 +8,37 @@ export const citasSlice = createSlice({
       "column-1": {
         id: "column-1",
         title: "Solicitud de cita",
+        estado:'Solicitud',
         taskIds: [],
       },
       "column-2": {
         id: "column-2",
         title: "Cita realizada",
+         estado:'Realizada',
         taskIds: [],
       },
       "column-3": {
         id: "column-3",
         title: "Aplicacion",
+         estado:'Aplicacion',
         taskIds: [],
       },
       "column-4": {
         id: "column-4",
         title: "Entrevista con el director",
+        estado:'Entrevista',
         taskIds: [],
       },
       "column-5": {
         id: "column-5",
         title: "Vacante ofrecida",
+         estado:'VOfrecida',
         taskIds: [],
       },
       "column-6": {
         id: "column-6",
         title: "Vacante aceptada",
+        estado:'VAceptada',
         taskIds: [],
       },
     },

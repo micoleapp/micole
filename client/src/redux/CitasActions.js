@@ -23,9 +23,20 @@ export const getCita = () => (dispatch) => {
     });
 };
 
-export const updateTask = (newTask) => (dispatch) => {
-  console.log(newTask);
-  dispatch(updateTasks(newTask));
+export const updateTask = (taskId,NuevoEstado) => (dispatch) => {
+ const idCita = taskId.idCita
+  console.log(idCita,NuevoEstado);
+  axios
+    .put(`/citas/${idCita}`, { estado: NuevoEstado})
+    .then((res) => console.log(res.data))
+    .catch((err) => {
+      dispatch(getError(err.response.data.error));
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: err.response.data.error,
+      });
+    });
 };
 export const updateColumn = (newColumn) => (dispatch) => {
   console.log(newColumn);
