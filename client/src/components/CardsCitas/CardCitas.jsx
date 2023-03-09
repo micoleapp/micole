@@ -13,29 +13,32 @@ import { getCitaAgendadas } from "../../redux/SchoolsActions";
 import Chip from "@mui/material/node/Chip";
 import NotFound from "./svg/notFound";
 export default function CardCitas({ filtros }) {
-  console.log(filtros);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [idCita, setIdCita] = useState("");
   const [Inactivas, setInactivas] = useState(citasAgendadas.CitasInactivas);
-  const [Activas, setActivas] = useState(citasAgendadas.CitasInactivas);
+  const [Activas, setActivas] = useState(citasAgendadas.CitasActivas);
   const [Citas, setCita] = useState(citasAgendadas);
-  console.log(grados);
 
   const dispatch = useDispatch();
-  const handlerPutStateCita = () => {
+  const handlerPutStateCita = (iD) => {
     console.log(idCita);
 
-    dispatch(putCita(idCita));
-    setInactivas(Citas.CitasInactivas.filter((ele) => ele.id !== idCita));
+    dispatch(putCita(iD));
+     const CitasConfirmadas = Citas.CitasInactivas.find((ele) => ele.id !== iD);
+    const citasSinConfirmar = Citas.CitasInactivas.filter(
+      (ele) => ele.id !== iD
+    );
+   
+    setInactivas(citasSinConfirmar, CitasConfirmadas);
     // setActivas(Inactivas.find((ele)=> ele.id === idCita))
-    setActivas([...Activas,Citas.CitasInactivas.find((ele) => ele.id !== idCita)])
-  
+    setActivas([...Activas,CitasConfirmadas]);
+    setIdCita("");
   };
-console.log(Activas)
+  console.log(Activas);
 
-  // useEffect(() => {
-  //   dispatch(getCitaAgendadas);
-  // }, [Citas]);
+  useEffect(() => {
+    dispatch(getCitaAgendadas);
+  }, []);
 
   return (
     <>
@@ -180,8 +183,8 @@ console.log(Activas)
                   </>
                 );
               })}
-            {citasAgendadas &&
-              Citas.CitasActivas.map((cita) => {
+            {Activas &&
+              Citas.Activas?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -466,8 +469,8 @@ console.log(Activas)
                       <div>
                         <Button
                           onClick={(event) => {
-                            setIdCita(cita.id);
-                            handlerPutStateCita(event);
+                            // setIdCita(cita.id);
+                            handlerPutStateCita(cita.id);
 
                             // setEstado(cita.estado);
                           }}
@@ -484,7 +487,7 @@ console.log(Activas)
         )}
         {filtros === "Confirmados" && (
           <div className={style.layout}>
-            {citasAgendadas && Citas.CitasActivas.length === 0 && (
+            {Activas && Citas.Activas?.length === 0 && (
               <>
                 <div
                   style={{
@@ -502,8 +505,8 @@ console.log(Activas)
               </>
             )}
 
-            {citasAgendadas &&
-              Citas.CitasActivas.map((cita) => {
+            {Activas&&
+              Citas.Activas?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
