@@ -16,7 +16,9 @@ export default function CardCitas({ filtros }) {
   console.log(filtros);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [idCita, setIdCita] = useState("");
-
+  const [Inactivas, setInactivas] = useState(citasAgendadas.CitasInactivas);
+  const [Activas, setActivas] = useState(citasAgendadas.CitasInactivas);
+  const [Citas, setCita] = useState(citasAgendadas);
   console.log(grados);
 
   const dispatch = useDispatch();
@@ -24,19 +26,24 @@ export default function CardCitas({ filtros }) {
     console.log(idCita);
 
     dispatch(putCita(idCita));
+    setInactivas(Citas.CitasInactivas.filter((ele) => ele.id !== idCita));
+    // setActivas(Inactivas.find((ele)=> ele.id === idCita))
+    setActivas([...Activas,Citas.CitasInactivas.find((ele) => ele.id !== idCita)])
+  
   };
+console.log(Activas)
 
-  useEffect(() => {
-    dispatch(getCitaAgendadas);
-  }, [citasAgendadas.CitasActivas?.length]);
-  console.log(citasAgendadas.CitasInactivas.length === 0);
+  // useEffect(() => {
+  //   dispatch(getCitaAgendadas);
+  // }, [Citas]);
+
   return (
     <>
       <div data-aos="fade-up">
         {filtros === "" && (
           <div className={style.layout}>
             {citasAgendadas &&
-              citasAgendadas.CitasInactivas.map((cita) => {
+              Inactivas?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -174,7 +181,7 @@ export default function CardCitas({ filtros }) {
                 );
               })}
             {citasAgendadas &&
-              citasAgendadas.CitasActivas.map((cita) => {
+              Citas.CitasActivas.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -316,7 +323,7 @@ export default function CardCitas({ filtros }) {
         )}
         {filtros === "SinConfirmar" && (
           <div className={style.layout}>
-            {citasAgendadas && citasAgendadas.CitasInactivas.length === 0 && (
+            {citasAgendadas && Inactivas?.length === 0 && (
               <>
                 <div
                   style={{
@@ -324,6 +331,8 @@ export default function CardCitas({ filtros }) {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    flexDirection: "column",
+                    padding: "20px",
                     minHeight: "100%",
                     boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
                   }}
@@ -334,7 +343,7 @@ export default function CardCitas({ filtros }) {
               </>
             )}
             {citasAgendadas &&
-              citasAgendadas.CitasInactivas.map((cita) => {
+              Inactivas?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -475,7 +484,7 @@ export default function CardCitas({ filtros }) {
         )}
         {filtros === "Confirmados" && (
           <div className={style.layout}>
-            {citasAgendadas && citasAgendadas.CitasActivas.length === 0 && (
+            {citasAgendadas && Citas.CitasActivas.length === 0 && (
               <>
                 <div
                   style={{
@@ -494,7 +503,7 @@ export default function CardCitas({ filtros }) {
             )}
 
             {citasAgendadas &&
-              citasAgendadas.CitasActivas.map((cita) => {
+              Citas.CitasActivas.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>

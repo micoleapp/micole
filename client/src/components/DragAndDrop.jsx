@@ -106,15 +106,13 @@ function DragAndDrop() {
     // const NuevoEstado = destinationCol.estado 
     dispatch(updateTask(tasks[removed],destinationCol.estado ));
     setState(newState);
-console.log(newState.columns)
-console.log( destinationCol.estado)
+
     alert(
       `Moviste la tarea ${removed} desde ${sourceCol.title} hacia ${
         destinationCol.title
       }! \nTu tarea es ${JSON.stringify(tasks[removed])}`
     );
-    console.log(sourceCol.id);
-    console.log(destinationCol.id);
+
   };
 
   return (
