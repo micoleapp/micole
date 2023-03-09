@@ -116,7 +116,6 @@ console.log( destinationCol.estado)
     console.log(sourceCol.id);
     console.log(destinationCol.id);
   };
-  console.log(tasks);
 
   return (
     <DragDropContext Scrollable onDragEnd={onDragEnd}>
