@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ModalCita from "./Tabs/ModalCita/ModalCita";
 
 const Column = ({ column, tasksArr }) => {
-  const { citasAgendadas } = useSelector((state) => state.schools);
+
   const dispatch = useDispatch();
 
 
@@ -21,10 +21,7 @@ const Column = ({ column, tasksArr }) => {
   };
   const handleClose = () => setOpen(false);
 
-  React.useEffect(() => {
-    dispatch(getCita());
-    
-  }, [citasAgendadas.CitasActivas?.length]);
+
 
   return (
     <>

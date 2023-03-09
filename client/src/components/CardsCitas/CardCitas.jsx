@@ -12,15 +12,12 @@ import { putCita } from "../../redux/CitasActions";
 import { getCitaAgendadas } from "../../redux/SchoolsActions";
 import Chip from "@mui/material/node/Chip";
 import NotFound from "./svg/notFound";
-import ContentPasteSearchOutlinedIcon from '@mui/icons-material/ContentPasteSearchOutlined';
+import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
 export default function CardCitas({ filtros }) {
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [Citas, setCita] = useState(citasAgendadas);
-  const [idCita, setIdCita] = useState("");
-
   const [Inactivas, setInactivas] = useState(Citas.CitasInactivas);
   const [Activas, setActivas] = useState(Citas.CitasActivas);
-
   const dispatch = useDispatch();
   const handlerPutStateCita = (iD) => {
     dispatch(putCita(iD));
@@ -32,8 +29,7 @@ export default function CardCitas({ filtros }) {
     setInactivas(citasSinConfirmar);
 
     setActivas([...Activas, CitasConfirmadas]);
-    setIdCita("");
-  };
+    };
   console.log(Activas);
 
   return (
@@ -44,22 +40,24 @@ export default function CardCitas({ filtros }) {
             {citasAgendadas && Inactivas?.length === 0 && (
               <>
                 <div
-                data-aos="flip-up"
+                  data-aos="flip-up"
                   style={{
                     width: "100%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     flexDirection: "row",
-                    color:'#0C2B42',
-                    gap:'10px',
+                    color: "#0C2B42",
+                    gap: "10px",
                     padding: "20px",
                     minHeight: "100%",
                     boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
-                    fontWeight:'600'
+                    fontWeight: "600",
                   }}
                 >
-                  <ContentPasteSearchOutlinedIcon    style={{color:'#0061DF'}}  />
+                  <ContentPasteSearchOutlinedIcon
+                    style={{ color: "#0061DF" }}
+                  />
                   <h1>No hay solicitudes pendientes</h1>
                 </div>
               </>
@@ -342,6 +340,7 @@ export default function CardCitas({ filtros }) {
             {citasAgendadas && Inactivas?.length === 0 && (
               <>
                 <div
+                   data-aos="flip-up"
                   style={{
                     width: "60%",
                     display: "flex",
@@ -497,10 +496,10 @@ export default function CardCitas({ filtros }) {
         )}
         {filtros === "Confirmados" && (
           <div className={style.layout}>
-           {citasAgendadas && Activas?.length === 0 && (
+            {citasAgendadas && Activas?.length === 0 && (
               <>
                 <div
-                data-aos="flip-up"
+                  data-aos="flip-up"
                   style={{
                     width: "60%",
                     display: "flex",
@@ -517,24 +516,8 @@ export default function CardCitas({ filtros }) {
                 </div>
               </>
             )}
-          
-            {Activas && Activas?.length === 0 && (
-              <>
-                <div
-                  style={{
-                    width: "60%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    minHeight: "100%",
-                    boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
-                  }}
-                >
-                  <NotFound />
-                  <h1>No hay solicitudes pendientes</h1>
-                </div>
-              </>
-            )}
+
+            
 
             {Activas &&
               Activas?.map((cita) => {
