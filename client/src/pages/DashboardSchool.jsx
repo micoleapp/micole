@@ -60,6 +60,8 @@ import { AiOutlineIdcard } from "react-icons/ai";
 import Cards from "../components/CardsDrgAndDrp/Cards";
 import CardCitas from "../components/CardsCitas/CardCitas";
 import SelectCitasAg from "../components/CardsCitas/SelectCitasAgendadas/SelectCitasAg";
+import { getCitaAgendadas } from "../redux/SchoolsActions";
+import { getCita } from "../redux/CitasActions";
 
 const libraries = ["places"];
 
@@ -109,7 +111,9 @@ function StandardImageList({ one, list, setImage, eliminarImagenDePreview }) {
   }
 }
 
+
 function DashboardSchool() {
+
   const { width, height } = useWindowSize();
   const [page, setPage] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
@@ -653,7 +657,7 @@ function DashboardSchool() {
     console.log(newDays);
     dispatch(postHorariosVacantes(newDays));
   };
-
+  
   const [spanOne, setSpanOne] = useState(false);
   const [spanTwo, setSpanTwo] = useState(false);
   const [activeUpOne, setActiveUpOne] = useState(true);
@@ -666,6 +670,16 @@ function DashboardSchool() {
     dispatch(getVacantes(datosPrincipales.niveles));
   }, [datosPrincipales.niveles]);
 
+  useEffect(() => {
+    dispatch(getCita());
+    
+  }, [page === 4 ]);
+
+  const { citasAgendadas } = useSelector((state) => state.schools);
+  useEffect(() => {
+   dispatch(getCitaAgendadas())
+
+  }, [page ===  5 ])
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
@@ -2591,7 +2605,7 @@ function DashboardSchool() {
                 </Button>
               </div>
             <div>
-              <SelectCitasAg/>
+              {/* <SelectCitasAg/> */}
             </div>
             </div>
             <div>

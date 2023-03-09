@@ -14,16 +14,15 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCita } from "../../redux/CitasActions";
+import ModalDeleteCita from "./ModalCita/ModalDeleteCita";
 
-export default function NavTabs({ task }) {
+export default function NavTabs({ task, handleCloseModal }) {
   const { grados } = useSelector((state) => state.schools);
   const [value, setValue] = useState("1");
-
+  const [OpenDelete, setOpenDelete] = useState(false);
+  const [CitaID, setCitaID] = useState("");
   const dispatch = useDispatch();
-  const handleDeleteCita = (id) => {
-    console.log(id);
-    dispatch(deleteCita(id));
-  };
+console.log(OpenDelete)
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -34,7 +33,7 @@ export default function NavTabs({ task }) {
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab label="Cita" value="1" />
-            <Tab label="Documentos" value="2" />
+            {/* <Tab label="Documentos" value="2" /> */}
             <Tab label="Contacto" value="3" />
           </TabList>
         </Box>
@@ -78,7 +77,13 @@ export default function NavTabs({ task }) {
             >
               <Button
                 variant="contained"
-                onClick={() => handleDeleteCita(task.idCita)}
+                onClick={() =>
+                  //  handleDeleteCita(task.idCita)
+                  {
+                    setOpenDelete(true);
+                    setCitaID(task.idCita);
+                  }
+                }
                 style={{
                   background: "#c01616",
                   width: "100%",
@@ -91,13 +96,9 @@ export default function NavTabs({ task }) {
             </div>
           </div>
         </TabPanel>
-        <TabPanel value="2">
-          <div style={{ minHeight: "120px" }}>
-            <p>Documentos : 2 de 5</p>
-          </div>
-        </TabPanel>
+
         <TabPanel value="3">
-          <div style={{ minHeight: "120px" }}>
+          <div style={{ minHeight: "200px" }}>
             <div style={{ display: "flex", gap: "20px" }}>
               <MailOutlineIcon style={{ color: "grey" }} />
               <p>{task.correo}</p>
@@ -109,6 +110,9 @@ export default function NavTabs({ task }) {
           </div>
         </TabPanel>
       </TabContext>
+      {OpenDelete && (
+        <ModalDeleteCita handleClose={handleCloseModal} IdCita={CitaID} />
+      )}
     </Box>
   );
 }

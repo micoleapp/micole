@@ -12,31 +12,58 @@ import { putCita } from "../../redux/CitasActions";
 import { getCitaAgendadas } from "../../redux/SchoolsActions";
 import Chip from "@mui/material/node/Chip";
 import NotFound from "./svg/notFound";
+import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
 export default function CardCitas({ filtros }) {
-  console.log(filtros);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
-  const [idCita, setIdCita] = useState("");
-
-  console.log(grados);
-
+  const [Citas, setCita] = useState(citasAgendadas);
+  const [Inactivas, setInactivas] = useState(Citas.CitasInactivas);
+  const [Activas, setActivas] = useState(Citas.CitasActivas);
   const dispatch = useDispatch();
-  const handlerPutStateCita = () => {
-    console.log(idCita);
+  const handlerPutStateCita = (iD) => {
+    dispatch(putCita(iD));
+    const CitasConfirmadas = Citas.CitasInactivas.find((ele) => ele.id === iD);
+    const citasSinConfirmar = Citas.CitasInactivas.filter(
+      (ele) => ele.id !== iD
+    );
 
-    dispatch(putCita(idCita));
-  };
+    setInactivas(citasSinConfirmar);
 
-  useEffect(() => {
-    dispatch(getCitaAgendadas);
-  }, [citasAgendadas.CitasActivas?.length]);
-  console.log(citasAgendadas.CitasInactivas.length === 0);
+    setActivas([...Activas, CitasConfirmadas]);
+    };
+  console.log(Activas);
+
   return (
     <>
       <div data-aos="fade-up">
         {filtros === "" && (
           <div className={style.layout}>
+            {citasAgendadas && Inactivas?.length === 0 && (
+              <>
+                <div
+                  data-aos="flip-up"
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "row",
+                    color: "#0C2B42",
+                    gap: "10px",
+                    padding: "20px",
+                    minHeight: "100%",
+                    boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+                    fontWeight: "600",
+                  }}
+                >
+                  <ContentPasteSearchOutlinedIcon
+                    style={{ color: "#0061DF" }}
+                  />
+                  <h1>No hay solicitudes pendientes</h1>
+                </div>
+              </>
+            )}
             {citasAgendadas &&
-              citasAgendadas.CitasInactivas.map((cita) => {
+              Inactivas?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -158,11 +185,8 @@ export default function CardCitas({ filtros }) {
                       </div>
                       <div>
                         <Button
-                          onClick={(event) => {
-                            setIdCita(cita.id);
-                            handlerPutStateCita(event);
-
-                            // setEstado(cita.estado);
+                          onClick={() => {
+                            handlerPutStateCita(cita.id);
                           }}
                           variant="contained"
                         >
@@ -173,8 +197,8 @@ export default function CardCitas({ filtros }) {
                   </>
                 );
               })}
-            {citasAgendadas &&
-              citasAgendadas.CitasActivas.map((cita) => {
+            {Activas &&
+              Activas?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -296,11 +320,8 @@ export default function CardCitas({ filtros }) {
                       </div>
                       <div>
                         <Button
-                          onClick={(event) => {
-                            setIdCita(cita.id);
-                            handlerPutStateCita(event);
-
-                            // setEstado(cita.estado);
+                          onClick={() => {
+                            handlerPutStateCita(cita.id);
                           }}
                           variant="contained"
                           disabled
@@ -316,14 +337,17 @@ export default function CardCitas({ filtros }) {
         )}
         {filtros === "SinConfirmar" && (
           <div className={style.layout}>
-            {citasAgendadas && citasAgendadas.CitasInactivas.length === 0 && (
+            {citasAgendadas && Inactivas?.length === 0 && (
               <>
                 <div
+                   data-aos="flip-up"
                   style={{
                     width: "60%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    flexDirection: "column",
+                    padding: "20px",
                     minHeight: "100%",
                     boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
                   }}
@@ -334,7 +358,7 @@ export default function CardCitas({ filtros }) {
               </>
             )}
             {citasAgendadas &&
-              citasAgendadas.CitasInactivas.map((cita) => {
+              Inactivas?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -456,11 +480,8 @@ export default function CardCitas({ filtros }) {
                       </div>
                       <div>
                         <Button
-                          onClick={(event) => {
-                            setIdCita(cita.id);
-                            handlerPutStateCita(event);
-
-                            // setEstado(cita.estado);
+                          onClick={() => {
+                            handlerPutStateCita(cita.id);
                           }}
                           variant="contained"
                         >
@@ -475,26 +496,31 @@ export default function CardCitas({ filtros }) {
         )}
         {filtros === "Confirmados" && (
           <div className={style.layout}>
-            {citasAgendadas && citasAgendadas.CitasActivas.length === 0 && (
+            {citasAgendadas && Activas?.length === 0 && (
               <>
                 <div
+                  data-aos="flip-up"
                   style={{
                     width: "60%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    flexDirection: "column",
+                    padding: "20px",
                     minHeight: "100%",
                     boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
                   }}
                 >
                   <NotFound />
-                  <h1>No hay solicitudes pendientes</h1>
+                  <h1>Aun no has confirmado ninguna cita </h1>
                 </div>
               </>
             )}
 
-            {citasAgendadas &&
-              citasAgendadas.CitasActivas.map((cita) => {
+            
+
+            {Activas &&
+              Activas?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -616,11 +642,8 @@ export default function CardCitas({ filtros }) {
                       </div>
                       <div>
                         <Button
-                          onClick={(event) => {
-                            setIdCita(cita.id);
-                            handlerPutStateCita(event);
-
-                            // setEstado(cita.estado);
+                          onClick={() => {
+                            handlerPutStateCita(cita.id);
                           }}
                           variant="contained"
                           disabled

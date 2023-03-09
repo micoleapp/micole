@@ -4,8 +4,8 @@ import Column from "./Column";
 import SelectCRM from "./CardsDrgAndDrp/SelectsCRM/SelectsCRM";
 import { useDispatch, useSelector } from "react-redux";
 
-import { updateTask, updateColumn } from "../redux/CitasActions";
-import { updateTasks } from "../redux/CitasSlice";
+import { updateTask, updateColumn, getCita } from "../redux/CitasActions";
+
 // const reorderColumnList = (sourceCol, startIndex, endIndex) => {
 //   const newTaskIds = Array.from(sourceCol.taskIds);
 
@@ -37,9 +37,12 @@ const reorderColumnList = (sourceCol, startIndex, endIndex) => {
 };
 
 function DragAndDrop() {
+   const { citasAgendadas } = useSelector((state) => state.schools);
   const { tasks, columns, columnOrder } = useSelector((state) => state.citas);
   const [state, setState] = React.useState({ tasks, columns, columnOrder });
   const dispatch = useDispatch();
+ 
+ 
   const onDragEnd = (result) => {
     const { destination, source } = result;
 
@@ -72,7 +75,6 @@ function DragAndDrop() {
           [newColumn.id]: newColumn,
         },
       };
-     
       dispatch(updateColumn(newState.columns));
 
       setState(newState);
@@ -102,19 +104,26 @@ function DragAndDrop() {
         [newEndCol.id]: newEndCol,
       },
     };
-    console.log(tasks[removed])
     dispatch(updateColumn(newState.columns));
-
+    // const taskId = tasks[removed]
+    // const NuevoEstado = destinationCol.estado 
+    dispatch(updateTask(tasks[removed],destinationCol.estado ));
     setState(newState);
-console.log(newState.columns)
+
     alert(
       `Moviste la tarea ${removed} desde ${sourceCol.title} hacia ${
         destinationCol.title
       }! \nTu tarea es ${JSON.stringify(tasks[removed])}`
     );
-    console.log(sourceCol.id);
-    console.log(destinationCol.id);
+
   };
+
+
+useEffect(() => {
+    dispatch(getCita());
+    
+  }, [citasAgendadas.CitasActivas?.length]);
+
 
   return (
     <DragDropContext Scrollable onDragEnd={onDragEnd}>
