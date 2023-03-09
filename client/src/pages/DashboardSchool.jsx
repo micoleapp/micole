@@ -60,6 +60,7 @@ import { AiOutlineIdcard } from "react-icons/ai";
 import Cards from "../components/CardsDrgAndDrp/Cards";
 import CardCitas from "../components/CardsCitas/CardCitas";
 import SelectCitasAg from "../components/CardsCitas/SelectCitasAgendadas/SelectCitasAg";
+import { getCitaAgendadas } from "../redux/SchoolsActions";
 
 const libraries = ["places"];
 
@@ -109,7 +110,13 @@ function StandardImageList({ one, list, setImage, eliminarImagenDePreview }) {
   }
 }
 
+
 function DashboardSchool() {
+  const { citasAgendadas } = useSelector((state) => state.schools);
+  useEffect(() => {
+   dispatch(getCitaAgendadas())
+
+  }, [citasAgendadas.CitasInactivas.length])
   const { width, height } = useWindowSize();
   const [page, setPage] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
