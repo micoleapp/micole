@@ -6,7 +6,7 @@ const informeAdminMail = (user, actualDate) => {
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta name="x-apple-disable-message-reformatting">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <title>Account Verification</title>
+      <title>Solicitud Informe Admin MiCole</title>
       <style type="text/css">
         a { text-decoration: none; outline: none; }
         @media (max-width: 649px) {
@@ -87,7 +87,7 @@ const informeAdminMail = (user, actualDate) => {
               <table class="o_block" width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation" style="max-width: 632px;margin: 0 auto;">
                 <tbody>
                   <tr>
-                    <td class="o_bg-dark o_px o_py-md o_br-t o_sans o_text" align="center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;background-color: #126de5;border-radius: 4px 4px 0px 0px;padding-left: 16px;padding-right: 16px;padding-top: 24px;padding-bottom: 24px;">
+                    <td class="o_bg-dark o_px o_py-md o_br-t o_sans o_text" align="center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;                        background-image: url('https://i.imgur.com/vqKaXyJ.png');background-size: cover;border-radius: 4px 4px 0px 0px;padding-left: 16px;padding-right: 16px;padding-top: 24px;padding-bottom: 24px;">
                       <p style="margin-top: 0px;margin-bottom: 0px;"><a class="o_text-white" href="https://example.com/" style="text-decoration: none;outline: none;color: #ffffff;"><img src="https://i.imgur.com/bq5PLes.png" width="136" height="36" alt="SimpleApp" style="max-width: 136px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a></p>
                     </td>
                   </tr>
