@@ -208,10 +208,14 @@ function SchoolDetail() {
       e.target["cel"].value === "" ||
       e.target["email"].value === ""
     ) {
-      return alert("Llena todos los campos para poder continuar");
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: "Debes llenar todos los datos para continuar",
+      });
+      return 
     }
-    console.log(cita);
-
+    
     dispatch(postCita(cita));
   };
 

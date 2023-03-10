@@ -160,20 +160,37 @@ export const postCita = (cita) => (dispatch) => {
   const { celular, correo, date, time, modo, nombre, añoIngreso, grado, ColegioId } = cita;
 
   dispatch(isLoading());
-  axios
-    .post("/citas", {
-      celular,
-      correo,
-      date,
-      time,
-      modo,
-      nombre,
-      ColegioId,
-      añoIngreso,
-      grado,
-    })
-    // .then((res) => dispatch(getVacantesGrados(res.data)))
-    .catch((err) => console.log(err));
+  try {    
+    axios
+      .post("/citas", {
+        celular,
+        correo,
+        date,
+        time,
+        modo,
+        nombre,
+        ColegioId,
+        añoIngreso,
+        grado,
+      })
+      .then(res=>{
+        Swal.fire({
+          icon: "success",
+          title: "Perfecto !",
+          text: "Tu colegio recibio tu cita espera a ser confirmada",
+        });
+      })
+      // .then((res) => dispatch(getVacantesGrados(res.data)))
+      .catch((err) =>{
+        Swal.fire({
+          icon: "error",
+          title: "Algo salio mal",
+          text: err.response.data.error,
+        });
+      });
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const getCitaAgendadas = () => (dispatch) => {
