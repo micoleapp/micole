@@ -29,18 +29,15 @@ export default function ModalDeleteCita({
   const dispatch = useDispatch();
 
   const comprobacion = () => {
-    if (success === "Se eliminó la Cita.") {
-      setOpenDelete(false);
-      // dispatch(cleanSuccessState());
-    } else if (error === "El registro no existe.") {
+    if (error === "El registro no existe.") {
       setOpenError(true);
     }
   };
 
   const handleDeleteCita = async () => {
     dispatch(deleteCita(IdCita));
+    setOpenDelete(false);
     await comprobacion();
-
   };
   console.log(Loading);
   const handleFinalizar = () => {
@@ -50,25 +47,25 @@ export default function ModalDeleteCita({
 
   return (
     <Box>
-      <Modal
-        keepMounted
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="keep-mounted-modal-title"
-        aria-describedby="keep-mounted-modal-description"
-      >
-        <Box sx={style}>
-          {openDelete === true && (
-            <Typography
-              id="keep-mounted-modal-title"
-              variant="h6"
-              component="h2"
-            >
-              Cancelar Cita
-            </Typography>
-          )}
-          <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-            {openDelete === true &&success === false &&  (
+      {openDelete === true && success === false && (
+        <Modal
+          keepMounted
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="keep-mounted-modal-title"
+          aria-describedby="keep-mounted-modal-description"
+        >
+          <Box sx={style}>
+            {openDelete === true && (
+              <Typography
+                id="keep-mounted-modal-title"
+                variant="h6"
+                component="h2"
+              >
+                Cancelar Cita
+              </Typography>
+            )}
+            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
               <div
                 style={{
                   display: "flex",
@@ -98,8 +95,29 @@ export default function ModalDeleteCita({
                   </Button>
                 </div>
               </div>
+            </Typography>
+          </Box>
+        </Modal>
+      )}
+      {success === "Se eliminó la Cita." && (
+        <Modal
+          keepMounted
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="keep-mounted-modal-title"
+          aria-describedby="keep-mounted-modal-description"
+        >
+          <Box sx={style}>
+            {openDelete === true && (
+              <Typography
+                id="keep-mounted-modal-title"
+                variant="h6"
+                component="h2"
+              >
+                Cancelar Cita
+              </Typography>
             )}
-            {success === "Se eliminó la Cita." && (
+            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
               <div
                 style={{
                   display: "flex",
@@ -132,42 +150,10 @@ export default function ModalDeleteCita({
                   </Button>
                 </div>
               </div>
-            )}
-
-            {/* {OpenError === true && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "20px",
-                  flexDirection: "column",
-                }}
-              >
-                <Typography
-                  id="keep-mounted-modal-title"
-                  variant="h6"
-                  component="h2"
-                >
-                  Ups, ha habido un error!
-                </Typography>
-                <p style={{ textAlign: "center" }}>El registro no existe.</p>
-                <div
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "space-evenly",
-                  }}
-                >
-                  <Button variant="contained" onClick={handleFinalizar}>
-                    Finalizar
-                  </Button>
-                </div>
-              </div>
-            )} */}
-          </Typography>
-        </Box>
-      </Modal>
+            </Typography>
+          </Box>
+        </Modal>
+      )}
     </Box>
   );
 }

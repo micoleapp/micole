@@ -30,19 +30,23 @@ export default function CardCitas({ filtros }) {
         (ele) => ele.id !== iD
       );
 
-
-
       setActivas([...Activas, CitasConfirmadas]);
       setInactivas(citasSinConfirmar);
-     return  dispatch(cleanSuccessState());
+      // return dispatch(cleanSuccessState());
     }
   };
 
   const handlerPutStateCita = async (iD) => {
     dispatch(putCita(iD));
-    const comprobacionDeCitaActivada = await comprobacion(iD);
+    await comprobacion(iD);
+
   };
-  console.log(success);
+
+  useEffect(() => {
+    return () => {
+      dispatch(getCitaAgendadas);
+    };
+  }, [success === "Se activo la Cita."]);
 
   return (
     <>
