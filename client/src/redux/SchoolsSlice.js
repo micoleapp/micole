@@ -20,7 +20,7 @@ export const schoolsSlice = createSlice({
     afiliaciones: [],
     grados: [],
     vacantesGrados: [],
-    citas: [],
+    citasAgendadas: [],
     error: "",
     loading: false,
   },
@@ -100,8 +100,8 @@ export const schoolsSlice = createSlice({
         (state.loading = false),
         (state.error = "");
     },
-    getCitas: (state, action) => {
-      (state.citas = action.payload),
+    getCitasAgendado: (state, action) => {
+      (state.citasAgendadas = action.payload),
         (state.loading = false),
         (state.error = "");
     },
@@ -137,7 +137,7 @@ export const {
   getDistrits,
   getCategories,
   getProvincias,
-  getCitas
+  getCitasAgendado
 } = schoolsSlice.actions;
 
 export default schoolsSlice.reducer;

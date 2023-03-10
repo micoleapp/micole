@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { clannDetailid, getAllGrados, getSchoolDetail, postCita } from "../redux/SchoolsActions";
+import {
+  clannDetailid,
+  getAllGrados,
+  getSchoolDetail,
+  postCita,
+} from "../redux/SchoolsActions";
 import banner from "../assets/ejemplobanner.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logo from "../assets/premium.png";
+import Swal from "sweetalert2";
+
 import {
   faDoorOpen,
   faHeart,
@@ -108,19 +115,22 @@ const ArrHorariosMockFormateado = [
 ];
 function SchoolDetail() {
   const { id } = useParams();
-  const { oneSchool , grados } = useSelector((state) => state.schools);
+  const { oneSchool, grados } = useSelector((state) => state.schools);
   const location = useLocation();
-
 
   const params = new URLSearchParams(location.search);
 
-  const [gradoParams, setGradoParams] = React.useState(params.get("grado"))
-  const [ingresoParams, setIngresoParams] = React.useState(params.get("ingreso"))
-console.log(grados)
-  console.log(gradoParams)
-  console.log(ingresoParams)
-  const nombre_grado = grados.find(grado=> grado.id == gradoParams).nombre_grado
-  console.log(nombre_grado)
+  const [gradoParams, setGradoParams] = React.useState(params.get("grado"));
+  const [ingresoParams, setIngresoParams] = React.useState(
+    params.get("ingreso")
+  );
+  console.log(grados);
+  console.log(gradoParams);
+  console.log(ingresoParams);
+  const nombre_grado = grados.find(
+    (grado) => grado.id == gradoParams
+  ).nombre_grado;
+  console.log(nombre_grado);
   const stringyDate = (date) => {
     if (date.toString().length === 1) {
       return "0" + date++;
@@ -133,14 +143,12 @@ console.log(grados)
 
   const dispatch = useDispatch();
   useEffect(() => {
-  dispatch(getAllGrados())
+    dispatch(getAllGrados());
     dispatch(getSchoolDetail(id));
     return () => {
       dispatch(clannDetailid());
-    }
+    };
   }, []);
-
-  
 
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -185,10 +193,8 @@ console.log(grados)
     nombre: "",
     celular: "",
     correo: "",
-    añoIngreso:ingresoParams,
-    grado:nombre_grado,
-    
-    
+    añoIngreso: ingresoParams,
+    grado: nombre_grado,
   });
 
   const handleSubmit = (e) => {
@@ -200,9 +206,9 @@ console.log(grados)
     ) {
       return alert("Llena todos los campos para poder continuar");
     }
-    console.log(cita)
+    console.log(cita);
 
-   dispatch(postCita(cita))
+    dispatch(postCita(cita));
   };
 
   const handleModo = () => {
@@ -251,6 +257,16 @@ console.log(grados)
     ratingPrecio,
   ]);
 
+  /*{
+    "nombre": "Jorge Lopez",
+      "email": "jlopez@gmail.com",
+      "comentario": "Excelente Colegio...",
+      "rating": 7.5,
+      "ColegioId": "f2aba1d5-3d86-4c5b-b18c-0b1f30ef98f9"
+}*/
+
+  console.log(localStorage.getItem("id") === id);
+
   const comentarioSubmit = (e) => {
     e.preventDefault();
     if (
@@ -261,10 +277,30 @@ console.log(grados)
     ) {
       return alert("Llena todos los campos para poder continuar");
     }
-    axios.post("http://localhost:3000/review", comentario);
+    if (localStorage.getItem("id") === id) {
+      Swal.fire("Error!", "No puedes comentar mas de una vez", "error");
+      return
+    }
+    try {
+      axios
+        .post("/reviews", { ...comentario, ColegioId: id })
+        .then((res) => {
+          Swal.fire(
+            "Gracias por tu comentario!",
+            "Tu comentario ha sido enviado",
+            "success"
+          );
+          localStorage.setItem("id", id);
+        })
+        .catch((err) => {
+          Swal.fire("Error!", "Ha ocurrido un error", "error");
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const disableWeekends = (date) => {
+  const disableWeekends = (date, dayColegio) => {
     return date.day() === 0 || date.day() === 6;
   };
   const [Horarios, setHorarios] = useState(false);
@@ -276,17 +312,17 @@ console.log(grados)
     new Set(oneSchool?.Infraestructuras?.map((e) => e.InfraestructuraTipoId))
   );
 
-  const [lat, setLat] = useState(0)
-  const [lng, setLng] = useState(0)
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
 
-    console.log(oneSchool)
+  console.log(oneSchool);
 
   useEffect(() => {
-    if(oneSchool.ubicacion){
-      setLat(JSON.parse(oneSchool?.ubicacion)?.lat)
-      setLng(JSON.parse(oneSchool?.ubicacion)?.lng)
+    if (oneSchool.ubicacion) {
+      setLat(JSON.parse(oneSchool?.ubicacion)?.lat);
+      setLng(JSON.parse(oneSchool?.ubicacion)?.lng);
     }
-  },[oneSchool])
+  }, [oneSchool]);
 
   return (
     <div className="bg-[#f6f7f8]">
@@ -307,9 +343,9 @@ console.log(grados)
           </h1>
           <div>
             <div className="flex justify-between flex-col gap-5 lg:flex-row mt-2 lg:mt-0">
-              <div className="flex gap-5 items-start lg:items-center flex-col lg:flex-row text-black/70">
-                <h2>{oneSchool.direccion} </h2>
-                <div className="flex gap-5 items-center">
+              <div className="flex gap-5 lg:items-center justify-center flex-col lg:flex-row text-black/70">
+                <h2 className="text-center">{oneSchool.direccion} </h2>
+                <div className="flex gap-5 lg:flex-row flex-col justify-center w-full items-center">
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
                     5 vacantes
                   </span>
@@ -321,7 +357,7 @@ console.log(grados)
                   </span>
                 </div>
               </div>
-              <div className="flex items-center gap-5 text-black/70">
+              <div className="flex flex-col lg:flex-row justify-center items-center gap-5 text-black/70">
                 <span className="flex items-center gap-2">
                   {" "}
                   <FontAwesomeIcon
@@ -346,7 +382,7 @@ console.log(grados)
             </div>
           </div>
           <div className="mt-5 gap-5 flex justify-between items-start lg:items-center flex-col lg:flex-row">
-            <div className="flex gap-5 flex-col items-start">
+            <div className="flex lg:flex-row flex-col gap-5 items-center justify-center lg:justify-start lg:w-full lg:items-start">
               {" "}
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
@@ -358,11 +394,17 @@ console.log(grados)
                   {oneSchool.numero_estudiantes} Alumnos
                 </span>
               </div>
-              {oneSchool?.Categoria?.map((cat)=>(
-              <div className="flex flex-col items-center gap-2 text-center">
-                <img src={cat.logo_categoria} alt="logo_categoria" className="w-4 object-cover invert-[40%] drop-shadow-md"/>
-                <span className="text-sm text-gray-400">{cat.nombre_categoria} </span>
-              </div>
+              {oneSchool?.Categoria?.map((cat) => (
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <img
+                    src={cat.logo_categoria}
+                    alt="logo_categoria"
+                    className="w-4 object-cover invert-[40%] drop-shadow-md"
+                  />
+                  <span className="text-sm text-gray-400">
+                    {cat.nombre_categoria}{" "}
+                  </span>
+                </div>
               ))}
               {/* <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
@@ -484,7 +526,9 @@ console.log(grados)
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">Niveles: </span>
-                    {oneSchool.Nivels?.map(nivel=>nivel.nombre_nivel).join(', ')}
+                    {oneSchool.Nivels?.map((nivel) => nivel.nombre_nivel).join(
+                      ", "
+                    )}
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
@@ -504,7 +548,6 @@ console.log(grados)
                     <span className="font-semibold text-black ">Salones: </span>
                     3
                   </li> */}
-
                 </ul>
                 {/* <ul className="flex flex-col gap-3">
                   <li className="text-black/60">
@@ -1038,26 +1081,23 @@ console.log(grados)
               {Horarios && (
                 <>
                   <div className={style.Layout}>
-               
                     {ArrHorariosMockFormateado.map((ele) => {
                       return (
                         <>
-                          <div 
-                          //si vacantes estan agotadas deberia aparecer todo en gris
+                          <div
+                            //si vacantes estan agotadas deberia aparecer todo en gris
                             // data-aos="zoom-in-left"
                             // data-aos-duration="700"
                             className={style.cardTable}
                           >
                             <div className={style.cardTable}>
                               <div className={style.itemTable}>
-                               
                                 <p style={{ fontSize: "12px" }}>{ele.dia}</p>
-                                <div style={{display:'flex',gap:'10px'}}>
-                                   <p>{ele.horarios.desde}</p>
-                                   <p>/</p>
-                                <p>{ele.horarios.hasta}</p>
+                                <div style={{ display: "flex", gap: "10px" }}>
+                                  <p>{ele.horarios.desde}</p>
+                                  <p>/</p>
+                                  <p>{ele.horarios.hasta}</p>
                                 </div>
-                               
                               </div>
                             </div>
                           </div>
@@ -1169,10 +1209,7 @@ console.log(grados)
                 </Link>
               </p>
             </div>
-            <div
-              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
-
-            >
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Galeria</h2>
               {oneSchool.hasOwnProperty("galeria_fotos") && (
                 <QuiltedImageList
@@ -1212,7 +1249,7 @@ console.log(grados)
                   src={`${oneSchool.video_url.replace("watch?v=", "embed/")}`}
                 ></video> */}
                 <video className="w-full h-[300px] lg:h-[400px]" controls>
-                  <source src={oneSchool.video_url} type="video/mp4"/>
+                  <source src={oneSchool.video_url} type="video/mp4" />
                 </video>
               </div>
             )}
