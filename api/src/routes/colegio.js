@@ -15,6 +15,7 @@ const {
   Vacante,
   Grado,
   Horario,
+  Review
 } = require('../db.js');
 const { Op } = require('sequelize');
 
@@ -69,6 +70,9 @@ router.get('/', async (req, res) => {
         {
           model: Horario,
           attributes: ['dia', 'horarios'],
+        },
+        {
+          model: Review,
         },
         {
           model: Categoria,
@@ -176,6 +180,9 @@ router.get('/:Colegio_id', async (req, res) => {
         {
           model: Horario,
           attributes: ['id', 'dia', 'horarios'],
+        },
+        {
+          model: Review,
         },
         {
           model: Categoria,
@@ -290,6 +297,9 @@ router.post('/filter', async (req, res) => {
           through: {
             attributes: [],
           },
+        },
+        {
+          model: Review,
         },
       ],
       where: {
