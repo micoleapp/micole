@@ -158,7 +158,7 @@ export const postHorariosVacantes = (horarios) => (dispatch) => {
 
 export const postCita = (cita) => (dispatch) => {
   const { celular, correo, date, time, modo, nombre, añoIngreso, grado, ColegioId } = cita;
-
+  console.log("test")
   dispatch(isLoading());
   try {    
     axios
