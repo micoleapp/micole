@@ -5,6 +5,8 @@ import {
   updateColumns,
   getError,
   isLoading,
+  getSuccess,
+  cleanSuccess,
 } from "./CitasSlice";
 
 export const getCita = () => (dispatch) => {
@@ -23,11 +25,11 @@ export const getCita = () => (dispatch) => {
     });
 };
 
-export const updateTask = (taskId,NuevoEstado) => (dispatch) => {
- const idCita = taskId.idCita
-  console.log(idCita,NuevoEstado);
+export const updateTask = (taskId, NuevoEstado) => (dispatch) => {
+  const idCita = taskId.idCita;
+
   axios
-    .put(`/citas/${idCita}`, { estado: NuevoEstado})
+    .put(`/citas/${idCita}`, { estado: NuevoEstado })
     .then((res) => console.log(res.data))
     .catch((err) => {
       dispatch(getError(err.response.data.error));
@@ -39,15 +41,15 @@ export const updateTask = (taskId,NuevoEstado) => (dispatch) => {
     });
 };
 export const updateColumn = (newColumn) => (dispatch) => {
-  console.log(newColumn);
+
   dispatch(updateColumns(newColumn));
 };
 export const putCita = (idCita) => (dispatch) => {
-  console.log(idCita);
+
   dispatch(isLoading());
   axios
     .put(`/citas/activo/${idCita}`, { activo: true })
-    .then((res) => console.log(res.data))
+    .then((res) => dispatch(getSuccess(res.data)))
     .catch((err) => {
       dispatch(getError(err.response.data.error));
       Swal.fire({
@@ -61,10 +63,10 @@ export const putCita = (idCita) => (dispatch) => {
 // citaRouter.delete("/:idCita", deleteCita);
 
 export const deleteCita = (idCita) => (dispatch) => {
-  console.log(idCita)
+  console.log(idCita);
   axios
     .delete(`/citas/${idCita}`)
-    .then((res) => dispatch(console.log(res.data)))
+    .then((res) => dispatch(getSuccess(res.data)))
     .catch((err) => {
       dispatch(getError(err.response.data.error));
       Swal.fire({
@@ -73,4 +75,13 @@ export const deleteCita = (idCita) => (dispatch) => {
         text: err.response.data.error,
       });
     });
+};
+
+export const cleanSuccessState = () => (dispatch) => {
+
+  try {
+    dispatch(cleanSuccess());
+  } catch (err) {
+    dispatch(getError(err.response.data.error));
+  }
 };

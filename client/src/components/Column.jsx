@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ModalCita from "./Tabs/ModalCita/ModalCita";
 
 const Column = ({ column, tasksArr }) => {
-
+  const { success } = useSelector((state) => state.citas);
   const dispatch = useDispatch();
 
 
@@ -21,6 +21,9 @@ const Column = ({ column, tasksArr }) => {
   };
   const handleClose = () => setOpen(false);
 
+useEffect(() => {
+
+}, [success])
 
 
   return (

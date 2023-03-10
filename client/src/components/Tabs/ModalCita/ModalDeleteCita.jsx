@@ -1,8 +1,8 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCita } from "../../../redux/CitasActions";
-
+import { cleanSuccessState, deleteCita } from "../../../redux/CitasActions";
+import LoadingButton from "@mui/lab/LoadingButton";
 const style = {
   position: "absolute",
   top: "50%",
@@ -16,20 +16,37 @@ const style = {
   p: 2,
 };
 
-export default function ModalDeleteCita({ IdCita, handleClose }) {
-  const [openExito, setOpenExito] = useState(false);
-
+export default function ModalDeleteCita({
+  IdCita,
+  handleClose,
+  HandlerOpendeleteModal,
+}) {
+  const { success, error, loading } = useSelector((state) => state.citas);
+  console.log(error);
+  const [openDelete, setOpenDelete] = useState(true);
+  const [OpenError, setOpenError] = useState(false);
+  const [Loading, setLoading] = React.useState(loading);
   const dispatch = useDispatch();
 
-  const handleDeleteCita = () => {
-    dispatch(deleteCita(IdCita));
-    setOpenExito(true);
-   
+  const comprobacion = () => {
+    if (success === "Se eliminó la Cita.") {
+      setOpenDelete(false);
+      // dispatch(cleanSuccessState());
+    } else if (error === "El registro no existe.") {
+      setOpenError(true);
+    }
   };
 
-const handleFinalizar =()=>{
- handleClose(true)
-}
+  const handleDeleteCita = async () => {
+    dispatch(deleteCita(IdCita));
+    await comprobacion();
+
+  };
+  console.log(Loading);
+  const handleFinalizar = () => {
+    handleClose(true);
+  };
+  console.log(success);
 
   return (
     <Box>
@@ -41,11 +58,17 @@ const handleFinalizar =()=>{
         aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style}>
-     {  openExito === false &&   <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-            Cancelar Cita
-          </Typography>}
+          {openDelete === true && (
+            <Typography
+              id="keep-mounted-modal-title"
+              variant="h6"
+              component="h2"
+            >
+              Cancelar Cita
+            </Typography>
+          )}
           <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-            {openExito === false && (
+            {openDelete === true &&success === false &&  (
               <div
                 style={{
                   display: "flex",
@@ -66,11 +89,17 @@ const handleFinalizar =()=>{
                   <Button variant="contained" onClick={handleDeleteCita}>
                     Si
                   </Button>
-                  <Button variant="contained">Cancelar</Button>
+
+                  <Button
+                    onClick={() => HandlerOpendeleteModal(false)}
+                    variant="contained"
+                  >
+                    Cancelar
+                  </Button>
                 </div>
               </div>
             )}
-            {openExito === true && (
+            {success === "Se eliminó la Cita." && (
               <div
                 style={{
                   display: "flex",
@@ -80,10 +109,14 @@ const handleFinalizar =()=>{
                   flexDirection: "column",
                 }}
               >
-               <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-            Cita Cancelada con Exito!
-          </Typography>
-                <p style={{textAlign:'center'}}>
+                <Typography
+                  id="keep-mounted-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                  Cita Cancelada con Exito!
+                </Typography>
+                <p style={{ textAlign: "center" }}>
                   Enviaremos un correo a la familia avisando que la cita ha sido
                   cancelada
                 </p>
@@ -94,11 +127,44 @@ const handleFinalizar =()=>{
                     justifyContent: "space-evenly",
                   }}
                 >
-                
-                  <Button variant="contained"onClick={handleFinalizar} >Finalizar</Button>
+                  <Button variant="contained" onClick={handleFinalizar}>
+                    Finalizar
+                  </Button>
                 </div>
               </div>
             )}
+
+            {/* {OpenError === true && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "20px",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography
+                  id="keep-mounted-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                  Ups, ha habido un error!
+                </Typography>
+                <p style={{ textAlign: "center" }}>El registro no existe.</p>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <Button variant="contained" onClick={handleFinalizar}>
+                    Finalizar
+                  </Button>
+                </div>
+              </div>
+            )} */}
           </Typography>
         </Box>
       </Modal>

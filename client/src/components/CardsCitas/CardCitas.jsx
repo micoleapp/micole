@@ -8,29 +8,41 @@ import EventIcon from "@mui/icons-material/Event";
 import PhoneIcon from "@mui/icons-material/Phone";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { Button } from "@mui/material";
-import { putCita } from "../../redux/CitasActions";
+import { cleanSuccessState, putCita } from "../../redux/CitasActions";
 import { getCitaAgendadas } from "../../redux/SchoolsActions";
 import Chip from "@mui/material/node/Chip";
 import NotFound from "./svg/notFound";
 import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
 export default function CardCitas({ filtros }) {
+  const { success } = useSelector((state) => state.citas);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [Citas, setCita] = useState(citasAgendadas);
   const [Inactivas, setInactivas] = useState(Citas.CitasInactivas);
   const [Activas, setActivas] = useState(Citas.CitasActivas);
   const dispatch = useDispatch();
-  const handlerPutStateCita = (iD) => {
+
+  const comprobacion = (iD) => {
+    if (success === "Se activo la Cita.") {
+      const CitasConfirmadas = Citas.CitasInactivas.find(
+        (ele) => ele.id === iD
+      );
+      const citasSinConfirmar = Citas.CitasInactivas.filter(
+        (ele) => ele.id !== iD
+      );
+
+
+
+      setActivas([...Activas, CitasConfirmadas]);
+      setInactivas(citasSinConfirmar);
+     return  dispatch(cleanSuccessState());
+    }
+  };
+
+  const handlerPutStateCita = async (iD) => {
     dispatch(putCita(iD));
-    const CitasConfirmadas = Citas.CitasInactivas.find((ele) => ele.id === iD);
-    const citasSinConfirmar = Citas.CitasInactivas.filter(
-      (ele) => ele.id !== iD
-    );
-
-    setInactivas(citasSinConfirmar);
-
-    setActivas([...Activas, CitasConfirmadas]);
-    };
-  console.log(Activas);
+    const comprobacionDeCitaActivada = await comprobacion(iD);
+  };
+  console.log(success);
 
   return (
     <>
@@ -340,7 +352,7 @@ export default function CardCitas({ filtros }) {
             {citasAgendadas && Inactivas?.length === 0 && (
               <>
                 <div
-                   data-aos="flip-up"
+                  data-aos="flip-up"
                   style={{
                     width: "60%",
                     display: "flex",
@@ -516,8 +528,6 @@ export default function CardCitas({ filtros }) {
                 </div>
               </>
             )}
-
-            
 
             {Activas &&
               Activas?.map((cita) => {

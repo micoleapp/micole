@@ -18,6 +18,7 @@ import {
   getGrados,
   getFilterSchool,
   getCitasAgendado,
+  getHorarios
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -156,8 +157,8 @@ export const postHorariosVacantes = (horarios) => (dispatch) => {
 };
 
 export const postCita = (cita) => (dispatch) => {
-  const { celular, correo, date, time, modo, nombre, añoIngreso, grado } = cita;
-  const ColegioId = localStorage.getItem("id");
+  const { celular, correo, date, time, modo, nombre, añoIngreso, grado, ColegioId } = cita;
+
   dispatch(isLoading());
   axios
     .post("/citas", {
@@ -181,6 +182,22 @@ export const getCitaAgendadas = () => (dispatch) => {
   axios
     .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
     .then((res) => dispatch(getCitasAgendado(res.data)))
+    .catch((err) => {
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: err.response.data.error,
+      });
+    });
+};
+
+
+export const getHorariosSchool = (idColegio) => (dispatch) => {
+  dispatch(isLoading());
+  
+  axios
+    .get(`/horarios/${idColegio}` )
+    .then((res) => dispatch(getHorarios(res.data)))
     .catch((err) => {
       Swal.fire({
         icon: "error",

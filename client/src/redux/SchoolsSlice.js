@@ -19,6 +19,7 @@ export const schoolsSlice = createSlice({
     niveles: [],
     afiliaciones: [],
     grados: [],
+    horarios:null,
     vacantesGrados: [],
     citasAgendadas: [],
     error: "",
@@ -105,7 +106,11 @@ export const schoolsSlice = createSlice({
         (state.loading = false),
         (state.error = "");
     },
-
+    getHorarios: (state, action) => {
+      (state.horarios = action.payload),
+        (state.loading = false),
+        (state.error = "");
+    },
     cleanOneSchool: (state, action) => {
       state.oneSchool = {};
       (state.loading = false), (state.error = "");
@@ -137,7 +142,8 @@ export const {
   getDistrits,
   getCategories,
   getProvincias,
-  getCitasAgendado
+  getCitasAgendado,
+  getHorarios
 } = schoolsSlice.actions;
 
 export default schoolsSlice.reducer;
