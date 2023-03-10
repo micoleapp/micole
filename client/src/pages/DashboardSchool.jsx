@@ -550,7 +550,7 @@ function DashboardSchool() {
     e.preventDefault();
 
     axios
-      .put(`http://localhost:3001/colegios/${user.id}`, allData)
+      .put(`/colegios/${user.id}`, allData)
       .then((res) => {
         Swal.fire({
           icon: "success",
