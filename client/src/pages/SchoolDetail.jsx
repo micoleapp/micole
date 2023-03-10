@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   clannDetailid,
   getAllGrados,
+  getHorariosSchool,
   getSchoolDetail,
   postCita,
 } from "../redux/SchoolsActions";
@@ -115,12 +116,13 @@ const ArrHorariosMockFormateado = [
 ];
 function SchoolDetail() {
   const { id } = useParams();
-  const { oneSchool, grados } = useSelector((state) => state.schools);
+  const { oneSchool, grados,horarios } = useSelector((state) => state.schools);
   const location = useLocation();
 
   const params = new URLSearchParams(location.search);
 
   const [gradoParams, setGradoParams] = React.useState(params.get("grado"));
+
   const [ingresoParams, setIngresoParams] = React.useState(
     params.get("ingreso")
   );
@@ -140,11 +142,12 @@ function SchoolDetail() {
   };
 
   const [image, setImage] = useState(null);
-
+  const idColegio = oneSchool.id;
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllGrados());
     dispatch(getSchoolDetail(id));
+    dispatch(getHorariosSchool(idColegio));
     return () => {
       dispatch(clannDetailid());
     };
@@ -195,6 +198,7 @@ function SchoolDetail() {
     correo: "",
     añoIngreso: ingresoParams,
     grado: nombre_grado,
+    ColegioId:idColegio
   });
 
   const handleSubmit = (e) => {
@@ -279,7 +283,7 @@ function SchoolDetail() {
     }
     if (localStorage.getItem("id") === id) {
       Swal.fire("Error!", "No puedes comentar mas de una vez", "error");
-      return
+      return;
     }
     try {
       axios
@@ -1081,7 +1085,7 @@ function SchoolDetail() {
               {Horarios && (
                 <>
                   <div className={style.Layout}>
-                    {ArrHorariosMockFormateado.map((ele) => {
+                    { horarios && horarios?.map((ele) => {
                       return (
                         <>
                           <div
