@@ -16,7 +16,7 @@ const style = {
   p: 2,
 };
 
-export default function ModalDeleteCita({ IdCita, handleClose }) {
+export default function ModalDeleteCita({ IdCita, handleClose,HandlerOpendeleteModal }) {
   const [openExito, setOpenExito] = useState(false);
 
   const dispatch = useDispatch();
@@ -63,10 +63,10 @@ const handleFinalizar =()=>{
                     justifyContent: "space-evenly",
                   }}
                 >
-                  <Button variant="contained" onClick={handleDeleteCita}>
+                  <Button variant="contained"    onClick={handleDeleteCita}>
                     Si
                   </Button>
-                  <Button variant="contained">Cancelar</Button>
+                  <Button  onClick={()=>HandlerOpendeleteModal(false)}  variant="contained">Cancelar</Button>
                 </div>
               </div>
             )}
