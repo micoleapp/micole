@@ -217,6 +217,7 @@ function SchoolDetail() {
     }
     
     dispatch(postCita(cita));
+    
   };
 
   const handleModo = () => {

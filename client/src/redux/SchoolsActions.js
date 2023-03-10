@@ -147,11 +147,12 @@ export const clannDetailid = () => (dispatch) => {
   }
 };
 
-export const postHorariosVacantes = (horarios) => (dispatch) => {
+export const postHorariosVacantes = (horarios,ColegioId) => (dispatch) => {
+  console.log(ColegioId)
+  console.log(horarios)
   dispatch(isLoading());
-  const ColegioId = localStorage.getItem("id");
   axios
-    .post("/disponibilidad", { horarios }, { ColegioId })
+    .post("/horarios", { horarios , ColegioId })
     // .then(res=>dispatch((res.data)))
     .catch((err) => console.log(err));
 };
@@ -210,6 +211,7 @@ export const getCitaAgendadas = () => (dispatch) => {
 
 
 export const getHorariosSchool = (idColegio) => (dispatch) => {
+  console.log(idColegio)
   dispatch(isLoading());
   
   axios
