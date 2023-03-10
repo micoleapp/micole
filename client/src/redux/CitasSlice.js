@@ -6,6 +6,7 @@ export const citasSlice = createSlice({
     tasks: null,
     success: null,
     error: "",
+    loading: false,
     columns: {
       "column-1": {
         id: "column-1",
@@ -97,7 +98,7 @@ export const citasSlice = createSlice({
       state.columns["column-6"].taskIds = data
         .filter((ele, index) => ele[index]?.estado === "VAceptada")
         .map((ele) => Object.values(ele)[0].id);
-
+      (state.loading = false), (state.success = false);
       // (state.tasks = Object.assign({}, ...data)),
       // (state.columns["column-1"].taskIds = action.payload
       //     .filter((ele) => ele.estado === "Solicitud")

@@ -1,8 +1,8 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCita } from "../../../redux/CitasActions";
-
+import { cleanSuccessState, deleteCita } from "../../../redux/CitasActions";
+import LoadingButton from "@mui/lab/LoadingButton";
 const style = {
   position: "absolute",
   top: "50%",
@@ -21,22 +21,32 @@ export default function ModalDeleteCita({
   handleClose,
   HandlerOpendeleteModal,
 }) {
-  const { success, error } = useSelector((state) => state.citas);
+  const { success, error, loading } = useSelector((state) => state.citas);
   console.log(error);
-  const [openExito, setOpenExito] = useState(false);
-
+  const [openDelete, setOpenDelete] = useState(true);
+  const [OpenError, setOpenError] = useState(false);
+  const [Loading, setLoading] = React.useState(loading);
   const dispatch = useDispatch();
 
-  const handleDeleteCita = () => {
-    dispatch(deleteCita(IdCita));
+  const comprobacion = () => {
     if (success === "Se eliminó la Cita.") {
-      setOpenExito(true);
+      setOpenDelete(false);
+      // dispatch(cleanSuccessState());
+    } else if (error === "El registro no existe.") {
+      setOpenError(true);
     }
   };
 
+  const handleDeleteCita = async () => {
+    dispatch(deleteCita(IdCita));
+    await comprobacion();
+
+  };
+  console.log(Loading);
   const handleFinalizar = () => {
     handleClose(true);
   };
+  console.log(success);
 
   return (
     <Box>
@@ -48,7 +58,7 @@ export default function ModalDeleteCita({
         aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style}>
-          {openExito === false && (
+          {openDelete === true && (
             <Typography
               id="keep-mounted-modal-title"
               variant="h6"
@@ -58,7 +68,7 @@ export default function ModalDeleteCita({
             </Typography>
           )}
           <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-            {openExito === false && (
+            {openDelete === true &&success === false &&  (
               <div
                 style={{
                   display: "flex",
@@ -79,6 +89,7 @@ export default function ModalDeleteCita({
                   <Button variant="contained" onClick={handleDeleteCita}>
                     Si
                   </Button>
+
                   <Button
                     onClick={() => HandlerOpendeleteModal(false)}
                     variant="contained"
@@ -88,7 +99,7 @@ export default function ModalDeleteCita({
                 </div>
               </div>
             )}
-            {openExito === true && (
+            {success === "Se eliminó la Cita." && (
               <div
                 style={{
                   display: "flex",
@@ -104,7 +115,6 @@ export default function ModalDeleteCita({
                   component="h2"
                 >
                   Cita Cancelada con Exito!
-                  
                 </Typography>
                 <p style={{ textAlign: "center" }}>
                   Enviaremos un correo a la familia avisando que la cita ha sido
@@ -123,6 +133,38 @@ export default function ModalDeleteCita({
                 </div>
               </div>
             )}
+
+            {/* {OpenError === true && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "20px",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography
+                  id="keep-mounted-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                  Ups, ha habido un error!
+                </Typography>
+                <p style={{ textAlign: "center" }}>El registro no existe.</p>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <Button variant="contained" onClick={handleFinalizar}>
+                    Finalizar
+                  </Button>
+                </div>
+              </div>
+            )} */}
           </Typography>
         </Box>
       </Modal>

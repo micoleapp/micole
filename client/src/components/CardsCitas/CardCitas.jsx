@@ -20,8 +20,8 @@ export default function CardCitas({ filtros }) {
   const [Inactivas, setInactivas] = useState(Citas.CitasInactivas);
   const [Activas, setActivas] = useState(Citas.CitasActivas);
   const dispatch = useDispatch();
-  const handlerPutStateCita = (iD) => {
-    dispatch(putCita(iD));
+
+  const comprobacion = (iD) => {
     if (success === "Se activo la Cita.") {
       const CitasConfirmadas = Citas.CitasInactivas.find(
         (ele) => ele.id === iD
@@ -30,11 +30,17 @@ export default function CardCitas({ filtros }) {
         (ele) => ele.id !== iD
       );
 
-      setInactivas(citasSinConfirmar);
+
 
       setActivas([...Activas, CitasConfirmadas]);
-      dispatch(cleanSuccessState());
+      setInactivas(citasSinConfirmar);
+     return  dispatch(cleanSuccessState());
     }
+  };
+
+  const handlerPutStateCita = async (iD) => {
+    dispatch(putCita(iD));
+    const comprobacionDeCitaActivada = await comprobacion(iD);
   };
   console.log(success);
 
