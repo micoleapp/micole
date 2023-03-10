@@ -16,20 +16,27 @@ const style = {
   p: 2,
 };
 
-export default function ModalDeleteCita({ IdCita, handleClose,HandlerOpendeleteModal }) {
+export default function ModalDeleteCita({
+  IdCita,
+  handleClose,
+  HandlerOpendeleteModal,
+}) {
+  const { success, error } = useSelector((state) => state.citas);
+  console.log(error);
   const [openExito, setOpenExito] = useState(false);
 
   const dispatch = useDispatch();
 
   const handleDeleteCita = () => {
     dispatch(deleteCita(IdCita));
-    setOpenExito(true);
-   
+    if (success === "Se eliminó la Cita.") {
+      setOpenExito(true);
+    }
   };
 
-const handleFinalizar =()=>{
- handleClose(true)
-}
+  const handleFinalizar = () => {
+    handleClose(true);
+  };
 
   return (
     <Box>
@@ -41,9 +48,15 @@ const handleFinalizar =()=>{
         aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style}>
-     {  openExito === false &&   <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-            Cancelar Cita
-          </Typography>}
+          {openExito === false && (
+            <Typography
+              id="keep-mounted-modal-title"
+              variant="h6"
+              component="h2"
+            >
+              Cancelar Cita
+            </Typography>
+          )}
           <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
             {openExito === false && (
               <div
@@ -63,10 +76,15 @@ const handleFinalizar =()=>{
                     justifyContent: "space-evenly",
                   }}
                 >
-                  <Button variant="contained"    onClick={handleDeleteCita}>
+                  <Button variant="contained" onClick={handleDeleteCita}>
                     Si
                   </Button>
-                  <Button  onClick={()=>HandlerOpendeleteModal(false)}  variant="contained">Cancelar</Button>
+                  <Button
+                    onClick={() => HandlerOpendeleteModal(false)}
+                    variant="contained"
+                  >
+                    Cancelar
+                  </Button>
                 </div>
               </div>
             )}
@@ -80,10 +98,15 @@ const handleFinalizar =()=>{
                   flexDirection: "column",
                 }}
               >
-               <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-            Cita Cancelada con Exito!
-          </Typography>
-                <p style={{textAlign:'center'}}>
+                <Typography
+                  id="keep-mounted-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                  Cita Cancelada con Exito!
+                  
+                </Typography>
+                <p style={{ textAlign: "center" }}>
                   Enviaremos un correo a la familia avisando que la cita ha sido
                   cancelada
                 </p>
@@ -94,8 +117,9 @@ const handleFinalizar =()=>{
                     justifyContent: "space-evenly",
                   }}
                 >
-                
-                  <Button variant="contained"onClick={handleFinalizar} >Finalizar</Button>
+                  <Button variant="contained" onClick={handleFinalizar}>
+                    Finalizar
+                  </Button>
                 </div>
               </div>
             )}

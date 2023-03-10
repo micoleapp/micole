@@ -670,16 +670,21 @@ function DashboardSchool() {
     dispatch(getVacantes(datosPrincipales.niveles));
   }, [datosPrincipales.niveles]);
 
+    const { success } = useSelector((state) => state.citas);
+  const { citasAgendadas } = useSelector((state) => state.schools);
   useEffect(() => {
     dispatch(getCita());
     
   }, [page === 4 ]);
 
-  const { citasAgendadas } = useSelector((state) => state.schools);
   useEffect(() => {
    dispatch(getCitaAgendadas())
 
-  }, [page ===  5 ])
+  }, [page ===  5  ])
+  useEffect(() => {
+    dispatch(getCitaAgendadas())
+ 
+   }, [page ===  5 , success  ])
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);

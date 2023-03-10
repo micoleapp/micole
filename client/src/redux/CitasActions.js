@@ -5,6 +5,8 @@ import {
   updateColumns,
   getError,
   isLoading,
+  getSuccess,
+  cleanSuccess
 } from "./CitasSlice";
 
 export const getCita = () => (dispatch) => {
@@ -47,7 +49,7 @@ export const putCita = (idCita) => (dispatch) => {
   dispatch(isLoading());
   axios
     .put(`/citas/activo/${idCita}`, { activo: true })
-    .then((res) => console.log(res.data))
+    .then((res) => dispatch( getSuccess(res.data)))
     .catch((err) => {
       dispatch(getError(err.response.data.error));
       Swal.fire({
@@ -64,7 +66,7 @@ export const deleteCita = (idCita) => (dispatch) => {
   console.log(idCita)
   axios
     .delete(`/citas/${idCita}`)
-    .then((res) => dispatch(console.log(res.data)))
+    .then((res) => dispatch( getSuccess(res.data)))
     .catch((err) => {
       dispatch(getError(err.response.data.error));
       Swal.fire({
@@ -74,3 +76,16 @@ export const deleteCita = (idCita) => (dispatch) => {
       });
     });
 };
+
+
+
+export const cleanSuccessState= () => (dispatch) => {
+  dispatch(isLoading());
+  try {
+    dispatch(cleanSuccess());
+  } catch (err) {
+    dispatch(getError(err.response.data.error));
+  }
+};
+
+
