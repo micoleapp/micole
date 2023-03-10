@@ -131,8 +131,8 @@ function DashboardSchool() {
   
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
-const ColegioId = oneSchool.id
-  console.log(ColegioId)
+
+
   const id = user.id;
   useEffect(() => {
     if (user) {
@@ -657,7 +657,7 @@ const ColegioId = oneSchool.id
       text: "Cambios guardados",
     });
     console.log(newDays);
-    dispatch(postHorariosVacantes(newDays, ColegioId));
+    dispatch(postHorariosVacantes(newDays));
   };
 
   const [spanOne, setSpanOne] = useState(false);

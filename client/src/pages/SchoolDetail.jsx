@@ -70,50 +70,50 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
   );
 }
 
-const ArrHorariosMockQuevaALBack = [
-  { Lunes: ["08:30", "13:00", true] },
-  { Martes: ["10:30", "13:00", true] },
-  { Miercoles: ["09:30", "13:00", true] },
-  { Jueves: ["07:30", "13:00", false] },
-  { Viernes: ["11:30", "13:00", false] },
-];
-const ArrHorariosMockFormateado = [
-  {
-    dia: "Lunes",
-    horarios: { desde: "08:30", hasta: "13:00" },
-    disponibilidad: false,
-    vacantesDispo: 2,
-    vacantes: "20",
-  },
-  {
-    dia: "Martes",
-    horarios: { desde: "10:30", hasta: "13:00" },
-    disponibilidad: true,
-    vacantesDispo: 3,
-    vacantes: "5",
-  },
-  {
-    dia: "Miercoles",
-    horarios: { desde: "09:30", hasta: "13:00" },
-    disponibilidad: true,
-    vacantesDispo: 1,
-    vacantes: "3",
-  },
-  {
-    dia: "Jueves",
-    horarios: { desde: "11:30", hasta: "13:00" },
-    disponibilidad: false,
-    vacantesDispo: 0,
-    vacantes: "6",
-  },
-  {
-    dia: "Viernes",
-    horarios: { desde: "08:30", hasta: "13:00" },
-    disponibilidad: false,
-    vacantesDispo: 0,
-    vacantes: "10",
-  },
-];
+// const ArrHorariosMockQuevaALBack = [
+//   { Lunes: ["08:30", "13:00", true] },
+//   { Martes: ["10:30", "13:00", true] },
+//   { Miercoles: ["09:30", "13:00", true] },
+//   { Jueves: ["07:30", "13:00", false] },
+//   { Viernes: ["11:30", "13:00", false] },
+// ];
+// const ArrHorariosMockFormateado = [
+//   {
+//     dia: "Lunes",
+//     horarios: { desde: "08:30", hasta: "13:00" },
+//     disponibilidad: false,
+//     vacantesDispo: 2,
+//     vacantes: "20",
+//   },
+//   {
+//     dia: "Martes",
+//     horarios: { desde: "10:30", hasta: "13:00" },
+//     disponibilidad: true,
+//     vacantesDispo: 3,
+//     vacantes: "5",
+//   },
+//   {
+//     dia: "Miercoles",
+//     horarios: { desde: "09:30", hasta: "13:00" },
+//     disponibilidad: true,
+//     vacantesDispo: 1,
+//     vacantes: "3",
+//   },
+//   {
+//     dia: "Jueves",
+//     horarios: { desde: "11:30", hasta: "13:00" },
+//     disponibilidad: false,
+//     vacantesDispo: 0,
+//     vacantes: "6",
+//   },
+//   {
+//     dia: "Viernes",
+//     horarios: { desde: "08:30", hasta: "13:00" },
+//     disponibilidad: false,
+//     vacantesDispo: 0,
+//     vacantes: "10",
+//   },
+// ];
 function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool, grados,horarios } = useSelector((state) => state.schools);
@@ -129,6 +129,7 @@ function SchoolDetail() {
   console.log(grados);
   console.log(gradoParams);
   console.log(ingresoParams);
+  console.log( oneSchool);
   const nombre_grado = grados.find(
     (grado) => grado.id == gradoParams
   ).nombre_grado;
@@ -142,12 +143,12 @@ function SchoolDetail() {
   };
 
   const [image, setImage] = useState(null);
-  const idColegio = oneSchool.id;
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllGrados());
     dispatch(getSchoolDetail(id));
-    dispatch(getHorariosSchool(idColegio));
+    dispatch(getHorariosSchool());
     return () => {
       dispatch(clannDetailid());
     };
@@ -198,7 +199,7 @@ function SchoolDetail() {
     correo: "",
     añoIngreso: ingresoParams,
     grado: nombre_grado,
-    ColegioId:idColegio
+
   });
 
   const handleSubmit = (e) => {
@@ -217,7 +218,7 @@ function SchoolDetail() {
     }
     
     dispatch(postCita(cita));
-    
+
   };
 
   const handleModo = () => {

@@ -158,8 +158,10 @@ export const postHorariosVacantes = (horarios,ColegioId) => (dispatch) => {
 };
 
 export const postCita = (cita) => (dispatch) => {
-  const { celular, correo, date, time, modo, nombre, añoIngreso, grado, ColegioId } = cita;
+  const { celular, correo, date, time, modo, nombre, añoIngreso, grado } = cita;
   console.log("test")
+ const  ColegioId = localStorage.getItem('ColegioId')
+
   dispatch(isLoading());
   try {    
     axios
@@ -173,6 +175,7 @@ export const postCita = (cita) => (dispatch) => {
         ColegioId,
         añoIngreso,
         grado,
+        ColegioId
       })
       .then(res=>{
         Swal.fire({
@@ -210,10 +213,11 @@ export const getCitaAgendadas = () => (dispatch) => {
 };
 
 
-export const getHorariosSchool = (idColegio) => (dispatch) => {
-  console.log(idColegio)
+export const getHorariosSchool = () => (dispatch) => {
+
   dispatch(isLoading());
-  
+  const idColegio= localStorage.getItem('ColegioId')
+  console.log(idColegio)
   axios
     .get(`/horarios/${idColegio}` )
     .then((res) => dispatch(getHorarios(res.data)))
