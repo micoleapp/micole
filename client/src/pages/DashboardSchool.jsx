@@ -128,8 +128,11 @@ function DashboardSchool() {
     niveles,
     infraestructura: infraState,
     afiliaciones,
+  
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
+const ColegioId = oneSchool.id
+  console.log(ColegioId)
   const id = user.id;
   useEffect(() => {
     if (user) {
@@ -547,7 +550,7 @@ function DashboardSchool() {
     e.preventDefault();
 
     axios
-      .put(`http://localhost:3001/colegios/${user.id}`, allData)
+      .put(`/colegios/${user.id}`, allData)
       .then((res) => {
         Swal.fire({
           icon: "success",
@@ -625,6 +628,7 @@ function DashboardSchool() {
   //   vacantesDispo:2,
   //   vacantes: "20",
   // },
+ 
   const handleSubmitCitas = (e) => {
     e.preventDefault();
 
@@ -633,8 +637,8 @@ function DashboardSchool() {
     });
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
-
-      horarios: [
+   
+      horarios: 
         {
           desde: stringyDate(day[Object.keys(day)][0]["$H"])
             .toString()
@@ -645,7 +649,7 @@ function DashboardSchool() {
             .concat(":")
             .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
         },
-      ],
+      
     }));
     Swal.fire({
       icon: "success",
@@ -653,7 +657,7 @@ function DashboardSchool() {
       text: "Cambios guardados",
     });
     console.log(newDays);
-    dispatch(postHorariosVacantes(newDays));
+    dispatch(postHorariosVacantes(newDays, ColegioId));
   };
 
   const [spanOne, setSpanOne] = useState(false);
