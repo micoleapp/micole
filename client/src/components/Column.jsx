@@ -1,44 +1,32 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
+import { getCita } from "../redux/CitasActions";
 import { Draggable } from "react-beautiful-dnd";
 import { Droppable } from "react-beautiful-dnd";
 import Chip from "@mui/material/Chip";
+import { useDispatch, useSelector } from "react-redux";
 
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import ModalCita from "./Tabs/ModalCita/ModalCita";
 
-import Typography from "@mui/material/Typography";
-import NavTabs from "./Tabs/TabsCita";
-import { useSelect } from "@mui/base";
-import { useSelector } from "react-redux";
+const Column = ({ column, tasksArr }) => {
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "none",
-  boxShadow: 24,
-  borderRadius: "8px",
-  p: 4,
-};
+  const dispatch = useDispatch();
 
-const Column = ({ column, tasks }) => {
 
-  
+  const { grados } = useSelector((state) => state.schools);
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  console.log(tasks);
-  const handleClick = () => {
-    setOpenDetail(true);
+  const [value, setValue] = React.useState("");
+  const handleOpen = (event) => {
+    setOpen(true);
+    console.log(event.target.value);
   };
+  const handleClose = () => setOpen(false);
+
+
 
   return (
     <>
-      <div className="rounded-md bg-white shadow-md border h-min w-full flex flex-col">
-        <div className="flex items-center  bg-[#0061dd] py-2 rounded-t-md px-2 mb-2 h-20">
+      <div className="rounded-md bg-white shadow-md border max-w-xs h-min w-full flex flex-col">
+        <div className="flex items-center   bg-[#0061dd] justify-center text-center py-2 rounded-t-md px-2 h-20">
           <h1 className="text-sm text-white">{column.title}</h1>
         </div>
         <Droppable droppableId={column.id}>
@@ -48,8 +36,9 @@ const Column = ({ column, tasks }) => {
 
               ref={droppableProvided.innerRef}
               {...droppableProvided.droppableProps}
+              className="p-2"
             >
-              {tasks.map((task, index) => (
+              {tasksArr.map((task, index) => (
                 <Draggable
                   key={task.id}
                   draggableId={`${task.id}`}
@@ -77,7 +66,11 @@ const Column = ({ column, tasks }) => {
                         <h2>{task.nombre}</h2>
                         <div>
                           <Chip
-                            onClick={handleOpen}
+                            onClick={() => {
+                              setOpen(true);
+                              setValue(task);
+                            }}
+                            value={`${task.id}`}
                             label="+"
                             size="small"
                             style={{
@@ -87,60 +80,34 @@ const Column = ({ column, tasks }) => {
                           />
                         </div>
                       </div>
-                      <div style={{ display: "flex" }}>
-                        <Chip label={task.grado} />
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "5px",
+                        }}
+                      >
+                        {grados &&
+                          grados.map((ele) => {
+                            if (ele.id === task.grado) {
+                              return <Chip label={ele.nombre_grado} />;
+                            }
+                          })}
                         <Chip label={task.añoIngreso} />
                       </div>
-                      {open && (
-                        <div>
-                          {/* <Button onClick={handleOpen}>Open modal</Button> */}
-                          <Modal
-                            keepMounted
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="keep-mounted-modal-title"
-                            aria-describedby="keep-mounted-modal-description"
-                          
-                          >
-                            <Box sx={style}>
-                              <Typography
-                                id="keep-mounted-modal-title"
-                                variant="h6"
-                                component="h2"
-                              >
-                                Cita Agendada
-                              </Typography>
-                              <Typography
-                                id="keep-mounted-modal-description"
-                                sx={{ mt: 2 }}
-                              >
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: "20px",
-                                    width: "100%",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <img
-                                    style={{ width: "70px", height: "70px" }}
-                                    src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
-                                    alt=""
-                                  />
-                                  <h1>{task.nombre}</h1>
-                                  <div />
-                                  <NavTabs task={task} />
-                                </div>
-                              </Typography>
-                            </Box>
-                          </Modal>
-                        </div>
-                      )}
                     </div>
                   )}
                 </Draggable>
               ))}
+              {open && (
+                <div>
+                  <ModalCita
+                    handleClose={handleClose}
+                    open={open}
+                    task={value}
+                  />
+                </div>
+              )}
               {droppableProvided.placeholder}
             </div>
           )}

@@ -24,6 +24,7 @@ import {
   getAllAfiliaciones,
   getAllGrados,
   getAllSchools,
+  getCitaAgendadas,
 
 } from "./redux/SchoolsActions";
 
@@ -47,6 +48,7 @@ function App() {
     dispatch(getAllSchools())
     dispatch(getUserByToken());
     dispatch(getCita())
+    dispatch(getCitaAgendadas())
   }, []);
 
   useEffect(() => {

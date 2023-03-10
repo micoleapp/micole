@@ -17,7 +17,7 @@ import {
   getAfiliaciones,
   getGrados,
   getFilterSchool,
-  getCitas,
+  getCitasAgendado,
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -156,22 +156,31 @@ export const postHorariosVacantes = (horarios) => (dispatch) => {
 };
 
 export const postCita = (cita) => (dispatch) => {
-  const { celular, correo, date, time, modo, nombre } = cita;
+  const { celular, correo, date, time, modo, nombre, añoIngreso, grado } = cita;
   const ColegioId = localStorage.getItem("id");
   dispatch(isLoading());
   axios
-    .post("/citas", { celular, correo, date, time, modo, nombre, ColegioId })
+    .post("/citas", {
+      celular,
+      correo,
+      date,
+      time,
+      modo,
+      nombre,
+      ColegioId,
+      añoIngreso,
+      grado,
+    })
     // .then((res) => dispatch(getVacantesGrados(res.data)))
     .catch((err) => console.log(err));
 };
 
-
-export const getCita = () => (dispatch) => {
+export const getCitaAgendadas = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
   axios
     .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
-    .then((res) => dispatch(getCitas(res.data)))
+    .then((res) => dispatch(getCitasAgendado(res.data)))
     .catch((err) => {
       Swal.fire({
         icon: "error",

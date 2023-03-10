@@ -7,7 +7,7 @@ const getCitas = async (req, res, next) => {
     if (!user) {
       return next({
         statusCode: 400,
-        message: 'El usuario no es un Colegio',
+        message: "El usuario no es un Colegio",
       });
     }
     const include = { include: [{ model: Colegio }, { model: Grado }] };
@@ -41,7 +41,7 @@ const getCitaById = async (req, res, next) => {
     if (!cita) {
       return next({
         statusCode: 400,
-        message: 'El registro no existe.',
+        message: "El registro no existe.",
       });
     }
     res.status(200).send(cita);
@@ -69,7 +69,7 @@ const createCita = async (req, res, next) => {
     if (ifExists) {
       return next({
         statusCode: 400,
-        message: 'El email ya cuenta con una cita con este Colegio.',
+        message: "El email ya cuenta con una cita con este Colegio.",
       });
     }
     const gradoId = await Grado.findOne({ where: { nombre_grado: grado } });
@@ -85,6 +85,7 @@ const createCita = async (req, res, next) => {
       GradoId: gradoId.id,
       ColegioId,
     });
+   
     res.status(200).json(newCita);
   } catch (error) {
     console.log(error);
@@ -101,7 +102,7 @@ const changeStatusCita = async (req, res, next) => {
     if (!cita) {
       return next({
         statusCode: 400,
-        message: 'El registro no existe.',
+        message: "El registro no existe.",
       });
     }
     await Cita.update(
@@ -110,7 +111,7 @@ const changeStatusCita = async (req, res, next) => {
       },
       { where: { id: idCita } }
     );
-    res.status(200).send('El estado de la cita se ha modificado.');
+    res.status(200).send("El estado de la cita se ha modificado.");
   } catch (error) {
     return next(error);
   }

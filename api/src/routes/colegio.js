@@ -294,7 +294,6 @@ router.post('/filter', async (req, res) => {
         },
         {
           model: Categoria,
-          attributes: ['id', 'nombre_categoria'],
           through: {
             attributes: [],
           },
