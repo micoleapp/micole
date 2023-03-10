@@ -18,6 +18,7 @@ import {
   getGrados,
   getFilterSchool,
   getCitasAgendado,
+  getHorarios
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -181,6 +182,22 @@ export const getCitaAgendadas = () => (dispatch) => {
   axios
     .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
     .then((res) => dispatch(getCitasAgendado(res.data)))
+    .catch((err) => {
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: err.response.data.error,
+      });
+    });
+};
+
+
+export const getHorariosSchool = () => (dispatch) => {
+  dispatch(isLoading());
+  const idColegio = localStorage.get('id')
+  axios
+    .get(`/horarios/${idColegio}` )
+    .then((res) => dispatch(getHorarios(res.data)))
     .catch((err) => {
       Swal.fire({
         icon: "error",
