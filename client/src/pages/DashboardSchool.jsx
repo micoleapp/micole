@@ -128,8 +128,11 @@ function DashboardSchool() {
     niveles,
     infraestructura: infraState,
     afiliaciones,
+  
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
+const ColegioId = oneSchool.id
+  console.log(ColegioId)
   const id = user.id;
   useEffect(() => {
     if (user) {
@@ -625,7 +628,7 @@ function DashboardSchool() {
   //   vacantesDispo:2,
   //   vacantes: "20",
   // },
-  const  ColegioId = oneSchool.id;
+ 
   const handleSubmitCitas = (e) => {
     e.preventDefault();
 
@@ -635,7 +638,7 @@ function DashboardSchool() {
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
    
-      horarios: [
+      horarios: 
         {
           desde: stringyDate(day[Object.keys(day)][0]["$H"])
             .toString()
@@ -646,7 +649,7 @@ function DashboardSchool() {
             .concat(":")
             .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
         },
-      ],
+      
     }));
     Swal.fire({
       icon: "success",

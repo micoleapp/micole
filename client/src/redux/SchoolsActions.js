@@ -148,6 +148,8 @@ export const clannDetailid = () => (dispatch) => {
 };
 
 export const postHorariosVacantes = (horarios,ColegioId) => (dispatch) => {
+  console.log(ColegioId)
+  console.log(horarios)
   dispatch(isLoading());
   axios
     .post("/horarios", { horarios , ColegioId })
@@ -192,6 +194,7 @@ export const getCitaAgendadas = () => (dispatch) => {
 
 
 export const getHorariosSchool = (idColegio) => (dispatch) => {
+  console.log(idColegio)
   dispatch(isLoading());
   
   axios
