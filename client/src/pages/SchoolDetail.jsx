@@ -213,6 +213,7 @@ function SchoolDetail() {
     console.log(cita);
 
     dispatch(postCita(cita));
+    
   };
 
   const handleModo = () => {

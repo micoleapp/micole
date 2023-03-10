@@ -625,6 +625,7 @@ function DashboardSchool() {
   //   vacantesDispo:2,
   //   vacantes: "20",
   // },
+  const  ColegioId = oneSchool.id;
   const handleSubmitCitas = (e) => {
     e.preventDefault();
 
@@ -633,7 +634,7 @@ function DashboardSchool() {
     });
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
-
+   
       horarios: [
         {
           desde: stringyDate(day[Object.keys(day)][0]["$H"])
@@ -653,7 +654,7 @@ function DashboardSchool() {
       text: "Cambios guardados",
     });
     console.log(newDays);
-    dispatch(postHorariosVacantes(newDays));
+    dispatch(postHorariosVacantes(newDays, ColegioId));
   };
 
   const [spanOne, setSpanOne] = useState(false);

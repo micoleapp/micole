@@ -147,11 +147,10 @@ export const clannDetailid = () => (dispatch) => {
   }
 };
 
-export const postHorariosVacantes = (horarios) => (dispatch) => {
+export const postHorariosVacantes = (horarios,ColegioId) => (dispatch) => {
   dispatch(isLoading());
-  const ColegioId = localStorage.getItem("id");
   axios
-    .post("/disponibilidad", { horarios }, { ColegioId })
+    .post("/horarios", { horarios , ColegioId })
     // .then(res=>dispatch((res.data)))
     .catch((err) => console.log(err));
 };
