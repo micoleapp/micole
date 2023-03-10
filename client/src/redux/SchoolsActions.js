@@ -157,8 +157,8 @@ export const postHorariosVacantes = (horarios) => (dispatch) => {
 };
 
 export const postCita = (cita) => (dispatch) => {
-  const { celular, correo, date, time, modo, nombre, añoIngreso, grado } = cita;
-  const ColegioId = localStorage.getItem("id");
+  const { celular, correo, date, time, modo, nombre, añoIngreso, grado, ColegioId } = cita;
+
   dispatch(isLoading());
   axios
     .post("/citas", {
@@ -192,9 +192,9 @@ export const getCitaAgendadas = () => (dispatch) => {
 };
 
 
-export const getHorariosSchool = () => (dispatch) => {
+export const getHorariosSchool = (idColegio) => (dispatch) => {
   dispatch(isLoading());
-  const idColegio = localStorage.get('id')
+  
   axios
     .get(`/horarios/${idColegio}` )
     .then((res) => dispatch(getHorarios(res.data)))
