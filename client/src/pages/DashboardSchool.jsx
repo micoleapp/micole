@@ -137,6 +137,7 @@ function DashboardSchool() {
   useEffect(() => {
     if (user) {
       dispatch(getSchoolDetail(user.id));
+
     }
   }, [allData]);
 
@@ -688,6 +689,7 @@ function DashboardSchool() {
     dispatch(getCita());
     dispatch(getCitaAgendadas());
   }, [success]);
+
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);

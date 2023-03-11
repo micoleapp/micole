@@ -2,7 +2,7 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cleanSuccessState, deleteCita } from "../../../redux/CitasActions";
-import LoadingButton from "@mui/lab/LoadingButton";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -25,7 +25,7 @@ export default function ModalDeleteCita({
   console.log(error);
   const [openDelete, setOpenDelete] = useState(true);
   const [OpenError, setOpenError] = useState(false);
-  const [Loading, setLoading] = React.useState(loading);
+
   const dispatch = useDispatch();
 
   const comprobacion = () => {
@@ -39,11 +39,11 @@ export default function ModalDeleteCita({
     setOpenDelete(false);
     await comprobacion();
   };
-  console.log(Loading);
+
   const handleFinalizar = () => {
     handleClose(true);
   };
-  console.log(success);
+
 
   return (
     <Box>
@@ -137,6 +137,62 @@ export default function ModalDeleteCita({
                 <p style={{ textAlign: "center" }}>
                   Enviaremos un correo a la familia avisando que la cita ha sido
                   cancelada
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <Button variant="contained" onClick={handleFinalizar}>
+                    Finalizar
+                  </Button>
+                </div>
+              </div>
+            </Typography>
+          </Box>
+        </Modal>
+      )}
+
+     {OpenError === true && (
+        <Modal
+          keepMounted
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="keep-mounted-modal-title"
+          aria-describedby="keep-mounted-modal-description"
+        >
+          <Box sx={style}>
+            {openDelete === true && (
+              <Typography
+                id="keep-mounted-modal-title"
+                variant="h6"
+                component="h2"
+              >
+                Cancelar Cita
+              </Typography>
+            )}
+            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "20px",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography
+                  id="keep-mounted-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                 Error 
+                </Typography>
+                <p style={{ textAlign: "center" }}>
+                  Ha habido un error al cancelar la cita
+                  <p>{error}</p>
                 </p>
                 <div
                   style={{

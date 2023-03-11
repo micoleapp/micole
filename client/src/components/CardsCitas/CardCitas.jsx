@@ -17,7 +17,7 @@ export default function CardCitas({ filtros }) {
   const { success } = useSelector((state) => state.citas);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [Citas, setCita] = useState(citasAgendadas);
-  const [Inactivas, setInactivas] = useState(Citas.CitasInactivas);
+  const [Inactivas, setInactivas] = useState(citasAgendadas.CitasInactivas);
   const [Activas, setActivas] = useState(Citas.CitasActivas);
   const dispatch = useDispatch();
 
@@ -42,11 +42,11 @@ export default function CardCitas({ filtros }) {
 
   };
 
-  useEffect(() => {
-    return () => {
-      dispatch(getCitaAgendadas);
-    };
-  }, [success === "Se activo la Cita."]);
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(getCitaAgendadas);
+  //   };
+  // }, [success === "Se activo la Cita."]);
 
   return (
     <>
