@@ -41,13 +41,67 @@ const pageSize = 5;
 
 const types = [
   {
-    label: "Mayor Precio",
+    label: "Mayor precio Pensión",
     onClick: () => {
       console.log("Mayor Precio");
     },
   },
   {
-    label: "Menor Precio",
+    label: "Menor precio Pensión",
+    onClick: () => {
+      console.log("Menor Precio");
+    },
+  },
+  {
+    label: "",
+    onClick: () => {
+      console.log("divider")
+    }
+  },
+  {
+    label: "Mayor precio Matricula",
+    onClick: () => {
+      console.log("Mayor Precio");
+    },
+  },
+  {
+    label: "Menor precio Matricula",
+    onClick: () => {
+      console.log("Menor Precio");
+    },
+  },
+  {
+    label: "",
+    onClick: () => {
+      console.log("divider")
+    }
+  },  
+  {
+    label: "Mayor precio Ingreso",
+    onClick: () => {
+      console.log("Mayor Precio");
+    },
+  },
+  {
+    label: "Menor precio Ingreso",
+    onClick: () => {
+      console.log("Menor Precio");
+    },
+  },
+  {
+    label: "",
+    onClick: () => {
+      console.log("divider")
+    }
+  },  
+  {
+    label: "Mayor Rating",
+    onClick: () => {
+      console.log("Mayor Precio");
+    },
+  },
+  {
+    label: "Menor Rating",
     onClick: () => {
       console.log("Menor Precio");
     },
