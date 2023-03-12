@@ -1440,23 +1440,25 @@ function DashboardSchool() {
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           type="submit"
                           onClick={handleCompleteDatosPrincipales}
                           sx={{ mr: 1 }}
                           disabled={datosPrincipalesCompleted()}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
@@ -1722,22 +1724,24 @@ function DashboardSchool() {
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           onClick={handleCompleteInfraestructura}
                           sx={{ mr: 1 }}
                           disabled={infraestructuraCompleted()}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
@@ -1956,22 +1960,24 @@ function DashboardSchool() {
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           onClick={handleCompleteAcreditaciones}
                           sx={{ mr: 1 }}
                           disabled={acreditacionesCompleted()}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
@@ -2057,24 +2063,26 @@ function DashboardSchool() {
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           disabled={
                             vacantesOffOne && vacantesOffTwo && vacantesOffThree
                           }
                           onClick={handleCompleteVacantes}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
@@ -2286,22 +2294,24 @@ function DashboardSchool() {
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           onClick={handleCompleteMultimedia}
                           sx={{ mr: 1 }}
                           disabled={multimediaCompleted()}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                                         (completed[activeStep] ? (
                                           <Typography

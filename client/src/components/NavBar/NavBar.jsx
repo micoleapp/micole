@@ -41,6 +41,13 @@ function NavBar() {
     dispatch(logout());
   };
 
+  function scrollBot() {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+  }
+
   return (
     <div className={style.layout}>
       <Link to={"/"}>
@@ -49,7 +56,6 @@ function NavBar() {
 
       <div className={style.container}>
         <div className={style.items}>
-          <p className={`${style.p} hover-underline-animation`}>Inicio</p>
           <Link
             className={`${style.p} hover-underline-animation`}
             to={"/?categorias=1"}
@@ -59,7 +65,7 @@ function NavBar() {
           <p className={`${style.p} hover-underline-animation`}>BLOG</p>
           <p
             className={`${style.p} hover-underline-animation`}
-            onClick={ToggleContact}
+            onClick={scrollBot}
           >
             Contáctanos
           </p>

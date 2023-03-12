@@ -34,10 +34,14 @@ export default function Carrusel() {
       <motion.div className={style.slider} drag='x' dragConstraints={{right:0, left:-1500} }>
         {categories.filter(el=>el.imagen_categoria !== "null").map((cat) => {
             return (
-                 <motion.div className={style.item} key={cat.id} onClick={()=>handleClick(cat.id)}>  
-                  <img src={cat.imagen_categoria} alt={cat.nombre_categoria} />
-                  <h1 className="text-center border-b border-l border-r rounded-b-md">{cat.nombre_categoria}</h1>
-           
+                 <motion.div className={`${style.item} relative flex justify-center items-center`} key={cat.id} onClick={()=>handleClick(cat.id)}>  
+                 <div className="absolute bg-black/50 w-52 h-52"></div>
+                  <img src={cat.imagen_categoria} alt={cat.nombre_categoria}/>
+                  <div className="flex flex-col justify-center gap-5 items-center absolute">
+                    {cat.logo_categoria && <img src={cat.logo_categoria} alt="logo" className="w-3 object-cover"/>}
+                  
+                  <h1 className="text-center text-white">{cat.nombre_categoria}</h1>
+                  </div>
             </motion.div>
             )
            

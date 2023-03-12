@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -8,22 +8,22 @@ import ContentLoader from "react-content-loader";
 import { Rating, Typography, Pagination, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useInView } from "framer-motion";
+import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
   faCamera,
   faPlayCircle,
   faSearch,
   faUsers,
-  faPaperclip,
-  faDoorOpen,
-  faUpRightAndDownLeftFromCenter,
-  faCirclePlus,
-  faHeart,
   faArrowDown,
   faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
+import { CiBag1 } from "react-icons/ci";
+import { FaRegMoneyBillAlt } from "react-icons/fa";
+import { ImTicket } from "react-icons/im";
+import { ImAttachment } from "react-icons/im";
+import { HiOutlineUsers } from "react-icons/hi";
+
 import {
   getAllDepartaments,
   getAllDistrits,
@@ -40,7 +40,20 @@ const Ingreso2 = [yearNow, yearNow + 1, yearNow + 2];
 
 const pageSize = 5;
 
-const types = ["Religoso", "Hombres", "Mujeres", "Mixtos"];
+const types = [
+  {
+    label: "Mayor Precio",
+    onClick: () => {
+      console.log("Mayor Precio");
+    },
+  },
+  {
+    label: "Menor Precio",
+    onClick: () => {
+      console.log("Menor Precio");
+    },
+  },
+];
 function valuetext(value) {
   return `${value}°C`;
 }
@@ -64,8 +77,10 @@ function ListSchool() {
   const [ingresoParams, setIngresoParams] = React.useState(
     params.get("ingreso")
   );
-  
-  const [categoriaParam,setCategoriaParam] = React.useState(params.get('categoria'))
+
+  const [categoriaParam, setCategoriaParam] = React.useState(
+    params.get("categoria")
+  );
 
   const [distritName, setDistritName] = React.useState(
     distritParams !== "false" ? [Number(distritParams)] : []
@@ -143,10 +158,8 @@ function ListSchool() {
   const [disabledPage, setDisabledPage] = useState(false);
 
   useEffect(() => {
-    
     const schools = allschools.slice(pagination.from, pagination.to);
     setPagination({ ...pagination, count: allschools.length, data: schools });
-     
   }, [allschools, pagination.from, pagination.to]);
 
   const handlePageChange = (event, page) => {
@@ -172,11 +185,11 @@ function ListSchool() {
     distrits: distritName,
     grado: gradoName,
     tipo: categorias,
-    pension: [value1[0],value1[1]],
-    cuota:[value2[0],value2[1]],
+    pension: [value1[0], value1[1]],
+    cuota: [value2[0], value2[1]],
     rating,
     ingles: english,
-    ingreso: ingresoName
+    ingreso: ingresoName,
   };
 
   const handleSubmitData = (e) => {
@@ -184,20 +197,18 @@ function ListSchool() {
     dispatch(getFilterListSchool(data));
   };
 
-  useEffect(() => {
-    dispatch(getFilterListSchool(data));
-  }, [
-    distritName,
-    gradoName,
-    categorias,
-    value1,
-    value2,
-    rating,
-    english,
-    ingresoName,
-  ]);
-
-  console.log(gradoName, ingresoName);
+  // useEffect(() => {
+  //   dispatch(getFilterListSchool(data));
+  // }, [
+  //   distritName,
+  //   gradoName,
+  //   categorias,
+  //   value1,
+  //   value2,
+  //   rating,
+  //   english,
+  //   ingresoName,
+  // ]);
 
   const goToDetails = (id) => {
     if (gradoName.length === 0 || ingresoName.length === 0) {
@@ -212,11 +223,26 @@ function ListSchool() {
     }
   };
 
+  function FavoritoButton() {
+    const [favorito, setFavorito] = useState(false);
+
+    const toggleFavorito = () => {
+      setFavorito(!favorito);
+    };
+
+    return (
+      <button className="text-2xl" onClick={toggleFavorito}>
+        {favorito ? "❤️" : "🤍"}
+      </button>
+    );
+  }
+
   return (
     <div
       className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "
       data-aos="fade-up"
       data-aos-duration="1000"
+      data-aos-mirror={true}
     >
       <h1 className="text-center mt-2 text-2xl font-semibold drop-shadow-md">
         Encuentra el colegio ideal
@@ -317,13 +343,15 @@ function ListSchool() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={categorias == cat.id || categoriaParam == cat.id}
+                          checked={
+                            categorias == cat.id || categoriaParam == cat.id
+                          }
                           onChange={(event, target) => {
                             if (target) {
                               setCategoriaParam(cat.id);
                               setCategorias(cat.id);
                             } else {
-                              setCategoriaParam(null)
+                              setCategoriaParam(null);
                               setCategorias([]);
                             }
                           }}
@@ -398,8 +426,9 @@ function ListSchool() {
                 }
               >
                 <FormGroup>
-                  {Ingreso2?.map((año) => (
+                  {Ingreso2?.map((año, index) => (
                     <FormControlLabel
+                      key={index}
                       control={
                         <Checkbox
                           checked={
@@ -532,24 +561,28 @@ function ListSchool() {
                 onChange={handleChangeType}
                 label="Tipo de colegio"
               >
-                {types.map((type) => (
-                  <MenuItem value={type} key={type}>
-                    <ListItemText primary={type} />
+                {types.map((type, index) => (
+                  <MenuItem
+                    value={type.label}
+                    key={index}
+                    onClick={type.onClick}
+                  >
+                    <ListItemText primary={type.label} />
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
           </div>
-          {pagination?.data?.length === 0 && <h1>No hay colegios que coincidan con esos filtros</h1> }
+          {pagination?.data?.length === 0 && (
+            <h1>No hay colegios que coincidan con esos filtros</h1>
+          )}
           <div className="flex flex-col gap-5">
             {!loading
               ? pagination?.data?.map((school, index) => {
                   return (
                     <div
-                      data-aos="zoom-in-left"
                       key={school.id}
                       className={`flex border rounded-md shadow-md bg-white p-2 items-center gap-2 flex-col md:flex-row`}
-                      data-aos-mirror={false}
                     >
                       {" "}
                       <div className="relative">
@@ -561,25 +594,62 @@ function ListSchool() {
                         <span className="absolute bg-[#0061dd] text-white p-1 px-2 rounded-md top-3 left-3">
                           DESTACADO
                         </span>
-                        {school?.Vacantes?.length > 0 && (ingresoName && gradoName) && (school?.Vacantes?.filter(vac=>vac.GradoId === gradoName && vac.año === ingresoName)[0]?.hasOwnProperty('capacidad')) && (school?.Vacantes?.filter(vac=>vac.GradoId === gradoName && vac.año === ingresoName)[0]?.hasOwnProperty('año')) && <span className="absolute animate-bounce bg-black/80 text-white p-1 px-2 rounded-md top-14 xl:top-3 xl:right-3 ml-3 w-fit">
-                          {school?.Vacantes?.length > 0 && (ingresoName && gradoName) && (school?.Vacantes?.filter(vac=>vac.GradoId === gradoName && vac.año === ingresoName)[0].hasOwnProperty('capacidad')) && (school?.Vacantes?.filter(vac=>vac.GradoId === gradoName && vac.año === ingresoName)[0].hasOwnProperty('año')) && school?.Vacantes?.filter(vac=>vac.GradoId === gradoName && vac.año === ingresoName)[0].capacidad - school?.Vacantes?.filter(vac=>vac.GradoId === gradoName && vac.año === ingresoName)[0].alumnos_matriculados }
-                        </span>}
-                       
+                        {school?.Vacantes?.length > 0 &&
+                          ingresoName &&
+                          gradoName &&
+                          school?.Vacantes?.filter(
+                            (vac) =>
+                              vac.GradoId === gradoName &&
+                              vac.año === ingresoName
+                          )[0]?.hasOwnProperty("capacidad") &&
+                          school?.Vacantes?.filter(
+                            (vac) =>
+                              vac.GradoId === gradoName &&
+                              vac.año === ingresoName
+                          )[0]?.hasOwnProperty("año") && (
+                            <span className="absolute bg-black/80 text-white p-1 px-2 rounded-md top-14 xl:top-3 xl:right-3 ml-3 w-fit">
+                              {school?.Vacantes?.length > 0 &&
+                                ingresoName &&
+                                gradoName &&
+                                school?.Vacantes?.filter(
+                                  (vac) =>
+                                    vac.GradoId === gradoName &&
+                                    vac.año === ingresoName
+                                )[0].hasOwnProperty("capacidad") &&
+                                school?.Vacantes?.filter(
+                                  (vac) =>
+                                    vac.GradoId === gradoName &&
+                                    vac.año === ingresoName
+                                )[0].hasOwnProperty("año") &&
+                                school?.Vacantes?.filter(
+                                  (vac) =>
+                                    vac.GradoId === gradoName &&
+                                    vac.año === ingresoName
+                                )[0].capacidad -
+                                  school?.Vacantes?.filter(
+                                    (vac) =>
+                                      vac.GradoId === gradoName &&
+                                      vac.año === ingresoName
+                                  )[0].alumnos_matriculados}{" "}
+                              Vacantes
+                            </span>
+                          )}
+
                         <div className="flex absolute gap-5 text-white bottom-3 left-3 bg-black/50 p-2 rounded-md">
                           <span className="flex hover:scale-110 duration-200 cursor-pointer items-center gap-2">
                             <FontAwesomeIcon size="lg" icon={faCamera} />
-                            {school.galeria_imagenes && JSON.parse(school.galeria_imagenes).length}
+                            {school.galeria_fotos &&
+                              JSON.parse(school.galeria_fotos).length}
                           </span>
                           <span className="flex hover:scale-110 duration-200 cursor-pointer items-center gap-2">
                             {" "}
                             <FontAwesomeIcon size="lg" icon={faPlayCircle} />
-                            {/*{JSON.parse(school.video_url).length}*/}
                           </span>
                         </div>
                       </div>
                       <div className="w-full p-5  flex flex-col justify-between gap-5 drop-shadow-md">
                         <div className="flex justify-between gap-4 xl:gap-0 flex-col xl:flex-row">
-                          <div className="flex flex-col gap-4">
+                          <div className="flex flex-col gap-4 w-full">
                             <div className="flex flex-col w-fit gap-2">
                               <h1 className="font-semibold text-lg">
                                 {school.nombre_colegio}{" "}
@@ -588,7 +658,7 @@ function ListSchool() {
                                 {school.direccion}{" "}
                               </small>
                             </div>
-                            <div className="flex items-center justify-center w-fit gap-10">
+                            {/* <div className="flex items-center justify-center w-fit gap-10">
                               <div className="flex flex-col items-center gap-2 text-center">
                                 <FontAwesomeIcon
                                   size="lg"
@@ -611,44 +681,44 @@ function ListSchool() {
                                   </span>
                                 </div>
                               ))}
-                              {/* <div className="flex flex-col text-center">
-                                <FontAwesomeIcon
-                                  size="lg"
-                                  color="rgb(156 163 175)"
-                                  icon={faDoorOpen}
-                                />
-                                <span className="text-sm text-gray-400">
-                                  2 Salones
-                                </span>
-                              </div> */}
+                            </div> */}
+                            <div className="grid grid-cols-2 grid-rows-3 w-full gap-y-2">
+                              {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"> <span className="text-xl"><CiBag1></CiBag1></span> Cuota de ingreso: S/{" "}
+                                {school.Vacantes[0].cuota_ingreso}
+                              </small> }
+                              <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><HiOutlineUsers></HiOutlineUsers></span> {school.numero_estudiantes} Alumnos</small>
+                              {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><FaRegMoneyBillAlt></FaRegMoneyBillAlt></span>Matricula: S/{" "}
+                                {school.Vacantes[0].matricula}
+                              </small> }
+                              {school?.Categoria.length < 4 ?                               <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl text-gray-400"><ImAttachment></ImAttachment></span>{school?.Categoria?.map(cat=>
+                                cat.nombre_categoria
+                              ).join(', ')} </small> :                               <small className="text-gray-400 flex gap-1 items-center">
+                                <span className="text-xl text-gray-400"><ImAttachment></ImAttachment></span>{school?.Categoria?.slice(0,3).map(cat=>
+                                cat.nombre_categoria
+                              ).join(', ')}... +{school?.Categoria?.slice(3).length} </small>}
+                              {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><ImTicket></ImTicket></span>Pensión: S/{" "}
+                                {school.Vacantes[0].pension}
+                              </small> }
+
+
                             </div>
                           </div>
-                          <div className="flex flex-col justify-between">
-                            <h1>Numero: {school.telefono}</h1>
+                          <div className="flex flex-col gap-2 justify-between">
+                            <h1>
+                              {school.Provincium.nombre_provincia},{" "}
+                              {school.Distrito.nombre_distrito}{" "}
+                            </h1>
                             <button
                               onClick={() => goToDetails(school.id)}
-                              className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center font-semibold"
+                              className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#0061dd] w-max text-center font-semibold"
                             >
                               VER DETALLE
                             </button>
-                            {/* <Link
-                            to={`/schooldetail/${school.id}?grado=${gradoName}&ingreso=${ingresoName}`}
-                            className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center font-semibold"
-                          >
-                            VER DETALLE
-                          </Link> */}
+  
                           </div>
                         </div>
 
-                        <hr />
-
-                        <div className="flex justify-between items-center">
-                          <div className="flex flex-col">
-                            <small>Cuota de ingreso: S/ {school.price} </small>
-                            <span className="font-semibold">
-                              S/ {school.price * 100}/mes
-                            </span>
-                          </div>
+                        <div className="flex flex-col lg:flex-row gap-5 justify-between items-center mt-2">
                           <div className="flex gap-5">
                             <Rating
                               name="simple-controlled"
@@ -657,6 +727,7 @@ function ListSchool() {
                               max={10}
                             />
                           </div>
+                          <FavoritoButton />
                           {/* <div className="flex gap-5">
                             <FontAwesomeIcon
                               size="lg"

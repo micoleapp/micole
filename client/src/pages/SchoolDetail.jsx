@@ -126,14 +126,10 @@ function SchoolDetail() {
   const [ingresoParams, setIngresoParams] = React.useState(
     params.get("ingreso")
   );
-  console.log(grados);
-  console.log(gradoParams);
-  console.log(ingresoParams);
   console.log( oneSchool);
-  const nombre_grado = grados.find(
+  const nombre_grado = grados?.find(
     (grado) => grado.id == gradoParams
-  ).nombre_grado;
-  console.log(nombre_grado);
+  )?.nombre_grado;
   const stringyDate = (date) => {
     if (date.toString().length === 1) {
       return "0" + date++;
@@ -141,6 +137,10 @@ function SchoolDetail() {
       return date;
     }
   };
+
+  const currentVacante = oneSchool?.Vacantes?.filter(vac=>vac.GradoId === Number(gradoParams) && vac.año === Number(ingresoParams))
+
+console.log(currentVacante)
 
   const [image, setImage] = useState(null);
 
@@ -275,8 +275,6 @@ function SchoolDetail() {
       "ColegioId": "f2aba1d5-3d86-4c5b-b18c-0b1f30ef98f9"
 }*/
 
-  console.log(localStorage.getItem("id") === id);
-
   const comentarioSubmit = (e) => {
     e.preventDefault();
     if (
@@ -325,8 +323,6 @@ function SchoolDetail() {
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
 
-  console.log(oneSchool);
-
   useEffect(() => {
     if (oneSchool.ubicacion) {
       setLat(JSON.parse(oneSchool?.ubicacion)?.lat);
@@ -357,7 +353,7 @@ function SchoolDetail() {
                 <h2 className="text-center">{oneSchool.direccion} </h2>
                 <div className="flex gap-5 lg:flex-row flex-col justify-center w-full items-center">
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
-                    5 vacantes
+                    {currentVacante && Number(currentVacante[0].capacidad) - Number(currentVacante[0].alumnos_matriculados)} {" "} Vacantes
                   </span>
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
                     {nombre_grado}
@@ -367,7 +363,7 @@ function SchoolDetail() {
                   </span>
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row justify-center items-center gap-5 text-black/70">
+              <div className="flex  justify-center items-center gap-5 text-black/70">
                 <span className="flex items-center gap-2">
                   {" "}
                   <FontAwesomeIcon
@@ -392,7 +388,7 @@ function SchoolDetail() {
             </div>
           </div>
           <div className="mt-5 gap-5 flex justify-between items-start lg:items-center flex-col lg:flex-row">
-            <div className="flex lg:flex-row flex-col gap-5 items-center justify-center lg:justify-start lg:w-full lg:items-start">
+            <div className="flex lg:flex-row w-full flex-col gap-5 items-center justify-center lg:justify-start lg:w-full lg:items-start">
               {" "}
               <div className="flex flex-col gap-2 text-center">
                 <FontAwesomeIcon
@@ -445,28 +441,24 @@ function SchoolDetail() {
                 </span>
               </div>
             </div>
-            <div>
-              <h1 className="font-semibold">S/ 800/mes</h1>
-              <small>Cuota de ingreso: S/ 10,000</small>
-            </div>
+            {currentVacante &&             <div className="flex flex-col w-full items-center lg:items-end">
+              <small>Cuota de ingreso: S/ {currentVacante[0].cuota_ingreso} </small>
+              <small>Cuota de pensión: S/ {currentVacante[0].cuota_pension}</small>
+              <small>Cuota de matricula: S/ {currentVacante[0].matricula}</small>
+            </div>}
+
           </div>
         </div>
         <main className="flex gap-5 flex-col lg:flex-row">
           <section className="left mt-5 flex flex-col gap-8 w-full">
             <div
               className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md"
-              data-aos="zoom-in-right"
-              data-aos-duration="1500"
-              data-aos-mirror={false}
             >
               <h2 className="font-semibold text-xl">Descripcion</h2>
               <p className="text-black/60 text-base">{oneSchool.descripcion}</p>
             </div>
             <div
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
-              data-aos="zoom-in-right"
-              data-aos-duration="1500"
-              data-aos-mirror={false}
             >
               <h2 className="font-semibold text-xl">Ubicacion</h2>
               <div className="flex text-xs w-full justify-between">
@@ -513,9 +505,6 @@ function SchoolDetail() {
             </div>
             <div
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
-              data-aos="zoom-in-right"
-              data-aos-duration="1500"
-              data-aos-mirror={false}
             >
               <h2 className="font-semibold text-xl">Detalles del Colegio</h2>
               <div className="flex text-xs w-full flex-col lg:flex-row gap-3 justify-between">
@@ -581,9 +570,6 @@ function SchoolDetail() {
             </div>
             <div
               className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md"
-              data-aos="zoom-in-right"
-              data-aos-duration="1500"
-              data-aos-mirror={false}
             >
               <h2 className="font-semibold text-xl">
                 Propuesta Valor Educativo
@@ -594,9 +580,6 @@ function SchoolDetail() {
             </div>
             <div
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
-              data-aos="zoom-in-right"
-              data-aos-duration="1500"
-              data-aos-mirror={false}
             >
               <h2 className="font-semibold text-xl">Infraestructura</h2>
               <Tabs
@@ -940,9 +923,6 @@ function SchoolDetail() {
             </div>
             <div
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
-              data-aos="zoom-in-right"
-              data-aos-duration="1500"
-              data-aos-mirror={false}
             >
               <h2 className="font-semibold text-xl">
                 Acreditaciones / Certificaciones / Asosiaciones
@@ -1060,9 +1040,6 @@ function SchoolDetail() {
           <section className="right mt-5  flex flex-col gap-8 w-full">
             <div
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
-              data-aos="zoom-in-left"
-              data-aos-duration="1500"
-              data-aos-mirror={false}
             >
               <h2 className="font-semibold text-xl">Solicitar una visita</h2>
               <div
@@ -1249,9 +1226,6 @@ function SchoolDetail() {
             {oneSchool.video_url?.length > 0 && (
               <div
                 className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
-                data-aos="zoom-in-left"
-                data-aos-duration="1500"
-                data-aos-mirror={false}
               >
                 <h2 className="font-semibold text-xl">Video</h2>
                 {/* <video
@@ -1266,9 +1240,6 @@ function SchoolDetail() {
             <form
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
               onSubmit={comentarioSubmit}
-              data-aos="zoom-in-left"
-              data-aos-duration="1500"
-              data-aos-mirror={false}
             >
               <h2 className="font-semibold text-xl">Deja tu comentario</h2>
               <div className="flex flex-col lg:grid grid-cols-2 text-black/70">
