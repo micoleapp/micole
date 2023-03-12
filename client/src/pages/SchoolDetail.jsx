@@ -615,12 +615,12 @@ console.log(currentVacante)
                 ))}
               </Tabs>
 
-              <div className="flex text-xs w-full justify-between">
+              <div className="text-sm flex w-full justify-center">
                 {oneSchool?.Infraestructuras?.some(
                   (e) => e.InfraestructuraTipoId === 1
                 ) && (
                   <TabPanel value={value} index={0}>
-                    <ul className="flex flex-col gap-3">
+                                        <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
                       {oneSchool?.Infraestructuras?.filter(
                         (e) => e.InfraestructuraTipoId === 1
                       ).map((e) => (
@@ -648,7 +648,7 @@ console.log(currentVacante)
                   (e) => e.InfraestructuraTipoId === 2
                 ) && (
                   <TabPanel value={value} index={1}>
-                    <ul className="flex flex-col gap-3">
+                                                          <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
                       {oneSchool?.Infraestructuras?.filter(
                         (e) => e.InfraestructuraTipoId === 2
                       ).map((e) => (
@@ -676,7 +676,7 @@ console.log(currentVacante)
                   (e) => e.InfraestructuraTipoId === 3
                 ) && (
                   <TabPanel value={value} index={2}>
-                    <ul className="flex flex-col gap-3">
+                                                       <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
                       {oneSchool?.Infraestructuras?.filter(
                         (e) => e.InfraestructuraTipoId === 3
                       ).map((e) => (
@@ -704,7 +704,7 @@ console.log(currentVacante)
                   (e) => e.InfraestructuraTipoId === 4
                 ) && (
                   <TabPanel value={value} index={3}>
-                    <ul className="flex flex-col gap-3">
+                                                              <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
                       {oneSchool?.Infraestructuras?.filter(
                         (e) => e.InfraestructuraTipoId === 4
                       ).map((e) => (
@@ -732,7 +732,7 @@ console.log(currentVacante)
                   (e) => e.InfraestructuraTipoId === 5
                 ) && (
                   <TabPanel value={value} index={4}>
-                    <ul className="flex flex-col gap-3">
+                                            <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
                       {oneSchool?.Infraestructuras?.filter(
                         (e) => e.InfraestructuraTipoId === 5
                       ).map((e) => (
@@ -928,7 +928,7 @@ console.log(currentVacante)
                 Acreditaciones / Certificaciones / Asosiaciones
               </h2>
               <div className="flex text-xs w-full gap-5">
-                <ul className="grid grid-cols-2 grid-rows-5">
+                <ul className="grid grid-cols-2 gap-y-5 gap-x-3">
                   {oneSchool?.Afiliacions?.map((ac) => (
                     <li className="text-black/60 flex items-center gap-3">
                       <img src={ac.logo} alt="" className="w-10" />

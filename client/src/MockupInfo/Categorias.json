@@ -1,0 +1,74 @@
+[
+  {
+  "id": 2,
+  "nombre_categoria": "Inclusivo",
+  "imagen_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f20da1448c8135cf1d30_Especial2_categoria.jpg",
+  "logo_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f5d9c8a443530229145c_ColEspecialIcon.svg"
+  },
+  {
+  "id": 3,
+  "nombre_categoria": "Hombres",
+  "imagen_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f39789f36d6535ef6663_Hombres2_categoria.jpg",
+  "logo_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f60ad3c3afea1b7d877a_ColHombresIcon.svg"
+  },
+  {
+  "id": 4,
+  "nombre_categoria": "Homeschool",
+  "imagen_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/63c7320e57852d172a76ad83_Homeschool.jpg",
+  "logo_categoria": ""
+  },
+  {
+  "id": 5,
+  "nombre_categoria": "Internacional",
+  "imagen_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f388a08ac700f68719ea_Internacional2_categoria.jpg",
+  "logo_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f602c8a44319f02915ee_MundoIcon.svg"
+  },
+  {
+  "id": 6,
+  "nombre_categoria": "Laico",
+  "imagen_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f791f78ad2f51d0472eb_Laico.jpg",
+  "logo_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b5584f7691c3e086f66053_Laico.png"
+  },
+  {
+  "id": 7,
+  "nombre_categoria": "Militar",
+  "imagen_categoria": "null",
+  "logo_categoria": "null"
+  },
+  {
+  "id": 8,
+  "nombre_categoria": "Mixto",
+  "imagen_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f782b03ee569be526697_Mixto.jpg",
+  "logo_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b558429a3cf14cd6a06c76_Mixto.png"
+  },
+  {
+  "id": 9,
+  "nombre_categoria": "Mujeres",
+  "imagen_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f3a425752733c4410cb8_Mujeres3_categoria.jpg",
+  "logo_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f6129d92297bb33aa0f9_ColMujeresIcon.svg"
+  },
+  {
+  "id": 10,
+  "nombre_categoria": "Privado",
+  "imagen_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b544d64c3ed0b9f10d7b66_Privado.jpg",
+  "logo_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b5583418c0ba591e37979e_Private.png"
+  },
+  {
+  "id": 12,
+  "nombre_categoria": "Religioso",
+  "imagen_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f379babdc3392e6363cb_Religioso2_categoria.jpg",
+  "logo_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f5d0e51b4b62b811bb61_IglesiaIcon.svg"
+  },
+  {
+  "id": 1,
+  "nombre_categoria": "Certificacion de estudios",
+  "imagen_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/63d302a461107be72d80ccaa_Certificacion_categoria.jpg",
+  "logo_categoria": "null"
+  },
+  {
+  "id": 11,
+  "nombre_categoria": "Publico",
+  "imagen_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b54702c00a4a0b9294903f_Publico.jpg",
+  "logo_categoria": "https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b55866bc84bf4d680e8169_Public.png"
+  }
+  ]

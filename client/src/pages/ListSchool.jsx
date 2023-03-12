@@ -14,7 +14,6 @@ import {
   faCamera,
   faPlayCircle,
   faSearch,
-  faUsers,
   faArrowDown,
   faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
@@ -135,12 +134,6 @@ function ListSchool() {
     setType(event.target.value);
   };
 
-  const [pagination, setPagination] = useState({
-    count: 0,
-    from: 0,
-    to: pageSize,
-  });
-
   const dispatch = useDispatch();
   const {
     filtersSchools: allschools,
@@ -155,23 +148,6 @@ function ListSchool() {
     dispatch(getAllDepartaments());
     dispatch(getAllDistrits());
   }, []);
-  const [disabledPage, setDisabledPage] = useState(false);
-
-  useEffect(() => {
-    const schools = allschools.slice(pagination.from, pagination.to);
-    setPagination({ ...pagination, count: allschools.length, data: schools });
-  }, [allschools, pagination.from, pagination.to]);
-
-  const handlePageChange = (event, page) => {
-    setDisabledPage(true);
-    setPagination({ data: {} });
-    const from = (page - 1) * pageSize;
-    const to = (page - 1) * pageSize + pageSize;
-    setPagination({ ...pagination, from: from, to: to });
-    setTimeout(() => {
-      setDisabledPage(false);
-    }, 1000);
-  };
 
   const items = [1, 2, 3, 4, 5];
 
@@ -242,7 +218,7 @@ function ListSchool() {
       className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "
       data-aos="fade-up"
       data-aos-duration="1000"
-      data-aos-mirror={true}
+      data-aos-mirror={false}
     >
       <h1 className="text-center mt-2 text-2xl font-semibold drop-shadow-md">
         Encuentra el colegio ideal
@@ -542,8 +518,8 @@ function ListSchool() {
           <div className="flex items-center justify-between drop-shadow-md">
             <small>
               Mostrando{" "}
-              <span className="font-semibold">{pagination?.data?.length}</span>{" "}
-              de <span className="font-semibold">{pagination?.count}</span>{" "}
+              <span className="font-semibold">{allschools?.length}</span>{" "}
+              {/* de <span className="font-semibold">{pagination?.count}</span>{" "} */}
               resultados{" "}
             </small>
             <FormControl
@@ -573,12 +549,12 @@ function ListSchool() {
               </Select>
             </FormControl>
           </div>
-          {pagination?.data?.length === 0 && (
+          {allschools?.length === 0 && (
             <h1>No hay colegios que coincidan con esos filtros</h1>
           )}
           <div className="flex flex-col gap-5">
             {!loading
-              ? pagination?.data?.map((school, index) => {
+              ? allschools?.map((school, index) => {
                   return (
                     <div
                       key={school.id}
@@ -775,12 +751,12 @@ function ListSchool() {
               display={"flex"}
               sx={{ margin: "20px 0px" }}
             >
-              <Pagination
+              {/* <Pagination
                 count={Math.ceil(pagination.count / pageSize)}
                 onChange={handlePageChange}
                 color="primary"
                 disabled={disabledPage}
-              />
+              /> */}
             </Box>
           </div>
         </section>

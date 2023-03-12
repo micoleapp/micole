@@ -3,13 +3,10 @@
     margin: 0 auto;
     /* width: 40rem; */
  overflow-x: hidden;
-
 }
 
 .slider{
-    cursor: pointer;
     display: flex;
-
 }
 
 .item{
@@ -24,7 +21,7 @@
     width: 100%;
     pointer-events: none;
     cursor: pointer;
-
+    
 }
 
 

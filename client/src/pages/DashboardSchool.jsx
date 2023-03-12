@@ -702,7 +702,7 @@ function DashboardSchool() {
         className={`leftshadow ${
           !isOpen
             ? "h-[50px] lg:h-full lg:min-h-full"
-            : "h-[300px] lg:h-full lg:min-h-full"
+            : "h-[500px] lg:h-full lg:min-h-full"
         } duration-300 overflow-hidden bg-white w-full lg:w-1/4 shadow-leftshadow flex justify-center z-50`}
       >
         <div className="absolute left-5 block lg:hidden">

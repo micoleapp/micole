@@ -1,7 +1,7 @@
 .filtros_container {
   display: flex;
   border-radius: 5px;
-  width: 100%;
+  width: 60%;
   background: #fff;
   align-items: flex-start;
 }
