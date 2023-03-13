@@ -14,9 +14,9 @@ const horarioRouter = require("./horarioRoutes.js");
 const infraestructuraRouter = require("./infraestructura.js");
 const gradoRouter = require("./grado.js");
 const nivelRouter = require("./nivel.js");
-const afiliacionRouter = require("./afiliacionRoutes.js");
+const afiliacionRouter = require("./AfiliacionRoutes.js");
 const citaRouter = require("./citaRouter");
-const reviewRouter = require("./ReviewRouter");
+const reviewRouter = require("./reviewRouter");
 const informeRouter = require("./informeRouter");
 
 const router = Router();

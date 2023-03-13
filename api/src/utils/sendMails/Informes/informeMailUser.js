@@ -9,7 +9,7 @@ const informeUsuarioMail = (user, actualDate) => {
       />
       <meta name="x-apple-disable-message-reformatting" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <title>Download Ready</title>
+      <title>Solicitud de Informe MiCole</title>
       <style type="text/css">
         a {
           text-decoration: none;
@@ -279,7 +279,7 @@ const informeUsuarioMail = (user, actualDate) => {
                           <p style="margin-top: 0px; margin-bottom: 0px">
                             <a
                               class="o_text-white"
-                              href="https://example.com/"
+                              href="https://www.micole.com.pe"
                               style="
                                 text-decoration: none;
                                 outline: none;
