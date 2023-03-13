@@ -15,14 +15,16 @@ import NotFound from "./svg/notFound";
 import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
 
 import Swal from "sweetalert2";
-
+// import PaginationCitas from "../Paginacion/PaginationCitas";
+// import sliceIntoChunks from "../"
 export default function CardCitas({ filtros }) {
   const { success } = useSelector((state) => state.citas);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [Citas, setCita] = useState(citasAgendadas);
   const [Inactivas, setInactivas] = useState(citasAgendadas.CitasInactivas);
   const [Activas, setActivas] = useState(Citas.CitasActivas);
-
+  const [arr, setArr] = React.useState([]);
+  // const [page, setPage] = React.useState(1);
   const dispatch = useDispatch();
 
   const comprobacion = (iD) => {
@@ -53,11 +55,11 @@ export default function CardCitas({ filtros }) {
     await comprobacion(iD);
   };
 
-  useEffect(() => {
-    // return () => {
-    //   dispatch(getCitaAgendadas);
-    // };
-  }, [Inactivas.length]);
+  // React.useEffect(() => {
+  
+  //   let resultado = sliceIntoChunks(citasAgendadas, 5);
+  //   setArr(resultado);
+  // }, []);
 
   return (
     <>
@@ -684,8 +686,10 @@ export default function CardCitas({ filtros }) {
               })}
           </div>
         )}
+          {/* <PaginationCitas/> */}
       </div>
 
+ 
       <div className={style.layout}></div>
     </>
   );
