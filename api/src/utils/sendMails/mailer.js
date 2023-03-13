@@ -3,6 +3,8 @@ const moment = require("moment");
 var actualDate = moment().format("DD/MM/YYYY HH:mm:ss A");
 /* Mail Templates */
 const confirmationSignUpTemplate = require("./confirmationSignUpTemplate");
+const informeMailUser = require("./Informes/informeMailUser");
+const informeMailAdmin = require("./Informes/informeMailAdmin");
 
 const createTransport = () => {
   /* Test with MailTrap */
@@ -42,4 +44,28 @@ const sendMailSignUp = async(user, type) => {
   return;
 };
 
+const sendMailInforme = async(user) => {
+  const transporter = createTransport();
+  await transporter.sendMail({
+    from: '"MiCole App " <micole.test.app@gmail.com>',
+    to: `${user.email}`,
+    subject: "Solicitud de Informe | MiCole",
+    html: informeMailUser(user, actualDate)
+  });
+  return;
+};
+
+const sendMailInformeAdmin = async(user) => {
+  const transporter = createTransport();
+  await transporter.sendMail({
+    from: '"MiCole App " <micole.test.app@gmail.com>',
+    to: `e.ce.max.ef@gmail.com`,
+    subject: "Solicitud de Informe | MiCole",
+    html: informeMailAdmin(user, actualDate)
+  });
+  return;
+};
+
 exports.sendMailSignUp = (user , type) => sendMailSignUp(user , type);
+exports.sendMailInforme = (user) => sendMailInforme(user);
+exports.sendMailInformeAdmin = (user) => sendMailInformeAdmin(user);

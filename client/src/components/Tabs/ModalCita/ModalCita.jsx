@@ -17,13 +17,11 @@ const style = {
 };
 
 export default function ModalCita({ task, handleClose, open }) {
- 
-  const { tasks } = useSelector((state) => state.citas);
 
 
 
 
-  console.log(task);
+
   return (
     <Modal
       keepMounted
@@ -53,7 +51,10 @@ export default function ModalCita({ task, handleClose, open }) {
             />
             <h1>{task.nombre}</h1>
             <div />
-            <NavTabs task={task} />
+           
+            <NavTabs handleCloseModal ={handleClose} task={task} />
+       
+       
           </div>
         </Typography>
       </Box>

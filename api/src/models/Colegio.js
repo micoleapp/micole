@@ -39,14 +39,14 @@ module.exports = (sequelize) => {
           },
         },
       },
-  
+
       nombre_colegio: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           is: {
             args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-            msg: "El nombre del colegio solo puede contener letras, acentos, tildes y espacios",
+            msg: 'El nombre del colegio solo puede contener letras, acentos, tildes y espacios',
           },
           len: {
             args: [2, 60],
@@ -103,7 +103,7 @@ module.exports = (sequelize) => {
         validate: {
           is: {
             args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-            msg: "El nombre del director solo puede contener letras, acentos, tildes y espacios",
+            msg: 'El nombre del director solo puede contener letras, acentos, tildes y espacios',
           },
           len: {
             args: [2, 60],
@@ -111,7 +111,17 @@ module.exports = (sequelize) => {
           },
         },
       },
+      logo: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
 
+      visualizaciones: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0,
+      },
+      
       primera_imagen: {
         type: DataTypes.STRING,
         allowNull: true,
