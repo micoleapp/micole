@@ -13,12 +13,16 @@ import { getCitaAgendadas } from "../../redux/SchoolsActions";
 import Chip from "@mui/material/node/Chip";
 import NotFound from "./svg/notFound";
 import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
+
+import Swal from "sweetalert2";
+
 export default function CardCitas({ filtros }) {
   const { success } = useSelector((state) => state.citas);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [Citas, setCita] = useState(citasAgendadas);
   const [Inactivas, setInactivas] = useState(citasAgendadas.CitasInactivas);
   const [Activas, setActivas] = useState(Citas.CitasActivas);
+
   const dispatch = useDispatch();
 
   const comprobacion = (iD) => {
@@ -26,27 +30,34 @@ export default function CardCitas({ filtros }) {
       const CitasConfirmadas = Citas.CitasInactivas.find(
         (ele) => ele.id === iD
       );
+
       const citasSinConfirmar = Citas.CitasInactivas.filter(
         (ele) => ele.id !== iD
       );
 
       setActivas([...Activas, CitasConfirmadas]);
       setInactivas(citasSinConfirmar);
-      // return dispatch(cleanSuccessState());
+      // return
+      Swal.fire({
+        icon: "success",
+        title: "La cita ha sido confirmada con exito",
+        text: "Se notificará a la familia interesada. Ademas podrás administrar tus citas en la pestaña de control de citas",
+      });
+
+      dispatch(cleanSuccessState());
     }
   };
 
   const handlerPutStateCita = async (iD) => {
     dispatch(putCita(iD));
     await comprobacion(iD);
-
   };
 
-  // useEffect(() => {
-  //   return () => {
-  //     dispatch(getCitaAgendadas);
-  //   };
-  // }, [success === "Se activo la Cita."]);
+  useEffect(() => {
+    // return () => {
+    //   dispatch(getCitaAgendadas);
+    // };
+  }, [Inactivas.length]);
 
   return (
     <>
@@ -508,6 +519,8 @@ export default function CardCitas({ filtros }) {
                   </>
                 );
               })}
+
+           
           </div>
         )}
         {filtros === "Confirmados" && (

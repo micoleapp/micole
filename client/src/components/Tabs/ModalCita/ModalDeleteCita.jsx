@@ -2,7 +2,7 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cleanSuccessState, deleteCita } from "../../../redux/CitasActions";
-
+import Swal from "sweetalert2";
 const style = {
   position: "absolute",
   top: "50%",
@@ -26,18 +26,38 @@ export default function ModalDeleteCita({
   const [openDelete, setOpenDelete] = useState(true);
   const [OpenError, setOpenError] = useState(false);
 
+  const [OpenFinalizar, setOpenFinalizar] = useState(false);
   const dispatch = useDispatch();
+console.log(success)
+const comprobacion = () => {
+ console.log('me ejecuto')
+  // if (success === "Se eliminó la Cita.") {
+  //   handleClose(true);
+  //   Swal.fire({
+  //     icon: "success",
+  //     title: " Cita Cancelada con Exito!",
+  //     text: "   Enviaremos un correo a la familia avisando que la cita ha sido cancelada",
+  //   });}
+  if(success === "Se eliminó la Cita." ){
+    setOpenFinalizar(true)
+}
+  if (error === "El registro no existe.") {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "No hemos podido eliminar la cita",
+    });
+  }
+};
 
-  const comprobacion = () => {
-    if (error === "El registro no existe.") {
-      setOpenError(true);
-    }
-  };
 
-  const handleDeleteCita = async () => {
+  const handleDeleteCita = async  () => {
     dispatch(deleteCita(IdCita));
     setOpenDelete(false);
+    
     await comprobacion();
+    // setOpenFinalizar(true)
+
   };
 
   const handleFinalizar = () => {
@@ -45,8 +65,11 @@ export default function ModalDeleteCita({
   };
 
 
+
   return (
-    <Box>
+    <>
+    
+      <Box>
       {openDelete === true && success === false && (
         <Modal
           keepMounted
@@ -99,67 +122,12 @@ export default function ModalDeleteCita({
           </Box>
         </Modal>
       )}
-      {success === "Se eliminó la Cita." && (
-        <Modal
-          keepMounted
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="keep-mounted-modal-title"
-          aria-describedby="keep-mounted-modal-description"
-        >
-          <Box sx={style}>
-            {openDelete === true && (
-              <Typography
-                id="keep-mounted-modal-title"
-                variant="h6"
-                component="h2"
-              >
-                Cancelar Cita
-              </Typography>
-            )}
-            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "20px",
-                  flexDirection: "column",
-                }}
-              >
-                <Typography
-                  id="keep-mounted-modal-title"
-                  variant="h6"
-                  component="h2"
-                >
-                  Cita Cancelada con Exito!
-                </Typography>
-                <p style={{ textAlign: "center" }}>
-                  Enviaremos un correo a la familia avisando que la cita ha sido
-                  cancelada
-                </p>
-                <div
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "space-evenly",
-                  }}
-                >
-                  <Button variant="contained" onClick={handleFinalizar}>
-                    Finalizar
-                  </Button>
-                </div>
-              </div>
-            </Typography>
-          </Box>
-        </Modal>
-      )}
 
      {OpenError === true && (
         <Modal
           keepMounted
           open={open}
-          onClose={handleClose}
+          // onClose={handleClose}
           aria-labelledby="keep-mounted-modal-title"
           aria-describedby="keep-mounted-modal-description"
         >
@@ -211,5 +179,64 @@ export default function ModalDeleteCita({
         </Modal>
       )}
     </Box>
+          {success === "Se eliminó la Cita." &&  (
+   
+        <Modal
+          keepMounted
+          open={open}
+          onClose={ handleFinalizar}
+          aria-labelledby="keep-mounted-modal-title"
+          aria-describedby="keep-mounted-modal-description"
+        >
+          <Box sx={style}>
+            {openDelete === true && (
+              <Typography
+                id="keep-mounted-modal-title"
+                variant="h6"
+                component="h2"
+              >
+                Cancelar Cita
+              </Typography>
+            )}
+            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "20px",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography
+                  id="keep-mounted-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                  Cita Cancelada con Exito!
+                </Typography>
+                <p style={{ textAlign: "center" }}>
+                  Enviaremos un correo a la familia avisando que la cita ha sido
+                  cancelada
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <Button variant="contained" onClick={handleFinalizar}>
+                    Finalizar
+                  </Button>
+                </div>
+              </div>
+            </Typography>
+          </Box>
+        </Modal>
+      )} 
+
+    </>
+  
   );
 }
