@@ -128,16 +128,13 @@ function DashboardSchool() {
     niveles,
     infraestructura: infraState,
     afiliaciones,
-  
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
-
 
   const id = user.id;
   useEffect(() => {
     if (user) {
       dispatch(getSchoolDetail(user.id));
-
     }
   }, [allData]);
 
@@ -629,28 +626,29 @@ function DashboardSchool() {
   //   vacantesDispo:2,
   //   vacantes: "20",
   // },
- 
+
   const handleSubmitCitas = (e) => {
     e.preventDefault();
 
     const newDaysWithTime = daysWithTime.filter((days) => {
       return days[Object.keys(days)[0]][2] === true;
     });
+
+    const newDaysssAA = newDaysWithTime.map((day) => console.log(day));
+
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
-    
-      horarios: 
-        {
-          desde: stringyDate(day[Object.keys(day)][0]["$H"])
-            .toString()
-            .concat(":")
-            .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
-          hasta: stringyDate(day[Object.keys(day)][1]["$H"])
-            .toString()
-            .concat(":")
-            .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
-        },
-      
+
+      horarios: {
+        desde: stringyDate(day[Object.keys(day)][0]["$H"])
+          .toString()
+          .concat(":")
+          .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
+        hasta: stringyDate(day[Object.keys(day)][1]["$H"])
+          .toString()
+          .concat(":")
+          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
+      },
     }));
     Swal.fire({
       icon: "success",
