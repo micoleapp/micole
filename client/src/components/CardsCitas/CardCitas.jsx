@@ -13,20 +13,24 @@ import { getCitaAgendadas } from "../../redux/SchoolsActions";
 import Chip from "@mui/material/node/Chip";
 import NotFound from "./svg/notFound";
 import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
-
 import Swal from "sweetalert2";
-// import PaginationCitas from "../Paginacion/PaginationCitas";
+import sliceIntoChunks  from "./Paginacion/utils/SliceCitas"
+import PaginationCitas from "./Paginacion/PaginationCitas";
 // import sliceIntoChunks from "../"
 export default function CardCitas({ filtros }) {
   const { success } = useSelector((state) => state.citas);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [Citas, setCita] = useState(citasAgendadas);
-  const [Inactivas, setInactivas] = useState(citasAgendadas.CitasInactivas);
-  const [Activas, setActivas] = useState(Citas.CitasActivas);
+ 
   const [arr, setArr] = React.useState([]);
-  // const [page, setPage] = React.useState(1);
+  const [page, setPage] = React.useState(0);
   const dispatch = useDispatch();
+  const [Inactivas, setInactivas] = useState(Citas.CitasInactivas);
+  // const [Activas, setActivas] = useState(Citas.CitasActivas);
 
+  const [Activas, setActivas] = useState([]);
+  console.log(Activas[page])
+  console.log(page)
   const comprobacion = (iD) => {
     if (success === "Se activo la Cita.") {
       const CitasConfirmadas = Citas.CitasInactivas.find(
@@ -55,12 +59,13 @@ export default function CardCitas({ filtros }) {
     await comprobacion(iD);
   };
 
-  // React.useEffect(() => {
+  React.useEffect(() => {
   
-  //   let resultado = sliceIntoChunks(citasAgendadas, 5);
-  //   setArr(resultado);
-  // }, []);
-
+    let resultado = sliceIntoChunks(citasAgendadas.CitasActivas, 5);
+    setActivas(resultado);
+    
+  }, []);
+console.log(arr)
   return (
     <>
       <div data-aos="fade-up">
@@ -527,7 +532,7 @@ export default function CardCitas({ filtros }) {
         )}
         {filtros === "Confirmados" && (
           <div className={style.layout}>
-            {citasAgendadas && Activas?.length === 0 && (
+            {citasAgendadas && Activas[page]?.length === 0 && (
               <>
                 <div
                   data-aos="flip-up"
@@ -549,7 +554,7 @@ export default function CardCitas({ filtros }) {
             )}
 
             {Activas &&
-              Activas?.map((cita) => {
+              Activas[page]?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -686,7 +691,7 @@ export default function CardCitas({ filtros }) {
               })}
           </div>
         )}
-          {/* <PaginationCitas/> */}
+          <PaginationCitas  nroPaginas={Activas.length} page={page} setPage={setPage} />
       </div>
 
  
