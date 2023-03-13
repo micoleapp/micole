@@ -33,7 +33,7 @@ export const getFilterHome = (distritos, grado, ingreso) => (dispatch) => {
   dispatch(isLoading());
   axios
     .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}`)
-    .then((res) => dispatch(getFilterSchool(res.data)))
+    .then((res) => dispatch(getFilterSchool(res.data.colegios)))
     .catch((err) => dispatch(getError(err.message)));
 };
 
@@ -41,7 +41,7 @@ export const getFilterListSchool = (data) => (dispatch) => {
   dispatch(isLoading());
   axios
     .post("/colegios/filter", data)
-    .then((res) => dispatch(getFilterSchool(res.data)))
+    .then((res) => dispatch(getFilterSchool(res.data.colegios)))
     .catch((err) => dispatch(getError(err.message)));
 };
 
@@ -126,7 +126,7 @@ export const getAllSchools = () => (dispatch) => {
   dispatch(isLoading());
   axios
     .get("/colegios")
-    .then((res) => dispatch(getSchools(res.data)))
+    .then((res) => dispatch(getSchools(res.data.colegios)))
     .catch((err) => dispatch(getError(err.message)));
 };
 

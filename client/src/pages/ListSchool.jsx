@@ -227,19 +227,6 @@ function ListSchool() {
     dispatch(getFilterListSchool(data));
   };
 
-  // useEffect(() => {
-  //   dispatch(getFilterListSchool(data));
-  // }, [
-  //   distritName,
-  //   gradoName,
-  //   categorias,
-  //   value1,
-  //   value2,
-  //   rating,
-  //   english,
-  //   ingresoName,
-  // ]);
-
   const goToDetails = (id) => {
     if (gradoName.length === 0 || ingresoName.length === 0) {
       Swal.fire({
