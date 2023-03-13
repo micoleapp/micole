@@ -31,9 +31,6 @@ router.get('/', async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
-  console.log(typeof(distritos));
-  console.log(typeof(grado));
-  console.log(typeof(ingreso));
   try {
     const totalColegios = await Colegio.findAll({
       include: [
@@ -65,7 +62,9 @@ router.get('/', async (req, res) => {
         },
         {
           model: Vacante,
-          include: [{ model: Grado }],
+          include: [{ model: Grado, attributes: ['nombre_grado'] }],
+          required: grado !== "false" || ingreso !== "false" ? true : false,
+          duplicating: grado || ingreso ? false : true,
         },
         {
           model: Pais,
@@ -74,6 +73,7 @@ router.get('/', async (req, res) => {
         {
           model: Departamento,
           attributes: ['id', 'nombre_departamento'],
+
         },
         {
           model: Provincia,
@@ -113,8 +113,9 @@ router.get('/', async (req, res) => {
         ...(ingreso && ingreso !== 'false' && { '$Vacantes.año$': ingreso }),
       },
       limit: limit,
-      subQuery: false,
+      offset: skip,
     });
+
     const pagination = getPagination(url, page, limit, totalColegios.length);
     res.json({
       count: totalColegios.length,
@@ -270,7 +271,16 @@ router.post('/filter', async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
   try {
-    const totalColegios = await Colegio.count({
+    const totalColegios = await Colegio.findAll({
+      include: [
+        {
+          model: Vacante,
+          include: [{ model: Grado }],
+        },
+        {
+          model: Categoria,
+        },
+      ],
       where: {
         ...(distrits.length !== 0 && {
           [Op.or]: distrits.map((distrito) => ({ DistritoId: distrito })),
@@ -299,7 +309,14 @@ router.post('/filter', async (req, res) => {
         },
         {
           model: Vacante,
-          include: [{ model: Grado, attributes: ['nombre_grado'] }],
+          include: [
+            {
+              model: Grado,
+              attributes: ['nombre_grado']
+            }
+          ],
+          required: grado.length !== 0 || ingreso.length !== 0  || pension.length !== 0 || cuota.length !== 0  ? true : false,
+          duplicating: grado.length !== 0 || ingreso.length !== 0  || pension.length !== 0 || cuota.length !== 0  ? false : true,
         },
         {
           model: Idioma,
@@ -337,6 +354,8 @@ router.post('/filter', async (req, res) => {
           through: {
             attributes: [],
           },
+          required: tipo.length !== 0 ? true : false,
+          duplicating: tipo.length !== 0 ? false : true,
         },
         {
           model: Review,
@@ -363,12 +382,11 @@ router.post('/filter', async (req, res) => {
       order: orderBy,
       limit: limit,
       offset: skip,
-      subQuery: false,
     });
-    const pagination = getPagination(url, page, limit, totalColegios);
+    const pagination = getPagination(url, page, limit, totalColegios.length);
     res.json({
-      count: totalColegios,
-      pages: Math.ceil(totalColegios / limit),
+      count: totalColegios.length,
+      pages: Math.ceil(totalColegios.length / limit),
       prev: pagination.prev,
       next: pagination.next,
       first: pagination.first,
