@@ -1,17 +1,21 @@
 const { mercadopago } = require("../mercadoPago.js");
-const { Colegio } = require("../db");
+const { Colegio, Plan_Pago } = require("../db");
+const { NGROK_URL } = process.env;
 
 const payController = async (req, res) => {
   const data = req.body;
-  const plan_pago = data.plan_pago;
 
-  const colegio = await Colegio.findByPk(`${data.id}`);
-  const id_colegio = data.id;
+  const colegio = await Colegio.findByPk(`${data.colegioId}`);
+  const id_colegio = colegio.id;
   const nombre_colegio = colegio.nombre_colegio;
   const direccion = colegio.direccion;
   const ruc = colegio.ruc;
-  const email = colegio.email;
-  console.log(id_colegio + "  " + nombre_colegio + "  ");
+  const email = data.email;
+
+  const plan = await Plan_Pago.findByPk(`${data.planPagoId}`);
+  const id_plan = data.planPagoId;
+  const nombre_plan_pago = plan.nombre_plan_pago;
+  const precio = plan.precio;
 
   let preference = {
     binary_mode: true,
@@ -24,23 +28,25 @@ const payController = async (req, res) => {
     },
     items: [
       {
-        id: 1,
-        title: "miproducto",
-        unit_price: 100,
-        quantity: 2,
+        id: id_plan,
+        title: nombre_plan_pago,
+        unit_price: precio,
+        quantity: data.cantidad,
         // currency_id: "PEN",
       },
     ],
+    external_reference: id_colegio,
     back_urls: {
       //definir las verdaderas aca
-      success: "https://google.com/",
+      success: "https://1ea4-177-246-245-112.ngrok.io/payments/success",
       failure:
         "https://www.microsoft.com/es-mx/download/internet-explorer.aspx",
       pending: "https://tupcideal.vercel.app/",
     },
-    notification_url:"",
+    notification_url: `${NGROK_URL}/payments/notification`,
   };
   console.log(preference.payer);
+  console.log(preference.items);
   mercadopago.preferences
     .create(preference)
     //le pasamos las preference que definimos de linea 35 a 72
