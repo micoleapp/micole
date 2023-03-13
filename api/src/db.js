@@ -84,7 +84,8 @@ const {
   Horario,
   Afiliacion_tipo,
   Afiliacion,
-  Cita
+  Cita,
+  Ventas
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -231,6 +232,20 @@ Afiliacion_tipo.hasMany(Afiliacion, {
 });
 Afiliacion.belongsTo(Afiliacion_tipo, {
   foreignKey: 'Afiliacion_tipo_Id',
+});
+
+Colegio.hasMany(Ventas, {
+  foreignKey: 'ColegioId',
+});
+Ventas.belongsTo(Colegio, {
+  foreignKey: 'ColegioId',
+});
+
+Plan_Pago.hasMany(Ventas, {
+  foreignKey: 'PlanPagoId',
+});
+Ventas.belongsTo(Plan_Pago, {
+  foreignKey: 'PlanPagoId',
 });
 
 Colegio.hasMany(Cita, {
