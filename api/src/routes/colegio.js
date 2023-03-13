@@ -31,14 +31,23 @@ router.get('/', async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
+  console.log(typeof(distritos));
+  console.log(typeof(grado));
+  console.log(typeof(ingreso));
   try {
-
-    const totalColegios = await Colegio.count({
+    const totalColegios = await Colegio.findAll({
+      include: [
+        {
+          model: Vacante,
+          include: [{ model: Grado }],
+        },
+      ],
       where: {
         ...(distritos && distritos !== 'false' && { DistritoId: distritos }),
-        ...(grado && grado !== 'false' && { '$Vacantes.GradoId$': 7 }),
+        ...(grado && grado !== 'false' && { '$Vacantes.GradoId$': grado }),
         ...(ingreso && ingreso !== 'false' && { '$Vacantes.año$': ingreso }),
       },
+      subQuery: false,
     });
 
     const colegios = await Colegio.findAll({
@@ -100,24 +109,23 @@ router.get('/', async (req, res) => {
       ],
       where: {
         ...(distritos && distritos !== 'false' && { DistritoId: distritos }),
-        ...(grado && grado !== 'false' && { '$Vacantes.GradoId$': 7 }),
+        ...(grado && grado !== 'false' && { '$Vacantes.GradoId$': grado }),
         ...(ingreso && ingreso !== 'false' && { '$Vacantes.año$': ingreso }),
       },
       limit: limit,
-      offset: skip,
       subQuery: false,
     });
-    const pagination = getPagination(url, page, limit, totalColegios);
+    const pagination = getPagination(url, page, limit, totalColegios.length);
     res.json({
-      count: totalColegios,
-      pages: Math.ceil(totalColegios / limit),
+      count: totalColegios.length,
+      pages: Math.ceil(totalColegios.length / limit),
       prev: pagination.prev,
       next: pagination.next,
       first: pagination.first,
       last: pagination.last,
       colegios,
     });
-/*     res.json(colegios); */
+    /*     res.json(colegios); */
   } catch (err) {
     console.log(err);
     res.json({ err });
@@ -261,8 +269,6 @@ router.post('/filter', async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
-  const totalColegios = await Colegio.count();
-  const pagination = getPagination(url, page, limit, totalColegios);
   try {
     const totalColegios = await Colegio.count({
       where: {
@@ -358,10 +364,9 @@ router.post('/filter', async (req, res) => {
       limit: limit,
       offset: skip,
       subQuery: false,
-
     });
     const pagination = getPagination(url, page, limit, totalColegios);
-     res.json({
+    res.json({
       count: totalColegios,
       pages: Math.ceil(totalColegios / limit),
       prev: pagination.prev,
