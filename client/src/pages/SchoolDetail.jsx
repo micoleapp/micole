@@ -220,8 +220,13 @@ function SchoolDetail() {
       });
       return;
     }
-
     dispatch(postCita(cita));
+    // Swal.fire({
+    //   icon: "success",
+    //   title: "Cita realizada exitosamente!",
+    //   text: "Cita Agendada",
+    // });
+ 
   };
 
   const handleModo = () => {
@@ -1081,7 +1086,7 @@ function SchoolDetail() {
                             <Card  sx={{display: "flex", gap: "10px", flexDirection:'column', alignItems:'center', padding:'10px'}}>
                               {/* <div className={style.cardTable}> */}
                                 {/* <div className={style.itemTable}> */}
-                                  <p style={{ fontSize: "14px", color:'#000', fontWeight:'700' }}>{ele.dia}</p>
+                                  <p style={{ fontSize: "14px", color:'#515151', fontWeight:'700' }}>{ele.dia}</p>
                                   <div style={{ display: "flex", gap: "10px",fontSize: "12px" ,flexDirection:'column'}}>
                                     <p>{ele.horarios[0].desde} AM</p>
                                  

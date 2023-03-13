@@ -638,7 +638,7 @@ function DashboardSchool() {
     });
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
-   
+    
       horarios: 
         {
           desde: stringyDate(day[Object.keys(day)][0]["$H"])
