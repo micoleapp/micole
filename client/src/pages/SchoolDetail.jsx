@@ -1074,7 +1074,7 @@ function SchoolDetail() {
                           <>
                             <div
                               // si vacantes estan agotadas deberia aparecer todo en gris
-                              data-aos="fade-up"
+                              data-aos="zoom-in-up"
                         
                               className={style.cardTable}
                             >
