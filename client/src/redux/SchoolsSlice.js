@@ -24,8 +24,15 @@ export const schoolsSlice = createSlice({
     citasAgendadas: [],
     error: "",
     loading: false,
+    pagination: {}
   },
   reducers: {
+    getPagination: (state, action) => {
+      (state.pagination = action.payload),
+        (state.loading = false),
+        (state.error = "");
+    }
+    ,
     getVacantesGrados: (state, action) => {
       (state.vacantesGrados = action.payload),
         (state.loading = false),
@@ -146,7 +153,8 @@ export const {
   getCategories,
   getProvincias,
   getCitasAgendado,
-  getHorarios
+  getHorarios,
+  getPagination
 } = schoolsSlice.actions;
 
 export default schoolsSlice.reducer;

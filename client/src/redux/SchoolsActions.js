@@ -19,7 +19,8 @@ import {
   getGrados,
   getFilterSchool,
   getCitasAgendado,
-  getHorarios
+  getHorarios,
+  getPagination
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -33,8 +34,11 @@ export const getVacantes = (niveles) => (dispatch) => {
 export const getFilterHome = (distritos, grado, ingreso) => (dispatch) => {
   dispatch(isLoading());
   axios
-    .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}`)
-    .then((res) => dispatch(getFilterSchool(res.data.colegios)))
+    .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}&limit=10&page=1`)
+    .then((res) => {
+      dispatch(getPagination(res.data))
+      dispatch(getFilterSchool(res.data.colegios))
+    })
     .catch((err) => dispatch(getError(err.message)));
 };
 
@@ -42,7 +46,10 @@ export const getFilterListSchool = (data) => (dispatch) => {
   dispatch(isLoading());
   axios
     .post("/colegios/filter", data)
-    .then((res) => dispatch(getFilterSchool(res.data.colegios)))
+    .then((res) => {
+      dispatch(getPagination(res.data))
+      dispatch(getFilterSchool(res.data.colegios))
+    })
     .catch((err) => dispatch(getError(err.message)));
 };
 

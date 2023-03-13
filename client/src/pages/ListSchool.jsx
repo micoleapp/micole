@@ -195,6 +195,7 @@ function ListSchool() {
     distrits,
     grados,
     categories,
+    pagination
   } = useSelector((state) => state.schools);
 
   useEffect(() => {
@@ -252,6 +253,10 @@ function ListSchool() {
         {favorito ? "❤️" : "🤍"}
       </button>
     );
+  }
+
+  const handlePageChange = (e) => {
+    console.log(e)
   }
 
   return (
@@ -792,12 +797,11 @@ function ListSchool() {
               display={"flex"}
               sx={{ margin: "20px 0px" }}
             >
-              {/* <Pagination
-                count={Math.ceil(pagination.count / pageSize)}
+              <Pagination
+                count={pagination.pages}
                 onChange={handlePageChange}
                 color="primary"
-                disabled={disabledPage}
-              /> */}
+              />
             </Box>
           </div>
         </section>
