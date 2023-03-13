@@ -255,8 +255,8 @@ function ListSchool() {
     );
   }
 
-  const handlePageChange = (e) => {
-    console.log(e)
+  const handlePageChange = (event,value) => {
+    console.log(value)
   }
 
   return (
