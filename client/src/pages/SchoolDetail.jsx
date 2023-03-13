@@ -116,9 +116,12 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
 // ];
 function SchoolDetail() {
   const { id } = useParams();
-  const { oneSchool, grados,horarios } = useSelector((state) => state.schools);
-  const location = useLocation();
+  const { oneSchool, grados, horarios } = useSelector((state) => state.schools);
 
+  const [Disponibilidad, setDisponibilidad] = React.useState(horarios);
+
+  const location = useLocation();
+  console.log(Disponibilidad);
   const params = new URLSearchParams(location.search);
 
   const [gradoParams, setGradoParams] = React.useState(params.get("grado"));
@@ -126,7 +129,7 @@ function SchoolDetail() {
   const [ingresoParams, setIngresoParams] = React.useState(
     params.get("ingreso")
   );
-  console.log( oneSchool);
+  console.log(oneSchool);
   const nombre_grado = grados?.find(
     (grado) => grado.id == gradoParams
   )?.nombre_grado;
@@ -138,9 +141,12 @@ function SchoolDetail() {
     }
   };
 
-  const currentVacante = oneSchool?.Vacantes?.filter(vac=>vac.GradoId === Number(gradoParams) && vac.año === Number(ingresoParams))
+  const currentVacante = oneSchool?.Vacantes?.filter(
+    (vac) =>
+      vac.GradoId === Number(gradoParams) && vac.año === Number(ingresoParams)
+  );
 
-console.log(currentVacante)
+  console.log(currentVacante);
 
   const [image, setImage] = useState(null);
 
@@ -199,7 +205,6 @@ console.log(currentVacante)
     correo: "",
     añoIngreso: ingresoParams,
     grado: nombre_grado,
-
   });
 
   const handleSubmit = (e) => {
@@ -214,11 +219,10 @@ console.log(currentVacante)
         title: "Algo salio mal",
         text: "Debes llenar todos los datos para continuar",
       });
-      return 
+      return;
     }
-    
-    dispatch(postCita(cita));
 
+    dispatch(postCita(cita));
   };
 
   const handleModo = () => {
@@ -353,7 +357,10 @@ console.log(currentVacante)
                 <h2 className="text-center">{oneSchool.direccion} </h2>
                 <div className="flex gap-5 lg:flex-row flex-col justify-center w-full items-center">
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
-                    {currentVacante && Number(currentVacante[0].capacidad) - Number(currentVacante[0].alumnos_matriculados)} {" "} Vacantes
+                    {currentVacante &&
+                      Number(currentVacante[0].capacidad) -
+                        Number(currentVacante[0].alumnos_matriculados)}{" "}
+                    Vacantes
                   </span>
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
                     {nombre_grado}
@@ -441,25 +448,28 @@ console.log(currentVacante)
                 </span>
               </div>
             </div>
-            {currentVacante &&             <div className="flex flex-col w-full items-center lg:items-end">
-              <small>Cuota de ingreso: S/ {currentVacante[0].cuota_ingreso} </small>
-              <small>Cuota de pensión: S/ {currentVacante[0].cuota_pension}</small>
-              <small>Cuota de matricula: S/ {currentVacante[0].matricula}</small>
-            </div>}
-
+            {currentVacante && (
+              <div className="flex flex-col w-full items-center lg:items-end">
+                <small>
+                  Cuota de ingreso: S/ {currentVacante[0].cuota_ingreso}{" "}
+                </small>
+                <small>
+                  Cuota de pensión: S/ {currentVacante[0].cuota_pension}
+                </small>
+                <small>
+                  Cuota de matricula: S/ {currentVacante[0].matricula}
+                </small>
+              </div>
+            )}
           </div>
         </div>
         <main className="flex gap-5 flex-col lg:flex-row">
           <section className="left mt-5 flex flex-col gap-8 w-full">
-            <div
-              className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md"
-            >
+            <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md">
               <h2 className="font-semibold text-xl">Descripcion</h2>
               <p className="text-black/60 text-base">{oneSchool.descripcion}</p>
             </div>
-            <div
-              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
-            >
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
               <h2 className="font-semibold text-xl">Ubicacion</h2>
               <div className="flex text-xs w-full justify-between">
                 <ul className="flex flex-col gap-3">
@@ -503,9 +513,7 @@ console.log(currentVacante)
               </div>
               <Maps lat={lat} lng={lng} />
             </div>
-            <div
-              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
-            >
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
               <h2 className="font-semibold text-xl">Detalles del Colegio</h2>
               <div className="flex text-xs w-full flex-col lg:flex-row gap-3 justify-between">
                 <ul className="grid grid-cols-3 w-full gap-3">
@@ -568,9 +576,7 @@ console.log(currentVacante)
                 </ul> */}
               </div>
             </div>
-            <div
-              className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md"
-            >
+            <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md">
               <h2 className="font-semibold text-xl">
                 Propuesta Valor Educativo
               </h2>
@@ -578,9 +584,7 @@ console.log(currentVacante)
                 {oneSchool.propuesta_valor}
               </p>
             </div>
-            <div
-              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
-            >
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
               <h2 className="font-semibold text-xl">Infraestructura</h2>
               <Tabs
                 value={value}
@@ -620,7 +624,7 @@ console.log(currentVacante)
                   (e) => e.InfraestructuraTipoId === 1
                 ) && (
                   <TabPanel value={value} index={0}>
-                                        <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
+                    <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
                       {oneSchool?.Infraestructuras?.filter(
                         (e) => e.InfraestructuraTipoId === 1
                       ).map((e) => (
@@ -648,7 +652,7 @@ console.log(currentVacante)
                   (e) => e.InfraestructuraTipoId === 2
                 ) && (
                   <TabPanel value={value} index={1}>
-                                                          <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
+                    <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
                       {oneSchool?.Infraestructuras?.filter(
                         (e) => e.InfraestructuraTipoId === 2
                       ).map((e) => (
@@ -676,7 +680,7 @@ console.log(currentVacante)
                   (e) => e.InfraestructuraTipoId === 3
                 ) && (
                   <TabPanel value={value} index={2}>
-                                                       <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
+                    <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
                       {oneSchool?.Infraestructuras?.filter(
                         (e) => e.InfraestructuraTipoId === 3
                       ).map((e) => (
@@ -704,7 +708,7 @@ console.log(currentVacante)
                   (e) => e.InfraestructuraTipoId === 4
                 ) && (
                   <TabPanel value={value} index={3}>
-                                                              <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
+                    <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
                       {oneSchool?.Infraestructuras?.filter(
                         (e) => e.InfraestructuraTipoId === 4
                       ).map((e) => (
@@ -732,7 +736,7 @@ console.log(currentVacante)
                   (e) => e.InfraestructuraTipoId === 5
                 ) && (
                   <TabPanel value={value} index={4}>
-                                            <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
+                    <ul className="grid grid-cols-3 w-full gap-x-10 gap-y-5">
                       {oneSchool?.Infraestructuras?.filter(
                         (e) => e.InfraestructuraTipoId === 5
                       ).map((e) => (
@@ -921,9 +925,7 @@ console.log(currentVacante)
                 </TabPanel> */}
               </div>
             </div>
-            <div
-              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md"
-            >
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
               <h2 className="font-semibold text-xl">
                 Acreditaciones / Certificaciones / Asosiaciones
               </h2>
@@ -1038,9 +1040,7 @@ console.log(currentVacante)
             </div> */}
           </section>
           <section className="right mt-5  flex flex-col gap-8 w-full">
-            <div
-              className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
-            >
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Solicitar una visita</h2>
               <div
                 onClick={toggleHorarios}
@@ -1068,29 +1068,31 @@ console.log(currentVacante)
               {Horarios && (
                 <>
                   <div className={style.Layout}>
-                    { horarios && horarios?.map((ele) => {
-                      return (
-                        <>
-                          <div
-                            //si vacantes estan agotadas deberia aparecer todo en gris
-                            // data-aos="zoom-in-left"
-                            // data-aos-duration="700"
-                            className={style.cardTable}
-                          >
-                            <div className={style.cardTable}>
-                              <div className={style.itemTable}>
-                                <p style={{ fontSize: "12px" }}>{ele.dia}</p>
-                                <div style={{ display: "flex", gap: "10px" }}>
-                                  <p>{ele.horarios.desde}</p>
-                                  <p>/</p>
-                                  <p>{ele.horarios.hasta}</p>
+                    {Disponibilidad &&
+                      Disponibilidad?.map((ele) => {
+                        console.log(ele.horarios[0].hasta)
+                        return (
+                          <>
+                            <div
+                              //si vacantes estan agotadas deberia aparecer todo en gris
+                              // data-aos="zoom-in-left"
+                              // data-aos-duration="700"
+                              className={style.cardTable}
+                            >
+                              <div className={style.cardTable}>
+                                <div className={style.itemTable}>
+                                  <p style={{ fontSize: "12px" }}>{ele.dia}</p>
+                                  <div style={{ display: "flex", gap: "10px" }}>
+                                    <p>{ele.horarios[0].desde}</p>
+                                    <p>/</p>
+                                    <p>{ele.horarios[0].hasta}</p>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </>
-                      );
-                    })}
+                          </>
+                        );
+                      })}
                   </div>
                 </>
               )}
@@ -1224,9 +1226,7 @@ console.log(currentVacante)
               </div>
             </div>
             {oneSchool.video_url?.length > 0 && (
-              <div
-                className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
-              >
+              <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
                 <h2 className="font-semibold text-xl">Video</h2>
                 {/* <video
                   className="w-full h-[300px] lg:h-[400px] "
