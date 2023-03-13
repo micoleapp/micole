@@ -35,7 +35,7 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Maps from "../components/Maps";
 import { a11yProps, TabPanel } from "../components/Tabs";
-import { Rating } from "@mui/material";
+import { Card, Rating } from "@mui/material";
 import dayjs from "dayjs";
 import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -1070,25 +1070,27 @@ function SchoolDetail() {
                   <div className={style.Layout}>
                     {Disponibilidad &&
                       Disponibilidad?.map((ele) => {
-                        console.log(ele.horarios[0].hasta)
+                        console.log(ele.horarios[0].hasta);
                         return (
                           <>
                             <div
-                              //si vacantes estan agotadas deberia aparecer todo en gris
-                              // data-aos="zoom-in-left"
-                              // data-aos-duration="700"
+                              // si vacantes estan agotadas deberia aparecer todo en gris
+                              data-aos="fade-up"
+                        
                               className={style.cardTable}
                             >
-                              <div className={style.cardTable}>
-                                <div className={style.itemTable}>
-                                  <p style={{ fontSize: "12px" }}>{ele.dia}</p>
-                                  <div style={{ display: "flex", gap: "10px" }}>
-                                    <p>{ele.horarios[0].desde}</p>
-                                    <p>/</p>
-                                    <p>{ele.horarios[0].hasta}</p>
+                            <Card  sx={{display: "flex", gap: "10px", flexDirection:'column', alignItems:'center', padding:'10px'}}>
+                              {/* <div className={style.cardTable}> */}
+                                {/* <div className={style.itemTable}> */}
+                                  <p style={{ fontSize: "14px", color:'#000', fontWeight:'700' }}>{ele.dia}</p>
+                                  <div style={{ display: "flex", gap: "10px",fontSize: "12px" ,flexDirection:'column'}}>
+                                    <p>{ele.horarios[0].desde} AM</p>
+                                 
+                                    <p>{ele.horarios[0].hasta} PM</p>
                                   </div>
-                                </div>
-                              </div>
+                                {/* </div> */}
+                              {/* </div> */}
+                            </Card>
                             </div>
                           </>
                         );
