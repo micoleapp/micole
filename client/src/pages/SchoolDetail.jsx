@@ -118,10 +118,9 @@ function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool, grados, horarios } = useSelector((state) => state.schools);
 
-  const [Disponibilidad, setDisponibilidad] = React.useState(horarios);
 
   const location = useLocation();
-  console.log(Disponibilidad);
+  console.log();
   const params = new URLSearchParams(location.search);
 
   const [gradoParams, setGradoParams] = React.useState(params.get("grado"));
@@ -1068,8 +1067,8 @@ function SchoolDetail() {
               {Horarios && (
                 <>
                   <div className={style.Layout}>
-                    {Disponibilidad &&
-                      Disponibilidad?.map((ele) => {
+                    {horarios&&
+                     horarios?.map((ele) => {
                         console.log(ele.horarios[0].hasta);
                         return (
                           <>
