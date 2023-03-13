@@ -14,14 +14,14 @@ import Chip from "@mui/material/node/Chip";
 import NotFound from "./svg/notFound";
 import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
 import Swal from "sweetalert2";
-import sliceIntoChunks  from "./Paginacion/utils/SliceCitas"
+import sliceIntoChunks from "./Paginacion/utils/SliceCitas";
 import PaginationCitas from "./Paginacion/PaginationCitas";
 // import sliceIntoChunks from "../"
 export default function CardCitas({ filtros }) {
   const { success } = useSelector((state) => state.citas);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [Citas, setCita] = useState(citasAgendadas);
- 
+
   const [arr, setArr] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const dispatch = useDispatch();
@@ -29,8 +29,8 @@ export default function CardCitas({ filtros }) {
   // const [Activas, setActivas] = useState(Citas.CitasActivas);
 
   const [Activas, setActivas] = useState([]);
-  console.log(Activas[page])
-  console.log(page)
+  console.log(Activas[page]);
+  console.log(page);
   const comprobacion = (iD) => {
     if (success === "Se activo la Cita.") {
       const CitasConfirmadas = Citas.CitasInactivas.find(
@@ -60,12 +60,12 @@ export default function CardCitas({ filtros }) {
   };
 
   React.useEffect(() => {
-  
-    let resultado = sliceIntoChunks(citasAgendadas.CitasActivas, 5);
-    setActivas(resultado);
-    
+    let resultadoActivas = sliceIntoChunks(citasAgendadas.CitasActivas, 5);
+    setActivas(resultadoActivas);
+    let resultadoInactivas = sliceIntoChunks(citasAgendadas.CitasInactivas, 5);
+    setInactivas(resultadoInactivas);
   }, []);
-console.log(arr)
+  console.log(Inactivas);
   return (
     <>
       <div data-aos="fade-up">
@@ -392,7 +392,7 @@ console.log(arr)
               </>
             )}
             {citasAgendadas &&
-              Inactivas?.map((cita) => {
+              Inactivas[page]?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -526,8 +526,6 @@ console.log(arr)
                   </>
                 );
               })}
-
-           
           </div>
         )}
         {filtros === "Confirmados" && (
@@ -691,10 +689,21 @@ console.log(arr)
               })}
           </div>
         )}
-          <PaginationCitas  nroPaginas={Activas.length} page={page} setPage={setPage} />
+        <PaginationCitas
+          nroPaginas={
+            filtros === "Confirmados"
+              ? Activas.length
+              : filtros === "SinConfirmar"
+              ? Inactivas.length
+              : filtros === ""
+              ? citasAgendadas.length
+              : 0
+          }
+          page={page}
+          setPage={setPage}
+        />
       </div>
 
- 
       <div className={style.layout}></div>
     </>
   );
