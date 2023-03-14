@@ -37,7 +37,7 @@ export default function CardCitas({ filtros }) {
       const CitasConfirmadas = Inactivas.find((ele) => ele.id === iD);
       setActivas([...Activas, CitasConfirmadas]);
 
-      setInactivas(citasAgendadas.CitasInactivas.filter((ele) => ele.id !== iD));
+      setInactivas([citasAgendadas.CitasInactivas.filter((ele) => ele.id !== iD)]);
 
       Swal.fire({
         icon: "success",
