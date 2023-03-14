@@ -716,7 +716,7 @@ export default function CardCitas({ filtros }) {
               : filtros === "SinConfirmar"
               ? Inactivas.length
               : filtros === ""
-              ? citasAgendadas.length
+              ? arrCita.length
               : 0
           }
           page={page}
