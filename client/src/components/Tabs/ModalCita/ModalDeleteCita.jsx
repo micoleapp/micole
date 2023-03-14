@@ -55,9 +55,9 @@ const comprobacion = () => {
     dispatch(deleteCita(IdCita));
     setOpenDelete(false);
     
-    await comprobacion();
+    // await comprobacion();
     // setOpenFinalizar(true)
-
+    handleClose(true);
   };
 
   const handleFinalizar = () => {
