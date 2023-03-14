@@ -128,6 +128,7 @@ function DashboardSchool() {
     niveles,
     infraestructura: infraState,
     afiliaciones,
+  
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
  console.log( oneSchool.visualizaciones)
