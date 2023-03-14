@@ -8,7 +8,7 @@ import {
   getSuccess,
   cleanSuccess,
 } from "./CitasSlice";
-import Swal from 'sweetalert2'
+
 export const getCita = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
@@ -41,20 +41,15 @@ export const updateTask = (taskId, NuevoEstado) => (dispatch) => {
     });
 };
 export const updateColumn = (newColumn) => (dispatch) => {
+
   dispatch(updateColumns(newColumn));
 };
 export const putCita = (idCita) => (dispatch) => {
-  // dispatch(isLoading());
+
+  dispatch(isLoading());
   axios
     .put(`/citas/activo/${idCita}`, { activo: true })
-    .then((res) => {
-      dispatch(getSuccess(res.data));
-      Swal.fire({
-        icon: "success",
-        title: "La cita ha sido confirmada con exito",
-        text: "Se notificará a la familia interesada. Ademas podrás administrar tus citas en la pestaña de control de citas",
-      });
-    })
+    .then((res) => dispatch(getSuccess(res.data)))
     .catch((err) => {
       dispatch(getError(err.response.data.error));
       Swal.fire({
@@ -83,6 +78,7 @@ export const deleteCita = (idCita) => (dispatch) => {
 };
 
 export const cleanSuccessState = () => (dispatch) => {
+
   try {
     dispatch(cleanSuccess());
   } catch (err) {

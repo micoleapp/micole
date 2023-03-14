@@ -18,29 +18,39 @@ import sliceIntoChunks from "./Paginacion/utils/SliceCitas";
 import PaginationCitas from "./Paginacion/PaginationCitas";
 // import sliceIntoChunks from "../"
 export default function CardCitas({ filtros }) {
-  const { citaCheck } = useSelector((state) => state.citas);
+  const { success } = useSelector((state) => state.citas);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
+  const [Citas, setCita] = useState(citasAgendadas);
+
+  const [arr, setArr] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const dispatch = useDispatch();
-  const [Inactivas, setInactivas] = useState([]);
+  const [Inactivas, setInactivas] = useState(Citas.CitasInactivas);
+  // const [Activas, setActivas] = useState(Citas.CitasActivas);
+
   const [Activas, setActivas] = useState([]);
-
+  console.log(Activas[page]);
+  console.log(page);
   const comprobacion = (iD) => {
-    if (citaCheck === "Se activo la Cita.") {
-      const CitasConfirmadas = Inactivas.find((ele) => ele.id === iD);
+    if (success === "Se activo la Cita.") {
+      const CitasConfirmadas = Citas.CitasInactivas.find(
+        (ele) => ele.id === iD
+      );
 
-      const citasSinConfirmar = Inactivas.filter((ele) => ele.id !== iD);
+      const citasSinConfirmar = Citas.CitasInactivas.filter(
+        (ele) => ele.id !== iD
+      );
 
       setActivas([...Activas, CitasConfirmadas]);
       setInactivas(citasSinConfirmar);
       // return
-      // Swal.fire({
-      //   icon: "success",
-      //   title: "La cita ha sido confirmada con exito",
-      //   text: "Se notificará a la familia interesada. Ademas podrás administrar tus citas en la pestaña de control de citas",
-      // });
+      Swal.fire({
+        icon: "success",
+        title: "La cita ha sido confirmada con exito",
+        text: "Se notificará a la familia interesada. Ademas podrás administrar tus citas en la pestaña de control de citas",
+      });
 
-      // dispatch(cleanSuccessState());
+      dispatch(cleanSuccessState());
     }
   };
 
@@ -48,7 +58,6 @@ export default function CardCitas({ filtros }) {
     dispatch(putCita(iD));
     await comprobacion(iD);
   };
-  useEffect(() => {}, [citaCheck]);
 
   React.useEffect(() => {
     let resultadoActivas = sliceIntoChunks(citasAgendadas.CitasActivas, 5);

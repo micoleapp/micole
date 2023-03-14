@@ -5,7 +5,6 @@ export const citasSlice = createSlice({
   initialState: {
     tasks: null,
     success: null,
-    citaCheck: null,
     error: "",
     loading: false,
     columns: {
@@ -130,14 +129,14 @@ export const citasSlice = createSlice({
       state.columns = action.payload;
     },
     getError: (state, action) => {
-      console.log(action.payload)((state.error = action.payload)),
+      (state.error = action.payload),
         (state.loading = false),
         (state.success = false);
     },
     getSuccess: (state, action) => {
-      console.log(action.payload);
-      state.citaCheck = action.payload
- 
+      (state.success = action.payload),
+        (state.loading = false),
+        (state.error = false);
     },
     isLoading: (state) => {
       state.loading = true;
