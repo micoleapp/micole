@@ -16,9 +16,10 @@ import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSear
 import Swal from "sweetalert2";
 import sliceIntoChunks from "./Paginacion/utils/SliceCitas";
 import PaginationCitas from "./Paginacion/PaginationCitas";
+import LoadingButton from "@mui/lab/LoadingButton";
 // import sliceIntoChunks from "../"
 export default function CardCitas({ filtros }) {
-  const { success } = useSelector((state) => state.citas);
+  const { success, loading } = useSelector((state) => state.citas);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [Citas, setCita] = useState(citasAgendadas);
 
@@ -37,7 +38,9 @@ export default function CardCitas({ filtros }) {
       const CitasConfirmadas = Inactivas.find((ele) => ele.id === iD);
       setActivas([...Activas, CitasConfirmadas]);
 
-      setInactivas([citasAgendadas.CitasInactivas.filter((ele) => ele.id !== iD)]);
+      setInactivas([
+        citasAgendadas.CitasInactivas.filter((ele) => ele.id !== iD),
+      ]);
 
       Swal.fire({
         icon: "success",
@@ -67,10 +70,13 @@ export default function CardCitas({ filtros }) {
   // useEffect(() => {
 
   // }, [success]);
-
+console.log(success)
   return (
     <>
-      <div data-aos="fade-up" style={{ height:'70vh', overflowY:'scroll',padding:'10px'}}>
+      <div
+        data-aos="fade-up"
+        style={{ height: "70vh", overflowY: "scroll", padding: "10px" }}
+      >
         {filtros === "" && (
           <div className={style.layout}>
             {citasAgendadas && arrCita?.length === 0 && (
@@ -235,7 +241,7 @@ export default function CardCitas({ filtros }) {
                       {cita.activo === true && (
                         <div>
                           <Button
-                             disabled
+                            disabled
                             onClick={() => {
                               handlerPutStateCita(cita.id);
                             }}
@@ -249,142 +255,6 @@ export default function CardCitas({ filtros }) {
                   </>
                 );
               })}
-            {/* {Activas &&
-              Activas[page]?.map((cita) => {
-                return (
-                  <>
-                    <div className={style.container}>
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "5px",
-                          flexDirection: "column",
-                          width: "100%",
-                          fontSize: "1.8vh",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "10px",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            fontSize: "1.8vh",
-                          }}
-                        >
-                          <img
-                            style={{ width: "50px", height: "50px" }}
-                            src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
-                            alt=""
-                          />
-                          <div>
-                            <div className={style.divNombreGrado}>
-                              <p>{cita.nombre}</p>
-                              {grados &&
-                                grados.map((ele) => {
-                                  console.log(ele.id === cita.GradoId);
-                                  if (ele.id === cita.GradoId) {
-                                    return (
-                                      <Chip
-                                        sx={{ height: "20px" }}
-                                        color="primary"
-                                        label={ele.nombre_grado}
-                                      />
-                                    );
-                                  }
-                                })}
-                            </div>
-
-                            <div className={style.itemDiv}>
-                              <div className={style.itemDiv}>
-                                <AccessTimeIcon
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    color: "grey",
-                                  }}
-                                />
-                                <p>{cita.hora_cita}</p>
-                              </div>{" "}
-                              <div className={style.itemDiv}>
-                                <EventIcon
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    color: "grey",
-                                  }}
-                                />{" "}
-                                <p>{cita.fecha_cita}</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "5px",
-                          width: "100%",
-                          justifyContent: "center",
-                        }}
-                      >
-                        {cita.modalidad === "Virtual" && (
-                          <LaptopWindowsIcon
-                            style={{
-                              width: "20px",
-                              height: "20px",
-                              color: "grey",
-                            }}
-                          />
-                        )}
-                        {cita.modalidad === "Presencial" && (
-                          <PersonPinIcon
-                            style={{
-                              width: "20px",
-                              height: "20px",
-                              color: "grey",
-                            }}
-                          />
-                        )}
-                        <p>{cita.modalidad}</p>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "5px",
-                          width: "100%",
-                          justifyContent: "center",
-                          flexDirection: "column",
-                        }}
-                      >
-                        <div className={style.itemDiv}>
-                          <PhoneIcon
-                            style={{
-                              width: "20px",
-                              height: "20px",
-                              color: "grey",
-                            }}
-                          />
-                          <p>{cita.telefono}</p>
-                        </div>
-
-                        <p>{cita.email}</p>
-                      </div>
-                      <div>
-                        <Button
-                          onClick={() => {
-                            handlerPutStateCita(cita.id);
-                          }}
-                          variant="contained"
-                          disabled
-                        >
-                          Confirmada{" "}
-                        </Button>
-                      </div>
-                    </div>
-                  </>
-                );
-              })} */}
           </div>
         )}
         {filtros === "SinConfirmar" && (
@@ -531,14 +401,19 @@ export default function CardCitas({ filtros }) {
                         <p>{cita.email}</p>
                       </div>
                       <div>
-                        <Button
-                          onClick={() => {
-                            handlerPutStateCita(cita.id);
-                          }}
-                          variant="contained"
-                        >
-                          Confirmar{" "}
-                        </Button>
+                  
+                          <Button
+                            onClick={() => {
+                              handlerPutStateCita(cita.id);
+                            }}
+                            variant="contained"
+                          >
+                            Confirmar{" "}
+                          </Button>
+                        
+                   
+
+                   
                       </div>
                     </div>
                   </>
@@ -548,7 +423,7 @@ export default function CardCitas({ filtros }) {
         )}
         {filtros === "Confirmados" && (
           <div className={style.layout}>
-            {citasAgendadas && Activas[page]?.length === 0 && (
+            {citasAgendadas && Activas?.length === 0 && (
               <>
                 <div
                   data-aos="flip-up"
@@ -707,21 +582,20 @@ export default function CardCitas({ filtros }) {
               })}
           </div>
         )}
-     
       </div>
       <PaginationCitas
-          nroPaginas={
-            filtros === "Confirmados"
-              ? Activas.length
-              : filtros === "SinConfirmar"
-              ? Inactivas.length
-              : filtros === ""
-              ? arrCita.length
-              : 0
-          }
-          page={page}
-          setPage={setPage}
-        />
+        nroPaginas={
+          filtros === "Confirmados"
+            ? Activas.length
+            : filtros === "SinConfirmar"
+            ? Inactivas.length
+            : filtros === ""
+            ? arrCita.length
+            : 0
+        }
+        page={page}
+        setPage={setPage}
+      />
       <div className={style.layout}></div>
     </>
   );

@@ -130,7 +130,7 @@ function DashboardSchool() {
     afiliaciones,
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
-
+ console.log( oneSchool.visualizaciones)
   const id = user.id;
   useEffect(() => {
     if (user) {
@@ -2611,10 +2611,10 @@ function DashboardSchool() {
               className={style.layout}
               style={{ display: "flex", gap: "10px" }}
             >
-              <Cards icon="solicitud" text="Solicitudes de Citas" nro={2} />
-              <Cards icon="visualizacion" text="Visualizaciones" nro={2} />
-              <Cards icon="mensaje" text="Mensajes" nro={2} />
-              <Cards icon="comentario" text="Comentarios" nro={2} />
+              <Cards icon="solicitud" text="Solicitudes de Citas" nro={citasAgendadas.CitasInactivas.length} />
+              <Cards icon="visualizacion" text="Visualizaciones" nro={oneSchool?.visualizaciones} />
+              <Cards icon="mensaje" text="Mensajes" nro={0} />
+              <Cards icon="comentario" text="Comentarios" nro={oneSchool.Reviews.length} />
             </div>
 
             <DragAndDrop />
