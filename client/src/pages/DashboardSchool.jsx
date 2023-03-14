@@ -128,8 +128,11 @@ function DashboardSchool() {
     niveles,
     infraestructura: infraState,
     afiliaciones,
+  
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
+const ColegioId = oneSchool.id
+  console.log(ColegioId)
 
   const id = user.id;
   useEffect(() => {
