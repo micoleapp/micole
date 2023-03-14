@@ -26,6 +26,14 @@
     flex-direction: row;
   
 }
+.promoPlan{
+    position: relative;
+bottom: -8%;
+ background-color: #fff;
+ z-index: 9999;
+}
+
+
 
 @media (max-width: 800px) {
     .container {
@@ -34,8 +42,5 @@
         justify-content: flex-end;
       
     }
-    .layout{
- 
    
-    }
 }
