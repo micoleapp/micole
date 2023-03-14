@@ -20,15 +20,20 @@ import {
   Select,
 } from "@mui/material";
 import axios from "axios";
+import Swal from "sweetalert2";
 function Payment({ plan: Plan }) {
   const { user } = useSelector((state) => state.auth);
-console.log(user)
-  const [plan, setPlan] = useState(0);
+  console.log(Plan)
+  const [plan, setPlan] = useState('gratis');
 
   const [months, setMonths] = useState(1);
   const [isLoading,setIsLoading] = useState(false)
   useEffect(() => {
-    setPlan(Plan);
+    if(!Plan){
+      setPlan("gratis");
+    }else{
+      setPlan(Plan);
+    }
   }, []);
 
   const [selectedMethod, setSelectedMethod] = useState("");
@@ -173,6 +178,21 @@ mercado pago
     }
   }
 
+  const handleYape = (e) => {
+    e.preventDefault();
+    const data = {
+      colegioId: user.id,
+      planPagoId,
+      cantidad: months,
+      email: user.email,
+    }
+    Swal.fire({
+      icon: "success",
+      title: "¡Email enviado!",
+      text: "Espere a que un asesor se ponga en contacto con usted.",
+    })
+  }
+
   return (
     <>
       {" "}
@@ -181,18 +201,26 @@ mercado pago
       </div>
       <div className={style.PaymentLayout}>
         <div className={style.container}>
-          <div className={style.Divdetalle}>
-            <h1>Detalles de Compra</h1>
-            <div className={style.detalle}>
-              <p>Plan Especial + IGV</p>
-              <p>S/ {price}</p>
+          {
+            plan !== 'gratis' && (
+              <div className={style.Divdetalle}>
+              <h1>Detalles de Compra</h1>
+              <div className={style.detalle}>
+                <p>Plan Especial + IGV</p>
+                <p>S/ {price}</p>
+              </div>
+              <div className={style.detalle}>
+                <p>Total</p>
+                <p>S/ {price * months}</p>
+              </div>
             </div>
-            <div className={style.detalle}>
-              <p>Total</p>
-              <p>S/ {price * months}</p>
-            </div>
-          </div>
-          <div className={style.containerMetodoPago}>
+            )
+          }
+
+          {
+            plan !== 'gratis' && (
+              <>
+                        <div className={style.containerMetodoPago}>
             <h1>Elige tu método de pago</h1>
 
             <div className={style.mercadoPago}>
@@ -246,7 +274,9 @@ mercado pago
                 name="paymentMethod"
                 type="checkbox"
                 checked={selectedMethod === "yape"}
-                onChange={() => setSelectedMethod("yape")}
+                onChange={() => {
+                  setButtonMp(null)
+                  setSelectedMethod("yape")}}
               />
               <img
                 style={{ width: "40px", height: "30px", borderRadius: "5px" }}
@@ -257,9 +287,14 @@ mercado pago
               </small>
             </div>
           </div>
+              </>
+            )
+          }
+
+
         </div>
         <div className={style.divBeneficios}>
-          <h1>Información Detallada del Plan Especial</h1>
+          <h1>Información Detallada del Plan {plan === 'gratis' ? "Free" : plan === "básico" ? "Basico" : plan === "estandar" ? "Estándar" : "Exclusivo"} </h1>
           <InfoPlanes plan={plan} />
           <div className="mt-7 flex flex-col gap-5">
             <FormControl
@@ -284,28 +319,33 @@ mercado pago
                 ))}
               </Select>
             </FormControl>
-            <FormControl
-              variant="standard"
-              style={{ width: "200px", height: "70px" }}
-              size="small"
-            >
-              <InputLabel id="demo-simple-select-standard-label">
-                Cuantos meses quieres pagar?
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-standard-label"
-                id="demo-type-select-standard"
-                value={months}
-                onChange={handleChangeMonths}
-                label="Cuantos meses quieres pagar?"
+            {
+              plan !== 'gratis' && (
+                <FormControl
+                variant="standard"
+                style={{ width: "200px", height: "70px" }}
+                size="small"
               >
-                {meses.map((type, index) => (
-                  <MenuItem value={type.value} key={index}>
-                    <ListItemText primary={type.label} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                <InputLabel id="demo-simple-select-standard-label">
+                  Cuantos meses quieres pagar?
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-type-select-standard"
+                  value={months}
+                  onChange={handleChangeMonths}
+                  label="Cuantos meses quieres pagar?"
+                >
+                  {meses.map((type, index) => (
+                    <MenuItem value={type.value} key={index}>
+                      <ListItemText primary={type.label} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              )
+            }
+
             {buttonMp == null && selectedMethod === "mercadoPago" ? (
               <div className={style.divButton}>
                 <button onClick={handleMp}>          {isLoading ? (
@@ -319,11 +359,11 @@ mercado pago
               </div>
             ) : buttonMp == null && selectedMethod === "yape" ? (
               <div className={style.divButton}>
-                <button>Enviar email</button>
+                <button onClick={handleYape}>Enviar email</button>
               </div>
             ) : null}
             {buttonMp &&               <div className={style.divButton}>
-                <a className="text-white bg-[#0061df] rounded-md px-3 py-2" href={buttonMp} target="_blank" onClick={()=>setButtonMp(null)}>FINALIZAR PEDIDO</a>
+                <a className="text-white bg-[#0061df] rounded-md px-3 py-2" href={buttonMp} onClick={()=>setButtonMp(null)}>FINALIZAR PEDIDO</a>
               </div>}
           </div>
         </div>
