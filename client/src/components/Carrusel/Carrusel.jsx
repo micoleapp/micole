@@ -1,13 +1,12 @@
 import React from "react";
 import style from "./Carrusel.module.css";
-import images from "../../exports/carruselImagenes";
 import { motion } from "framer-motion";
-import { Link,useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { getFilterListSchool } from "../../redux/SchoolsActions";
+import Categorias from '../../MockupInfo/Categorias.json'
 export default function Carrusel() {
 
-  const {categories} = useSelector((state)=>state.schools)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const handleClick = (e) => {
@@ -31,16 +30,23 @@ export default function Carrusel() {
 
     <motion.div id="categorias" className={style.slider_container}>
    
-      <motion.div className={style.slider} drag='x' dragConstraints={{right:0, left:-1500} }>
-        {categories.filter(el=>el.imagen_categoria !== "null").map((cat) => {
-            return (
-                 <motion.div className={style.item} key={cat.id} onClick={()=>handleClick(cat.id)}>  
-                  <img src={cat.imagen_categoria} alt={cat.nombre_categoria} />
-                  <h1 className="text-center border-b border-l border-r rounded-b-md">{cat.nombre_categoria}</h1>
-           
-            </motion.div>
+      <motion.div className={style.slider} drag='x' dragConstraints={{right:0, left:-1000} }>
+        {Categorias.filter(el=>el.imagen_categoria !== "null" && el.logo_categoria !== "null").map((cat) => {
+            return (<>
+            
+            <motion.div className={`${style.item} relative flex justify-center items-center cursor-pointer`} key={cat.id} >  
+            <div className="absolute bg-black/50 w-52 h-52"></div>
+             <img src={cat.imagen_categoria} alt={cat.nombre_categoria}/>
+             <div className="flex flex-col justify-center gap-5 items-center absolute cursor-pointer">
+               {cat.logo_categoria && <img src={cat.logo_categoria} alt="logo" className="w-3 h-3 object-cover"/>}
+             
+             <h1 className="text-center text-white">{cat.nombre_categoria}</h1>
+             </div>
+             <p className="text-white absolute bottom-5 hover:text-sky-500" onClick={()=>handleClick(cat.id)}>Click aqui</p>
+       </motion.div>
+            </>
             )
-           
+            
           
         })}
       </motion.div>

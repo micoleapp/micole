@@ -1,4 +1,5 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 import {
   getVacantesGrados,
   getNiveles,
@@ -18,7 +19,8 @@ import {
   getGrados,
   getFilterSchool,
   getCitasAgendado,
-  getHorarios
+  getHorarios,
+  getPagination
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -32,8 +34,11 @@ export const getVacantes = (niveles) => (dispatch) => {
 export const getFilterHome = (distritos, grado, ingreso) => (dispatch) => {
   dispatch(isLoading());
   axios
-    .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}`)
-    .then((res) => dispatch(getFilterSchool(res.data)))
+    .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}&limit=10&page=1`)
+    .then((res) => {
+      dispatch(getPagination(res.data))
+      dispatch(getFilterSchool(res.data.colegios))
+    })
     .catch((err) => dispatch(getError(err.message)));
 };
 
@@ -41,7 +46,10 @@ export const getFilterListSchool = (data) => (dispatch) => {
   dispatch(isLoading());
   axios
     .post("/colegios/filter", data)
-    .then((res) => dispatch(getFilterSchool(res.data)))
+    .then((res) => {
+      dispatch(getPagination(res.data))
+      dispatch(getFilterSchool(res.data.colegios))
+    })
     .catch((err) => dispatch(getError(err.message)));
 };
 
@@ -126,7 +134,7 @@ export const getAllSchools = () => (dispatch) => {
   dispatch(isLoading());
   axios
     .get("/colegios")
-    .then((res) => dispatch(getSchools(res.data)))
+    .then((res) => dispatch(getSchools(res.data.colegios)))
     .catch((err) => dispatch(getError(err.message)));
 };
 
@@ -158,8 +166,10 @@ export const postHorariosVacantes = (horarios,ColegioId) => (dispatch) => {
 };
 
 export const postCita = (cita) => (dispatch) => {
-  const { celular, correo, date, time, modo, nombre, añoIngreso, grado, ColegioId } = cita;
+  const { celular, correo, date, time, modo, nombre, añoIngreso, grado } = cita;
   console.log("test")
+ const  ColegioId = localStorage.getItem('ColegioId')
+
   dispatch(isLoading());
   try {    
     axios
@@ -173,6 +183,8 @@ export const postCita = (cita) => (dispatch) => {
         ColegioId,
         añoIngreso,
         grado,
+        ColegioId
+
       })
       .then(res=>{
         Swal.fire({
@@ -210,10 +222,12 @@ export const getCitaAgendadas = () => (dispatch) => {
 };
 
 
-export const getHorariosSchool = (idColegio) => (dispatch) => {
-  console.log(idColegio)
+
+export const getHorariosSchool = () => (dispatch) => {
+
   dispatch(isLoading());
-  
+  const idColegio= localStorage.getItem('ColegioId')
+  console.log(idColegio)
   axios
     .get(`/horarios/${idColegio}` )
     .then((res) => dispatch(getHorarios(res.data)))

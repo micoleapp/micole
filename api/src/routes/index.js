@@ -16,6 +16,7 @@ const gradoRouter = require("./grado.js");
 const nivelRouter = require("./nivel.js");
 const afiliacionRouter = require("./AfiliacionRoutes.js");
 const citaRouter = require("./citaRouter");
+const paymentRouter = require("./payment");
 const reviewRouter = require("./reviewRouter");
 const informeRouter = require("./informeRouter");
 
@@ -35,6 +36,8 @@ router.use("/niveles", nivelRouter);
 router.use("/afiliaciones", afiliacionRouter);
 router.use("/citas", citaRouter);
 router.use("/reviews", reviewRouter);
+router.use("/payments", paymentRouter);
+// router.use("/informes", informeRouter);
 router.use("/informes", informeRouter);
 
 router.get("/", (req, res) =>

@@ -10,7 +10,10 @@ const getCitas = async (req, res, next) => {
         message: "El usuario no es un Colegio",
       });
     }
-    const include = { include: [{ model: Colegio }, { model: Grado }] };
+    const include = { include: [{ model: Grado }] };
+    const Citas = await Cita.findAll({
+      ...include,
+    });
     const CitasActivas = await Cita.findAll({
       where: { ColegioId: user.id, activo: true },
       ...include,
@@ -19,7 +22,7 @@ const getCitas = async (req, res, next) => {
       where: { ColegioId: user.id, activo: false },
       ...include,
     });
-    res.status(200).send({ CitasActivas, CitasInactivas });
+    res.status(200).send({Citas, CitasActivas, CitasInactivas });
   } catch (error) {
     return next(error);
   }

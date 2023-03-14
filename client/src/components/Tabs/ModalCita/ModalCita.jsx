@@ -19,12 +19,14 @@ const style = {
 
 export default function ModalCita({ task, handleClose, open }) {
   const dispatch = useDispatch();
-  const { success, error, loading } = useSelector((state) => state.citas);
-  useEffect(() => {
-    return () => {
-      dispatch(getCita);
-    };
-  }, [success]);
+//incesesario
+  // const { success, error, loading } = useSelector((state) => state.citas);
+  
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(getCita);
+  //   };
+  // }, [success]);
 
   return (
     <Modal

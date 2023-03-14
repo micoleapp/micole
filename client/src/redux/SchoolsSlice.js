@@ -24,8 +24,15 @@ export const schoolsSlice = createSlice({
     citasAgendadas: [],
     error: "",
     loading: false,
+    pagination: {}
   },
   reducers: {
+    getPagination: (state, action) => {
+      (state.pagination = action.payload),
+        (state.loading = false),
+        (state.error = "");
+    }
+    ,
     getVacantesGrados: (state, action) => {
       (state.vacantesGrados = action.payload),
         (state.loading = false),
@@ -92,11 +99,14 @@ export const schoolsSlice = createSlice({
         (state.error = "");
     },
     getSchools: (state, action) => {
+     
       (state.allschools = action.payload),
         (state.loading = false),
         (state.error = "");
     },
     getOneSchool: (state, action) => {
+      
+    const Colegioid =  localStorage.setItem('ColegioId', action.payload.id);
       (state.oneSchool = action.payload),
         (state.loading = false),
         (state.error = "");
@@ -143,7 +153,8 @@ export const {
   getCategories,
   getProvincias,
   getCitasAgendado,
-  getHorarios
+  getHorarios,
+  getPagination
 } = schoolsSlice.actions;
 
 export default schoolsSlice.reducer;

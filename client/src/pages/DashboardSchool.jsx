@@ -133,6 +133,7 @@ function DashboardSchool() {
   const { user, oneSchool } = useSelector((state) => state.auth);
 const ColegioId = oneSchool.id
   console.log(ColegioId)
+
   const id = user.id;
   useEffect(() => {
     if (user) {
@@ -628,28 +629,29 @@ const ColegioId = oneSchool.id
   //   vacantesDispo:2,
   //   vacantes: "20",
   // },
- 
+
   const handleSubmitCitas = (e) => {
     e.preventDefault();
 
     const newDaysWithTime = daysWithTime.filter((days) => {
       return days[Object.keys(days)[0]][2] === true;
     });
+
+    const newDaysssAA = newDaysWithTime.map((day) => console.log(day));
+
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
-   
-      horarios: 
-        {
-          desde: stringyDate(day[Object.keys(day)][0]["$H"])
-            .toString()
-            .concat(":")
-            .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
-          hasta: stringyDate(day[Object.keys(day)][1]["$H"])
-            .toString()
-            .concat(":")
-            .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
-        },
-      
+
+      horarios: {
+        desde: stringyDate(day[Object.keys(day)][0]["$H"])
+          .toString()
+          .concat(":")
+          .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
+        hasta: stringyDate(day[Object.keys(day)][1]["$H"])
+          .toString()
+          .concat(":")
+          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
+      },
     }));
     Swal.fire({
       icon: "success",
@@ -657,7 +659,23 @@ const ColegioId = oneSchool.id
       text: "Cambios guardados",
     });
     console.log(newDays);
-    dispatch(postHorariosVacantes(newDays, ColegioId));
+    dispatch(postHorariosVacantes(newDays));
+    try {
+      axios
+        .put(`/colegios/${user.id}`, { isActive: true })
+        .then((res) => {
+          Swal.fire({
+            icon: "success",
+            title: "Felicitaciones!",
+            text: "Colegio listo para mostrarse en nuestra pagina!",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const [spanOne, setSpanOne] = useState(false);
@@ -688,6 +706,7 @@ const ColegioId = oneSchool.id
     dispatch(getCita());
     dispatch(getCitaAgendadas());
   }, [success]);
+
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
@@ -700,7 +719,7 @@ const ColegioId = oneSchool.id
         className={`leftshadow ${
           !isOpen
             ? "h-[50px] lg:h-full lg:min-h-full"
-            : "h-[300px] lg:h-full lg:min-h-full"
+            : "h-[500px] lg:h-full lg:min-h-full"
         } duration-300 overflow-hidden bg-white w-full lg:w-1/4 shadow-leftshadow flex justify-center z-50`}
       >
         <div className="absolute left-5 block lg:hidden">
@@ -1438,23 +1457,25 @@ const ColegioId = oneSchool.id
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           type="submit"
                           onClick={handleCompleteDatosPrincipales}
                           sx={{ mr: 1 }}
                           disabled={datosPrincipalesCompleted()}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
@@ -1720,22 +1741,24 @@ const ColegioId = oneSchool.id
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           onClick={handleCompleteInfraestructura}
                           sx={{ mr: 1 }}
                           disabled={infraestructuraCompleted()}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
@@ -1954,22 +1977,24 @@ const ColegioId = oneSchool.id
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           onClick={handleCompleteAcreditaciones}
                           sx={{ mr: 1 }}
                           disabled={acreditacionesCompleted()}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
@@ -2055,24 +2080,26 @@ const ColegioId = oneSchool.id
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           disabled={
                             vacantesOffOne && vacantesOffTwo && vacantesOffThree
                           }
                           onClick={handleCompleteVacantes}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
@@ -2284,22 +2311,24 @@ const ColegioId = oneSchool.id
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           onClick={handleCompleteMultimedia}
                           sx={{ mr: 1 }}
                           disabled={multimediaCompleted()}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                                         (completed[activeStep] ? (
                                           <Typography
