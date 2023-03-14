@@ -45,29 +45,29 @@ export default function GridVacantes({ año, setVacantesOff }) {
 
   return (
     <>
-      <div className="rounded-lg relative overflow-x-auto pb-5">
+      <div className=" relative overflow-x-auto pb-5">
         <table className="text-sm shadow-md relative ">
-          <thead className="text-xs rounded-lg text-white bg-[#0061dd]">
+          <thead className="text-xs  text-white bg-[#0061dd]">
             <tr>
-              <th scope="col" className="px-6 py-5 text-center">
+              <th scope="col" className="py-5 w-[10px] text-center">
                 Grado
               </th>
-              <th scope="col" className="px-6 text-center">
+              <th scope="col" className="text-center">
                 Capacidad <br /> Disponible
               </th>
-              <th scope="col" className="px-6 text-center">
+              <th scope="col" className="text-center">
                 Alumnos <br /> Matriculados
               </th>
-              <th scope="col" className="px-6 text-center">
+              <th scope="col" className="text-center">
                 Vacantes <br /> Disponibles
               </th>
-              <th scope="col" className="px-6 text-center">
+              <th scope="col" className=" text-center">
                 Cuota <br /> Ingreso
               </th>
-              <th scope="col" className="px-6 text-center">
+              <th scope="col" className=" text-center">
                 Matricula
               </th>
-              <th scope="col" className="px-6 text-center">
+              <th scope="col" className="text-center">
                 Pension
               </th>
             </tr>
@@ -82,12 +82,12 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     value={vac.nombre_grado}
                   />
                 </td>
-                <td className="px-6">
+                <td className="">
                   <input
                     id={vac.GradoId}
                     name="capacidad"
                     onChange={handleChange}
-                    className="border-b-2 text-center border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
+                    className="border-b-2 text-center w-[100px] border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
                     defaultValue={oneSchool?.Vacantes?.filter(
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.capacidad)}
@@ -95,7 +95,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     type="number"
                   />{" "}
                 </td>
-                <td className="px-6">
+                <td className="">
                   <input
                     id={vac.GradoId}
                     name="alumnos"
@@ -103,12 +103,12 @@ export default function GridVacantes({ año, setVacantesOff }) {
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.alumnos_matriculados)}
                     onChange={handleChange}
-                    className="border-b-2 text-center border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
+                    className="border-b-2 text-center w-[100px] border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
                     placeholder="Ingrese nro"
                     type="number"
                   />{" "}
                 </td>
-                <td className="px-6">
+                <td className="">
                   <input
                     id={vac.GradoId}
                     disabled
@@ -131,12 +131,12 @@ export default function GridVacantes({ año, setVacantesOff }) {
                         (el) => el.GradoId === vac.GradoId && el.año === año
                       ).map((el) => el.alumnos_matriculados)
                     }
-                    className="border-b-2 text-center border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
+                    className="border-b-2 text-center w-[100px] border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
                     type="number"
                   />{" "}
                 </td>
-                <td className="px-6 relative">
-                  <span className="absolute top-[33%] left-[30%] font-bold">
+                <td className=" relative">
+                  <span className="absolute top-[33%] left-[20%] font-bold">
                     $
                   </span>
                   <input
@@ -146,13 +146,13 @@ export default function GridVacantes({ año, setVacantesOff }) {
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.cuota_ingreso)}
                     onChange={handleChange}
-                    className="border-b-2 text-center border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
+                    className="border-b-2 text-center w-[100px] border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
                     placeholder="Ingrese nro"
                     type="number"
                   />{" "}
                 </td>
-                <td className="px-6 relative">
-                  <span className="absolute top-[33%] left-[30%] font-bold">
+                <td className=" relative">
+                  <span className="absolute top-[33%] left-[20%] font-bold">
                     $
                   </span>
                   <input
@@ -162,13 +162,13 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     ).map((el) => el.matricula)}
                     name="matricula"
                     onChange={handleChange}
-                    className="border-b-2 text-center border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
+                    className="border-b-2 text-center border-l w-[100px] border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
                     placeholder="Ingrese nro"
                     type="number"
                   />{" "}
                 </td>
-                <td className="px-6 relative">
-                  <span className="absolute top-[33%] left-[30%] font-bold">
+                <td className="relative pr-2">
+                  <span className="absolute top-[33%] left-[20%] font-bold">
                     $
                   </span>
                   <input
@@ -178,7 +178,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     ).map((el) => el.cuota_pension)}
                     name="cuota_pension"
                     onChange={handleChange}
-                    className="border-b-2 text-center border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
+                    className="border-b-2 text-center border-l w-[100px] border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
                     placeholder="Ingrese nro"
                     type="number"
                   />{" "}

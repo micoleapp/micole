@@ -47,8 +47,8 @@ const handleValueAño =(event)=>{
           <p>Distrito</p>
           <FormControl
             variant="standard"
-            style={{ width: "150px" }}
             size="small"
+            className="w-full lg:w-[180px] "
           >
             <InputLabel
               className="text-xl"
@@ -75,7 +75,7 @@ const handleValueAño =(event)=>{
           <p>Grado</p>
           <FormControl
             variant="standard"
-            style={{ width: "150px" }}
+            className="w-full lg:w-[180px] "
             size="small"
           >
             <InputLabel
@@ -104,7 +104,7 @@ const handleValueAño =(event)=>{
           <p>Ingreso</p>
           <FormControl
             variant="standard"
-            style={{ width: "150px" }}
+            className="w-full lg:w-[180px] "
             size="small"
           >
             <InputLabel

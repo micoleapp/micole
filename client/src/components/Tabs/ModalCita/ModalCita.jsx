@@ -1,6 +1,7 @@
 import { Box, Modal, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getCita } from "../../../redux/CitasActions";
 import { getCitas } from "../../../redux/CitasSlice";
 import NavTabs from "../TabsCita";
 const style = {
@@ -17,10 +18,15 @@ const style = {
 };
 
 export default function ModalCita({ task, handleClose, open }) {
-
-
-
-
+  const dispatch = useDispatch();
+//incesesario
+  // const { success, error, loading } = useSelector((state) => state.citas);
+  
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(getCita);
+  //   };
+  // }, [success]);
 
   return (
     <Modal
@@ -51,10 +57,8 @@ export default function ModalCita({ task, handleClose, open }) {
             />
             <h1>{task.nombre}</h1>
             <div />
-           
-            <NavTabs handleCloseModal ={handleClose} task={task} />
-       
-       
+
+            <NavTabs handleCloseModal={handleClose} task={task} />
           </div>
         </Typography>
       </Box>

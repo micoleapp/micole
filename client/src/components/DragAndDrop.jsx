@@ -38,10 +38,10 @@ const reorderColumnList = (sourceCol, startIndex, endIndex) => {
 
 function DragAndDrop() {
    const { citasAgendadas } = useSelector((state) => state.schools);
-  const { tasks, columns, columnOrder } = useSelector((state) => state.citas);
+  const { tasks, columns, columnOrder, success} = useSelector((state) => state.citas);
   const [state, setState] = React.useState({ tasks, columns, columnOrder });
   const dispatch = useDispatch();
- 
+ console.log(success)
  
   const onDragEnd = (result) => {
     const { destination, source } = result;
@@ -122,7 +122,7 @@ function DragAndDrop() {
 useEffect(() => {
     dispatch(getCita());
     
-  }, [citasAgendadas.CitasActivas?.length]);
+  }, [citasAgendadas.CitasActivas?.length, success ]);
 
 
   return (

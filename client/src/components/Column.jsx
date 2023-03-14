@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { getCita } from "../redux/CitasActions";
 import { Draggable } from "react-beautiful-dnd";
 import { Droppable } from "react-beautiful-dnd";
@@ -8,9 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import ModalCita from "./Tabs/ModalCita/ModalCita";
 
 const Column = ({ column, tasksArr }) => {
-
+  const { success } = useSelector((state) => state.citas);
   const dispatch = useDispatch();
-
 
   const { grados } = useSelector((state) => state.schools);
   const [open, setOpen] = React.useState(false);
@@ -21,7 +20,7 @@ const Column = ({ column, tasksArr }) => {
   };
   const handleClose = () => setOpen(false);
 
-
+  // useEffect(() => {}, [success]);
 
   return (
     <>

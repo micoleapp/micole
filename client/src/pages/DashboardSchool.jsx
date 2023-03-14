@@ -28,7 +28,7 @@ import MoveToInboxOutlinedIcon from "@mui/icons-material/MoveToInboxOutlined";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
-import style from "./Dashboard.module.css"
+import style from "./Dashboard.module.css";
 
 import {
   GoogleMap,
@@ -111,16 +111,14 @@ function StandardImageList({ one, list, setImage, eliminarImagenDePreview }) {
   }
 }
 
-
 function DashboardSchool() {
-
   const { width, height } = useWindowSize();
   const [page, setPage] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [allData, setAllData] = useState({});
-  const [Filtro, setFiltro] = useState('');
-  console.log(Filtro)
+  const [Filtro, setFiltro] = useState("");
+  console.log(Filtro);
   const dispatch = useDispatch();
   const {
     categories,
@@ -132,6 +130,7 @@ function DashboardSchool() {
     afiliaciones,
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
+
   const id = user.id;
   useEffect(() => {
     if (user) {
@@ -549,7 +548,7 @@ function DashboardSchool() {
     e.preventDefault();
 
     axios
-      .put(`http://localhost:3001/colegios/${user.id}`, allData)
+      .put(`/colegios/${user.id}`, allData)
       .then((res) => {
         Swal.fire({
           icon: "success",
@@ -627,27 +626,29 @@ function DashboardSchool() {
   //   vacantesDispo:2,
   //   vacantes: "20",
   // },
+
   const handleSubmitCitas = (e) => {
     e.preventDefault();
 
     const newDaysWithTime = daysWithTime.filter((days) => {
       return days[Object.keys(days)[0]][2] === true;
     });
+
+    const newDaysssAA = newDaysWithTime.map((day) => console.log(day));
+
     const newDays = newDaysWithTime.map((day) => ({
       dia: Object.keys(day)[0],
 
-      horarios: [
-        {
-          desde: stringyDate(day[Object.keys(day)][0]["$H"])
-            .toString()
-            .concat(":")
-            .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
-          hasta: stringyDate(day[Object.keys(day)][1]["$H"])
-            .toString()
-            .concat(":")
-            .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
-        },
-      ],
+      horarios: {
+        desde: stringyDate(day[Object.keys(day)][0]["$H"])
+          .toString()
+          .concat(":")
+          .concat(stringyDate(day[Object.keys(day)][0]["$m"]).toString()),
+        hasta: stringyDate(day[Object.keys(day)][1]["$H"])
+          .toString()
+          .concat(":")
+          .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
+      },
     }));
     Swal.fire({
       icon: "success",
@@ -657,7 +658,7 @@ function DashboardSchool() {
     console.log(newDays);
     dispatch(postHorariosVacantes(newDays));
   };
-  
+
   const [spanOne, setSpanOne] = useState(false);
   const [spanTwo, setSpanTwo] = useState(false);
   const [activeUpOne, setActiveUpOne] = useState(true);
@@ -670,16 +671,23 @@ function DashboardSchool() {
     dispatch(getVacantes(datosPrincipales.niveles));
   }, [datosPrincipales.niveles]);
 
-  useEffect(() => {
-    dispatch(getCita());
-    
-  }, [page === 4 ]);
-
+  const { success } = useSelector((state) => state.citas);
   const { citasAgendadas } = useSelector((state) => state.schools);
   useEffect(() => {
-   dispatch(getCitaAgendadas())
+    dispatch(getCita());
+  }, [page === 4]);
 
-  }, [page ===  5 ])
+  useEffect(() => {
+    dispatch(getCitaAgendadas());
+  }, [page === 5]);
+  useEffect(() => {
+    dispatch(getCitaAgendadas());
+  }, [citasAgendadas.CitasActivas?.length]);
+  useEffect(() => {
+    dispatch(getCita());
+    dispatch(getCitaAgendadas());
+  }, [success]);
+
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
@@ -692,7 +700,7 @@ function DashboardSchool() {
         className={`leftshadow ${
           !isOpen
             ? "h-[50px] lg:h-full lg:min-h-full"
-            : "h-[300px] lg:h-full lg:min-h-full"
+            : "h-[500px] lg:h-full lg:min-h-full"
         } duration-300 overflow-hidden bg-white w-full lg:w-1/4 shadow-leftshadow flex justify-center z-50`}
       >
         <div className="absolute left-5 block lg:hidden">
@@ -1430,23 +1438,25 @@ function DashboardSchool() {
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           type="submit"
                           onClick={handleCompleteDatosPrincipales}
                           sx={{ mr: 1 }}
                           disabled={datosPrincipalesCompleted()}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
@@ -1712,22 +1722,24 @@ function DashboardSchool() {
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           onClick={handleCompleteInfraestructura}
                           sx={{ mr: 1 }}
                           disabled={infraestructuraCompleted()}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
@@ -1946,22 +1958,24 @@ function DashboardSchool() {
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           onClick={handleCompleteAcreditaciones}
                           sx={{ mr: 1 }}
                           disabled={acreditacionesCompleted()}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
@@ -2047,24 +2061,26 @@ function DashboardSchool() {
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           disabled={
                             vacantesOffOne && vacantesOffTwo && vacantesOffThree
                           }
                           onClick={handleCompleteVacantes}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
@@ -2276,22 +2292,24 @@ function DashboardSchool() {
                       <Box
                         sx={{ display: "flex", flexDirection: "row", pt: 2 }}
                       >
-                        <Button
+                        <button
                           color="inherit"
                           disabled={activeStep === 0}
                           onClick={handleBack}
                           sx={{ mr: 1 }}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Back
-                        </Button>
+                        </button>
                         <Box sx={{ flex: "1 1 auto" }} />
-                        <Button
+                        <button
                           onClick={handleCompleteMultimedia}
                           sx={{ mr: 1 }}
                           disabled={multimediaCompleted()}
+                          className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
-                        </Button>
+                        </button>
                         {/* {activeStep !== steps.length &&
                                         (completed[activeStep] ? (
                                           <Typography
@@ -2316,120 +2334,120 @@ function DashboardSchool() {
           </Box>
         ) : page === 1 ? (
           <div className="min-h-screen">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <div className="grid lg:grid-cols-3 w-full grid-cols-2">
-                  {daysWithTime.map((day, index) => (
-                    <div className="my-3">
-                      <FormControlLabel
-                        label={Object.keys(day)}
-                        control={
-                          <Checkbox
-                            checked={day[Object.keys(day)][2]}
-                            onChange={(event, target) => {
-                              if (target) {
-                                setDaysWithTime([
-                                  ...daysWithTime.slice(0, index),
-                                  {
-                                    [Object.keys(day)]: [
-                                      day[Object.keys(day)][0],
-                                      day[Object.keys(day)][1],
-                                      true,
-                                    ],
-                                  },
-                                  ...daysWithTime.slice(index + 1),
-                                ]);
-                              } else {
-                                setDaysWithTime([
-                                  ...daysWithTime.slice(0, index),
-                                  {
-                                    [Object.keys(day)]: [
-                                      day[Object.keys(day)][0],
-                                      day[Object.keys(day)][1],
-                                      false,
-                                    ],
-                                  },
-                                  ...daysWithTime.slice(index + 1),
-                                ]);
-                              }
-                            }}
-                          />
-                        }
-                      />
-                      <div className="flex flex-col gap-3">
-                        <small className="font-semibold">
-                          {[
-                            stringyDate(
-                              day[Object.keys(day)][0]["$H"]
-                            ).toString(),
-                            stringyDate(
-                              day[Object.keys(day)][0]["$m"]
-                            ).toString(),
-                          ].join(":")}{" "}
-                          -{" "}
-                          {[
-                            stringyDate(
-                              day[Object.keys(day)][1]["$H"]
-                            ).toString(),
-                            stringyDate(
-                              day[Object.keys(day)][1]["$m"]
-                            ).toString(),
-                          ].join(":")}{" "}
-                        </small>
-                        <div className="flex gap-2">
-                          <MobileTimePicker
-                            label="Desde"
-                            disabled={!day[Object.keys(day)][2]}
-                            className="w-[70px]"
-                            value={day[Object.keys(day)][0]}
-                            renderInput={(params) => <TextField {...params} />}
-                            ampm={false}
-                            onChange={(newValue) => {
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <div className="grid lg:grid-cols-3 w-full grid-cols-2">
+                {daysWithTime.map((day, index) => (
+                  <div className="my-3">
+                    <FormControlLabel
+                      label={Object.keys(day)}
+                      control={
+                        <Checkbox
+                          checked={day[Object.keys(day)][2]}
+                          onChange={(event, target) => {
+                            if (target) {
                               setDaysWithTime([
                                 ...daysWithTime.slice(0, index),
                                 {
                                   [Object.keys(day)]: [
-                                    newValue,
+                                    day[Object.keys(day)][0],
                                     day[Object.keys(day)][1],
                                     true,
                                   ],
                                 },
                                 ...daysWithTime.slice(index + 1),
                               ]);
-                            }}
-                            minutesStep={60}
-                            minTime={dayjs("2014-08-18T08:00:00")}
-                            maxTime={day[Object.keys(day)][1]}
-                          />
-                          <MobileTimePicker
-                            label="Hasta"
-                            disabled={!day[Object.keys(day)][2]}
-                            className="w-[70px] "
-                            onChange={(newValue) => {
+                            } else {
                               setDaysWithTime([
                                 ...daysWithTime.slice(0, index),
                                 {
                                   [Object.keys(day)]: [
                                     day[Object.keys(day)][0],
-                                    newValue,
-                                    true,
+                                    day[Object.keys(day)][1],
+                                    false,
                                   ],
                                 },
                                 ...daysWithTime.slice(index + 1),
                               ]);
-                            }}
-                            value={day[Object.keys(day)][1]}
-                            renderInput={(params) => <TextField {...params} />}
-                            ampm={false}
-                            minutesStep={60}
-                            minTime={day[Object.keys(day)][0]}
-                            maxTime={dayjs("2014-08-18T17:00:00")}
-                          />
-                        </div>
+                            }
+                          }}
+                        />
+                      }
+                    />
+                    <div className="flex flex-col gap-3">
+                      <small className="font-semibold">
+                        {[
+                          stringyDate(
+                            day[Object.keys(day)][0]["$H"]
+                          ).toString(),
+                          stringyDate(
+                            day[Object.keys(day)][0]["$m"]
+                          ).toString(),
+                        ].join(":")}{" "}
+                        -{" "}
+                        {[
+                          stringyDate(
+                            day[Object.keys(day)][1]["$H"]
+                          ).toString(),
+                          stringyDate(
+                            day[Object.keys(day)][1]["$m"]
+                          ).toString(),
+                        ].join(":")}{" "}
+                      </small>
+                      <div className="flex gap-2">
+                        <MobileTimePicker
+                          label="Desde"
+                          disabled={!day[Object.keys(day)][2]}
+                          className="w-[70px]"
+                          value={day[Object.keys(day)][0]}
+                          renderInput={(params) => <TextField {...params} />}
+                          ampm={false}
+                          onChange={(newValue) => {
+                            setDaysWithTime([
+                              ...daysWithTime.slice(0, index),
+                              {
+                                [Object.keys(day)]: [
+                                  newValue,
+                                  day[Object.keys(day)][1],
+                                  true,
+                                ],
+                              },
+                              ...daysWithTime.slice(index + 1),
+                            ]);
+                          }}
+                          minutesStep={60}
+                          minTime={dayjs("2014-08-18T08:00:00")}
+                          maxTime={day[Object.keys(day)][1]}
+                        />
+                        <MobileTimePicker
+                          label="Hasta"
+                          disabled={!day[Object.keys(day)][2]}
+                          className="w-[70px] "
+                          onChange={(newValue) => {
+                            setDaysWithTime([
+                              ...daysWithTime.slice(0, index),
+                              {
+                                [Object.keys(day)]: [
+                                  day[Object.keys(day)][0],
+                                  newValue,
+                                  true,
+                                ],
+                              },
+                              ...daysWithTime.slice(index + 1),
+                            ]);
+                          }}
+                          value={day[Object.keys(day)][1]}
+                          renderInput={(params) => <TextField {...params} />}
+                          ampm={false}
+                          minutesStep={60}
+                          minTime={day[Object.keys(day)][0]}
+                          maxTime={dayjs("2014-08-18T17:00:00")}
+                        />
                       </div>
                     </div>
-                  ))}
-                </div>
-              </LocalizationProvider>
+                  </div>
+                ))}
+              </div>
+            </LocalizationProvider>
             <button
               onClick={handleSubmitCitas}
               className="flex mx-auto my-5 bg-[#0061dd] text-white p-2 rounded-md shadow-md"
@@ -2573,7 +2591,10 @@ function DashboardSchool() {
           </div>
         ) : page === 4 ? (
           <div className="min-h-screen">
-            <div className={style.layout}  style={{ display: "flex", gap: "10px" }}>
+            <div
+              className={style.layout}
+              style={{ display: "flex", gap: "10px" }}
+            >
               <Cards icon="solicitud" text="Solicitudes de Citas" nro={2} />
               <Cards icon="visualizacion" text="Visualizaciones" nro={2} />
               <Cards icon="mensaje" text="Mensajes" nro={2} />
@@ -2585,31 +2606,38 @@ function DashboardSchool() {
         ) : page === 5 ? (
           <div className=" min-h-screen">
             <h1>Citas</h1>
-            <div className={style.containerBtn} >
+            <div className={style.containerBtn}>
               <div>
-                <Button onClick={()=>setFiltro('')} startIcon={<StarBorderIcon />} variant="outlined">
+                <Button
+                  onClick={() => setFiltro("")}
+                  startIcon={<StarBorderIcon />}
+                  variant="outlined"
+                >
                   Todos
                 </Button>
               </div>
               <div>
-                <Button onClick={()=>setFiltro('Confirmados')} startIcon={<DraftsOutlinedIcon />} variant="outlined">
+                <Button
+                  onClick={() => setFiltro("Confirmados")}
+                  startIcon={<DraftsOutlinedIcon />}
+                  variant="outlined"
+                >
                   Confirmados
                 </Button>
               </div>
               <div>
-                <Button onClick={()=>setFiltro('SinConfirmar')}
+                <Button
+                  onClick={() => setFiltro("SinConfirmar")}
                   startIcon={<MailOutlineOutlinedIcon />}
                   variant="outlined"
                 >
                   Sin Confirmar
                 </Button>
               </div>
-            <div>
-              {/* <SelectCitasAg/> */}
-            </div>
+              <div>{/* <SelectCitasAg/> */}</div>
             </div>
             <div>
-              <CardCitas filtros={Filtro}/>
+              <CardCitas filtros={Filtro} />
             </div>
           </div>
         ) : null}

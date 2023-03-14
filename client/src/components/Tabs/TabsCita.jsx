@@ -111,7 +111,7 @@ console.log(OpenDelete)
         </TabPanel>
       </TabContext>
       {OpenDelete && (
-        <ModalDeleteCita handleClose={handleCloseModal} IdCita={CitaID} />
+        <ModalDeleteCita  HandlerOpendeleteModal={setOpenDelete}  handleClose={handleCloseModal} IdCita={CitaID} />
       )}
     </Box>
   );

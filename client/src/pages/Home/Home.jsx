@@ -20,10 +20,11 @@ function Home() {
   const myDivRef = useRef(null);
 
   useEffect(()=>{
-    if(params.get("categorias") !== null) {
+    if(params.get("categorias") === "1") {
       myDivRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
     }
-  },[params.get("categorias")])
+  },[params])
+  
 
   return (
     <>

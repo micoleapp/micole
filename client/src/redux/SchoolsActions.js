@@ -1,4 +1,5 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 import {
   getVacantesGrados,
   getNiveles,
@@ -18,6 +19,8 @@ import {
   getGrados,
   getFilterSchool,
   getCitasAgendado,
+  getHorarios,
+  getPagination
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -31,8 +34,11 @@ export const getVacantes = (niveles) => (dispatch) => {
 export const getFilterHome = (distritos, grado, ingreso) => (dispatch) => {
   dispatch(isLoading());
   axios
-    .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}`)
-    .then((res) => dispatch(getFilterSchool(res.data)))
+    .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}&limit=10&page=1`)
+    .then((res) => {
+      dispatch(getPagination(res.data))
+      dispatch(getFilterSchool(res.data.colegios))
+    })
     .catch((err) => dispatch(getError(err.message)));
 };
 
@@ -40,7 +46,10 @@ export const getFilterListSchool = (data) => (dispatch) => {
   dispatch(isLoading());
   axios
     .post("/colegios/filter", data)
-    .then((res) => dispatch(getFilterSchool(res.data)))
+    .then((res) => {
+      dispatch(getPagination(res.data))
+      dispatch(getFilterSchool(res.data.colegios))
+    })
     .catch((err) => dispatch(getError(err.message)));
 };
 
@@ -125,7 +134,7 @@ export const getAllSchools = () => (dispatch) => {
   dispatch(isLoading());
   axios
     .get("/colegios")
-    .then((res) => dispatch(getSchools(res.data)))
+    .then((res) => dispatch(getSchools(res.data.colegios)))
     .catch((err) => dispatch(getError(err.message)));
 };
 
@@ -146,33 +155,54 @@ export const clannDetailid = () => (dispatch) => {
   }
 };
 
-export const postHorariosVacantes = (horarios) => (dispatch) => {
+export const postHorariosVacantes = (horarios,ColegioId) => (dispatch) => {
+  console.log(ColegioId)
+  console.log(horarios)
   dispatch(isLoading());
-  const ColegioId = localStorage.getItem("id");
   axios
-    .post("/disponibilidad", { horarios }, { ColegioId })
+    .post("/horarios", { horarios , ColegioId })
     // .then(res=>dispatch((res.data)))
     .catch((err) => console.log(err));
 };
 
 export const postCita = (cita) => (dispatch) => {
   const { celular, correo, date, time, modo, nombre, añoIngreso, grado } = cita;
-  const ColegioId = localStorage.getItem("id");
+  console.log("test")
+ const  ColegioId = localStorage.getItem('ColegioId')
+
   dispatch(isLoading());
-  axios
-    .post("/citas", {
-      celular,
-      correo,
-      date,
-      time,
-      modo,
-      nombre,
-      ColegioId,
-      añoIngreso,
-      grado,
-    })
-    // .then((res) => dispatch(getVacantesGrados(res.data)))
-    .catch((err) => console.log(err));
+  try {    
+    axios
+      .post("/citas", {
+        celular,
+        correo,
+        date,
+        time,
+        modo,
+        nombre,
+        ColegioId,
+        añoIngreso,
+        grado,
+        ColegioId
+      })
+      .then(res=>{
+        Swal.fire({
+          icon: "success",
+          title: "Perfecto !",
+          text: "Tu colegio recibio tu cita espera a ser confirmada",
+        });
+      })
+      // .then((res) => dispatch(getVacantesGrados(res.data)))
+      .catch((err) =>{
+        Swal.fire({
+          icon: "error",
+          title: "Algo salio mal",
+          text: err.response.data.error,
+        });
+      });
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const getCitaAgendadas = () => (dispatch) => {
@@ -181,6 +211,24 @@ export const getCitaAgendadas = () => (dispatch) => {
   axios
     .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
     .then((res) => dispatch(getCitasAgendado(res.data)))
+    .catch((err) => {
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: err.response.data.error,
+      });
+    });
+};
+
+
+export const getHorariosSchool = () => (dispatch) => {
+
+  dispatch(isLoading());
+  const idColegio= localStorage.getItem('ColegioId')
+  console.log(idColegio)
+  axios
+    .get(`/horarios/${idColegio}` )
+    .then((res) => dispatch(getHorarios(res.data)))
     .catch((err) => {
       Swal.fire({
         icon: "error",

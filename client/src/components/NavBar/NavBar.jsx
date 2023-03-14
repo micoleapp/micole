@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Burguer from "./svg/Burguer";
 import Logo from "../../assets/logo1.png";
 import style from "./NavBar.module.css";
 import Categoria from "./Categoria/Categoria";
@@ -8,7 +7,7 @@ import { Link } from "react-router-dom";
 import ModalLogin from "../ModalLogin/ModalLogin";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/AuthActions";
-import BurguerMenuU from "./BurguerMenu/BurguerMenu";
+import { Squash as Hamburger } from "hamburger-react";
 
 function NavBar() {
   const dispatch = useDispatch();
@@ -41,6 +40,16 @@ function NavBar() {
     dispatch(logout());
   };
 
+  function scrollBot() {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+  }
+
+  const [isOpen, setOpen] = useState(false);
+
+
   return (
     <div className={style.layout}>
       <Link to={"/"}>
@@ -49,7 +58,6 @@ function NavBar() {
 
       <div className={style.container}>
         <div className={style.items}>
-          <p className={`${style.p} hover-underline-animation`}>Inicio</p>
           <Link
             className={`${style.p} hover-underline-animation`}
             to={"/?categorias=1"}
@@ -59,19 +67,15 @@ function NavBar() {
           <p className={`${style.p} hover-underline-animation`}>BLOG</p>
           <p
             className={`${style.p} hover-underline-animation`}
-            onClick={ToggleContact}
+            onClick={scrollBot}
           >
             Contáctanos
           </p>
         </div>
 
-        <div onClick={toggleBurguerMenu} className={style.Burguer}>
-          <Burguer />
-        </div>
-        <div className={style.burguerMenu}>
-            {BurguerMen && <BurguerMenuU handlerClose={setBurguerMen}/> }
-        </div>
-       
+       <div  className="md:hidden">
+        <Hamburger toggled={isOpen} toggle={setOpen} color="#fff"/>
+       </div>
 
         <div className={style.buttonContainer}>
           {isAuth === true ? (
@@ -106,6 +110,52 @@ function NavBar() {
         </div>
       )}
       {OpenLogin && <ModalLogin handlerClose={setOpenLogin} OpenLogin={OpenLogin} />}
+      <div className={`bg-[#0061dd] w-[100vw] absolute top-16 z-[500] ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-all duration-300 md:hidden rounded-b-md`}>
+        <div className="flex flex-col justify-center items-center gap-5 p-5">
+          <Link
+            className={`${style.p} hover-underline-animation`}
+            to={"/?categorias=1"}
+            onClick={()=>setOpen(!isOpen)}
+          >
+            Categorias
+          </Link>
+          <p className={`${style.p} hover-underline-animation`} 
+            onClick={()=>setOpen(!isOpen)}
+          
+          >BLOG</p>
+          <p
+            className={`${style.p} hover-underline-animation`}
+            onClick={()=>{
+              scrollBot()
+              setOpen(!isOpen)
+            }}
+          >
+            Contáctanos
+          </p>
+          {isAuth === true ? (
+            <button onClick={()=>{
+           setOpen(!isOpen)
+              handlerLogout()
+            }} className={style.SesionButtom}>
+              Cerrar Sesion
+            </button>
+          ) : (
+            <button onClick={()=>{
+              setOpen(!isOpen)
+                 handlerLogin()
+               }} className={style.SesionButtom}>
+              Iniciar sesion
+            </button>
+          )}
+          {isAuth === true ? (
+          <Link to={"/dashboardschool"}  onClick={()=>setOpen(!isOpen)}>
+          <button className={style.SesionButtom}>Ver Perfil</button>
+        </Link>
+          ) : (          <Link to={"/enroll"}  onClick={()=>setOpen(!isOpen)}>
+          <button className={style.SesionButtom}>Inscribe tu colegio</button>
+        </Link>)}
+        </div>
+      </div>
     </div>
   );
 }
