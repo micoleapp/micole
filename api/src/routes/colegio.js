@@ -1,4 +1,4 @@
-const { Router } = require('express');
+const { Router } = require("express");
 const router = Router();
 const {
   Pais,
@@ -16,24 +16,21 @@ const {
   Grado,
   Horario,
   Review,
-} = require('../db.js');
-const { Op } = require('sequelize');
-const getPagination = require('../utils/getPagination');
+} = require("../db.js");
+const { Op } = require("sequelize");
+const getPagination = require("../utils/getPagination");
 
 // const getComponentData = require("../funciones/getComponentData.js");
 // const ratingProm = require("../funciones/ratingProm.js");
 
 //------- PEDIR TODOS LOS COLEGIOS A LA BD--------
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   const { distritos, grado, ingreso } = req.query;
-  const cleanedUrl = req.originalUrl.replace(/limit=\d+&page=\d+&?/, '');
-  const url = `${req.protocol}://${req.get('host')}${cleanedUrl}`;
+  const cleanedUrl = req.originalUrl.replace(/limit=\d+&page=\d+&?/, "");
+  const url = `${req.protocol}://${req.get("host")}${cleanedUrl}`;
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
-  console.log(typeof(distritos));
-  console.log(typeof(grado));
-  console.log(typeof(ingreso));
   try {
     const totalColegios = await Colegio.findAll({
       include: [
@@ -54,42 +51,45 @@ router.get('/', async (req, res) => {
       include: [
         {
           model: Nivel,
-          attributes: ['nombre_nivel', 'id'],
+          attributes: ["nombre_nivel", "id"],
         },
         {
           model: Idioma,
-          attributes: ['nombre_idioma', 'id'],
+          attributes: ["nombre_idioma", "id"],
           through: {
             attributes: [],
           },
         },
         {
           model: Vacante,
-          include: [{ model: Grado }],
+          include: [{ model: Grado, attributes: ['nombre_grado'] }],
+          required: grado !== "false" || ingreso !== "false" ? true : false,
+          duplicating: grado || ingreso ? false : true,
         },
         {
           model: Pais,
-          attributes: ['id', 'nombre_pais'],
+          attributes: ["id", "nombre_pais"],
         },
         {
           model: Departamento,
           attributes: ['id', 'nombre_departamento'],
+
         },
         {
           model: Provincia,
-          attributes: ['id', 'nombre_provincia'],
+          attributes: ["id", "nombre_provincia"],
         },
         {
           model: Distrito,
-          attributes: ['id', 'nombre_distrito'],
+          attributes: ["id", "nombre_distrito"],
         },
         {
           model: Plan_Pago,
-          attributes: ['id', 'nombre_plan_pago'],
+          attributes: ["id", "nombre_plan_pago"],
         },
         {
           model: Horario,
-          attributes: ['dia', 'horarios'],
+          attributes: ["dia", "horarios"],
         },
         {
           model: Review,
@@ -97,10 +97,10 @@ router.get('/', async (req, res) => {
         {
           model: Categoria,
           attributes: [
-            'id',
-            'nombre_categoria',
-            'imagen_categoria',
-            'logo_categoria',
+            "id",
+            "nombre_categoria",
+            "imagen_categoria",
+            "logo_categoria",
           ],
           through: {
             attributes: [],
@@ -113,8 +113,9 @@ router.get('/', async (req, res) => {
         ...(ingreso && ingreso !== 'false' && { '$Vacantes.año$': ingreso }),
       },
       limit: limit,
-      subQuery: false,
+      offset: skip,
     });
+
     const pagination = getPagination(url, page, limit, totalColegios.length);
     res.json({
       count: totalColegios.length,
@@ -133,7 +134,7 @@ router.get('/', async (req, res) => {
 });
 
 //------- PEDIR UNO DE LOS COLEGIOS POR ID--------
-router.get('/:Colegio_id', async (req, res) => {
+router.get("/:Colegio_id", async (req, res) => {
   const { Colegio_id } = req.params;
 
   try {
@@ -142,42 +143,42 @@ router.get('/:Colegio_id', async (req, res) => {
       include: [
         {
           model: Nivel,
-          attributes: ['nombre_nivel', 'id'],
+          attributes: ["nombre_nivel", "id"],
         },
         {
           model: Vacante,
-          include: [{ model: Grado, attributes: ['nombre_grado'] }],
+          include: [{ model: Grado, attributes: ["nombre_grado"] }],
         },
         {
           model: Idioma,
-          attributes: ['nombre_idioma', 'id'],
+          attributes: ["nombre_idioma", "id"],
           through: {
             attributes: [],
           },
         },
         {
           model: Pais,
-          attributes: ['id', 'nombre_pais'],
+          attributes: ["id", "nombre_pais"],
         },
         {
           model: Departamento,
-          attributes: ['id', 'nombre_departamento'],
+          attributes: ["id", "nombre_departamento"],
         },
         {
           model: Provincia,
-          attributes: ['id', 'nombre_provincia'],
+          attributes: ["id", "nombre_provincia"],
         },
         {
           model: Distrito,
-          attributes: ['id', 'nombre_distrito', 'ProvinciaId'],
+          attributes: ["id", "nombre_distrito", "ProvinciaId"],
         },
         {
           model: Plan_Pago,
-          attributes: ['id', 'nombre_plan_pago'],
+          attributes: ["id", "nombre_plan_pago"],
         },
         {
           model: Horario,
-          attributes: ['id', 'dia', 'horarios'],
+          attributes: ["id", "dia", "horarios"],
         },
         {
           model: Review,
@@ -185,10 +186,10 @@ router.get('/:Colegio_id', async (req, res) => {
         {
           model: Categoria,
           attributes: [
-            'id',
-            'nombre_categoria',
-            'imagen_categoria',
-            'logo_categoria',
+            "id",
+            "nombre_categoria",
+            "imagen_categoria",
+            "logo_categoria",
           ],
           through: {
             attributes: [],
@@ -197,10 +198,10 @@ router.get('/:Colegio_id', async (req, res) => {
         {
           model: Infraestructura,
           attributes: [
-            'id',
-            'nombre_infraestructura',
-            'InfraestructuraTipoId',
-            'imagen',
+            "id",
+            "nombre_infraestructura",
+            "InfraestructuraTipoId",
+            "imagen",
           ],
           through: {
             attributes: [],
@@ -208,7 +209,7 @@ router.get('/:Colegio_id', async (req, res) => {
         },
         {
           model: Afiliacion,
-          attributes: ['id', 'nombre_afiliacion', 'Afiliacion_tipo_Id', 'logo'],
+          attributes: ["id", "nombre_afiliacion", "Afiliacion_tipo_Id", "logo"],
           through: {
             attributes: [],
           },
@@ -221,7 +222,7 @@ router.get('/:Colegio_id', async (req, res) => {
     res.json({ err });
   }
 });
-router.post('/filter', async (req, res) => {
+router.post("/filter", async (req, res) => {
   const {
     distrits,
     grado,
@@ -236,41 +237,50 @@ router.post('/filter', async (req, res) => {
 
   let orderBy = null;
   switch (order) {
-    case 'mayor_precio_pension':
-      orderBy = [['$Vacantes.cuota_pension$', 'DESC']];
+    case "mayor_precio_pension":
+      orderBy = [["$Vacantes.cuota_pension$", "DESC"]];
       break;
-    case 'menor_precio_pension':
-      orderBy = [['$Vacantes.cuota_pension$', 'ASC']];
+    case "menor_precio_pension":
+      orderBy = [["$Vacantes.cuota_pension$", "ASC"]];
       break;
-    case 'mayor_precio_matricula':
-      orderBy = [['$Vacantes.cuota_ingreso$', 'DESC']];
+    case "mayor_precio_matricula":
+      orderBy = [["$Vacantes.cuota_ingreso$", "DESC"]];
       break;
-    case 'menor_precio_matricula':
-      orderBy = [['$Vacantes.cuota_ingreso$', 'ASC']];
+    case "menor_precio_matricula":
+      orderBy = [["$Vacantes.cuota_ingreso$", "ASC"]];
       break;
-    case 'mayor_precio_ingreso':
-      orderBy = [['$Vacantes.cuota_ingreso$', 'DESC']];
+    case "mayor_precio_ingreso":
+      orderBy = [["$Vacantes.cuota_ingreso$", "DESC"]];
       break;
-    case 'menor_precio_ingreso':
-      orderBy = [['$Vacantes.cuota_ingreso$', 'ASC']];
+    case "menor_precio_ingreso":
+      orderBy = [["$Vacantes.cuota_ingreso$", "ASC"]];
       break;
-    case 'mayor_rating':
-      orderBy = [['rating', 'DESC']];
+    case "mayor_rating":
+      orderBy = [["rating", "DESC"]];
       break;
-    case 'menor_rating':
-      orderBy = [['rating', 'ASC']];
+    case "menor_rating":
+      orderBy = [["rating", "ASC"]];
       break;
     default:
       orderBy = null;
       break;
   }
-  const cleanedUrl = req.originalUrl.replace(/limit=\d+&page=\d+&?/, '');
-  const url = `${req.protocol}://${req.get('host')}${cleanedUrl}`;
+  const cleanedUrl = req.originalUrl.replace(/limit=\d+&page=\d+&?/, "");
+  const url = `${req.protocol}://${req.get("host")}${cleanedUrl}`;
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
   try {
-    const totalColegios = await Colegio.count({
+    const totalColegios = await Colegio.findAll({
+      include: [
+        {
+          model: Vacante,
+          include: [{ model: Grado }],
+        },
+        {
+          model: Categoria,
+        },
+      ],
       where: {
         ...(distrits.length !== 0 && {
           [Op.or]: distrits.map((distrito) => ({ DistritoId: distrito })),
@@ -295,48 +305,57 @@ router.post('/filter', async (req, res) => {
       include: [
         {
           model: Nivel,
-          attributes: ['nombre_nivel', 'id'],
+          attributes: ["nombre_nivel", "id"],
         },
         {
           model: Vacante,
-          include: [{ model: Grado, attributes: ['nombre_grado'] }],
+          include: [
+            {
+              model: Grado,
+              attributes: ['nombre_grado']
+            }
+          ],
+          required: grado.length !== 0 || ingreso.length !== 0  || pension.length !== 0 || cuota.length !== 0  ? true : false,
+          duplicating: grado.length !== 0 || ingreso.length !== 0  || pension.length !== 0 || cuota.length !== 0  ? false : true,
         },
         {
           model: Idioma,
-          attributes: ['nombre_idioma', 'id'],
+          attributes: ["nombre_idioma", "id"],
           through: {
             attributes: [],
           },
         },
         {
           model: Pais,
-          attributes: ['id', 'nombre_pais'],
+          attributes: ["id", "nombre_pais"],
         },
         {
           model: Departamento,
-          attributes: ['id', 'nombre_departamento'],
+          attributes: ["id", "nombre_departamento"],
         },
         {
           model: Provincia,
-          attributes: ['id', 'nombre_provincia'],
+          attributes: ["id", "nombre_provincia"],
         },
         {
           model: Distrito,
-          attributes: ['id', 'nombre_distrito'],
+          attributes: ["id", "nombre_distrito"],
         },
         {
           model: Plan_Pago,
-          attributes: ['id', 'nombre_plan_pago'],
+          attributes: ["id", "nombre_plan_pago"],
         },
         {
           model: Horario,
-          attributes: ['dia', 'horarios'],
+          attributes: ["dia", "horarios"],
         },
         {
           model: Categoria,
           through: {
             attributes: [],
           },
+          required: tipo.length !== 0 ? true : false,
+          duplicating: tipo.length !== 0 ? false : true,
         },
         {
           model: Review,
@@ -346,29 +365,28 @@ router.post('/filter', async (req, res) => {
         ...(distrits.length !== 0 && {
           [Op.or]: distrits.map((distrito) => ({ DistritoId: distrito })),
         }),
-        ...(grado.length !== 0 && { '$Vacantes.GradoId$': grado }),
-        ...(ingreso.length !== 0 && { '$Vacantes.año$': ingreso }),
+        ...(grado.length !== 0 && { "$Vacantes.GradoId$": grado }),
+        ...(ingreso.length !== 0 && { "$Vacantes.año$": ingreso }),
         ...(pension.length !== 0 && {
-          '$Vacantes.cuota_pension$': {
+          "$Vacantes.cuota_pension$": {
             [Op.between]: [pension[0], pension[1]],
           },
         }),
         ...(cuota.length !== 0 && {
-          '$Vacantes.cuota_ingreso$': { [Op.between]: [cuota[0], cuota[1]] },
+          "$Vacantes.cuota_ingreso$": { [Op.between]: [cuota[0], cuota[1]] },
         }),
-        ...(tipo.length !== 0 && { '$Categoria.id$': tipo }),
+        ...(tipo.length !== 0 && { "$Categoria.id$": tipo }),
         ...(ingles && { $horas_idioma_extranjero$: { [Op.lte]: ingles } }),
         ...(rating && { $rating$: { [Op.gte]: rating } }),
       },
       order: orderBy,
       limit: limit,
       offset: skip,
-      subQuery: false,
     });
-    const pagination = getPagination(url, page, limit, totalColegios);
+    const pagination = getPagination(url, page, limit, totalColegios.length);
     res.json({
-      count: totalColegios,
-      pages: Math.ceil(totalColegios / limit),
+      count: totalColegios.length,
+      pages: Math.ceil(totalColegios.length / limit),
       prev: pagination.prev,
       next: pagination.next,
       first: pagination.first,
@@ -384,7 +402,7 @@ router.post('/filter', async (req, res) => {
 });
 
 //--------------------PUT  UN COLEGIO POR ID-------
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   console.log(req.body);
   try {
     const { id } = req.params;
@@ -409,6 +427,7 @@ router.put('/:id', async (req, res) => {
       infraestructura,
       niveles,
       afiliaciones,
+      isActive,
     } = req.body;
     let video_url = multimedia.video_url;
     let primera_imagen = multimedia.image;
@@ -434,13 +453,14 @@ router.put('/:id', async (req, res) => {
         horas_idioma_extranjero: ingles,
         DepartamentoId: departamento.id,
         provincia: provincia,
+        isActive: isActive,
       },
 
       { where: { id: id } }
     );
     const colegio = await Colegio.findByPk(id);
     if (colegio === null) {
-      console.log('Not found!');
+      console.log("Not found!");
     } else {
       await colegio.setInfraestructuras(infraestructura.map((i) => i.id));
       await colegio.setCategoria(categoria.map((c) => c.id));

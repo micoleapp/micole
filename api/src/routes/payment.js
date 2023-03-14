@@ -15,6 +15,7 @@ router.post("/notification", async (req, res) => {
 
   var merchantOrder;
   var ventas;
+  var colegio;
 
   switch (topic) {
     case "payment":
@@ -43,6 +44,10 @@ router.post("/notification", async (req, res) => {
           console.log("id del Colegio=" + idColegio);
           await ventas.setPlan_Pago(plan);
           await ventas.setColegio(idColegio);
+
+          colegio=await Colegio.findOne({where:{id:idColegio}});
+          await colegio.setPlan_Pago(plan);
+          
           await ventas.save();
 
           res.status(200).send(merchantOrder);
