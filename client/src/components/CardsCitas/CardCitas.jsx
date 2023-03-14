@@ -22,10 +22,10 @@ export default function CardCitas({ filtros }) {
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [Citas, setCita] = useState(citasAgendadas);
 
-  const [arr, setArr] = React.useState([]);
+  const [arrCita, setArrCitas] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const dispatch = useDispatch();
-  const [Inactivas, setInactivas] = useState(Citas.CitasInactivas);
+  const [Inactivas, setInactivas] = useState([]);
   // const [Activas, setActivas] = useState(Citas.CitasActivas);
 
   const [Activas, setActivas] = useState([]);
@@ -33,17 +33,12 @@ export default function CardCitas({ filtros }) {
   console.log(page);
   const comprobacion = (iD) => {
     if (success === "Se activo la Cita.") {
-      const CitasConfirmadas = Citas.CitasInactivas.find(
-        (ele) => ele.id === iD
-      );
-
-      const citasSinConfirmar = Citas.CitasInactivas.filter(
-        (ele) => ele.id !== iD
-      );
-
+      console.log(Inactivas);
+      const CitasConfirmadas = Inactivas.find((ele) => ele.id === iD);
       setActivas([...Activas, CitasConfirmadas]);
-      setInactivas(citasSinConfirmar);
-      // return
+
+      setInactivas(citasAgendadas.CitasInactivas.filter((ele) => ele.id !== iD));
+
       Swal.fire({
         icon: "success",
         title: "La cita ha sido confirmada con exito",
@@ -60,18 +55,25 @@ export default function CardCitas({ filtros }) {
   };
 
   React.useEffect(() => {
-    let resultadoActivas = sliceIntoChunks(citasAgendadas.CitasActivas, 5);
+    let resultadoActivas = sliceIntoChunks(citasAgendadas.CitasActivas, 10);
     setActivas(resultadoActivas);
-    let resultadoInactivas = sliceIntoChunks(citasAgendadas.CitasInactivas, 5);
+    let resultadoInactivas = sliceIntoChunks(citasAgendadas.CitasInactivas, 10);
     setInactivas(resultadoInactivas);
+    let resultadoAllCitas = sliceIntoChunks(citasAgendadas.Citas, 10);
+    setArrCitas(resultadoAllCitas);
   }, []);
   console.log(Inactivas);
+
+  // useEffect(() => {
+
+  // }, [success]);
+
   return (
     <>
-      <div data-aos="fade-up">
+      <div data-aos="fade-up" style={{ height:'70vh', overflowY:'scroll',padding:'10px'}}>
         {filtros === "" && (
           <div className={style.layout}>
-            {citasAgendadas && Inactivas?.length === 0 && (
+            {citasAgendadas && arrCita?.length === 0 && (
               <>
                 <div
                   data-aos="flip-up"
@@ -97,7 +99,7 @@ export default function CardCitas({ filtros }) {
               </>
             )}
             {citasAgendadas &&
-              Inactivas?.map((cita) => {
+              arrCita[page]?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -217,22 +219,38 @@ export default function CardCitas({ filtros }) {
 
                         <p>{cita.email}</p>
                       </div>
-                      <div>
-                        <Button
-                          onClick={() => {
-                            handlerPutStateCita(cita.id);
-                          }}
-                          variant="contained"
-                        >
-                          Confirmar{" "}
-                        </Button>
-                      </div>
+                      {cita.activo === false && (
+                        <div>
+                          <Button
+                            onClick={() => {
+                              handlerPutStateCita(cita.id);
+                            }}
+                            variant="contained"
+                          >
+                            Confirmar{" "}
+                          </Button>
+                        </div>
+                      )}
+
+                      {cita.activo === true && (
+                        <div>
+                          <Button
+                             disabled
+                            onClick={() => {
+                              handlerPutStateCita(cita.id);
+                            }}
+                            variant="contained"
+                          >
+                            Confirmar{" "}
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </>
                 );
               })}
-            {Activas &&
-              Activas?.map((cita) => {
+            {/* {Activas &&
+              Activas[page]?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -366,7 +384,7 @@ export default function CardCitas({ filtros }) {
                     </div>
                   </>
                 );
-              })}
+              })} */}
           </div>
         )}
         {filtros === "SinConfirmar" && (
@@ -689,7 +707,9 @@ export default function CardCitas({ filtros }) {
               })}
           </div>
         )}
-        <PaginationCitas
+     
+      </div>
+      <PaginationCitas
           nroPaginas={
             filtros === "Confirmados"
               ? Activas.length
@@ -702,8 +722,6 @@ export default function CardCitas({ filtros }) {
           page={page}
           setPage={setPage}
         />
-      </div>
-
       <div className={style.layout}></div>
     </>
   );
