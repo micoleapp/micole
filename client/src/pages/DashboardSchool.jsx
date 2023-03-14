@@ -658,19 +658,20 @@ function DashboardSchool() {
     console.log(newDays);
     dispatch(postHorariosVacantes(newDays));
     try {
-      axios.put(`/colegios/${user.id}`, {isActive:true})
-      .then(res=>{
-        Swal.fire({
-          icon: "success",
-          title: "Felicitaciones!",
-          text: "Colegio listo para mostrarse en nuestra pagina!",
+      axios
+        .put(`/colegios/${user.id}`, { isActive: true })
+        .then((res) => {
+          Swal.fire({
+            icon: "success",
+            title: "Felicitaciones!",
+            text: "Colegio listo para mostrarse en nuestra pagina!",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      })
-      .catch(err=>{
-        console.log(err)
-      })
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
