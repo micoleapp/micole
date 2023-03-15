@@ -1,4 +1,5 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 import {
   getVacantesGrados,
   getNiveles,
@@ -18,7 +19,8 @@ import {
   getGrados,
   getFilterSchool,
   getCitasAgendado,
-  getHorarios
+  getHorarios,
+  getPagination
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -29,19 +31,25 @@ export const getVacantes = (niveles) => (dispatch) => {
     .catch((err) => console.log(err));
 };
 
-export const getFilterHome = (distritos, grado, ingreso) => (dispatch) => {
+export const getFilterHome = (distritos, grado, ingreso, page) => (dispatch) => {
   dispatch(isLoading());
   axios
-    .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}`)
-    .then((res) => dispatch(getFilterSchool(res.data.colegios)))
+    .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}&limit=5&page=${page}`)
+    .then((res) => {
+      dispatch(getPagination(res.data))
+      dispatch(getFilterSchool(res.data.colegios))
+    })
     .catch((err) => dispatch(getError(err.message)));
 };
 
-export const getFilterListSchool = (data) => (dispatch) => {
+export const getFilterListSchool = (data, page) => (dispatch) => {
   dispatch(isLoading());
   axios
-    .post("/colegios/filter", data)
-    .then((res) => dispatch(getFilterSchool(res.data.colegios)))
+    .post(`/colegios/filter?limit=5&page=${page}`, data)
+    .then((res) => {
+      dispatch(getPagination(res.data))
+      dispatch(getFilterSchool(res.data.colegios))
+    })
     .catch((err) => dispatch(getError(err.message)));
 };
 

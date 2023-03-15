@@ -13,18 +13,24 @@ import { getCitaAgendadas } from "../../redux/SchoolsActions";
 import Chip from "@mui/material/node/Chip";
 import NotFound from "./svg/notFound";
 import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
-
 import Swal from "sweetalert2";
-
+import sliceIntoChunks from "./Paginacion/utils/SliceCitas";
+import PaginationCitas from "./Paginacion/PaginationCitas";
+// import sliceIntoChunks from "../"
 export default function CardCitas({ filtros }) {
   const { success } = useSelector((state) => state.citas);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [Citas, setCita] = useState(citasAgendadas);
-  const [Inactivas, setInactivas] = useState(citasAgendadas.CitasInactivas);
-  const [Activas, setActivas] = useState(Citas.CitasActivas);
 
+  const [arr, setArr] = React.useState([]);
+  const [page, setPage] = React.useState(0);
   const dispatch = useDispatch();
+  const [Inactivas, setInactivas] = useState(Citas.CitasInactivas);
+  // const [Activas, setActivas] = useState(Citas.CitasActivas);
 
+  const [Activas, setActivas] = useState([]);
+  console.log(Activas[page]);
+  console.log(page);
   const comprobacion = (iD) => {
     if (success === "Se activo la Cita.") {
       const CitasConfirmadas = Citas.CitasInactivas.find(
@@ -53,12 +59,13 @@ export default function CardCitas({ filtros }) {
     await comprobacion(iD);
   };
 
-  useEffect(() => {
-    // return () => {
-    //   dispatch(getCitaAgendadas);
-    // };
-  }, [Inactivas.length]);
-
+  React.useEffect(() => {
+    let resultadoActivas = sliceIntoChunks(citasAgendadas.CitasActivas, 5);
+    setActivas(resultadoActivas);
+    let resultadoInactivas = sliceIntoChunks(citasAgendadas.CitasInactivas, 5);
+    setInactivas(resultadoInactivas);
+  }, []);
+  console.log(Inactivas);
   return (
     <>
       <div data-aos="fade-up">
@@ -385,7 +392,7 @@ export default function CardCitas({ filtros }) {
               </>
             )}
             {citasAgendadas &&
-              Inactivas?.map((cita) => {
+              Inactivas[page]?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -519,13 +526,11 @@ export default function CardCitas({ filtros }) {
                   </>
                 );
               })}
-
-           
           </div>
         )}
         {filtros === "Confirmados" && (
           <div className={style.layout}>
-            {citasAgendadas && Activas?.length === 0 && (
+            {citasAgendadas && Activas[page]?.length === 0 && (
               <>
                 <div
                   data-aos="flip-up"
@@ -547,7 +552,7 @@ export default function CardCitas({ filtros }) {
             )}
 
             {Activas &&
-              Activas?.map((cita) => {
+              Activas[page]?.map((cita) => {
                 return (
                   <>
                     <div className={style.container}>
@@ -684,6 +689,19 @@ export default function CardCitas({ filtros }) {
               })}
           </div>
         )}
+        <PaginationCitas
+          nroPaginas={
+            filtros === "Confirmados"
+              ? Activas.length
+              : filtros === "SinConfirmar"
+              ? Inactivas.length
+              : filtros === ""
+              ? citasAgendadas.length
+              : 0
+          }
+          page={page}
+          setPage={setPage}
+        />
       </div>
 
       <div className={style.layout}></div>

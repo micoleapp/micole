@@ -10,7 +10,7 @@ import { MenuItem } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { InputLabel } from "@mui/material";
 import { useSelector } from "react-redux";
-import { getFilterHome } from "../../redux/SchoolsActions";
+import { getFilterHome, getFilterListSchool } from "../../redux/SchoolsActions";
 const yearNow = new Date().getFullYear();
 const Ingreso2 = [yearNow, yearNow+1, yearNow+2];
 
@@ -27,6 +27,11 @@ function FiltrosHome() {
   const toggleFilters = () => {
     setOpenFilter(!OpenFilter);
   };
+
+/* const handleSubmit = (event) => {
+  console.log("hola");
+  dispatch(getFilterListSchool(data, 1));
+} */
 
 const handleValueDistrito =(event)=>{
   console.log(event.target.value)
@@ -131,7 +136,7 @@ const handleValueAño =(event)=>{
 
         <div className={style.container_button}>
           <Link to={`/listschool?distrito=${Distrito}&grado=${Grado}&ingreso=${Ingreso}`}>
-            <button onClick={()=>dispatch(getFilterHome(Distrito,Grado,Ingreso))}>Buscar</button>
+            <button>Buscar</button>
           </Link>
         </div>
       </div>
