@@ -8,14 +8,13 @@ router.get("/success", (req, res) => {
   res.send("Todo bien al 100");
 });
 router.post("/notification", async (req, res) => {
-  console.log("yo soy la mera mera: ");
   const { query } = req;
-  console.log({ query });
   const topic = query.topic;
 
   var merchantOrder;
   var ventas;
   var colegio;
+  var fecha;
 
   switch (topic) {
     case "payment":
@@ -24,6 +23,13 @@ router.post("/notification", async (req, res) => {
 
       merchantOrder = await mercadopago.merchant_orders.findById(
         payment.body.order.id
+      );
+
+      fecha = merchantOrder.body.payments[0].date_approved;
+      fecha = new Date(fecha);
+
+      fecha.setMonth(
+        fecha.getMonth() + Number(merchantOrder.body.items[0].quantity)
       );
 
       ventas = await Ventas.findOne({
@@ -37,17 +43,20 @@ router.post("/notification", async (req, res) => {
         if (merchantOrder.body.payments[0].status === "approved") {
           ventas.status = "Paid";
           ventas.mp_payment_id = paymentId;
+          ventas.InicioPlan = merchantOrder.body.payments[0].date_approved;
+          ventas.months = merchantOrder.body.items[0].quantity;
           ventas.PlanPagoId = merchantOrder.body.items[0].id;
+          ventas.vencimientoPlan = fecha;
+
           const plan = merchantOrder.body.items[0].id;
           const idColegio = merchantOrder.body.external_reference;
-          console.log("id del plan=" + plan);
-          console.log("id del Colegio=" + idColegio);
+
           await ventas.setPlan_Pago(plan);
           await ventas.setColegio(idColegio);
 
-          colegio=await Colegio.findOne({where:{id:idColegio}});
+          colegio = await Colegio.findOne({ where: { id: idColegio } });
           await colegio.setPlan_Pago(plan);
-          
+
           await ventas.save();
 
           res.status(200).send(merchantOrder);
