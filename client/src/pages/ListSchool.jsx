@@ -153,10 +153,10 @@ function ListSchool() {
   };
 
   const [type, setType] = React.useState("");
-
+  const [page, setPage] = React.useState(1);
   const [value1, setValue1] = React.useState([0, 4000]);
-
   const [rating, setRating] = React.useState(null);
+
 
   const handleChange1 = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -195,16 +195,19 @@ function ListSchool() {
     distrits,
     grados,
     categories,
+    pagination,
   } = useSelector((state) => state.schools);
 
   useEffect(() => {
-    dispatch(getFilterHome(distritParams, gradoParams, ingresoParams));
     dispatch(getAllDepartaments());
     dispatch(getAllDistrits());
   }, []);
 
-  const items = [1, 2, 3, 4, 5];
+  useEffect(() => {
+    dispatch(getFilterListSchool(data, page));
+  }, [page]);
 
+  const items = [1, 2, 3, 4, 5];
   const [toggle, setToggle] = useState(false);
   const [toggleDistrits, setToggleDistrits] = useState(false);
   const [toggleGrado, setToggleGrado] = useState(false);
@@ -221,12 +224,11 @@ function ListSchool() {
     ingles: english,
     ingreso: ingresoName,
   };
-
   const handleSubmitData = (e) => {
     e.preventDefault();
-    dispatch(getFilterListSchool(data));
+    setPage(1);
+    dispatch(getFilterListSchool(data, page));
   };
-
   const goToDetails = (id) => {
     if (gradoName.length === 0 || ingresoName.length === 0) {
       Swal.fire({
@@ -252,6 +254,10 @@ function ListSchool() {
         {favorito ? "❤️" : "🤍"}
       </button>
     );
+  }
+
+  const handlePageChange = (event,value) => {
+    setPage(value);
   }
 
   return (
@@ -356,7 +362,7 @@ function ListSchool() {
                 }
               >
                 <FormGroup>
-                  {categories.map((cat) => (
+                  {categories?.map((cat) => (
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -559,7 +565,7 @@ function ListSchool() {
           <div className="flex items-center justify-between drop-shadow-md">
             <small>
               Mostrando{" "}
-              <span className="font-semibold">{allschools?.length}</span>{" "}
+              <span className="font-semibold">{pagination?.count}</span>{" "}
               {/* de <span className="font-semibold">{pagination?.count}</span>{" "} */}
               resultados{" "}
             </small>
@@ -594,7 +600,7 @@ function ListSchool() {
             <h1>No hay colegios que coincidan con esos filtros</h1>
           )}
           <div className="flex flex-col gap-5">
-            {!loading
+            {allschools.length > 0
               ? allschools?.map((school, index) => {
                   return (
                     <div
@@ -792,12 +798,12 @@ function ListSchool() {
               display={"flex"}
               sx={{ margin: "20px 0px" }}
             >
-              {/* <Pagination
-                count={Math.ceil(pagination.count / pageSize)}
+              <Pagination
+                count={pagination.pages}
                 onChange={handlePageChange}
+                page={page}
                 color="primary"
-                disabled={disabledPage}
-              /> */}
+              />
             </Box>
           </div>
         </section>

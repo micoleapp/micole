@@ -63,8 +63,9 @@ router.get("/", async (req, res) => {
         {
           model: Vacante,
           include: [{ model: Grado, attributes: ['nombre_grado'] }],
-          required: grado !== "false" || ingreso !== "false" ? true : false,
-          duplicating: grado || ingreso ? false : true,
+          required: grado !== 'false' || ingreso !== 'false' ? true : false,
+          duplicating: grado !== 'false' || ingreso !== 'false' ? false : true,
+
         },
         {
           model: Pais,
@@ -108,15 +109,17 @@ router.get("/", async (req, res) => {
         },
       ],
       where: {
-        ...(distritos && distritos !== 'false' && { DistritoId: distritos }),
+        ...(distritos !== 'false' && { DistritoId: distritos }),
         ...(grado && grado !== 'false' && { '$Vacantes.GradoId$': grado }),
         ...(ingreso && ingreso !== 'false' && { '$Vacantes.año$': ingreso }),
       },
-      limit: limit,
-      offset: skip,
+      //(Sequelize) Problemas con Limit y Offset con los includes hasMany -> https://github.com/sequelize/sequelize/issues/7585
+      /*    limit: limit,
+      offset: skip, */
     });
-
-    const pagination = getPagination(url, page, limit, totalColegios.length);
+    const endIndex = skip + limit;
+    const colegiosPaginados = colegios.slice(skip, endIndex);
+    const pagination = getPagination(url, page, limit, colegios.length);
     res.json({
       count: totalColegios.length,
       pages: Math.ceil(totalColegios.length / limit),
@@ -124,9 +127,8 @@ router.get("/", async (req, res) => {
       next: pagination.next,
       first: pagination.first,
       last: pagination.last,
-      colegios,
+      colegios: colegiosPaginados,
     });
-    /*     res.json(colegios); */
   } catch (err) {
     console.log(err);
     res.json({ err });
@@ -312,11 +314,23 @@ router.post("/filter", async (req, res) => {
           include: [
             {
               model: Grado,
-              attributes: ['nombre_grado']
-            }
+              attributes: ['nombre_grado'],
+            },
           ],
-          required: grado.length !== 0 || ingreso.length !== 0  || pension.length !== 0 || cuota.length !== 0  ? true : false,
-          duplicating: grado.length !== 0 || ingreso.length !== 0  || pension.length !== 0 || cuota.length !== 0  ? false : true,
+          required:
+            grado.length !== 0 ||
+            ingreso.length !== 0 ||
+            pension.length !== 0 ||
+            cuota.length !== 0
+              ? true
+              : false,
+          duplicating:
+            grado.length !== 0 ||
+            ingreso.length !== 0 ||
+            pension.length !== 0 ||
+            cuota.length !== 0
+              ? false
+              : true,
         },
         {
           model: Idioma,
@@ -380,20 +394,22 @@ router.post("/filter", async (req, res) => {
         ...(rating && { $rating$: { [Op.gte]: rating } }),
       },
       order: orderBy,
-      limit: limit,
-      offset: skip,
+       //(Sequelize) Problemas con Limit y Offset con los includes hasMany -> https://github.com/sequelize/sequelize/issues/7585
+/*       limit: limit,
+      offset: skip, */
     });
-    const pagination = getPagination(url, page, limit, totalColegios.length);
+    const endIndex = skip + limit;
+    const colegiosPaginados = colegios.slice(skip, endIndex);
+    const pagination = getPagination(url, page, limit, colegios.length);
     res.json({
-      count: totalColegios.length,
-      pages: Math.ceil(totalColegios.length / limit),
+      count: colegios.length,
+      pages: Math.ceil(colegios.length / limit),
       prev: pagination.prev,
       next: pagination.next,
       first: pagination.first,
       last: pagination.last,
-      colegios,
+      colegios: colegiosPaginados,
     });
-    /* res.json(colegios); */
   } catch (err) {
     res.status(500).send({
       message: err.message,
