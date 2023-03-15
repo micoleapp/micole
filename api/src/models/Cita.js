@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      fecha_cita: {
+      /* fecha_cita: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -30,6 +30,10 @@ module.exports = (sequelize) => {
             }
           },
         },
+      }, */
+      fecha_cita: {
+        type: DataTypes.DATE,
+        allowNull: false,
       },
       hora_cita: {
         type: DataTypes.STRING,
