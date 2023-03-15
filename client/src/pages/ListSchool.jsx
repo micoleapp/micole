@@ -41,66 +41,77 @@ const pageSize = 5;
 
 const types = [
   {
-    label: "Mayor precio Pensión",
+    value: "mayor_precio_pension",
+    label: "Mayor Precio Pensión",
     onClick: () => {
-      console.log("Mayor Precio");
+      console.log("Mayor Precio");    
     },
   },
   {
-    label: "Menor precio Pensión",
+    value: "menor_precio_pension",
+    label: "Menor Precio Pensión",
     onClick: () => {
       console.log("Menor Precio");
     },
   },
   {
+    value: "",
     label: "",
     onClick: () => {
       console.log("divider")
     }
   },
   {
-    label: "Mayor precio Matricula",
+    value: "mayor_precio_matricula",
+    label: "Mayor Precio Matricula",
     onClick: () => {
       console.log("Mayor Precio");
     },
   },
   {
-    label: "Menor precio Matricula",
+    value: "menor_precio_matricula",
+    label: "Menor Precio Matricula",
     onClick: () => {
       console.log("Menor Precio");
     },
   },
   {
-    label: "",
-    onClick: () => {
-      console.log("divider")
-    }
-  },  
-  {
-    label: "Mayor precio Ingreso",
-    onClick: () => {
-      console.log("Mayor Precio");
-    },
-  },
-  {
-    label: "Menor precio Ingreso",
-    onClick: () => {
-      console.log("Menor Precio");
-    },
-  },
-  {
+    value: "",
     label: "",
     onClick: () => {
       console.log("divider")
     }
   },  
   {
+    value: "mayor_precio_ingreso",
+    label: "Mayor Precio Ingreso",
+    onClick: () => {
+      console.log("Mayor Precio");
+    },
+  },
+  {
+    value: "menor_precio_ingreso",
+    label: "Menor Precio Ingreso",
+    onClick: () => {
+      console.log("Menor Precio");
+    },
+  },
+  {
+    value: "",
+    label: "",
+    onClick: () => {
+      console.log("divider")
+    }
+  },  
+  {
+    value: "mayor_rating",
     label: "Mayor Rating",
     onClick: () => {
       console.log("Mayor Precio");
     },
   },
   {
+    value: "menor_rating",
     label: "Menor Rating",
     onClick: () => {
       console.log("Menor Precio");
@@ -144,7 +155,7 @@ function ListSchool() {
   const [ingresoName, setIngresoName] = React.useState(
     ingresoParams !== "false" ? [Number(ingresoParams)] : []
   );
-
+  const [order, setOrder] = React.useState([]);
   const [categorias, setCategorias] = React.useState([]);
   const [english, setEnglish] = React.useState(200);
 
@@ -203,10 +214,14 @@ function ListSchool() {
     dispatch(getAllDistrits());
   }, []);
 
+/*   useEffect(() => {
+    console.log(data);
+  }, [order]); */
+
   useEffect(() => {
     dispatch(getFilterListSchool(data, page));
-  }, [page]);
-
+  }, [page, order]);
+  console.log(allschools);
   const items = [1, 2, 3, 4, 5];
   const [toggle, setToggle] = useState(false);
   const [toggleDistrits, setToggleDistrits] = useState(false);
@@ -223,11 +238,17 @@ function ListSchool() {
     rating,
     ingles: english,
     ingreso: ingresoName,
+    order: order,
   };
   const handleSubmitData = (e) => {
     e.preventDefault();
     setPage(1);
     dispatch(getFilterListSchool(data, page));
+  };
+
+  const handleSort = (value) => {
+    setPage(1);
+    setOrder(value)
   };
   const goToDetails = (id) => {
     if (gradoName.length === 0 || ingresoName.length === 0) {
@@ -565,7 +586,7 @@ function ListSchool() {
           <div className="flex items-center justify-between drop-shadow-md">
             <small>
               Mostrando{" "}
-              <span className="font-semibold">{pagination?.count}</span>{" "}
+              <span className="font-semibold">{allschools.length} de {pagination?.count}</span>{" "}
               {/* de <span className="font-semibold">{pagination?.count}</span>{" "} */}
               resultados{" "}
             </small>
@@ -586,9 +607,9 @@ function ListSchool() {
               >
                 {types.map((type, index) => (
                   <MenuItem
-                    value={type.label}
+                    value={type.value}
                     key={index}
-                    onClick={type.onClick}
+                    onClick={() => type.value !== "" && handleSort(type.value)}
                   >
                     <ListItemText primary={type.label} />
                   </MenuItem>
