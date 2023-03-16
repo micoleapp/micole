@@ -427,8 +427,8 @@ const informeUsuarioMail = (user, actualDate) => {
                         color: #82899a;
                         padding-left: 24px;
                         padding-right: 24px;
-                        padding-top: 64px;
-                        padding-bottom: 64px;
+                        padding-top: 32px;
+                        padding-bottom: 32px;
                       "
                     >
                       <table
@@ -500,9 +500,9 @@ const informeUsuarioMail = (user, actualDate) => {
                           line-height: 39px;
                         "
                       >
-                        Gracias por tu interés en MiCole
+                        Confirmación de solicitud 
                       </h2>
-                      <p style="margin-top: 0px; margin-bottom: 0px">
+                      <p style=" font-size:12px; margin-top: 0px; margin-bottom: 0px">
                         Tu Solicitud ha sido enviada correctamente.
                       </p>
                     </td>
@@ -635,16 +635,30 @@ const informeUsuarioMail = (user, actualDate) => {
                                   line-height: 24px;
                                   max-width: 584px;
                                   color: #424651;
-                                  text-align: center;
+                                  text-align: left;
                                 "
                               >
-                                <p style="margin-top: 0px; margin-bottom: 0px">
-                                  Hemos recibido su solicitud de información y
-                                  estamos encantados de poder brindarle más
-                                  detalles sobre MiCole. Un miembro de nuestro
-                                  equipo se comunicará con usted en breve para
-                                  proporcionarle la información que necesita y
-                                  responder a cualquier pregunta que pueda tener.
+                                <p style="margin-top: 0px; margin-bottom: 20px">
+                                  Estimado colegio <b>${user.nombre_colegio},</b>
+                                </p>
+                                <p style="margin-top: 0px; margin-bottom: 20px">
+                                  Le escribimos para confirmar que hemos recibido
+                                  su solicitud para recibir más información sobre
+                                  el buscador de colegios <b>MiCole</b>. Queremos
+                                  agradecerle por su interés y por considerar la
+                                  posibilidad de unirse a nuestra plataforma.
+                                </p>
+                                <p style="margin-top: 0px; margin-bottom: 20px">
+                                  En breve nos pondremos en contacto con ustedes
+                                  con más detalles sobre cómo <b>MiCole</b> puede ayudar
+                                  a su colegio a conectarse con las familias en
+                                  busca de una educación para sus hijos. Si tiene
+                                  alguna pregunta no dude en ponerse en contacto
+                                  con nosotros y estaremos encantados de ayudarle.
+                                </p>
+                                <p><b>Atentamente,</b></p>
+                                <p>
+                                  <b style="color: #126de5">Equipo de MiCole</b>
                                 </p>
                               </div>
                               <!--[if mso]></td></tr></table><![endif]-->
@@ -662,151 +676,6 @@ const informeUsuarioMail = (user, actualDate) => {
         </tbody>
       </table>
   
-      <!-- spacer -->
-      <table
-        width="100%"
-        cellspacing="0"
-        cellpadding="0"
-        border="0"
-        role="presentation"
-      >
-        <tbody>
-          <tr>
-            <td
-              class="o_bg-light o_px-xs"
-              align="center"
-              style="
-                background-color: #dbe5ea;
-                padding-left: 8px;
-                padding-right: 8px;
-              "
-            >
-              <!--[if mso]><table width="632" cellspacing="0" cellpadding="0" border="0" role="presentation"><tbody><tr><td><![endif]-->
-              <table
-                class="o_block"
-                width="100%"
-                cellspacing="0"
-                cellpadding="0"
-                border="0"
-                role="presentation"
-                style="max-width: 632px; margin: 0 auto"
-              >
-                <tbody>
-                  <tr>
-                    <td
-                      class="o_bg-white"
-                      style="
-                        font-size: 24px;
-                        line-height: 24px;
-                        height: 24px;
-                        background-color: #ffffff;
-                      "
-                    >
-                      &nbsp;
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <!--[if mso]></td></tr></table><![endif]-->
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- button-primary -->
-      <table
-        width="100%"
-        cellspacing="0"
-        cellpadding="0"
-        border="0"
-        role="presentation"
-      >
-        <tbody>
-          <tr>
-            <td
-              class="o_bg-light o_px-xs"
-              align="center"
-              style="
-                background-color: #dbe5ea;
-                padding-left: 8px;
-                padding-right: 8px;
-              "
-            >
-              <!--[if mso]><table width="632" cellspacing="0" cellpadding="0" border="0" role="presentation"><tbody><tr><td><![endif]-->
-              <table
-                class="o_block"
-                width="100%"
-                cellspacing="0"
-                cellpadding="0"
-                border="0"
-                role="presentation"
-                style="max-width: 632px; margin: 0 auto"
-              >
-                <tbody>
-                  <tr>
-                    <td
-                      class="o_bg-white o_px-md o_py-xs"
-                      align="center"
-                      style="
-                        background-color: #ffffff;
-                        padding-left: 24px;
-                        padding-right: 24px;
-                        padding-top: 8px;
-                        padding-bottom: 8px;
-                      "
-                    >
-                      <table
-                        align="center"
-                        cellspacing="0"
-                        cellpadding="0"
-                        border="0"
-                        role="presentation"
-                      >
-                        <tbody>
-                          <tr>
-                            <td
-                              width="300"
-                              class="o_btn o_bg-primary o_br o_heading o_text"
-                              align="center"
-                              style="
-                                font-family: Helvetica, Arial, sans-serif;
-                                font-weight: bold;
-                                margin-top: 0px;
-                                margin-bottom: 0px;
-                                font-size: 16px;
-                                line-height: 24px;
-                                mso-padding-alt: 12px 24px;
-                                background-color: #126de5;
-                                border-radius: 4px;
-                              "
-                            >
-                              <a
-                                class="o_text-white"
-                                href="https://www.micole.com.pe"
-                                target="_blank"
-                                style="
-                                  text-decoration: none;
-                                  outline: none;
-                                  color: #ffffff;
-                                  display: block;
-                                  padding: 12px 24px;
-                                  mso-text-raise: 3px;
-                                "
-                                >Ver Beneficios de MiCole</a
-                              >
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <!--[if mso]></td></tr></table><![endif]-->
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- spacer-lg -->
       <table
         width="100%"
         cellspacing="0"
@@ -842,7 +711,7 @@ const informeUsuarioMail = (user, actualDate) => {
                       style="
                         font-size: 48px;
                         line-height: 48px;
-                        height: 48px;
+                        height: 32px;
                         background-color: #ffffff;
                       "
                     >

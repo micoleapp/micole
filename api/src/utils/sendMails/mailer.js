@@ -49,7 +49,7 @@ const sendMailInforme = async(user) => {
   await transporter.sendMail({
     from: '"MiCole App " <micole.test.app@gmail.com>',
     to: `${user.email}`,
-    subject: "Solicitud de Informe | MiCole",
+    subject: "Confirmación de solicitud de información sobre MiCole",
     html: informeMailUser(user, actualDate)
   });
   return;
@@ -59,8 +59,8 @@ const sendMailInformeAdmin = async(user) => {
   const transporter = createTransport();
   await transporter.sendMail({
     from: '"MiCole App " <micole.test.app@gmail.com>',
-    to: `e.ce.max.ef@gmail.com`,
-    subject: "Solicitud de Informe | MiCole",
+    to: `informes@micole.com.pe`,
+    subject: "Nueva solicitud de información sobre MiCole",
     html: informeMailAdmin(user, actualDate)
   });
   return;

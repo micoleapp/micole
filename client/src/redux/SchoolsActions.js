@@ -31,10 +31,10 @@ export const getVacantes = (niveles) => (dispatch) => {
     .catch((err) => console.log(err));
 };
 
-export const getFilterHome = (distritos, grado, ingreso) => (dispatch) => {
+export const getFilterHome = (distritos, grado, ingreso, page) => (dispatch) => {
   dispatch(isLoading());
   axios
-    .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}&limit=10&page=1`)
+    .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}&limit=5&page=${page}`)
     .then((res) => {
       dispatch(getPagination(res.data))
       dispatch(getFilterSchool(res.data.colegios))
@@ -42,10 +42,10 @@ export const getFilterHome = (distritos, grado, ingreso) => (dispatch) => {
     .catch((err) => dispatch(getError(err.message)));
 };
 
-export const getFilterListSchool = (data) => (dispatch) => {
+export const getFilterListSchool = (data, page) => (dispatch) => {
   dispatch(isLoading());
   axios
-    .post("/colegios/filter", data)
+    .post(`/colegios/filter?limit=5&page=${page}`, data)
     .then((res) => {
       dispatch(getPagination(res.data))
       dispatch(getFilterSchool(res.data.colegios))

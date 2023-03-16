@@ -41,66 +41,77 @@ const pageSize = 5;
 
 const types = [
   {
-    label: "Mayor precio Pensión",
+    value: "mayor_precio_pension",
+    label: "Mayor Precio Pensión",
     onClick: () => {
-      console.log("Mayor Precio");
+      console.log("Mayor Precio");    
     },
   },
   {
-    label: "Menor precio Pensión",
+    value: "menor_precio_pension",
+    label: "Menor Precio Pensión",
     onClick: () => {
       console.log("Menor Precio");
     },
   },
   {
+    value: "",
     label: "",
     onClick: () => {
       console.log("divider")
     }
   },
   {
-    label: "Mayor precio Matricula",
+    value: "mayor_precio_matricula",
+    label: "Mayor Precio Matricula",
     onClick: () => {
       console.log("Mayor Precio");
     },
   },
   {
-    label: "Menor precio Matricula",
+    value: "menor_precio_matricula",
+    label: "Menor Precio Matricula",
     onClick: () => {
       console.log("Menor Precio");
     },
   },
   {
-    label: "",
-    onClick: () => {
-      console.log("divider")
-    }
-  },  
-  {
-    label: "Mayor precio Ingreso",
-    onClick: () => {
-      console.log("Mayor Precio");
-    },
-  },
-  {
-    label: "Menor precio Ingreso",
-    onClick: () => {
-      console.log("Menor Precio");
-    },
-  },
-  {
+    value: "",
     label: "",
     onClick: () => {
       console.log("divider")
     }
   },  
   {
+    value: "mayor_precio_ingreso",
+    label: "Mayor Precio Ingreso",
+    onClick: () => {
+      console.log("Mayor Precio");
+    },
+  },
+  {
+    value: "menor_precio_ingreso",
+    label: "Menor Precio Ingreso",
+    onClick: () => {
+      console.log("Menor Precio");
+    },
+  },
+  {
+    value: "",
+    label: "",
+    onClick: () => {
+      console.log("divider")
+    }
+  },  
+  {
+    value: "mayor_rating",
     label: "Mayor Rating",
     onClick: () => {
       console.log("Mayor Precio");
     },
   },
   {
+    value: "menor_rating",
     label: "Menor Rating",
     onClick: () => {
       console.log("Menor Precio");
@@ -144,7 +155,7 @@ function ListSchool() {
   const [ingresoName, setIngresoName] = React.useState(
     ingresoParams !== "false" ? [Number(ingresoParams)] : []
   );
-
+  const [order, setOrder] = React.useState([]);
   const [categorias, setCategorias] = React.useState([]);
   const [english, setEnglish] = React.useState(200);
 
@@ -153,10 +164,10 @@ function ListSchool() {
   };
 
   const [type, setType] = React.useState("");
-
+  const [page, setPage] = React.useState(1);
   const [value1, setValue1] = React.useState([0, 4000]);
-
   const [rating, setRating] = React.useState(null);
+
 
   const handleChange1 = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -195,17 +206,23 @@ function ListSchool() {
     distrits,
     grados,
     categories,
-    pagination
+    pagination,
   } = useSelector((state) => state.schools);
 
   useEffect(() => {
-    dispatch(getFilterHome(distritParams, gradoParams, ingresoParams));
     dispatch(getAllDepartaments());
     dispatch(getAllDistrits());
   }, []);
 
-  const items = [1, 2, 3, 4, 5];
+/*   useEffect(() => {
+    console.log(data);
+  }, [order]); */
 
+  useEffect(() => {
+    dispatch(getFilterListSchool(data, page));
+  }, [page, order]);
+  console.log(allschools);
+  const items = [1, 2, 3, 4, 5];
   const [toggle, setToggle] = useState(false);
   const [toggleDistrits, setToggleDistrits] = useState(false);
   const [toggleGrado, setToggleGrado] = useState(false);
@@ -221,13 +238,18 @@ function ListSchool() {
     rating,
     ingles: english,
     ingreso: ingresoName,
+    order: order,
   };
-
   const handleSubmitData = (e) => {
     e.preventDefault();
-    dispatch(getFilterListSchool(data));
+    setPage(1);
+    dispatch(getFilterListSchool(data, page));
   };
 
+  const handleSort = (value) => {
+    setPage(1);
+    setOrder(value)
+  };
   const goToDetails = (id) => {
     if (gradoName.length === 0 || ingresoName.length === 0) {
       Swal.fire({
@@ -256,7 +278,7 @@ function ListSchool() {
   }
 
   const handlePageChange = (event,value) => {
-    console.log(value)
+    setPage(value);
   }
 
   return (
@@ -361,7 +383,7 @@ function ListSchool() {
                 }
               >
                 <FormGroup>
-                  {categories.map((cat) => (
+                  {categories?.map((cat) => (
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -564,7 +586,7 @@ function ListSchool() {
           <div className="flex items-center justify-between drop-shadow-md">
             <small>
               Mostrando{" "}
-              <span className="font-semibold">{allschools?.length}</span>{" "}
+              <span className="font-semibold">{allschools.length} de {pagination?.count}</span>{" "}
               {/* de <span className="font-semibold">{pagination?.count}</span>{" "} */}
               resultados{" "}
             </small>
@@ -585,9 +607,9 @@ function ListSchool() {
               >
                 {types.map((type, index) => (
                   <MenuItem
-                    value={type.label}
+                    value={type.value}
                     key={index}
-                    onClick={type.onClick}
+                    onClick={() => type.value !== "" && handleSort(type.value)}
                   >
                     <ListItemText primary={type.label} />
                   </MenuItem>
@@ -599,7 +621,7 @@ function ListSchool() {
             <h1>No hay colegios que coincidan con esos filtros</h1>
           )}
           <div className="flex flex-col gap-5">
-            {!loading
+            {allschools.length > 0
               ? allschools?.map((school, index) => {
                   return (
                     <div
@@ -800,6 +822,7 @@ function ListSchool() {
               <Pagination
                 count={pagination.pages}
                 onChange={handlePageChange}
+                page={page}
                 color="primary"
               />
             </Box>
