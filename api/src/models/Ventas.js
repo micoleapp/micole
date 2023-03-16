@@ -35,6 +35,10 @@ module.exports = (sequelize) => {
       vencimientoPlan: {
         type: DataTypes.DATEONLY,
       },
+      activo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     },
     {
       timestamps: false,

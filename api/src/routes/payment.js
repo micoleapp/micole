@@ -15,6 +15,7 @@ router.post("/notification", async (req, res) => {
   var ventas;
   var colegio;
   var fecha;
+  var planVencido;
 
   switch (topic) {
     case "payment":
@@ -37,6 +38,7 @@ router.post("/notification", async (req, res) => {
           mp_merchantOrder_id: [merchantOrder.body.id],
         },
       });
+
       console.log(merchantOrder.body);
 
       if (ventas && ventas.status === "Pending") {
@@ -51,13 +53,21 @@ router.post("/notification", async (req, res) => {
           const plan = merchantOrder.body.items[0].id;
           const idColegio = merchantOrder.body.external_reference;
 
+          planVencido = await Ventas.findOne({
+            where: {
+              ColegioId: idColegio,
+              activo: true,
+            },
+          });
+
+          planVencido.activo = false;
           await ventas.setPlan_Pago(plan);
           await ventas.setColegio(idColegio);
 
           colegio = await Colegio.findOne({ where: { id: idColegio } });
           await colegio.setPlan_Pago(plan);
-
           await ventas.save();
+          await planVencido.save();
 
           res.status(200).send(merchantOrder);
         }

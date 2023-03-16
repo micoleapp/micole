@@ -22,11 +22,13 @@ router.get("/", async (req, res) => {
         "months",
         "InicioPlan",
         "vencimientoPlan",
+        "activo"
       ],
       where: {
         ColegioId: idColegio,
       },
     });
+    venta.sort((x, y) => y.activo - x.activo);
 
     res.json(venta);
   } catch (err) {
