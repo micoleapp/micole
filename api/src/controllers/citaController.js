@@ -100,7 +100,7 @@ const getCitas = async (req, res, next) => {
       CitasActivas,
       CitasActivasMesActual,
       CitasPermitidasMesActual,
-      CitasNoPermitidasMesActual: CitasInactivasMesActual.length - CitasPermitidasMesActual.length,
+      CantidadCitasNoPermitidasMesActual: CitasInactivasMesActual.length - CitasPermitidasMesActual.length,
       CitasInactivasTotales: CitasInactivas.length - CitasPermitidasMesActual.length,
       CitasInactivas
     });
