@@ -31,7 +31,7 @@ export default function CardCitas({ filtros }) {
   const [Inactivas, setInactivas] = useState([]);
   const [Activas, setActivas] = useState([]);
 //LOGICA CONFIRMACION DE CITAS
-
+console.log(citasAgendadas)
   const comprobacion = (iD) => {
     if (success === "Se activo la Cita.") {
       console.log(Inactivas);
@@ -70,6 +70,7 @@ export default function CardCitas({ filtros }) {
     let resultadoCitaNoPermitidas = sliceIntoChunks(citasAgendadas.CitasInactivas, 10);
     setArrCitaNoPermitidas(resultadoCitaNoPermitidas);
     setArrCitas( resultadoActivas )
+    
   }, []);
 
   return (
@@ -286,8 +287,8 @@ export default function CardCitas({ filtros }) {
                   <ContentPasteSearchOutlinedIcon
                     style={{ color: "#0061DF" }}
                   />
-                 { arrCitaNoPermitidas.length ===0 && <h1>No hay solicitudes pendientes o ya has llegado al limite de tu plan</h1>}
-                 { arrCitaNoPermitidas.length > 0 && <h1>Ya has llegado al limite de tu plan</h1>}
+                 {  Inactivas.length ===0 && <h1>No hay solicitudes pendientes</h1>}
+                 {/* { arrCitaNoPermitidas.length > 0 && <h1>Ya has llegado al limite de tu plan</h1>} */}
                 </div>
                   </>
                 )}
