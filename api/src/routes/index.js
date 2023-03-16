@@ -17,8 +17,11 @@ const nivelRouter = require("./nivel.js");
 const afiliacionRouter = require("./AfiliacionRoutes.js");
 const citaRouter = require("./citaRouter");
 const paymentRouter = require("./payment");
+const ventasRouter = require("./ventas");
 const reviewRouter = require("./reviewRouter");
 const informeRouter = require("./informeRouter");
+const metodosRouter = require("./metodos");
+const dificultadesRouter = require("./dificultades");
 
 const router = Router();
 
@@ -37,6 +40,9 @@ router.use("/afiliaciones", afiliacionRouter);
 router.use("/citas", citaRouter);
 router.use("/reviews", reviewRouter);
 router.use("/payments", paymentRouter);
+router.use("/ventas", ventasRouter);
+router.use("/metodos", metodosRouter);
+router.use("/dificultades", dificultadesRouter);
 // router.use("/informes", informeRouter);
 router.use("/informes", informeRouter);
 

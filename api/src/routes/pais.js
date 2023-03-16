@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
       pais.save();
       res.status(200).json(pais);
     } else {
-      res.status(500).json([{ error: "Producto existente" }]);
+      res.status(500).json([{ error: "Pais existente" }]);
     }
   } catch (err) {
     res.status(500).json({ err });
