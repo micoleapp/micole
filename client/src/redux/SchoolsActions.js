@@ -184,6 +184,7 @@ export const postCita = (cita) => (dispatch) => {
         añoIngreso,
         grado,
         ColegioId
+
       })
       .then(res=>{
         Swal.fire({
@@ -219,6 +220,7 @@ export const getCitaAgendadas = () => (dispatch) => {
       });
     });
 };
+
 
 
 export const getHorariosSchool = () => (dispatch) => {

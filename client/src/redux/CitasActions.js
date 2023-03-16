@@ -8,7 +8,7 @@ import {
   getSuccess,
   cleanSuccess,
 } from "./CitasSlice";
-
+import Swal from 'sweetalert2'
 export const getCita = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
@@ -66,7 +66,14 @@ export const deleteCita = (idCita) => (dispatch) => {
   console.log(idCita);
   axios
     .delete(`/citas/${idCita}`)
-    .then((res) => dispatch(getSuccess(res.data)))
+    .then((res) =>{ 
+      dispatch(getSuccess(res.data))
+      Swal.fire({
+        icon: "success",
+        title: "Cita cancelada con exito",
+        text: 'Se notificará a la familia interesada',
+      });
+    })
     .catch((err) => {
       dispatch(getError(err.response.data.error));
       Swal.fire({

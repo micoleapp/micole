@@ -58,6 +58,13 @@ function NavBar() {
 
       <div className={style.container}>
         <div className={style.items}>
+          {isAuth && (
+          <Link   className={`${style.p} hover-underline-animation`}
+          to={"/enroll"}>
+            Inscribe tu colegio
+        </Link>
+          )}
+
           <Link
             className={`${style.p} hover-underline-animation`}
             to={"/?categorias=1"}
@@ -112,6 +119,12 @@ function NavBar() {
       {OpenLogin && <ModalLogin handlerClose={setOpenLogin} OpenLogin={OpenLogin} />}
       <div className={`bg-[#0061dd] w-[100vw] absolute top-16 z-[500] ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-all duration-300 md:hidden rounded-b-md`}>
         <div className="flex flex-col justify-center items-center gap-5 p-5">
+        {isAuth && (
+          <Link   className={`${style.p} hover-underline-animation`}
+          to={"/enroll"} onClick={()=>setOpen(!isOpen)}>
+            Inscribe tu colegio
+        </Link>
+          )}
           <Link
             className={`${style.p} hover-underline-animation`}
             to={"/?categorias=1"}
