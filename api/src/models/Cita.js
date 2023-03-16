@@ -32,7 +32,7 @@ module.exports = (sequelize) => {
         },
       }, */
       fecha_cita: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
       },
       hora_cita: {

@@ -1,5 +1,6 @@
 const { Cita, Colegio, Grado, Plan_Pago } = require('../db');
 const { Op } = require('sequelize');
+const moment = require('moment');
 
 const getCitas = async (req, res, next) => {
   const tokenUser = req.user;
@@ -11,48 +12,98 @@ const getCitas = async (req, res, next) => {
         message: 'El usuario no es un Colegio',
       });
     }
+    const fecha_actual = new Date();
+    const year = fecha_actual.getFullYear();
+    const mes_actual = fecha_actual.getMonth() + 1;
+    const firstDayOfMonth = new Date(year, mes_actual - 1, 1);
+    const lastDayOfMonth = new Date(year, mes_actual, 0);
     const include = { include: [{ model: Grado }] };
     const plan_pago = await Plan_Pago.findOne({
       where: { id: user.PlanPagoId },
     });
-    const Citas = await Cita.findAll({
-      ...include,
-    });
+
     const CitasActivas = await Cita.findAll({
-      where: { ColegioId: user.id, activo: true },
-      ...include,
-    });
-    const CitasInactivas = await Cita.findAll({
-      where: { ColegioId: user.id, activo: false },
-      ...include,
-      limit: plan_pago.cantidad_familias,
-    });
-    const fecha_actual = new Date();
-    const mes_actual = fecha_actual.getMonth() + 1;
-    console.log(mes_actual, fecha_actual.getFullYear());
-    console.log(new Date(fecha_actual.getFullYear(), mes_actual - 1, 1));
-    console.log(new Date(fecha_actual.getFullYear(), mes_actual, 0));
-    console.log(new Date(Citas[0].fecha_cita));
-    var elementos_fecha = Citas[0].fecha_cita.split('/');
-    var anio = elementos_fecha[2];
-    var mes = elementos_fecha[1] - 1;
-    var dia = elementos_fecha[0];
-    var fecha = new Date(anio, mes, dia);
-    console.log(fecha);
-    /*  const CitasInactivasMesActual = await Cita.findAll({
       where: {
-        ColegioId: tokenUser.id,
+        ColegioId: user.id,
+        activo: true,
+      },
+      ...include,
+      order: [["fecha_cita", "ASC"]],
+    });
+
+    const CitasInactivas = await Cita.findAll({
+      where: {
+        ColegioId: user.id,
         activo: false,
+      },
+      ...include,
+      order: [["fecha_cita", "ASC"]],
+    });
+
+    const CitasActivasMesActual = await Cita.findAll({
+      where: {
+        ColegioId: user.id,
+        activo: true,
         fecha_cita: {
           [Op.and]: [
-            { [Op.gte]: new Date(fecha_actual.getFullYear(), mes_actual - 1, 1) },
-            { [Op.lte]: new Date(fecha_actual.getFullYear(), mes_actual, 0) },
+            { [Op.gte]: firstDayOfMonth },
+            { [Op.lte]: lastDayOfMonth },
           ],
         },
       },
       ...include,
-    }); */
-    res.status(200).send({ Citas, CitasActivas, CitasInactivas });
+      order: [["fecha_cita", "ASC"]],
+    });
+
+    const CitasInactivasMesActual = await Cita.findAll({
+      where: {
+        ColegioId: user.id,
+        activo: false,
+        fecha_cita: {
+          [Op.and]: [
+            { [Op.gte]: firstDayOfMonth },
+            { [Op.lte]: lastDayOfMonth },
+          ],
+        },
+      },
+      ...include,
+      order: [["fecha_cita", "ASC"]],
+    });
+
+    let cantidadCitasPermitidasMesActual = 0;
+    if (CitasActivasMesActual.length < plan_pago.cantidad_familias) {
+      cantidadCitasPermitidasMesActual = plan_pago.cantidad_familias - CitasActivasMesActual.length;
+    }
+
+  
+    let CitasPermitidasMesActual = await Cita.findAll({
+      where: {
+        ColegioId: user.id,
+        activo: false,
+        fecha_cita: {
+          [Op.and]: [
+            { [Op.gte]: firstDayOfMonth },
+            { [Op.lte]: lastDayOfMonth },
+          ],
+        },
+      },
+      ...include,
+      order: [["fecha_cita", "ASC"]],
+      limit: cantidadCitasPermitidasMesActual,
+    });
+
+    if (CitasActivasMesActual.length >= plan_pago.cantidad_familias) {
+      CitasPermitidasMesActual = [];
+    }
+
+    res.status(200).send({
+      CitasActivas,
+      CitasActivasMesActual,
+      CitasPermitidasMesActual,
+      CitasNoPermitidasMesActual: CitasInactivasMesActual.length - CitasPermitidasMesActual.length,
+      CitasInactivasTotales: CitasInactivas.length - CitasPermitidasMesActual.length,
+      CitasInactivas
+    });
   } catch (error) {
     return next(error);
   }
@@ -96,8 +147,9 @@ const createCita = async (req, res, next) => {
     ColegioId,
   } = req.body;
   try {
+    const fechaCita = moment(date, ['DD/MM/YYYY', 'YYYY-MM-DD']);
     const ifExists = await Cita.findOne({
-      where: { email: correo, fecha_cita: date, ColegioId },
+      where: { email: correo, fecha_cita: fechaCita, ColegioId },
     });
     if (ifExists) {
       return next({
@@ -106,13 +158,8 @@ const createCita = async (req, res, next) => {
       });
     }
     const gradoId = await Grado.findOne({ where: { nombre_grado: grado } });
-    var fechaSinFormateo = date.split('/');
-    var anio = fechaSinFormateo[2];
-    var mes = fechaSinFormateo[1] - 1;
-    var dia = fechaSinFormateo[0];
-    var fechaFormateada = new Date(anio, mes, dia);
     const newCita = await Cita.create({
-      fecha_cita: fechaFormateada,
+      fecha_cita: fechaCita,
       hora_cita: time,
       modalidad: modo,
       nombre: nombre,
