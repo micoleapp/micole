@@ -199,7 +199,7 @@ const signUp = async (req, res, next) => {
         nombre: newColegio.nombre_colegio,
         rol: newAuth.rol,
       };
-      mailer.sendMailSignUp(sanitizedSchool, "Colegio"); //Enviamos el mail de Confirmación de Registro para el Usuario Colegio
+      /* mailer.sendMailSignUp(sanitizedSchool, "Colegio"); */ //Enviamos el mail de Confirmación de Registro para el Usuario Colegio
       return res.status(201).send(sanitizedSchool);
     }
     const newUser = await User.create({ nombre, apellidos, dni, idAuth });
@@ -209,7 +209,7 @@ const signUp = async (req, res, next) => {
       rol: newAuth.rol,
       avatar: newUser.avatar,
     };
-    mailer.sendMailSignUp(sanitizedUser, "User"); //Enviamos el mail de Confirmación de Registro para el Usuario Normal
+    /* mailer.sendMailSignUp(sanitizedUser, "User"); */ //Enviamos el mail de Confirmación de Registro para el Usuario Normal
     return res.status(201).send(sanitizedUser);
   } catch (error) {
     return next(error);

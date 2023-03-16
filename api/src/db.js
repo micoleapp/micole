@@ -85,7 +85,9 @@ const {
   Afiliacion_tipo,
   Afiliacion,
   Cita,
-  Ventas
+  Ventas,
+  Metodos,
+  Dificultades,
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -165,28 +167,28 @@ Infraestructura.belongsToMany(Colegio, {
 });
 
 Colegio.belongsToMany(Nivel, {
-  through: 'Colegio_Nivel',
+  through: "Colegio_Nivel",
   timestamps: false,
 });
 Nivel.belongsToMany(Colegio, {
-  through: 'Colegio_Nivel',
+  through: "Colegio_Nivel",
   timestamps: false,
 });
 
 Colegio.belongsToMany(Afiliacion, {
-  through: 'Colegio_Afiliacion',
+  through: "Colegio_Afiliacion",
   timestamps: false,
 });
 Afiliacion.belongsToMany(Colegio, {
-  through: 'Colegio_Afiliacion',
+  through: "Colegio_Afiliacion",
   timestamps: false,
 });
 
 Nivel.hasMany(Grado, {
-  foreignKey: 'NivelId',
+  foreignKey: "NivelId",
 });
 Grado.belongsTo(Nivel, {
-  foreignKey: 'NivelId',
+  foreignKey: "NivelId",
 });
 
 //------RELACIONES ADMINISTRATIVAS------
@@ -228,45 +230,45 @@ Vacante.belongsTo(Grado, {
 });
 
 Afiliacion_tipo.hasMany(Afiliacion, {
-  foreignKey: 'Afiliacion_tipo_Id',
+  foreignKey: "Afiliacion_tipo_Id",
 });
 Afiliacion.belongsTo(Afiliacion_tipo, {
-  foreignKey: 'Afiliacion_tipo_Id',
+  foreignKey: "Afiliacion_tipo_Id",
 });
 
 Colegio.hasMany(Ventas, {
-  foreignKey: 'ColegioId',
+  foreignKey: "ColegioId",
 });
 Ventas.belongsTo(Colegio, {
-  foreignKey: 'ColegioId',
+  foreignKey: "ColegioId",
 });
 
 Plan_Pago.hasMany(Ventas, {
-  foreignKey: 'PlanPagoId',
+  foreignKey: "PlanPagoId",
 });
 Ventas.belongsTo(Plan_Pago, {
-  foreignKey: 'PlanPagoId',
+  foreignKey: "PlanPagoId",
 });
 
 Colegio.hasMany(Cita, {
-  foreignKey: 'ColegioId',
+  foreignKey: "ColegioId",
 });
 Cita.belongsTo(Colegio, {
-  foreignKey: 'ColegioId',
+  foreignKey: "ColegioId",
 });
 
 Grado.hasMany(Cita, {
-  foreignKey: 'GradoId',
+  foreignKey: "GradoId",
 });
 Cita.belongsTo(Grado, {
-  foreignKey: 'GradoId',
+  foreignKey: "GradoId",
 });
 
 Colegio.hasMany(Review, {
-  foreignKey: 'ColegioId',
+  foreignKey: "ColegioId",
 });
 Review.belongsTo(Colegio, {
-  foreignKey: 'ColegioId',
+  foreignKey: "ColegioId",
 });
 
 Infraestructura_tipo.hasMany(Infraestructura);
