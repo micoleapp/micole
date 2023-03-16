@@ -37,7 +37,6 @@ console.log(citasAgendadas)
       console.log(Inactivas);
       const CitasConfirmadas = Inactivas.find((ele) => ele.id === iD);
       setActivas([...Activas, CitasConfirmadas]);
-
       setInactivas([
         Inactivas[0].filter((ele) => ele.id !== iD),
       ]);
@@ -937,7 +936,7 @@ console.log(citasAgendadas)
         {/* citas ya confirmadas */}
         {filtros === "Confirmados" && (
           <div className={style.layout}>
-            {citasAgendadas && Activas?.length === 0 && (
+            {citasAgendadas && Activas[page]?.length === 0 && (
               <>
                 <div
                   data-aos="flip-up"
@@ -1099,6 +1098,7 @@ console.log(citasAgendadas)
               })}
           </div>
         )}
+     
       </div>
         {/* PAGINADO */}
       <PaginationCitas

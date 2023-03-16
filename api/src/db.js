@@ -250,6 +250,20 @@ Ventas.belongsTo(Plan_Pago, {
   foreignKey: "PlanPagoId",
 });
 
+Colegio.hasMany(Ventas, {
+  foreignKey: 'ColegioId',
+});
+Ventas.belongsTo(Colegio, {
+  foreignKey: 'ColegioId',
+});
+
+Plan_Pago.hasMany(Ventas, {
+  foreignKey: 'PlanPagoId',
+});
+Ventas.belongsTo(Plan_Pago, {
+  foreignKey: 'PlanPagoId',
+});
+
 Colegio.hasMany(Cita, {
   foreignKey: "ColegioId",
 });

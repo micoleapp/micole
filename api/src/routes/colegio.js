@@ -25,7 +25,6 @@ const getPagination = require("../utils/getPagination");
 
 //------- PEDIR TODOS LOS COLEGIOS A LA BD--------
 router.get("/", async (req, res) => {
-  console.log("fffa");
   const { distritos, grado, ingreso } = req.query;
   const cleanedUrl = req.originalUrl.replace(/limit=\d+&page=\d+&?/, "");
   const url = `${req.protocol}://${req.get("host")}${cleanedUrl}`;
@@ -225,7 +224,6 @@ router.get("/:Colegio_id", async (req, res) => {
   }
 });
 router.post("/filter", async (req, res) => {
-  console.log("fffa2");
   const {
     distrits,
     grado,
