@@ -25,11 +25,13 @@ export default function CardCitas({ filtros }) {
   const { oneSchool } = useSelector((state) => state.auth);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [arrCita, setArrCitas] = React.useState([]);
+  const [arrCitaNoPermitidas, setArrCitaNoPermitidas] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const dispatch = useDispatch();
   const [Inactivas, setInactivas] = useState([]);
   const [Activas, setActivas] = useState([]);
 //LOGICA CONFIRMACION DE CITAS
+console.log( oneSchool.Plan_Pago.nombre_plan_pago)
   const comprobacion = (iD) => {
     if (success === "Se activo la Cita.") {
       console.log(Inactivas);
@@ -37,7 +39,7 @@ export default function CardCitas({ filtros }) {
       setActivas([...Activas, CitasConfirmadas]);
 
       setInactivas([
-        citasAgendadas.CitasInactivas.filter((ele) => ele.id !== iD),
+        citasAgendadas.CitasPermitidasMesActual.filter((ele) => ele.id !== iD),
       ]);
 
       Swal.fire({
@@ -49,21 +51,26 @@ export default function CardCitas({ filtros }) {
       dispatch(cleanSuccessState());
     }
   };
-
+// CitasPermitidasMesActual
+// CantidadCitasNoPermitidasMesActual
+// CitasActivasMesActual
   const handlerPutStateCita = async (iD) => {
     dispatch(putCita(iD));
     await comprobacion(iD);
   };
 //  PAGINADO 
+// CitasInactivas
+console.log(citasAgendadas)
   React.useEffect(() => {
-    let resultadoActivas = sliceIntoChunks(citasAgendadas.CitasActivas, 10);
+    let resultadoActivas = sliceIntoChunks(citasAgendadas.CitasActivasMesActual, 10);
     setActivas(resultadoActivas);
-    let resultadoInactivas = sliceIntoChunks(citasAgendadas.CitasInactivas, 10);
+    let resultadoInactivas = sliceIntoChunks(citasAgendadas.CitasPermitidasMesActual, 10);
     setInactivas(resultadoInactivas);
-    let resultadoAllCitas = sliceIntoChunks(citasAgendadas.Citas, 10);
-    setArrCitas(resultadoAllCitas);
+    let resultadoCitaNoPermitidas = sliceIntoChunks(citasAgendadas.CitasInactivas, 10);
+    setArrCitaNoPermitidas(resultadoCitaNoPermitidas);
+    setArrCitas( resultadoActivas )
   }, []);
-
+console.log(arrCita)
   return (
     <>
       <div
@@ -279,7 +286,7 @@ export default function CardCitas({ filtros }) {
                 )}
                 {citasAgendadas &&
                   Inactivas[page]?.map((cita, i) => {
-                    if (i < 2) {
+                    if (i < 3) {
                       return (
                         <>
                           <div className={style.container}>
@@ -446,8 +453,8 @@ export default function CardCitas({ filtros }) {
                 </Card>
               </div>
               <div className="blur-sm  z-10">
-                {citasAgendadas &&
-                  Inactivas[page]?.map((cita, i) => {
+                {citasAgendadas && arrCitaNoPermitidas.length != 0 &&
+                 arrCitaNoPermitidas[page]?.map((cita, i) => {
                     return (
                       <>
                         <div className={style.container}>
@@ -749,7 +756,7 @@ export default function CardCitas({ filtros }) {
                   })}
               </div>
               {/* blur + promocion de planes  */}
-              <div className={style.promoPlan}>
+           {Inactivas.length > 0 &&   <div className={style.promoPlan}>
                 <Card
                   sx={{
                     position: "absolute",
@@ -777,10 +784,10 @@ export default function CardCitas({ filtros }) {
                     <Button variant="contained">Ver planes</Button>
                   </CardContent>
                 </Card>
-              </div>
+              </div>}
               <div className="blur-sm  z-10">
-                {citasAgendadas &&
-                  Inactivas[page]?.map((cita, i) => {
+                {citasAgendadas && Inactivas.length > 0 &&
+                 arrCitaNoPermitidas[page]?.map((cita, i) => {
                     return (
                       <>
                         <div className={style.container}>
@@ -1082,7 +1089,7 @@ export default function CardCitas({ filtros }) {
                   })}
               </div>
               {/* blur + promocion de planes  */}
-              <div className={style.promoPlan}>
+             { Inactivas.length > 0 && <div className={style.promoPlan}>
                 <Card
                   sx={{
                     position: "absolute",
@@ -1110,10 +1117,10 @@ export default function CardCitas({ filtros }) {
                     <Button variant="contained">Ver planes</Button>
                   </CardContent>
                 </Card>
-              </div>
+              </div>}
               <div className="blur-sm  z-10">
-                {citasAgendadas &&
-                  Inactivas[page]?.map((cita, i) => {
+                {citasAgendadas && Inactivas.length > 0 &&
+                 arrCitaNoPermitidas[page]?.map((cita, i) => {
                     return (
                       <>
                         <div className={style.container}>
@@ -1278,7 +1285,7 @@ export default function CardCitas({ filtros }) {
                 )}
                 {citasAgendadas &&
                   Inactivas[page]?.map((cita, i) => {
-                    if (i < 50) {
+                 
                       return (
                         <>
                           <div className={style.container}>
@@ -1411,7 +1418,7 @@ export default function CardCitas({ filtros }) {
                           </div>
                         </>
                       );
-                    }
+                    
                   })}
               </div>
               {/* blur + promocion de planes  */}
@@ -1609,9 +1616,9 @@ export default function CardCitas({ filtros }) {
             )}
 
             {Activas &&
-              oneSchool.Plan_Pago.nombre_plan_pago === "Free" &&
+              
               Activas[page]?.map((cita, i) => {
-                if (i < 3) {
+              
                   return (
                     <>
                       <div className={style.container}>
@@ -1745,7 +1752,7 @@ export default function CardCitas({ filtros }) {
                       </div>
                     </>
                   );
-                }
+               
               })}
           </div>
         )}
