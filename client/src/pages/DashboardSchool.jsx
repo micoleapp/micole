@@ -62,6 +62,7 @@ import CardCitas from "../components/CardsCitas/CardCitas";
 import SelectCitasAg from "../components/CardsCitas/SelectCitasAgendadas/SelectCitasAg";
 import { getCitaAgendadas } from "../redux/SchoolsActions";
 import { getCita } from "../redux/CitasActions";
+import Miplan from "../components/Miplan/Miplan";
 
 const libraries = ["places"];
 
@@ -131,7 +132,7 @@ function DashboardSchool() {
   
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
- console.log( oneSchool.visualizaciones)
+
   const id = user.id;
   useEffect(() => {
     if (user) {
@@ -822,6 +823,7 @@ function DashboardSchool() {
               }`}
             >
               Mi plan
+             
             </span>
           </button>
 
@@ -2473,7 +2475,9 @@ function DashboardSchool() {
             </button>
           </div>
         ) : page === 2 ? (
-          <div className="min-h-screen">Plan</div>
+          <div className="min-h-screen">
+           <Miplan/>
+          </div>
         ) : page === 3 ? (
           <div className="flex flex-col gap-5 min-h-screen px-24">
             <h1 className="text-xl font-semibold">Datos Personales</h1>
