@@ -15,6 +15,8 @@ const {
   Vacante,
   Grado,
   Horario,
+  Metodos,
+  Dificultades,
   Review,
 } = require("../db.js");
 const { Op } = require("sequelize");
@@ -40,9 +42,9 @@ router.get("/", async (req, res) => {
         },
       ],
       where: {
-        ...(distritos && distritos !== 'false' && { DistritoId: distritos }),
-        ...(grado && grado !== 'false' && { '$Vacantes.GradoId$': grado }),
-        ...(ingreso && ingreso !== 'false' && { '$Vacantes.año$': ingreso }),
+        ...(distritos && distritos !== "false" && { DistritoId: distritos }),
+        ...(grado && grado !== "false" && { "$Vacantes.GradoId$": grado }),
+        ...(ingreso && ingreso !== "false" && { "$Vacantes.año$": ingreso }),
       },
       subQuery: false,
     });
@@ -62,10 +64,9 @@ router.get("/", async (req, res) => {
         },
         {
           model: Vacante,
-          include: [{ model: Grado, attributes: ['nombre_grado'] }],
-          required: grado !== 'false' || ingreso !== 'false' ? true : false,
-          duplicating: grado !== 'false' || ingreso !== 'false' ? false : true,
-
+          include: [{ model: Grado, attributes: ["nombre_grado"] }],
+          required: grado !== "false" || ingreso !== "false" ? true : false,
+          duplicating: grado !== "false" || ingreso !== "false" ? false : true,
         },
         {
           model: Pais,
@@ -73,8 +74,7 @@ router.get("/", async (req, res) => {
         },
         {
           model: Departamento,
-          attributes: ['id', 'nombre_departamento'],
-
+          attributes: ["id", "nombre_departamento"],
         },
         {
           model: Provincia,
@@ -109,9 +109,9 @@ router.get("/", async (req, res) => {
         },
       ],
       where: {
-        ...(distritos && distritos !== 'false' && { DistritoId: distritos }),
-        ...(grado && grado !== 'false' && { '$Vacantes.GradoId$': grado }),
-        ...(ingreso && ingreso !== 'false' && { '$Vacantes.año$': ingreso }),
+        ...(distritos && distritos !== "false" && { DistritoId: distritos }),
+        ...(grado && grado !== "false" && { "$Vacantes.GradoId$": grado }),
+        ...(ingreso && ingreso !== "false" && { "$Vacantes.año$": ingreso }),
       },
       //(Sequelize) Problemas con Limit y Offset con los includes hasMany -> https://github.com/sequelize/sequelize/issues/7585
       /*    limit: limit,
@@ -179,6 +179,14 @@ router.get("/:Colegio_id", async (req, res) => {
           attributes: ["id", "nombre_plan_pago"],
         },
         {
+          model: Metodos,
+          attributes: ["id_metodo", "nombre_metodo"],
+        },
+        {
+          model: Dificultades,
+          attributes: ["id_dificultad", "nombre_dificultad"],
+        },
+        {
           model: Horario,
           attributes: ["id", "dia", "horarios"],
         },
@@ -234,27 +242,29 @@ router.post("/filter", async (req, res) => {
     ingles,
     ingreso,
     order,
+    metodos,
+    dificultades,
   } = req.body;
   console.log(req.body);
   let orderBy = null;
   switch (order) {
     case "mayor_precio_pension":
-      orderBy = [[{ model: Vacante },'cuota_pension', "DESC"]];
+      orderBy = [[{ model: Vacante }, "cuota_pension", "DESC"]];
       break;
     case "menor_precio_pension":
-      orderBy =[[{ model: Vacante },'cuota_pension', "ASC"]];
+      orderBy = [[{ model: Vacante }, "cuota_pension", "ASC"]];
       break;
     case "mayor_precio_matricula":
-      orderBy = [[{ model: Vacante }, 'matricula', "DESC"]];
+      orderBy = [[{ model: Vacante }, "matricula", "DESC"]];
       break;
     case "menor_precio_matricula":
-      orderBy = [[{ model: Vacante }, 'matricula', "ASC"]];
+      orderBy = [[{ model: Vacante }, "matricula", "ASC"]];
       break;
     case "mayor_precio_ingreso":
-      orderBy = [[{ model: Vacante }, 'cuota_ingreso', "DESC"]];
+      orderBy = [[{ model: Vacante }, "cuota_ingreso", "DESC"]];
       break;
     case "menor_precio_ingreso":
-      orderBy = [[{ model: Vacante }, 'cuota_ingreso', "ASC"]];
+      orderBy = [[{ model: Vacante }, "cuota_ingreso", "ASC"]];
       break;
     case "mayor_rating":
       orderBy = [["rating", "DESC"]];
@@ -272,7 +282,6 @@ router.post("/filter", async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
   try {
-
     const colegios = await Colegio.findAll({
       include: [
         {
@@ -284,7 +293,7 @@ router.post("/filter", async (req, res) => {
           include: [
             {
               model: Grado,
-              attributes: ['nombre_grado'],
+              attributes: ["nombre_grado"],
             },
           ],
           required:
@@ -330,6 +339,14 @@ router.post("/filter", async (req, res) => {
           attributes: ["id", "nombre_plan_pago"],
         },
         {
+          model: Metodos,
+          attributes: ["id_metodo", "nombre_metodo"],
+        },
+        {
+          model: Dificultades,
+          attributes: ["id_dificultad", "nombre_dificultad"],
+        },
+        {
           model: Horario,
           attributes: ["dia", "horarios"],
         },
@@ -360,12 +377,16 @@ router.post("/filter", async (req, res) => {
           "$Vacantes.cuota_ingreso$": { [Op.between]: [cuota[0], cuota[1]] },
         }),
         ...(tipo.length !== 0 && { "$Categoria.id$": tipo }),
+        ...(metodos.length !== 0 && { "$Metodos.id_metodo$": metodos }),
+        ...(dificultades.length !== 0 && {
+          "$Dificultades.id_dificultad$": dificultades,
+        }),
         ...(ingles && { $horas_idioma_extranjero$: { [Op.lte]: ingles } }),
         ...(rating && { rating: { [Op.gte]: rating } }),
       },
       order: orderBy,
-       //(Sequelize) Problemas con Limit y Offset con los includes hasMany -> https://github.com/sequelize/sequelize/issues/7585
-/*       limit: limit,
+      //(Sequelize) Problemas con Limit y Offset con los includes hasMany -> https://github.com/sequelize/sequelize/issues/7585
+      /*       limit: limit,
       offset: skip, */
     });
     const endIndex = skip + limit;
@@ -389,9 +410,9 @@ router.post("/filter", async (req, res) => {
 
 //--------------------PUT  UN COLEGIO POR ID-------
 router.put("/:id", async (req, res) => {
-  console.log(req.body);
   try {
     const { id } = req.params;
+    console.log(id);
     const {
       direccion,
       alumnos,
@@ -414,6 +435,8 @@ router.put("/:id", async (req, res) => {
       niveles,
       afiliaciones,
       isActive,
+      metodos,
+      dificultades,
     } = req.body;
     let video_url = multimedia.video_url;
     let primera_imagen = multimedia.image;
@@ -445,6 +468,8 @@ router.put("/:id", async (req, res) => {
       { where: { id: id } }
     );
     const colegio = await Colegio.findByPk(id);
+    await colegio.setMetodos(metodos);
+    await colegio.setDificultades(dificultades);
     if (colegio === null) {
       console.log("Not found!");
     } else {
