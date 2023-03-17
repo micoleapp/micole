@@ -240,6 +240,7 @@ function ListSchool() {
     dificultades: dificultadesArray,
     metodos: metodosArray
   };
+  console.log(data)
   const handleSubmitData = (e) => {
     e.preventDefault();
     setPage(1);
@@ -498,7 +499,7 @@ function ListSchool() {
             <div>
               <div className="flex items-center gap-5 z-50 ">
                 <Typography id="input-slider" gutterBottom fontWeight="bold">
-                  Dificultades
+                  Apto para
                 </Typography>
                 <button onClick={() => setToggleDificultad(!toggleDificultad)}>
                   {" "}
@@ -519,6 +520,7 @@ function ListSchool() {
                       key={index}
                       control={
                         <Checkbox
+                          size="small"
                           checked={
                             dificultadesArray.includes(dif.id_dificultad)
                           }
@@ -544,7 +546,7 @@ function ListSchool() {
             <div>
               <div className="flex items-center gap-5 z-50 ">
                 <Typography id="input-slider" gutterBottom fontWeight="bold">
-                  Metodos
+                Métodos pedagógicos
                 </Typography>
                 <button onClick={() => setToggleMetodo(!toggleMetodo)}>
                   {" "}
@@ -833,7 +835,7 @@ function ListSchool() {
                                 cat.nombre_categoria
                               ).join(', ')}... +{school?.Categoria?.slice(3).length} </small>}
                               {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><ImTicket></ImTicket></span>Pensión: S/{" "}
-                                {school.Vacantes[0].pension}
+                                {school.Vacantes[0].cuota_pension}
                               </small> }
 
 
