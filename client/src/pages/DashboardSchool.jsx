@@ -695,20 +695,13 @@ function DashboardSchool() {
 
   const { success } = useSelector((state) => state.citas);
   const { citasAgendadas } = useSelector((state) => state.schools);
-  useEffect(() => {
-    dispatch(getCita());
-  }, [page === 4]);
+
 
   useEffect(() => {
     dispatch(getCitaAgendadas());
+    dispatch (getCita())
   }, [page === 5]);
-  useEffect(() => {
-    dispatch(getCitaAgendadas());
-  }, [citasAgendadas.CitasActivas?.length]);
-  useEffect(() => {
-    dispatch(getCita());
-    dispatch(getCitaAgendadas());
-  }, [success]);
+ 
 
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
