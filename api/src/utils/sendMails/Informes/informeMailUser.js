@@ -198,7 +198,7 @@ const informeUsuarioMail = (user, actualDate) => {
                 visibility: hidden;
               "
             >
-              Email Summary (Hidden)
+             El Colegio ${user.nombre_colegio} solicita información sobre MiCole.
             </td>
           </tr>
         </tbody>
@@ -289,7 +289,7 @@ const informeUsuarioMail = (user, actualDate) => {
                                 src="https://i.imgur.com/bq5PLes.png"
                                 width="136"
                                 height="36"
-                                alt="SimpleApp"
+                                alt="MiCole"
                                 style="
                                   max-width: 136px;
                                   -ms-interpolation-mode: bicubic;
