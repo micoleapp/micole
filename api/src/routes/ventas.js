@@ -3,10 +3,11 @@ const { getGradosByNivel } = require("../controllers/gradoController.js");
 const router = Router();
 const { Ventas, Plan_Pago } = require("../db.js");
 
-//------- PEDIR TODOS LOS GRADOS A LA BD--------
+//------- PEDIR TODAS LAS VENTAS A UN COLEGIO A LA BD--------
 router.get("/", async (req, res) => {
-  const { idColegio } = req.query;
   try {
+    const { id } = req.query;
+    console.log(id);
     let venta;
     venta = await Ventas.findAll({
       include: [
@@ -22,13 +23,14 @@ router.get("/", async (req, res) => {
         "months",
         "InicioPlan",
         "vencimientoPlan",
-        "activo"
+        "activo",
       ],
       where: {
-        ColegioId: idColegio,
+        ColegioId: id,
       },
     });
-    venta.sort((x, y) => y.activo - x.activo);
+    console.log(venta);
+    venta.sort((x, y) => x.activo - y.activo);
 
     res.json(venta);
   } catch (err) {

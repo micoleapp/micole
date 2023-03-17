@@ -216,6 +216,24 @@ Categoria.belongsToMany(Colegio, {
   timestamps: false,
 });
 
+Colegio.belongsToMany(Metodos, {
+  through: "Colegio_Metodos",
+  timestamps: false,
+});
+Metodos.belongsToMany(Colegio, {
+  through: "Colegio_Metodos",
+  timestamps: false,
+});
+
+Colegio.belongsToMany(Dificultades, {
+  through: "Colegio_Dificultades",
+  timestamps: false,
+});
+Dificultades.belongsToMany(Colegio, {
+  through: "Colegio_Dificultades",
+  timestamps: false,
+});
+
 Colegio.hasMany(Vacante, {
   foreignKey: "ColegioId",
 });
