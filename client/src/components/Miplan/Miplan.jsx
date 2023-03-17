@@ -22,7 +22,7 @@ export default function Miplan() {
   const ID = "13b57af0-d887-4bb5-ba41-f5d3f38c650b";
   useEffect( () => {
     axios
-      .get(`/ventas?idColegio=${ID}`)
+      .get(`/ventas?id=${ID}`)
       .then((res) => setPlanPago(res.data))
       .catch((err) => {
         console.log(err.message);
