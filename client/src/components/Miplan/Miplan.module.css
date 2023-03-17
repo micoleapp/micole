@@ -35,3 +35,14 @@ box-shadow:0px 4px 40px rgba(31, 95, 175, 0.15) ;
     font-weight: 600;
     color:#0D263B ;
 }
+
+
+
+@media (max-width: 800px) {
+    .divCard{
+        flex-direction: column;
+    }
+    .divItem{
+        flex-direction: row;
+    }
+}
