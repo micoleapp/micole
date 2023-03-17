@@ -729,9 +729,9 @@ function ListSchool() {
                           alt={school.title}
                           className="w-[400px] h-64 object-cover"
                         />
-                        <span className="absolute bg-[#0061dd] text-white p-1 px-2 rounded-md top-3 left-3">
+                        {/* <span className="absolute bg-[#0061dd] text-white p-1 px-2 rounded-md top-3 left-3">
                           DESTACADO
-                        </span>
+                        </span> */}
                         {school?.Vacantes?.length > 0 &&
                           ingresoName &&
                           gradoName &&
@@ -820,13 +820,14 @@ function ListSchool() {
                                 </div>
                               ))}
                             </div> */}
+                            
                             <div className="grid grid-cols-2 grid-rows-3 w-full gap-y-2">
                               {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"> <span className="text-xl"><CiBag1></CiBag1></span> Cuota de ingreso: S/{" "}
-                                {school.Vacantes[0].cuota_ingreso}
+                                {school.Vacantes.filter(el=>el.año === ingresoName && el.GradoId === gradoName)[0]?.cuota_ingreso}
                               </small> }
                               <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><HiOutlineUsers></HiOutlineUsers></span> {school.numero_estudiantes} Alumnos</small>
                               {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><FaRegMoneyBillAlt></FaRegMoneyBillAlt></span>Matricula: S/{" "}
-                                {school.Vacantes[0].matricula}
+                              {school.Vacantes.filter(el=>el.año === ingresoName && el.GradoId === gradoName)[0]?.matricula}
                               </small> }
                               {school?.Categoria.length < 4 ?                               <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl text-gray-400"><ImAttachment></ImAttachment></span>{school?.Categoria?.map(cat=>
                                 cat.nombre_categoria
@@ -835,7 +836,7 @@ function ListSchool() {
                                 cat.nombre_categoria
                               ).join(', ')}... +{school?.Categoria?.slice(3).length} </small>}
                               {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><ImTicket></ImTicket></span>Pensión: S/{" "}
-                                {school.Vacantes[0].cuota_pension}
+                              {school.Vacantes.filter(el=>el.año === ingresoName && el.GradoId === gradoName)[0]?.cuota_pension}
                               </small> }
 
 
