@@ -209,6 +209,7 @@ export const postCita = (cita) => (dispatch) => {
 export const getCitaAgendadas = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
+  token && 
   axios
     .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
     .then((res) => dispatch(getCitasAgendado(res.data)))

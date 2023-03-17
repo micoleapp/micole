@@ -38,7 +38,6 @@ router.post("/notification", async (req, res) => {
           mp_merchantOrder_id: [merchantOrder.body.id],
         },
       });
-
       console.log(merchantOrder.body);
 
       if (ventas && ventas.status === "Pending") {

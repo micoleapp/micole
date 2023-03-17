@@ -17,11 +17,11 @@ export const getCita = () => (dispatch) => {
     .then((res) => dispatch(getCitas(res.data)))
     .catch((err) => {
       dispatch(getError(err.response.data.error));
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: err.response.data.error,
-      });
+      // Swal.fire({
+      //   icon: "error",
+      //   title: "Oops...",
+      //   text: err.response.data.error,
+      // });
     });
 };
 
