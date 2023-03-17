@@ -468,8 +468,8 @@ router.put("/:id", async (req, res) => {
       { where: { id: id } }
     );
     const colegio = await Colegio.findByPk(id);
-    await colegio.setMetodos(metodos);
-    await colegio.setDificultades(dificultades);
+    await colegio.setMetodos(metodos.map((i) => i.id_metodo));
+    await colegio.setDificultades(dificultades.map((i)=> i.id_dificultad));
     if (colegio === null) {
       console.log("Not found!");
     } else {

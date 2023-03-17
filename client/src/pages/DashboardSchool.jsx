@@ -372,14 +372,14 @@ function DashboardSchool() {
       : [],
     afiliaciones:
       oneSchool?.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
-    dificultades: oneSchool?.dificultades ? oneSchool.dificultades : [],
-    metodos: oneSchool?.metodos ? oneSchool.metodos : [],
+    dificultades: oneSchool?.Dificultades ? oneSchool.Dificultades : [],
+    metodos: oneSchool?.Metodos ? oneSchool.Metodos : [],
   };
 
   const [datosPrincipales, setDatosPrincipales] = useState(
     initialDatosPrincipales
   );
-
+  console.log(datosPrincipales)
   const datosPrincipalesCompleted = () => {
     if (
       datosPrincipales.nombreColegio !== "" &&
@@ -1285,7 +1285,7 @@ function DashboardSchool() {
                             className="text-lg font-medium"
                           >
 ¿Utilizas alguno de estos métodos pedagógicos?                          </label>
-                          <small>Puede marcar mas de una opción</small>
+                          <small>Puede marcar mas de una opción</small> 
                         </div>
                         <div className="flex flex-col lg:grid grid-cols-3">
                           {metodos?.map((level,key) => (
