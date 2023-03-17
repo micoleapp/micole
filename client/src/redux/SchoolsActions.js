@@ -20,7 +20,9 @@ import {
   getFilterSchool,
   getCitasAgendado,
   getHorarios,
-  getPagination
+  getPagination,
+  getMetodos,
+  getDificultades
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -240,3 +242,27 @@ export const getHorariosSchool = () => (dispatch) => {
       });
     });
 };
+
+export const getAllMetodos = () => (dispatch) => {
+  dispatch(isLoading());
+  try {
+    axios
+      .get("/metodos")
+      .then((res) => dispatch(getMetodos(res.data)))
+      .catch((err) => dispatch(getError(err.message)));
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getAllDificultades = () => (dispatch) => {
+  dispatch(isLoading());
+  try {
+    axios
+      .get("/dificultades")
+      .then((res) => dispatch(getDificultades(res.data)))
+      .catch((err) => dispatch(getError(err.message)));
+  } catch (error) {
+    console.log(error)
+  }
+}

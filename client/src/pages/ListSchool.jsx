@@ -37,8 +37,6 @@ import ListItemText from "@mui/material/ListItemText";
 const yearNow = new Date().getFullYear();
 const Ingreso2 = [yearNow, yearNow + 1, yearNow + 2];
 
-const pageSize = 5;
-
 const types = [
   {
     value: "mayor_precio_pension",
@@ -207,27 +205,27 @@ function ListSchool() {
     grados,
     categories,
     pagination,
-  } = useSelector((state) => state.schools);
-
-  useEffect(() => {
-    dispatch(getAllDepartaments());
-    dispatch(getAllDistrits());
-  }, []);
+    dificultades,
+    metodos
+  } = useSelector((state) => state.schools);  
 
 /*   useEffect(() => {
     console.log(data);
   }, [order]); */
+  const [dificultadesArray, setDificultadesArray] = useState([]);
+  const [metodosArray, setMetodosArray] = useState([]);
 
   useEffect(() => {
     dispatch(getFilterListSchool(data, page));
   }, [page, order]);
-  console.log(allschools);
   const items = [1, 2, 3, 4, 5];
   const [toggle, setToggle] = useState(false);
   const [toggleDistrits, setToggleDistrits] = useState(false);
   const [toggleGrado, setToggleGrado] = useState(false);
   const [toggleTypes, setToggleTypes] = useState(false);
   const [toggleAño, setToggleAño] = useState(false);
+  const [toggleDificultad, setToggleDificultad] = useState(false);
+  const [toggleMetodo, setToggleMetodo] = useState(false);
 
   const data = {
     distrits: distritName,
@@ -239,6 +237,8 @@ function ListSchool() {
     ingles: english,
     ingreso: ingresoName,
     order: order,
+    dificultades: dificultadesArray,
+    metodos: metodosArray
   };
   const handleSubmitData = (e) => {
     e.preventDefault();
@@ -495,6 +495,98 @@ function ListSchool() {
                 </FormGroup>
               </div>
             </div>
+            <div>
+              <div className="flex items-center gap-5 z-50 ">
+                <Typography id="input-slider" gutterBottom fontWeight="bold">
+                  Dificultades
+                </Typography>
+                <button onClick={() => setToggleDificultad(!toggleDificultad)}>
+                  {" "}
+                  <FontAwesomeIcon
+                    size="lg"
+                    icon={toggleDificultad ? faArrowUp : faArrowDown}
+                  />
+                </button>
+              </div>
+              <div
+                className={
+                  toggleDificultad ? "block h-[150px] overflow-y-scroll" : "hidden"
+                }
+              >
+                <FormGroup>
+                  {dificultades?.map((dif, index) => (
+                    <FormControlLabel
+                      key={index}
+                      control={
+                        <Checkbox
+                          checked={
+                            dificultadesArray.includes(dif.id_dificultad)
+                          }
+                          onChange={(event, target) => {
+                            if (target) {
+                              setDificultadesArray([...dificultadesArray, dif.id_dificultad]);
+                            } else {
+                              setDificultadesArray(
+                                dificultadesArray.filter(
+                                  (dificultad) => dificultad !== dif.id_dificultad
+                                )
+                              );
+                            }
+                          }}
+                        />
+                      }
+                      label={dif.nombre_dificultad}
+                    />
+                  ))}
+                </FormGroup>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-5 z-50 ">
+                <Typography id="input-slider" gutterBottom fontWeight="bold">
+                  Metodos
+                </Typography>
+                <button onClick={() => setToggleMetodo(!toggleMetodo)}>
+                  {" "}
+                  <FontAwesomeIcon
+                    size="lg"
+                    icon={toggleMetodo ? faArrowUp : faArrowDown}
+                  />
+                </button>
+              </div>
+              <div
+                className={
+                  toggleMetodo ? "block h-[150px] overflow-y-scroll" : "hidden"
+                }
+              >
+                <FormGroup>
+                  {metodos?.map((dif, index) => (
+                    <FormControlLabel
+                      key={index}
+                      control={
+                        <Checkbox
+                          checked={
+                            metodosArray.includes(dif.id_metodo)
+                          }
+                          onChange={(event, target) => {
+                            if (target) {
+                              setMetodosArray([...metodosArray, dif.id_metodo]);
+                            } else {
+                              setMetodosArray(
+                                metodosArray.filter(
+                                  (dificultad) => dificultad !== dif.id_metodo
+                                )
+                              );
+                            }
+                          }}
+                        />
+                      }
+                      label={dif.nombre_metodo}
+                    />
+                  ))}
+                </FormGroup>
+              </div>
+            </div>
             <div className="drop-shadow-md">
               <Typography id="input-slider" gutterBottom fontWeight="bold">
                 Pensión (s/)
@@ -586,7 +678,7 @@ function ListSchool() {
           <div className="flex items-center justify-between drop-shadow-md">
             <small>
               Mostrando{" "}
-              <span className="font-semibold">{allschools.length} de {pagination?.count}</span>{" "}
+              <span className="font-semibold">{allschools.length}</span> de <span className="font-semibold"> {pagination?.count}</span>{" "}
               {/* de <span className="font-semibold">{pagination?.count}</span>{" "} */}
               resultados{" "}
             </small>

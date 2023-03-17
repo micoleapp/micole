@@ -119,7 +119,7 @@ function DashboardSchool() {
   const [completed, setCompleted] = React.useState({});
   const [allData, setAllData] = useState({});
   const [Filtro, setFiltro] = useState("");
-  console.log(Filtro);
+
   const dispatch = useDispatch();
   const {
     categories,
@@ -129,6 +129,8 @@ function DashboardSchool() {
     niveles,
     infraestructura: infraState,
     afiliaciones,
+    dificultades,
+    metodos
   
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
@@ -370,6 +372,8 @@ function DashboardSchool() {
       : [],
     afiliaciones:
       oneSchool?.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
+    dificultades: oneSchool?.dificultades ? oneSchool.dificultades : [],
+    metodos: oneSchool?.metodos ? oneSchool.metodos : [],
   };
 
   const [datosPrincipales, setDatosPrincipales] = useState(
@@ -711,6 +715,8 @@ function DashboardSchool() {
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
 
   console.log(vacantesOffThree);
+
+  console.log(datosPrincipales)
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -1193,8 +1199,9 @@ function DashboardSchool() {
                           <small>Puede marcar mas de una opción</small>
                         </div>
                         <div className="flex flex-col lg:grid grid-cols-3">
-                          {niveles?.map((level) => (
+                          {niveles?.map((level,key) => (
                             <FormControlLabel
+                            key={key}
                               control={
                                 <Checkbox
                                   checked={datosPrincipales.niveles.some(
@@ -1222,6 +1229,95 @@ function DashboardSchool() {
                                 />
                               }
                               label={level.nombre_nivel}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex flex-col">
+                          <label
+                            htmlFor="alumnos"
+                            className="text-lg font-medium"
+                          >
+                            ¿Aceptas estudiantes con alguna de estas dificultades?
+                          </label>
+                          <small>Puede marcar mas de una opción</small>
+                        </div>
+                        <div className="flex flex-col lg:grid grid-cols-3">
+                          {dificultades?.map((level,key) => (
+                            <FormControlLabel
+                            key={key}
+                              control={
+                                <Checkbox
+                                  checked={datosPrincipales.dificultades.some(
+                                    (niv) => niv.id_dificultad === level.id_dificultad
+                                  )}
+                                  onChange={(event, target) => {
+                                    if (target) {
+                                      setDatosPrincipales({
+                                        ...datosPrincipales,
+                                        dificultades: [
+                                          ...datosPrincipales.dificultades,
+                                          level,
+                                        ],
+                                      });
+                                    } else {
+                                      setDatosPrincipales({
+                                        ...datosPrincipales,
+                                        dificultades:
+                                          datosPrincipales.dificultades.filter(
+                                            (cat) => cat.id_dificultad !== level.id_dificultad
+                                          ),
+                                      });
+                                    }
+                                  }}
+                                />
+                              }
+                              label={level.nombre_dificultad}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex flex-col">
+                          <label
+                            htmlFor="alumnos"
+                            className="text-lg font-medium"
+                          >
+¿Utilizas alguno de estos métodos pedagógicos?                          </label>
+                          <small>Puede marcar mas de una opción</small>
+                        </div>
+                        <div className="flex flex-col lg:grid grid-cols-3">
+                          {metodos?.map((level,key) => (
+                            <FormControlLabel
+                            key={key}
+                              control={
+                                <Checkbox
+                                  checked={datosPrincipales.metodos.some(
+                                    (niv) => niv.id_metodo === level.id_metodo
+                                  )}
+                                  onChange={(event, target) => {
+                                    if (target) {
+                                      setDatosPrincipales({
+                                        ...datosPrincipales,
+                                        metodos: [
+                                          ...datosPrincipales.metodos,
+                                          level,
+                                        ],
+                                      });
+                                    } else {
+                                      setDatosPrincipales({
+                                        ...datosPrincipales,
+                                        metodos:
+                                          datosPrincipales.metodos.filter(
+                                            (cat) => cat.id_metodo !== level.id_metodo
+                                          ),
+                                      });
+                                    }
+                                  }}
+                                />
+                              }
+                              label={level.nombre_metodo}
                             />
                           ))}
                         </div>
