@@ -284,8 +284,8 @@ export default function Carrusel() {
     <AliceCarousel
       autoPlay={true}
       infinite={true}
-      animationDuration={2000}
-      autoPlayInterval={1000}
+      animationDuration={10000}
+      autoPlayInterval={0}
       mouseTracking
       items={items}
     />
