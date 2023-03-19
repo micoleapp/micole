@@ -22,6 +22,7 @@ const reviewRouter = require("./reviewRouter");
 const informeRouter = require("./informeRouter");
 const metodosRouter = require("./metodos");
 const dificultadesRouter = require("./dificultades");
+const eventoRouter = require("./eventoRoutes");
 
 const router = Router();
 
@@ -43,8 +44,8 @@ router.use("/payments", paymentRouter);
 router.use("/ventas", ventasRouter);
 router.use("/metodos", metodosRouter);
 router.use("/dificultades", dificultadesRouter);
-// router.use("/informes", informeRouter);
 router.use("/informes", informeRouter);
+router.use("/eventos", eventoRouter);
 
 router.get("/", (req, res) =>
   res.json({ name: pkg.name, version: pkg.version })

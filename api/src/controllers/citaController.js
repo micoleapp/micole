@@ -1,6 +1,7 @@
 const { Cita, Colegio, Grado, Plan_Pago } = require('../db');
 const { Op } = require('sequelize');
 const moment = require('moment');
+const mailer = require('../utils/sendMails/mailer');
 
 const getCitas = async (req, res, next) => {
   const tokenUser = req.user;
@@ -28,7 +29,7 @@ const getCitas = async (req, res, next) => {
         activo: true,
       },
       ...include,
-      order: [["fecha_cita", "ASC"]],
+      order: [['fecha_cita', 'ASC']],
     });
 
     const CitasInactivas = await Cita.findAll({
@@ -37,7 +38,7 @@ const getCitas = async (req, res, next) => {
         activo: false,
       },
       ...include,
-      order: [["fecha_cita", "ASC"]],
+      order: [['fecha_cita', 'ASC']],
     });
 
     const CitasActivasMesActual = await Cita.findAll({
@@ -52,7 +53,7 @@ const getCitas = async (req, res, next) => {
         },
       },
       ...include,
-      order: [["fecha_cita", "ASC"]],
+      order: [['fecha_cita', 'ASC']],
     });
 
     const CitasInactivasMesActual = await Cita.findAll({
@@ -67,15 +68,15 @@ const getCitas = async (req, res, next) => {
         },
       },
       ...include,
-      order: [["fecha_cita", "ASC"]],
+      order: [['fecha_cita', 'ASC']],
     });
 
     let cantidadCitasPermitidasMesActual = 0;
     if (CitasActivasMesActual.length < plan_pago.cantidad_familias) {
-      cantidadCitasPermitidasMesActual = plan_pago.cantidad_familias - CitasActivasMesActual.length;
+      cantidadCitasPermitidasMesActual =
+        plan_pago.cantidad_familias - CitasActivasMesActual.length;
     }
 
-  
     let CitasPermitidasMesActual = await Cita.findAll({
       where: {
         ColegioId: user.id,
@@ -88,7 +89,7 @@ const getCitas = async (req, res, next) => {
         },
       },
       ...include,
-      order: [["fecha_cita", "ASC"]],
+      order: [['fecha_cita', 'ASC']],
       limit: cantidadCitasPermitidasMesActual,
     });
 
@@ -100,9 +101,11 @@ const getCitas = async (req, res, next) => {
       CitasActivas,
       CitasActivasMesActual,
       CitasPermitidasMesActual,
-      CantidadCitasNoPermitidasMesActual: CitasInactivasMesActual.length - CitasPermitidasMesActual.length,
-      CitasInactivasTotales: CitasInactivas.length - CitasPermitidasMesActual.length,
-      CitasInactivas
+      CantidadCitasNoPermitidasMesActual:
+        CitasInactivasMesActual.length - CitasPermitidasMesActual.length,
+      CitasInactivasTotales:
+        CitasInactivas.length - CitasPermitidasMesActual.length,
+      CitasInactivas,
     });
   } catch (error) {
     return next(error);
@@ -169,7 +172,8 @@ const createCita = async (req, res, next) => {
       GradoId: gradoId.id,
       ColegioId,
     });
-
+    const colegio = await Colegio.findByPk(ColegioId);
+    mailer.sendMailSolicitudCita(newCita, colegio);
     res.status(200).json(newCita);
   } catch (error) {
     console.log(error);
