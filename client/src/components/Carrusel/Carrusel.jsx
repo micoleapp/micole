@@ -1,12 +1,30 @@
 import React from "react";
 import style from "./Carrusel.module.css";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getFilterListSchool } from "../../redux/SchoolsActions";
-import Categorias from "../../MockupInfo/Categorias.json";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
+import Especial from '../../assets/carrusel/Especial.jpg'
+import Hombres from '../../assets/carrusel/Hombres.jpg'
+import Homeschool from '../../assets/carrusel/Homeschool.jpg'
+import Internacional from '../../assets/carrusel/Internacional.jpg'
+import Laico from '../../assets/carrusel/Laico.jpg'
+import Mixto from '../../assets/carrusel/Mixto.jpg'
+import Mujeres from '../../assets/carrusel/Mujeres.jpg'
+import Certificacion from '../../assets/carrusel/Certificacion.jpg'
+import Privado from '../../assets/carrusel/Privado.jpg'
+import Publico from '../../assets/carrusel/Publico.jpg'
+import Religioso from '../../assets/carrusel/Religioso.jpg'
+import LogoEspecial from '../../assets/carrusel/LogoEspecial.svg'
+import LogoReligioso from '../../assets/carrusel/LogoReligioso.svg'
+import LogoHombres from '../../assets/carrusel/LogoHombres.svg'
+import LogoInternacional from '../../assets/carrusel/LogoInternacional.svg'
+import LogoMujeres from '../../assets/carrusel/LogoMujeres.svg'
+import LogoLaico from '../../assets/carrusel/LogoLaico.png'
+import LogoMixto from '../../assets/carrusel/LogoMixto.png'
+import LogoPrivado from '../../assets/carrusel/Privado.png'
+import LogoPublico from '../../assets/carrusel/LogoPublico.png'
 const handleDragStart = (e) => e.preventDefault();
 
 export default function Carrusel() {
@@ -40,13 +58,13 @@ export default function Carrusel() {
         onClick={() => handleClick(2)}
       >
         <img
-          src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f20da1448c8135cf1d30_Especial2_categoria.jpg"
+          src={Especial}
           alt="Inclusivo"
           className="filter brightness-50"
         />
         <div className="flex flex-col justify-center gap-0 items-center absolute cursor-pointer">
           <img
-            src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f5d9c8a443530229145c_ColEspecialIcon.svg"
+            src={LogoEspecial}
             alt="logo"
             className="w-3 h-3 object-cover"
           />
@@ -60,13 +78,13 @@ export default function Carrusel() {
         onClick={() => handleClick(3)}
       >
         <img
-          src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f39789f36d6535ef6663_Hombres2_categoria.jpg"
+          src={Hombres}
           alt="Hombre"
           className="filter brightness-50"
         />
         <div className="flex flex-col justify-center gap-5 items-center absolute cursor-pointer">
           <img
-            src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f60ad3c3afea1b7d877a_ColHombresIcon.svg"
+            src={LogoHombres}
             alt="logo"
             className="w-5 h-5 object-cover flex"
           />
@@ -80,7 +98,7 @@ export default function Carrusel() {
         onClick={() => handleClick(4)}
       >
         <img
-          src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/63c7320e57852d172a76ad83_Homeschool.jpg"
+          src={Homeschool}
           alt="Homeschool"
           className="filter brightness-50"
         />
@@ -94,13 +112,13 @@ export default function Carrusel() {
         onClick={() => handleClick(5)}
       >
         <img
-          src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f388a08ac700f68719ea_Internacional2_categoria.jpg"
+          src={Internacional}
           alt="Internacional"
           className="filter brightness-50"
         />
         <div className="flex flex-col justify-center gap-5 items-center absolute cursor-pointer">
           <img
-            src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f602c8a44319f02915ee_MundoIcon.svg"
+            src={LogoInternacional}
             alt="logo"
             className="w-3 h-3 object-cover"
           />
@@ -116,13 +134,13 @@ export default function Carrusel() {
         onClick={() => handleClick(6)}
       >
         <img
-          src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f791f78ad2f51d0472eb_Laico.jpg"
+          src={Laico}
           alt="Laico"
           className="filter brightness-50"
         />
         <div className="flex flex-col justify-center gap-0 items-center absolute cursor-pointer">
           <img
-            src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b5584f7691c3e086f66053_Laico.png"
+            src={LogoLaico}
             alt="logo"
             className="w-3 h-3 object-cover"
           />
@@ -136,7 +154,7 @@ export default function Carrusel() {
         onClick={() => handleClick(7)}
       >
         <img
-          src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/63c7320e57852d172a76ad83_Homeschool.jpg"
+          src={Homeschool}
           alt="Militar"
           className="filter brightness-50"
         />
@@ -151,13 +169,13 @@ export default function Carrusel() {
         onClick={() => handleClick(8)}
       >
         <img
-          src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f782b03ee569be526697_Mixto.jpg"
+          src={Mixto}
           alt="Mixto"
           className="filter brightness-50"
         />
         <div className="flex flex-col justify-center gap-5 items-center absolute cursor-pointer">
         <img
-            src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b558429a3cf14cd6a06c76_Mixto.png"
+            src={LogoMixto}
             alt="logo"
             className="w-3 h-3 object-cover"
           />
@@ -170,13 +188,13 @@ export default function Carrusel() {
         onClick={() => handleClick(9)}
       >
         <img
-          src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f3a425752733c4410cb8_Mujeres3_categoria.jpg"
+          src={Mujeres}
           alt="Mujeres"
           className="filter brightness-50"
         />
         <div className="flex flex-col justify-center gap-5 items-center absolute cursor-pointer">
           <img
-            src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f6129d92297bb33aa0f9_ColMujeresIcon.svg"
+            src={LogoMujeres}
             alt="logo"
             className="w-3 h-3 object-cover"
           />
@@ -192,13 +210,13 @@ export default function Carrusel() {
       onClick={() => handleClick(10)}
     >
       <img
-        src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b544d64c3ed0b9f10d7b66_Privado.jpg"
+        src={Privado}
         alt="Privado"
         className="filter brightness-50"
       />
       <div className="flex flex-col justify-center gap-0 items-center absolute cursor-pointer">
         <img
-          src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b5583418c0ba591e37979e_Private.png"
+          src={LogoPrivado}
           alt="logo"
           className="w-3 h-3 object-cover"
         />
@@ -212,13 +230,13 @@ export default function Carrusel() {
       onClick={() => handleClick(12)}
     >
       <img
-        src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f379babdc3392e6363cb_Religioso2_categoria.jpg"
+        src={Religioso}
         alt="Religioso"
         className="filter brightness-50"
       />
       <div className="flex flex-col justify-center gap-5 items-center absolute cursor-pointer">
         <img
-          src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b3f5d0e51b4b62b811bb61_IglesiaIcon.svg"
+          src={LogoReligioso}
           alt="logo"
           className="w-5 h-5 object-cover flex"
         />
@@ -232,7 +250,7 @@ export default function Carrusel() {
       onClick={() => handleClick(1)}
     >
       <img
-        src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/63d302a461107be72d80ccaa_Certificacion_categoria.jpg"
+        src={Certificacion}
         alt="Certificacion de estudios"
         className="filter brightness-50"
       />
@@ -246,13 +264,13 @@ export default function Carrusel() {
       onClick={() => handleClick(11)}
     >
       <img
-        src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b54702c00a4a0b9294903f_Publico.jpg"
+        src={Publico}
         alt="Publico"
         className="filter brightness-50"
       />
       <div className="flex flex-col justify-center gap-5 items-center absolute cursor-pointer">
         <img
-          src="https://uploads-ssl.webflow.com/628021db5f1eee1db790ab78/62b55866bc84bf4d680e8169_Public.png"
+          src={LogoPublico}
           alt="logo"
           className="w-3 h-3 object-cover"
         />
