@@ -18,6 +18,7 @@ const {
   Metodos,
   Dificultades,
   Review,
+  Evento
 } = require("../db.js");
 const { Op } = require("sequelize");
 const getPagination = require("../utils/getPagination");
@@ -193,6 +194,9 @@ router.get("/:Colegio_id", async (req, res) => {
         },
         {
           model: Review,
+        },
+        {
+          model: Evento,
         },
         {
           model: Categoria,
