@@ -47,26 +47,26 @@ const getEventoById = async (req, res, next) => {
 
 const createEvento = async (req, res, next) => {
   const {
-    nombre,
-    descripcion,
-    date,
-    time,
-    tipo,
-    capacidad,
-    imagen,
-    ColegioId,
+    nombreEvento,
+    descripcionEvento,
+    fechaEvento,
+    horaEvento,
+    tipoEvento,
+    capacidadEvento,
+    image,
+    idColegio,
   } = req.body;
   try {
-    const fechaEvento = moment(date, ['DD/MM/YYYY', 'YYYY-MM-DD']);
+    const fechaEventoF = moment(fechaEvento, ['DD/MM/YYYY', 'YYYY-MM-DD']);
     const newEvento = await Evento.create({
-      fecha_evento: fechaEvento,
-      descripcion: descripcion,
-      hora_evento: time,
-      nombre_evento: nombre,
-      tipo_evento: tipo,
-      capacidad: capacidad,
-      imagen_evento: imagen,
-      ColegioId,
+      fecha_evento: fechaEventoF,
+      descripcion: descripcionEvento,
+      hora_evento: horaEvento,
+      nombre_evento: nombreEvento,
+      tipo_evento: tipoEvento,
+      capacidad: capacidadEvento,
+      imagen_evento: image,
+      ColegioId: idColegio,
     });
     res.status(200).json(newEvento);
   } catch (error) {
