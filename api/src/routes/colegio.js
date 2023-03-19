@@ -438,9 +438,18 @@ router.put("/:id", async (req, res) => {
       metodos,
       dificultades,
     } = req.body;
-    let video_url = multimedia.video_url;
-    let primera_imagen = multimedia.image;
-    let galeria_fotos = JSON.stringify(multimedia.images);
+    let video_url = "";
+    let primera_imagen = "";
+    let galeria_fotos = "";
+    console.log(multimedia)
+    if(multimedia){      
+      video_url = multimedia.video_url;
+      primera_imagen = multimedia.image;
+      galeria_fotos = JSON.stringify(multimedia.images);
+    }
+    console.log(video_url)
+    console.log(primera_imagen)
+    console.log(galeria_fotos)
     const ubicacion = { lat, lng };
     const editedColegio = await Colegio.update(
       {

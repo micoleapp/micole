@@ -208,7 +208,6 @@ function ListSchool() {
     dificultades,
     metodos
   } = useSelector((state) => state.schools);  
-
 /*   useEffect(() => {
     console.log(data);
   }, [order]); */
@@ -720,14 +719,14 @@ function ListSchool() {
                   return (
                     <div
                       key={school.id}
-                      className={`flex border rounded-md shadow-md bg-white p-2 items-center gap-2 flex-col md:flex-row`}
+                      className={`flex border rounded-md shadow-md h-auto lg:h-[220px] bg-white items-center gap-2 flex-col md:flex-row`}
                     >
                       {" "}
                       <div className="relative">
                         <img
                           src={school.primera_imagen}
                           alt={school.title}
-                          className="w-[400px] h-64 object-cover"
+                          className="w-[400px] h-auto lg:h-[220px] object-cover"
                         />
                         {/* <span className="absolute bg-[#0061dd] text-white p-1 px-2 rounded-md top-3 left-3">
                           DESTACADO

@@ -237,7 +237,19 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    setAllData({ ...allData, ...datosPrincipales });
+    // setAllData({ ...allData, ...datosPrincipales });
+    try {
+      axios.put(`/colegios/${user.id}`, datosPrincipales)
+      .then(res=>{
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+
     handleNext();
   };
 
@@ -252,7 +264,17 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    setAllData({ ...allData, ...datosPrincipales });
+        try {
+      axios.put(`/colegios/${user.id}`, datosPrincipales)
+      .then(res=>{
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    } catch (error) {
+      console.log(error)
+    }
     handleNext();
   };
 
@@ -260,7 +282,17 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    setAllData({ ...allData, ...datosPrincipales });
+    try {
+      axios.put(`/colegios/${user.id}`, datosPrincipales)
+      .then(res=>{
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    } catch (error) {
+      console.log(error)
+    }
     handleNext();
   };
 
@@ -268,7 +300,18 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    setAllData({ ...allData, multimedia });
+    console.log({ ...datosPrincipales, multimedia });
+    try {
+      axios.put(`/colegios/${user.id}`, { ...datosPrincipales, multimedia })
+      .then(res=>{
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    } catch (error) {
+      console.log(error)
+    }
     handleNext();
   };
 
@@ -552,30 +595,16 @@ function DashboardSchool() {
 
   const handleSubmitFormComplete = (e) => {
     e.preventDefault();
-
-    axios
-      .put(`/colegios/${user.id}`, allData)
-      .then((res) => {
-        Swal.fire({
-          icon: "success",
-          title: "Felicidades ya estas a un paso de publicar tu colegio",
-          text: "Continua completando el horario para tus citas",
-          confirmButtonText: "Continuar",
-        }).then((res) => {
-          if (res.isConfirmed) {
-            handleReset();
-            setPage(1);
-          }
-        });
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-        Swal.fire({
-          icon: "error",
-          title: "Lo sentimos algo salio mal",
-          text: err.message,
-        });
-      });
+    Swal.fire({
+      icon: "success",
+      title: "Felicidades ya estas a un paso de publicar tu colegio",
+      confirmButtonText: "Continuar",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        handleReset();
+        setPage(1);
+      }
+    });
   };
 
   const [vacantes, setVacantes] = useState(0);
@@ -891,8 +920,7 @@ function DashboardSchool() {
                       Felicitaciones completaste todos los pasos
                     </h1>
                     <p className="text-center">
-                      Porfavor envia el formulario hacia nuestra base de datos
-                      para continuar
+                      Porfavor continua completando tus horarios para citas
                     </p>
                     <img src={Logo} alt="" className="object-cover mx-auto" />
                     <button
@@ -900,7 +928,7 @@ function DashboardSchool() {
                       className="bg-[#0061dd] text-white rounded-md mx-auto p-3"
                       onClick={handleSubmitFormComplete}
                     >
-                      Enviar datos
+                      Continuar
                     </button>
                   </div>
                 </React.Fragment>
@@ -1581,6 +1609,8 @@ function DashboardSchool() {
                         </Button>
                       ))} */}
                       </Box>
+                      <small className="flex justify-end">Al apretar NEXT estas guardando tus datos</small>
+
                     </form>
                   )}
                   {activeStep === 1 && (
@@ -1864,6 +1894,8 @@ function DashboardSchool() {
                         </Button>
                       ))} */}
                       </Box>
+                      <small className="flex justify-end">Al apretar NEXT estas guardando tus datos</small>
+
                     </div>
                   )}
                   {activeStep === 2 && (
@@ -2100,6 +2132,8 @@ function DashboardSchool() {
                         </Button>
                       ))} */}
                       </Box>
+                      <small className="flex justify-end">Al apretar NEXT estas guardando tus datos</small>
+
                     </div>
                   )}
                   {activeStep === 3 && (
@@ -2205,6 +2239,8 @@ function DashboardSchool() {
                         </Button>
                       ))} */}
                       </Box>
+                      <small className="flex justify-end">Al apretar NEXT estas guardando tus datos</small>
+
                     </div>
                   )}
                   {activeStep === 4 && (
@@ -2434,6 +2470,8 @@ function DashboardSchool() {
                                           </Button>
                                         ))} */}
                       </Box>
+                      <small className="flex justify-end">Al apretar NEXT estas guardando tus datos</small>
+
                     </div>
                   )}
                 </React.Fragment>
