@@ -46,7 +46,7 @@ function App() {
     dispatch(getAllPaises());
     dispatch(getAllNiveles());
     dispatch(getAllAfiliaciones());
-    dispatch(getAllSchools())
+    // dispatch(getAllSchools())
     dispatch(getUserByToken());
     dispatch(getCita())
     dispatch(getCitaAgendadas())
