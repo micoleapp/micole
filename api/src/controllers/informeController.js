@@ -11,7 +11,6 @@ const sendInfoEmail = async (req, res, next) => {
       telefono: celular,
     });
     mailer.sendMailInforme(newInforme); 
-    mailer.sendMailInformeAdmin(newInforme);
     res.status(200).send('Solicitud recibida correctamente');
   } catch (error) {
     return next(error);

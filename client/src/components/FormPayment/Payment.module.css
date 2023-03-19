@@ -4,7 +4,7 @@
   align-items: first baseline;
   padding: 20px;
   /* justify-content: space-evenly; */
-  height: 80vh;
+  max-height: 80vh;
   overflow-y: scroll;
 }
 .container {

@@ -1,4 +1,4 @@
-const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
+const confirmationRegisterTemplate = (user, type, actualDate)  => { return `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -8,7 +8,7 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
     />
     <meta name="x-apple-disable-message-reformatting" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Solicitud de Cita</title>
+    <title>Solicitud de Informe MiCole</title>
     <style type="text/css">
       a {
         text-decoration: none;
@@ -197,7 +197,7 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
               visibility: hidden;
             "
           >
-           Estimado ${user.nombre}, Se ha enviado su solicitud de cita con el colegio ${colegio.nombre_colegio}
+            ¡Bienvenido colegio ${user.nombre} a MiCole!
           </td>
         </tr>
       </tbody>
@@ -278,7 +278,7 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
                         <p style="margin-top: 0px; margin-bottom: 0px">
                           <a
                             class="o_text-white"
-                            href="https://www.micole.com.pe/"
+                            href="https://www.micole.com.pe"
                             style="
                               text-decoration: none;
                               outline: none;
@@ -426,8 +426,8 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
                       color: #82899a;
                       padding-left: 24px;
                       padding-right: 24px;
-                      padding-top: 64px;
-                      padding-bottom: 64px;
+                      padding-top: 32px;
+                      padding-bottom: 32px;
                     "
                   >
                     <table
@@ -442,6 +442,14 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
                             class="o_sans o_text o_text-white o_bg-primary o_px o_py o_br-max"
                             align="center"
                             style="
+                              font-family: Helvetica, Arial, sans-serif;
+                              margin-top: 0px;
+                              margin-bottom: 0px;
+                              font-size: 16px;
+                              line-height: 24px;
+                              background-color: #ffffff;
+                              color: #126de5;
+                              border-radius: 96px;
                               padding-left: 16px;
                               padding-right: 16px;
                               padding-top: 16px;
@@ -449,11 +457,12 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
                             "
                           >
                             <img
-                              src="${colegio.logo}"
+                              src="https://i.imgur.com/cOqWYbR.png"
+                              width="48"
+                              height="48"
                               alt=""
                               style="
-                                max-height: 150px;
-                                max-width: 180px;
+                                max-width: 48px;
                                 -ms-interpolation-mode: bicubic;
                                 vertical-align: middle;
                                 border: 0;
@@ -463,6 +472,17 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
                                 text-decoration: none;
                               "
                             />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="
+                              font-size: 24px;
+                              line-height: 24px;
+                              height: 24px;
+                            "
+                          >
+                            &nbsp;
                           </td>
                         </tr>
                       </tbody>
@@ -479,9 +499,17 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
                         line-height: 39px;
                       "
                     >
-                      Solicitud de Cita Realizada
+                      ¡Bienvenido a MiCole!
                     </h2>
-
+                    <p
+                      style="
+                        font-size: 14px;
+                        margin-top: 0px;
+                        margin-bottom: 0px;
+                      "
+                    >
+                      ${type==="Colegio" ? `Colegio: ${user.nombre}` : user.nombre}
+                    </p>
                   </td>
                 </tr>
               </tbody>
@@ -607,7 +635,7 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
                               style="
                                 font-family: Helvetica, Arial, sans-serif;
                                 margin-top: 0px;
-                                margin-bottom: 0px;
+                                margin-bottom: 40px;
                                 font-size: 16px;
                                 line-height: 24px;
                                 max-width: 584px;
@@ -616,20 +644,33 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
                               "
                             >
                               <p style="margin-top: 0px; margin-bottom: 20px">
-                                Estimado padre de familia,
+                                Estimado colegio <b>${user.nombre}:</b>
                               </p>
                               <p style="margin-top: 0px; margin-bottom: 20px">
-                                Le informamos que hemos recibido su solicitud de
-                                cita para el colegio
-                                <b>${colegio.nombre_colegio}</b> el día
-                                <b>${user.fecha_cita}</b> a las
-                                <b>${user.hora_cita}</b>. En breve el colegio le
-                                estará confirmando su solicitud, por lo que
-                                esperamos pase una buena experiencia con ellos.
+                                <b
+                                  >¡Bienvenido al buscador de colegios
+                                  MiCole!</b
+                                >
+                                Nos complace informarle que su registro se ha
+                                completado con éxito y ahora pueden mostrar su
+                                colegio a cientos de padres de familia en
+                                búsqueda de información.
+                              </p>
+                              <p style="margin-top: 0px; margin-bottom: 20px">
+                                No dude en ponerse en contacto con nuestro
+                                equipo de soporte si tiene alguna pregunta o
+                                problema.
+                              </p>
+                              <p>
+                                ¡Gracias por elegirnos y esperamos ayudarlos a
+                                conseguir nuevas familias para el colegio
+                                ${user.nombre}!
                               </p>
                               <p><b>Atentamente,</b></p>
                               <p>
-                                <b style="color: #126de5">Equipo de MiCole</b>
+                                <b style="color: #126de5"
+                                  >El equipo de búsqueda de colegios.</b
+                                >
                               </p>
                             </div>
                             <!--[if mso]></td></tr></table><![endif]-->
@@ -647,7 +688,26 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
       </tbody>
     </table>
 
-    <!-- spacer-lg -->
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
+      <tbody>
+        <tr>
+          <td class="o_bg-light o_px-xs" align="center" style="background-color: #dbe5ea;padding-left: 8px;padding-right: 8px;">
+            <!--[if mso]><table width="632" cellspacing="0" cellpadding="0" border="0" role="presentation"><tbody><tr><td><![endif]-->
+            <table class="o_block" width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation" style="max-width: 632px;margin: 0 auto;">
+              <tbody>
+                <tr>
+                  <td class="o_bg-white o_sans o_text o_text-secondary" align="center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;background-color: #ffffff;color: #424651;">
+                    <p style="margin-top: 0px;margin-bottom: 0px;"><img class="o_img-full" src="https://i.imgur.com/sa9Y4F3.png" width="632" height="352" alt="img-micole" style="max-width: 632px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;width: 100%;"></p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!--[if mso]></td></tr></table><![endif]-->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
     <table
       width="100%"
       cellspacing="0"
@@ -679,40 +739,69 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
               <tbody>
                 <tr>
                   <td
-                    class="o_bg-white"
+                    class="o_re o_bg-primary o_px o_pb-md"
+                    align="center"
                     style="
-                      font-size: 48px;
-                      line-height: 48px;
-                      height: 48px;
-                      background-color: #ffffff;
+                      font-size: 0;
+                      vertical-align: top;
+                      background-color: #126de5;
+                      padding-left: 16px;
+                      padding-right: 16px;
+                      padding-bottom: 12px;
                     "
                   >
-                    &nbsp;
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <!--[if mso]></td></tr></table><![endif]-->
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
-      <tbody>
-        <tr>
-          <td class="o_bg-light o_px-xs" align="center" style="background-color: #dbe5ea;padding-left: 8px;padding-right: 8px;">
-            <!--[if mso]><table width="632" cellspacing="0" cellpadding="0" border="0" role="presentation"><tbody><tr><td><![endif]-->
-            <table class="o_block" width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation" style="max-width: 632px;margin: 0 auto;">
-              <tbody>
-                <tr>
-                  <td class="o_re o_bg-primary o_px o_pb-md" align="center" style="font-size: 0;vertical-align: top;background-color: #126de5;padding-left: 16px;padding-right: 16px;padding-bottom: 12px;">
                     <!--[if mso]><table cellspacing="0" cellpadding="0" border="0" role="presentation"><tbody><tr><td width="300" align="center" valign="top" style="padding: 0px 8px;"><![endif]-->
-                      <div class="o_col o_col-3" style="display: inline-block;vertical-align: top;width: 100%;">
-                      <div style="font-size: 12px; line-height: 12px; height: 12px;">&nbsp; </div>
-                      <div class="o_px-xs o_sans o_text o_text-white o_left o_xs-center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;color: #ffffff;text-align: left;padding-left: 8px;padding-right: 8px;">
-                        <p class="o_mb-xxs" style="font-size: 14px; margin-top: 0px;margin-bottom: 4px;"><strong>¡Tu opinión es importante para nosotros!</strong></p>
-                        <p class="o_text-xs" style="font-size: 12px;line-height: 21px;margin-top: 0px;margin-bottom: 0px;">Te invitamos a compartir tus comentarios y sugerencias para que podamos seguir mejorando.</p>
+                    <div
+                      class="o_col o_col-3"
+                      style="
+                        display: inline-block;
+                        vertical-align: top;
+                        width: 100%;
+                      "
+                    >
+                      <div
+                        style="font-size: 12px; line-height: 12px; height: 12px"
+                      >
+                        &nbsp;
+                      </div>
+                      <div
+                        class="o_px-xs o_sans o_text o_text-white o_left o_xs-center"
+                        style="
+                          font-family: Helvetica, Arial, sans-serif;
+                          margin-top: 0px;
+                          margin-bottom: 0px;
+                          font-size: 16px;
+                          line-height: 24px;
+                          color: #ffffff;
+                          text-align: left;
+                          padding-left: 8px;
+                          padding-right: 8px;
+                        "
+                      >
+                        <p
+                          class="o_mb-xxs"
+                          style="
+                            font-size: 14px;
+                            margin-top: 0px;
+                            margin-bottom: 4px;
+                          "
+                        >
+                          <strong
+                            >¡Tu opinión es importante para nosotros!</strong
+                          >
+                        </p>
+                        <p
+                          class="o_text-xs"
+                          style="
+                            font-size: 12px;
+                            line-height: 21px;
+                            margin-top: 0px;
+                            margin-bottom: 0px;
+                          "
+                        >
+                          Te invitamos a compartir tus comentarios y sugerencias
+                          para que podamos seguir mejorando.
+                        </p>
                       </div>
                     </div>
                   </td>
@@ -755,7 +844,6 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
               style="max-width: 632px; margin: 0 auto"
             >
               <tbody>
-                
                 <tr>
                   <td
                     class="o_px-md o_py-lg o_br-b o_sans o_text-xs o_text-light"
@@ -856,7 +944,8 @@ const solicitudCita = (user, colegio, actualDate)  => { return `<!DOCTYPE html>
     </table>
   </body>
 </html>
+
 `};
 
 
-module.exports = solicitudCita;
+module.exports = confirmationRegisterTemplate;

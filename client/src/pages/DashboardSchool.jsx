@@ -62,6 +62,7 @@ import CardCitas from "../components/CardsCitas/CardCitas";
 import SelectCitasAg from "../components/CardsCitas/SelectCitasAgendadas/SelectCitasAg";
 import { getCitaAgendadas } from "../redux/SchoolsActions";
 import { getCita } from "../redux/CitasActions";
+import Miplan from "../components/Miplan/Miplan";
 
 const libraries = ["places"];
 
@@ -128,6 +129,7 @@ function DashboardSchool() {
     niveles,
     infraestructura: infraState,
     afiliaciones,
+  
   } = useSelector((state) => state.schools);
   const { user, oneSchool } = useSelector((state) => state.auth);
 
@@ -657,6 +659,22 @@ function DashboardSchool() {
     });
     console.log(newDays);
     dispatch(postHorariosVacantes(newDays));
+    try {
+      axios
+        .put(`/colegios/${user.id}`, { isActive: true })
+        .then((res) => {
+          Swal.fire({
+            icon: "success",
+            title: "Felicitaciones!",
+            text: "Colegio listo para mostrarse en nuestra pagina!",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const [spanOne, setSpanOne] = useState(false);
@@ -805,6 +823,7 @@ function DashboardSchool() {
               }`}
             >
               Mi plan
+             
             </span>
           </button>
 
@@ -2456,7 +2475,9 @@ function DashboardSchool() {
             </button>
           </div>
         ) : page === 2 ? (
-          <div className="min-h-screen">Plan</div>
+          <div className="min-h-screen">
+           <Miplan/>
+          </div>
         ) : page === 3 ? (
           <div className="flex flex-col gap-5 min-h-screen px-24">
             <h1 className="text-xl font-semibold">Datos Personales</h1>
@@ -2595,10 +2616,10 @@ function DashboardSchool() {
               className={style.layout}
               style={{ display: "flex", gap: "10px" }}
             >
-              <Cards icon="solicitud" text="Solicitudes de Citas" nro={2} />
-              <Cards icon="visualizacion" text="Visualizaciones" nro={2} />
-              <Cards icon="mensaje" text="Mensajes" nro={2} />
-              <Cards icon="comentario" text="Comentarios" nro={2} />
+              <Cards icon="solicitud" text="Solicitudes de Citas" nro={citasAgendadas.CitasInactivas.length} />
+              <Cards icon="visualizacion" text="Visualizaciones" nro={oneSchool?.visualizaciones} />
+              <Cards icon="mensaje" text="Mensajes" nro={0} />
+              <Cards icon="comentario" text="Comentarios" nro={oneSchool.Reviews.length} />
             </div>
 
             <DragAndDrop />

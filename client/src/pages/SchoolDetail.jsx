@@ -362,8 +362,8 @@ function SchoolDetail() {
                 <div className="flex gap-5 lg:flex-row flex-col justify-center w-full items-center">
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
                     {currentVacante &&
-                      Number(currentVacante[0].capacidad) -
-                        Number(currentVacante[0].alumnos_matriculados)}{" "}
+                      Number(currentVacante[0]?.capacidad) -
+                        Number(currentVacante[0]?.alumnos_matriculados)}{" "}
                     Vacantes
                   </span>
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
