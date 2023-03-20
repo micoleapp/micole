@@ -957,18 +957,23 @@ console.log(arrCita)
                 <div
                   data-aos="flip-up"
                   style={{
-                    width: "60%",
+                    width: "100%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    flexDirection: "column",
+                    flexDirection: "row",
+                    color: "#0C2B42",
+                    gap: "10px",
                     padding: "20px",
                     minHeight: "100%",
                     boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+                    fontWeight: "600",
                   }}
                 >
-                  <NotFound />
-                  <h1>Aun no has confirmado ninguna cita </h1>
+                  <ContentPasteSearchOutlinedIcon
+                    style={{ color: "#0061DF" }}
+                  />
+                  <h1>Aun no has confirmado ninguna cita</h1>
                 </div>
               </>
             )}
@@ -1100,6 +1105,7 @@ console.log(arrCita)
                             handlerPutStateCita(cita.id);
                           }}
                           variant="contained"
+                          sx={{background:'green'}}
                           disabled
                         >
                           Confirmada{" "}
