@@ -136,7 +136,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                   />{" "}
                 </td>
                 <td className=" relative">
-                  <span className="absolute top-[33%] left-[20%] font-bold">
+                  <span className="absolute top-[33%] left-[10%] font-bold">
                     $
                   </span>
                   <input
@@ -152,7 +152,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                   />{" "}
                 </td>
                 <td className=" relative">
-                  <span className="absolute top-[33%] left-[20%] font-bold">
+                  <span className="absolute top-[33%] left-[10%] font-bold">
                     $
                   </span>
                   <input
@@ -168,7 +168,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                   />{" "}
                 </td>
                 <td className="relative pr-2">
-                  <span className="absolute top-[33%] left-[20%] font-bold">
+                  <span className="absolute top-[33%] left-[10%] font-bold">
                     $
                   </span>
                   <input

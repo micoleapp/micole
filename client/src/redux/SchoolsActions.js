@@ -161,10 +161,20 @@ export const postHorariosVacantes = (horarios,ColegioId) => (dispatch) => {
   console.log(ColegioId)
   console.log(horarios)
   dispatch(isLoading());
-  axios
-    .post("/horarios", { horarios , ColegioId })
-    // .then(res=>dispatch((res.data)))
-    .catch((err) => console.log(err));
+  try {
+    axios
+      .post("/horarios", { horarios , ColegioId })
+      .then(res=>
+        Swal.fire({
+          icon: "success",
+          title: "Horarios actualizados exitosamente!",
+          text: "Cambios guardados",
+        })
+        )
+      .catch((err) => console.log(err));
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const postCita = (cita) => (dispatch) => {

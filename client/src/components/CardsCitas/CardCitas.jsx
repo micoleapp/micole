@@ -109,6 +109,7 @@ console.log(arrCita)
                     minHeight: "100%",
                     boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
                     fontWeight: "600",
+                    backgroundColor: "#fff",
                   }}
                 >
                   <ContentPasteSearchOutlinedIcon

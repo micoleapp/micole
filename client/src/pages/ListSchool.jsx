@@ -383,7 +383,7 @@ function ListSchool() {
                 }
               >
                 <FormGroup>
-                  {categories?.map((cat) => (
+                  {categories && categories.length > 0 && categories?.map((cat) => (
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -719,7 +719,7 @@ function ListSchool() {
                   return (
                     <div
                       key={school.id}
-                      className={`flex border rounded-md shadow-md h-auto lg:h-[220px] bg-white items-center gap-2 flex-col md:flex-row`}
+                      className={`flex border rounded-md shadow-md h-auto bg-white items-center gap-2 flex-col md:flex-row`}
                     >
                       {" "}
                       <div className="relative">

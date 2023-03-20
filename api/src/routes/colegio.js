@@ -417,6 +417,7 @@ router.post("/filter", async (req, res) => {
 router.put("/activo/:id"), async (req,res) => {
   try {
     const { id } = req.params;
+
     const colegio = await Colegio.findByPk(id);
     if (!colegio) {
       return next({
