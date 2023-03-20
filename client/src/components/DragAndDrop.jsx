@@ -107,7 +107,7 @@ function DragAndDrop() {
     dispatch(updateColumn(newState.columns));
     // const taskId = tasks[removed]
     // const NuevoEstado = destinationCol.estado 
-    dispatch(updateTask(tasks[removed],destinationCol.estado ));
+   dispatch(updateTask(tasks[removed],destinationCol.estado ));
     setState(newState);
 
     alert(
