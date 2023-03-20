@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import style from "./textEvent.module.css";
 export default function TextEvento({
@@ -9,29 +9,40 @@ export default function TextEvento({
   horaEvento,
   idColegio,
   capacidadEvento,
-}) 
-{
+}) {
+  const { oneSchool } = useSelector((state) => state.schools);
+  console.log(oneSchool.id);
 
+  useEffect(() => {
+    axios
+      .put(`/citas/${idCita}`, { estado: NuevoEstado })
+      .then((res) => console.log(res.data))
+      .catch((err) => {
+        dispatch(getError(err.response.data.error));
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: err.response.data.error,
+        });
+      });
+  }, []);
 
-    const { oneSchool } = useSelector((state) => state.auth);
-console.log(oneSchool.logo)
-    return (
+  return (
     <div className={style.card}>
-        <div style={{maxWidth:'10vh', maxHeight:'12vh'}}>
-             <img  style={{display:'flex'}}  src={oneSchool.logo} alt='Logo'/>
-        </div>
-         
+      <div style={{ maxWidth: "10vh", maxHeight: "12vh" }}>
+        <img style={{ display: "flex" }} src={idColegio} alt="Logo" />
+      </div>
+
       {nombreEvento && <h1 className={style.title}>{nombreEvento}</h1>}
       {description && <p className={style.descripcion}>{description}</p>}
       <div style={{ display: "flex" }}>
-      
         <div className={style.divDetalles}>
           <p className={style.pTittle}>Dia</p>
           {fechaEvento && <p className={style.p}>{fechaEvento}</p>}
         </div>
         <div className={style.divDetalles}>
           <p className={style.pTittle}>Horario</p>
-          {fechaEvento && <p className={style.p}>{ horaEvento}</p>}
+          {fechaEvento && <p className={style.p}>{horaEvento}</p>}
         </div>
         <div className={style.divDetalles}>
           <p className={style.pTittle}>Capacidad</p>

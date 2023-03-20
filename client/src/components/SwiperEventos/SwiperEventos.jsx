@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Pagination, Autoplay, EffectFade } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-
+import { useSelector } from "react-redux";
 import axios from "axios";
 // Import Swiper styles
 import "swiper/css";
@@ -12,15 +12,13 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import TextEvento from "./TextEvento";
 export default function SwiperEventos() {
-  const [Data, setData] = useState();
-  // useEffect(() => {
-  //     axios.get(``).then((res) => {
-  //       const respons = res.data;
-  //       setData(respons);
-  //     });
-  //   }, []);
+  const { oneSchool } = useSelector((state) => state.schools);
+  console.log(oneSchool.Eventos);
+
+
+  console.log(Data)
   return (
-    <div style={{width:'60vh',  }}>
+    <div style={{ width: "60vh" }}>
       <Swiper
         modules={[Autoplay, Pagination, EffectFade]}
         effect="fade"
@@ -39,7 +37,6 @@ export default function SwiperEventos() {
         className={style.swiper}
       >
         {MockEventos.map((event) => {
-          
           return (
             <>
               <SwiperSlide className={style.swiper_slide}>
@@ -67,10 +64,10 @@ export default function SwiperEventos() {
 
 const MockEventos = [
   {
-    idColegio: 'sad',
+    idColegio: "sad",
     nombreEvento: "Esuela Abierta",
     descripcionEvento:
-    "Lorem Ipsum has been the industry's standathe 1500s, when an unknown printer took a galley",
+      "Lorem Ipsum has been the industry's standathe 1500s, when an unknown printer took a galley",
 
     tipoEvento: "Puerta Abierta",
     capacidadEvento: 200,
@@ -80,7 +77,7 @@ const MockEventos = [
       "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679350090/fzbdxjnerwn5wrqlgfx6.png",
   },
   {
-    idColegio: 'sad',
+    idColegio: "sad",
     nombreEvento: "Evento 1",
     descripcionEvento:
       "Lorem Ipsum has been the industry's standathe 1500s, when an unknown printer took a galley",
@@ -92,7 +89,7 @@ const MockEventos = [
       "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679350090/fzbdxjnerwn5wrqlgfx6.png",
   },
   {
-    idColegio: 'sad',
+    idColegio: "sad",
     nombreEvento: "Recorrido del Campus",
     descripcionEvento:
       "Lorem Ipsum has been the industry's standathe 1500s, when an unknown printer took a galley",
@@ -104,12 +101,12 @@ const MockEventos = [
       "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679350090/fzbdxjnerwn5wrqlgfx6.png",
   },
   {
-    idColegio: 'sad',
+    idColegio: "sad",
     nombreEvento: "Demostracion de talleres",
     descripcionEvento:
       "Lorem Ipsum has been the industry's standathe 1500s, when an unknown printer took a galley",
- 
-      tipoEvento: "Prueb3",
+
+    tipoEvento: "Prueb3",
     capacidadEvento: 0,
     fechaEvento: "12/02/2020",
     horaEvento: "08:00",
