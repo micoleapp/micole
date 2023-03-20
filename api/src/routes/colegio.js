@@ -367,6 +367,7 @@ router.post("/filter", async (req, res) => {
         },
       ],
       where: {
+        isActive: true,
         ...(distrits.length !== 0 && {
           [Op.or]: distrits.map((distrito) => ({ DistritoId: distrito })),
         }),
