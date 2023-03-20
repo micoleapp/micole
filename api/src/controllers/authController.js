@@ -191,6 +191,7 @@ const signUp = async (req, res, next) => {
         ProvinciaId,
         DepartamentoId,
         idAuth,
+        PlanPagoId: 1
       });
       const sanitizedSchool = {
         email: newAuth.email,

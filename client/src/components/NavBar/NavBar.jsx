@@ -8,10 +8,10 @@ import ModalLogin from "../ModalLogin/ModalLogin";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/AuthActions";
 import { Squash as Hamburger } from "hamburger-react";
-
+import CircularProgress from '@mui/material/CircularProgress'
 function NavBar() {
   const dispatch = useDispatch();
-  const { isAuth } = useSelector((state) => state.auth);
+  const { isAuth ,oneSchool} = useSelector((state) => state.auth);
   const [OpenLogin, setOpenLogin] = useState(false);
   const [BurguerMen, setBurguerMen] = useState(false);
   const [OpenCategory, setOpenCategory] = useState(false);
@@ -94,13 +94,24 @@ function NavBar() {
               Iniciar sesion
             </button>
           )}
-          {isAuth === true ? (
+          {/* {isAuth === true && oneSchool !== null ? (
           <Link to={"/dashboardschool"}>
           <button className={style.SesionButtom}>Ver Perfil</button>
         </Link>
           ) : (          <Link to={"/enroll"}>
           <button className={style.SesionButtom}>Inscribe tu colegio</button>
-        </Link>)}
+        </Link>)} */}
+
+        {!isAuth ? (          <Link to={"/enroll"}>
+          <button className={style.SesionButtom}>Inscribe tu colegio</button>
+        </Link>) : oneSchool !== null ?  (
+          <Link to={"/dashboardschool"}>
+          <button className={style.SesionButtom}>Ver Perfil</button>
+        </Link>
+          ) :  <button className={`${style.SesionButtom} flex items-center justify-center gap-2`}>Cargando perfil            <CircularProgress
+          size="1rem"
+          style={{ color: '#0061dd' }}
+        /> </button> }
 
         </div>
       </div>
@@ -160,13 +171,16 @@ function NavBar() {
               Iniciar sesion
             </button>
           )}
-          {isAuth === true ? (
-          <Link to={"/dashboardschool"}  onClick={()=>setOpen(!isOpen)}>
+        {!isAuth ? (          <Link to={"/enroll"}>
+          <button className={style.SesionButtom}>Inscribe tu colegio</button>
+        </Link>) : oneSchool !== null ?  (
+          <Link to={"/dashboardschool"}>
           <button className={style.SesionButtom}>Ver Perfil</button>
         </Link>
-          ) : (          <Link to={"/enroll"}  onClick={()=>setOpen(!isOpen)}>
-          <button className={style.SesionButtom}>Inscribe tu colegio</button>
-        </Link>)}
+          ) :  <button className={`${style.SesionButtom} flex items-center justify-center gap-2`}>Cargando perfil            <CircularProgress
+          size="1rem"
+          style={{ color: '#0061dd' }}
+        /> </button> }
         </div>
       </div>
     </div>

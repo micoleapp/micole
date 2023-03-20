@@ -24,7 +24,9 @@ export const getUserByToken = () => (dispatch) => {
         icon: 'error',
         title: 'Oops...',
         text: err.response.data.error
-      })});
+      })
+    localStorage.removeItem("token");
+    });
   }else{
     dispatch(logoutUser())
   }

@@ -25,7 +25,8 @@ import {
   getAllGrados,
   getAllSchools,
   getCitaAgendadas,
-
+  getAllDificultades,
+  getAllMetodos
 } from "./redux/SchoolsActions";
 
 import RequireAuth from "./components/RequireAuth";
@@ -45,10 +46,12 @@ function App() {
     dispatch(getAllPaises());
     dispatch(getAllNiveles());
     dispatch(getAllAfiliaciones());
-    dispatch(getAllSchools())
+    // dispatch(getAllSchools())
     dispatch(getUserByToken());
     dispatch(getCita())
     dispatch(getCitaAgendadas())
+    dispatch(getAllMetodos())
+    dispatch(getAllDificultades())
   }, []);
 
   useEffect(() => {

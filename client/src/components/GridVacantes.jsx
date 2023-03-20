@@ -147,7 +147,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     ).map((el) => el.cuota_ingreso)}
                     onChange={handleChange}
                     className="border-b-2 text-center w-[100px] border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
-                    placeholder="Ingrese nro"
+                    placeholder="..."
                     type="number"
                   />{" "}
                 </td>
@@ -163,7 +163,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     name="matricula"
                     onChange={handleChange}
                     className="border-b-2 text-center border-l w-[100px] border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
-                    placeholder="Ingrese nro"
+                    placeholder="..."
                     type="number"
                   />{" "}
                 </td>
@@ -179,7 +179,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     name="cuota_pension"
                     onChange={handleChange}
                     className="border-b-2 text-center border-l w-[100px] border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
-                    placeholder="Ingrese nro"
+                    placeholder="..."
                     type="number"
                   />{" "}
                 </td>

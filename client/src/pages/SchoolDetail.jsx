@@ -31,6 +31,7 @@ import {
   faHouseMedicalFlag,
   faCameraRotate,
 } from "@fortawesome/free-solid-svg-icons";
+import {BsPinAngle} from 'react-icons/bs'
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Maps from "../components/Maps";
@@ -47,6 +48,7 @@ import { fontSize } from "@mui/system";
 import style from "./SchoolD.module.css";
 import { HiChevronDown } from "react-icons/hi";
 import { HiChevronLeft } from "react-icons/hi";
+import SwiperEventos from "../components/SwiperEventos/SwiperEventos";
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
     <div className="w-full px-4">
@@ -579,7 +581,32 @@ function SchoolDetail() {
                   </li>
                 </ul> */}
               </div>
+              {oneSchool?.Metodos?.length > 0 && (
+                <>
+                                <h2 className="font-semibold text-lg">
+                Metodos de aprendizaje
+              </h2>
+              <div className="flex flex-wrap gap-5">
+              {oneSchool?.Metodos?.map(metodo=>(
+                <p className="flex gap-2 items-center text-sm"> <BsPinAngle className="text-[#0061dd]"/> {metodo.nombre_metodo} </p>
+              ))}
+              </div>
+                </>
+              )}
+                            {oneSchool?.Dificultades?.length > 0 && (
+                <>
+                                <h2 className="font-semibold text-lg">
+                Metodos de aprendizaje
+              </h2>
+              <div className="flex flex-wrap gap-5">
+              {oneSchool?.Dificultades?.map(dif=>(
+                <p className="flex gap-2 items-center text-sm"> <BsPinAngle className="text-[#0061dd]"/> {dif.nombre_dificultad} </p>
+              ))}
+              </div>
+                </>
+              )}
             </div>
+
             <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md">
               <h2 className="font-semibold text-xl">
                 Propuesta Valor Educativo
@@ -1204,6 +1231,10 @@ function SchoolDetail() {
                 </Link>
               </p>
             </div>
+            <div style={{width:'100%', display:'flex', justifyContent:'center',flexDirection:'column', gap:'10px'}}>
+            <h2 className="font-semibold text-xl">Eventos</h2>
+            <SwiperEventos/>
+          </div >
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Galeria</h2>
               {oneSchool.hasOwnProperty("galeria_fotos") && (
@@ -1243,6 +1274,7 @@ function SchoolDetail() {
                 </video>
               </div>
             )}
+           
             <form
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
               onSubmit={comentarioSubmit}
@@ -1390,7 +1422,9 @@ function SchoolDetail() {
                 Enviar reseña
               </button>
             </form>
+           
           </section>
+          
         </main>
       </div>
     </div>

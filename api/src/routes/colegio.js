@@ -28,7 +28,6 @@ const getPagination = require("../utils/getPagination");
 
 //------- PEDIR TODOS LOS COLEGIOS A LA BD--------
 router.get("/", async (req, res) => {
-  console.log("fffa");
   const { distritos, grado, ingreso } = req.query;
   const cleanedUrl = req.originalUrl.replace(/limit=\d+&page=\d+&?/, "");
   const url = `${req.protocol}://${req.get("host")}${cleanedUrl}`;
@@ -237,7 +236,6 @@ router.get("/:Colegio_id", async (req, res) => {
   }
 });
 router.post("/filter", async (req, res) => {
-  console.log("fffa2");
   const {
     distrits,
     grado,
@@ -444,9 +442,18 @@ router.put("/:id", async (req, res) => {
       metodos,
       dificultades,
     } = req.body;
-    let video_url = multimedia.video_url;
-    let primera_imagen = multimedia.image;
-    let galeria_fotos = JSON.stringify(multimedia.images);
+    let video_url = "";
+    let primera_imagen = "";
+    let galeria_fotos = "";
+    console.log(multimedia)
+    if(multimedia){      
+      video_url = multimedia.video_url;
+      primera_imagen = multimedia.image;
+      galeria_fotos = JSON.stringify(multimedia.images);
+    }
+    console.log(video_url)
+    console.log(primera_imagen)
+    console.log(galeria_fotos)
     const ubicacion = { lat, lng };
     const editedColegio = await Colegio.update(
       {

@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import ListItemText from "@mui/material/ListItemText";
 import FormControlLabel from "@mui/material/FormControlLabel";
+
 import Checkbox from "@mui/material/Checkbox";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -29,7 +30,9 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 import style from "./Dashboard.module.css";
+import CircularProgress from '@mui/material/CircularProgress'
 
+import {MdDeleteForever} from "react-icons/md"
 import {
   GoogleMap,
   useJsApiLoader,
@@ -37,12 +40,13 @@ import {
   Autocomplete,
 } from "@react-google-maps/api";
 import { steps } from "../MockupInfo/Pasos";
-import { getVacantes, postHorariosVacantes } from "../redux/SchoolsActions";
+import { getVacantes, postHorariosVacantes,getCitaAgendadas } from "../redux/SchoolsActions";
 import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
 import { RiImageAddLine } from "react-icons/ri";
 import { GiHexagonalNut } from "react-icons/gi";
+import { BsCalendarCheck } from "react-icons/bs";
 import { useEffect } from "react";
 import { logout, getSchoolDetail } from "../redux/AuthActions";
 import { useState } from "react";
@@ -50,7 +54,7 @@ import { useRef } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { MobileTimePicker } from "@mui/x-date-pickers";
+import { DateTimePicker, MobileDatePicker, MobileDateTimePicker, MobileTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -60,10 +64,22 @@ import { AiOutlineIdcard } from "react-icons/ai";
 import Cards from "../components/CardsDrgAndDrp/Cards";
 import CardCitas from "../components/CardsCitas/CardCitas";
 import SelectCitasAg from "../components/CardsCitas/SelectCitasAgendadas/SelectCitasAg";
-import { getCitaAgendadas } from "../redux/SchoolsActions";
 import { getCita } from "../redux/CitasActions";
 import Miplan from "../components/Miplan/Miplan";
+import Modal from '@mui/material/Modal';
 
+const styleModal = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  overflow: 'auto',
+  maxHeight:"80vh",
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  borderRadius:"10px",
+  p: 4,
+};
 const libraries = ["places"];
 
 const containerStyle = {
@@ -113,13 +129,15 @@ function StandardImageList({ one, list, setImage, eliminarImagenDePreview }) {
 }
 
 function DashboardSchool() {
+  const [hand,setHand] = useState(false)
+  const [editEvento, setEditEvento] = useState({})
+
   const { width, height } = useWindowSize();
   const [page, setPage] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
-  const [allData, setAllData] = useState({});
   const [Filtro, setFiltro] = useState("");
-  console.log(Filtro);
+
   const dispatch = useDispatch();
   const {
     categories,
@@ -129,16 +147,12 @@ function DashboardSchool() {
     niveles,
     infraestructura: infraState,
     afiliaciones,
-  
+    dificultades,
+    metodos,
   } = useSelector((state) => state.schools);
-  const { user, oneSchool } = useSelector((state) => state.auth);
+  const { user, oneSchool ,loading} = useSelector((state) => state.auth);
 
   const id = user.id;
-  useEffect(() => {
-    if (user) {
-      dispatch(getSchoolDetail(user.id));
-    }
-  }, [allData]);
 
   const {
     register,
@@ -235,7 +249,20 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    setAllData({ ...allData, ...datosPrincipales });
+    // setAllData({ ...allData, ...datosPrincipales });
+    try {
+      axios
+        .put(`/colegios/${user.id}`, datosPrincipales)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+
     handleNext();
   };
 
@@ -250,7 +277,18 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    setAllData({ ...allData, ...datosPrincipales });
+    try {
+      axios
+        .put(`/colegios/${user.id}`, datosPrincipales)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
     handleNext();
   };
 
@@ -258,7 +296,18 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    setAllData({ ...allData, ...datosPrincipales });
+    try {
+      axios
+        .put(`/colegios/${user.id}`, datosPrincipales)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
     handleNext();
   };
 
@@ -266,7 +315,19 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    setAllData({ ...allData, multimedia });
+    console.log({ ...datosPrincipales, multimedia });
+    try {
+      axios
+        .put(`/colegios/${user.id}`, { ...datosPrincipales, multimedia })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
     handleNext();
   };
 
@@ -370,12 +431,14 @@ function DashboardSchool() {
       : [],
     afiliaciones:
       oneSchool?.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
+    dificultades: oneSchool?.Dificultades ? oneSchool.Dificultades : [],
+    metodos: oneSchool?.Metodos ? oneSchool.Metodos : [],
   };
 
   const [datosPrincipales, setDatosPrincipales] = useState(
     initialDatosPrincipales
   );
-
+  console.log(datosPrincipales);
   const datosPrincipalesCompleted = () => {
     if (
       datosPrincipales.nombreColegio !== "" &&
@@ -422,8 +485,39 @@ function DashboardSchool() {
   const [isOpen, setOpen] = useState(false);
 
   const [file, setFile] = useState(null);
-
+  const [fileEvento, setFileEvento] = useState(null);
+  const [fileEditEvento,setFileEditEvento] = useState(null);
+  console.log(fileEditEvento)
   const [files, setFiles] = useState(null);
+
+  const [evento,setEvento] = useState({
+    idColegio:id,
+    nombreEvento: "",
+    descripcionEvento: "",
+    tipoEvento: "",
+    capacidadEvento: 0,
+          fechaEvento: dayjs(new Date()),
+          horaEvento: "08:00",
+    image: ""
+  })
+
+
+
+  const disableEvento = () => {
+    if (
+      evento.nombreEvento !== "" &&
+      evento.descripcionEvento !== "" &&
+      evento.tipoEvento !== "" &&
+      evento.capacidadEvento !== 0 &&
+      evento.fechaEvento !== "" &&
+      evento.horaEvento !== "" &&
+      evento.image !== ""
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   const handleFilesSubmitOne = async (e) => {
     e.preventDefault();
@@ -451,6 +545,55 @@ function DashboardSchool() {
     setSpanOne(false);
     setActiveUpOne(false);
   };
+  const handleFilesSubmitEvento = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    try {
+      formData.append("file", previewEvento);
+      formData.append("upload_preset", "tcotxf16");
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/de4i6biay/image/upload",
+        formData
+      );
+      setEvento({ ...evento, image: res.data.secure_url });
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: "Intenta nuevamente",
+      });
+    }
+    Swal.fire({
+      icon: "success",
+      title: "Imagen subida correctamente",
+    });
+    setSpanOne(false);
+    setActiveUpOne(false);
+  };
+  const [succesEditImage, setSuccesEditImage] = useState(false);
+  const handleFilesSubmitEditEvento = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    try {
+      formData.append("file", previewEditEvento);
+      formData.append("upload_preset", "tcotxf16");
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/de4i6biay/image/upload",
+        formData
+      );
+      setEditEvento({ ...editEvento, image: res.data.secure_url });
+      setHand(false)
+      setSuccesEditImage(true)
+    } catch (error) {
+      console.log(error);
+
+    }
+    setSpanOne(false);
+    setActiveUpOne(false);
+  };
+
+  
 
   function handleFilesSubmit(e) {
     e.preventDefault();
@@ -506,7 +649,56 @@ function DashboardSchool() {
       : [];
   const [preview, setPreview] = useState(initialPreview);
   const [previewOne, setPreviewOne] = useState(initialPreviewOne);
-
+  const [previewEvento, setPreviewEvento] = useState(null);
+  const [previewEditEvento,setPreviewEditEvento] = useState(null);
+  const [dateEvento, setDateEvento] = React.useState(dayjs(new Date()));
+  const [timeEvento, setTimeEvento] = React.useState(dayjs("2014-08-18T08:00:00"));
+  const [dateEditEvento, setDateEditEvento] = React.useState(dayjs(new Date()));
+  const [timeEditEvento, setTimeEditEvento] = React.useState(dayjs("2014-08-18T08:00:00"));
+  const [change,setChange] = useState(false)
+  const handleChangeDate = (newValue) => {
+    setDateEvento(dayjs(newValue));
+    setEvento({
+      ...evento,
+      fechaEvento: [
+        stringyDate(newValue["$D"]).toString(),
+        stringyDate(newValue["$M"] + 1).toString(),
+        newValue["$y"].toString(),
+      ].join("/"),
+    });
+  };
+  const handleChangeTime = (newValue) => {
+    setTimeEvento(dayjs(newValue));
+    setEvento({
+      ...evento,
+      horaEvento: [
+        stringyDate(newValue["$H"]).toString(),
+        stringyDate(newValue["$m"]).toString(),
+      ].join(":"),
+    });
+  };
+  const handleChangeDateEdit = (newValue) => {
+    setDateEditEvento(dayjs(newValue));
+    setEditEvento({
+      ...editEvento,
+      fechaEvento: [
+        stringyDate(newValue["$D"]).toString(),
+        stringyDate(newValue["$M"] + 1).toString(),
+        newValue["$y"].toString(),
+      ].join("/"),
+    });
+  };
+  const handleChangeTimeEdit = (newValue) => {
+    setChange(true)
+    setTimeEditEvento(dayjs(newValue));
+    setEditEvento({
+      ...editEvento,
+      horaEvento: [
+        stringyDate(newValue["$H"]).toString(),
+        stringyDate(newValue["$m"]).toString(),
+      ].join(":"),
+    });
+  };
   useEffect(() => {
     if (files !== null) {
       Object.values(files).map((file) => {
@@ -528,6 +720,27 @@ function DashboardSchool() {
       };
     }
   }, [file]);
+  useEffect(() => {
+    if (fileEvento !== null) {
+      const reader = new FileReader();
+      reader.readAsDataURL(fileEvento);
+      reader.onloadend = () => {
+        setPreviewEvento(reader.result);
+      };
+    }
+  }, [fileEvento]);
+
+  useEffect(() => {
+    if (fileEditEvento !== null) {
+      const reader = new FileReader();
+      reader.readAsDataURL(fileEditEvento);
+      reader.onloadend = () => {
+        setPreviewEditEvento(reader.result);
+        setHand(true)
+
+      };
+    }
+  }, [fileEditEvento]);
 
   const eliminarImagenDePreview = (img) => {
     setPreview(preview.filter((image) => image !== img));
@@ -548,30 +761,16 @@ function DashboardSchool() {
 
   const handleSubmitFormComplete = (e) => {
     e.preventDefault();
-
-    axios
-      .put(`/colegios/${user.id}`, allData)
-      .then((res) => {
-        Swal.fire({
-          icon: "success",
-          title: "Felicidades ya estas a un paso de publicar tu colegio",
-          text: "Continua completando el horario para tus citas",
-          confirmButtonText: "Continuar",
-        }).then((res) => {
-          if (res.isConfirmed) {
-            handleReset();
-            setPage(1);
-          }
-        });
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-        Swal.fire({
-          icon: "error",
-          title: "Lo sentimos algo salio mal",
-          text: err.message,
-        });
-      });
+    Swal.fire({
+      icon: "success",
+      title: "Felicidades ya estas a un paso de publicar tu colegio",
+      confirmButtonText: "Continuar",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        handleReset();
+        setPage(1);
+      }
+    });
   };
 
   const [vacantes, setVacantes] = useState(0);
@@ -691,26 +890,172 @@ function DashboardSchool() {
 
   const { success } = useSelector((state) => state.citas);
   const { citasAgendadas } = useSelector((state) => state.schools);
-  useEffect(() => {
-    dispatch(getCita());
-  }, [page === 4]);
 
   useEffect(() => {
     dispatch(getCitaAgendadas());
-  }, [page === 5]);
-  useEffect(() => {
-    dispatch(getCitaAgendadas());
-  }, [citasAgendadas.CitasActivas?.length]);
-  useEffect(() => {
     dispatch(getCita());
-    dispatch(getCitaAgendadas());
-  }, [success]);
+  }, [page === 5]);
 
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
 
-  console.log(vacantesOffThree);
+  const handleSubmitEvento = (e) => {
+    e.preventDefault()
+    try {
+      axios.post('/eventos',evento)
+      .then(res=>{
+        Swal.fire({
+          icon: 'success',
+          title: 'Evento creado exitosamente!',
+        })
+        dispatch(getSchoolDetail(id))
+        setEvento({
+          idColegio:id,
+          nombreEvento: "",
+          descripcionEvento: "",
+          tipoEvento: "",
+          capacidadEvento: 0,
+          fechaEvento: dayjs(new Date()),
+          horaEvento: "08:00",
+          image: ""
+        })
+        setFileEvento(null)
+        setPreviewEvento(null)
+      })
+      .catch(err=>{
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Algo salio mal!',
+        })
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
+  const handleDelete = (id) => {
+    try {
+      Swal.fire({
+        title: 'Estas seguro?',
+        text: "No podras revertir esto!",
+        icon: 'warning',
+        showDenyButton: true,
+        confirmButtonText: 'Si, eliminar!',
+        denyButtonText: `No`
+      })
+      .then(res=>{
+        if(res.isConfirmed){
+          axios.delete(`/eventos/${id}`)
+          .then(res=>{
+            dispatch(getSchoolDetail(user.id))
+            Swal.fire({
+              icon: 'success',
+              title: 'Evento eliminado exitosamente!',
+            })
+          }
+          )
+          .catch(err=>{
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Algo salio mal!',
+            })
+          })
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handleSubmitEditEvento = (id) => {
+    if(change){
+      try {
+        axios.put(`/eventos/${id}`,editEvento)
+        .then(res=>{
+          Swal.fire({
+            icon: 'success',
+            title: 'Evento editado exitosamente!',
+          })
+          dispatch(getSchoolDetail(user.id))
+        })
+        .catch(err=>{
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Algo salio mal!',
+          })
+        })
+      } catch (error) {
+        console.log(error)
+      }
+      handleCloseModal()
+      setHand(false)
+      setSuccesEditImage(false)
+      setChange(false)
+    }else{
+      const horaEvento = [
+        stringyDate(editEvento.horaEvento["$H"]).toString(),
+        stringyDate(editEvento.horaEvento["$m"]).toString(),
+      ].join(":")
+      const newEvent = {...editEvento,horaEvento}
+      console.log(newEvent)
+      console.log(editEvento)
+      try {
+        axios.put(`/eventos/${id}`,newEvent)
+        .then(res=>{
+          Swal.fire({
+            icon: 'success',
+            title: 'Evento editado exitosamente!',
+          })
+          dispatch(getSchoolDetail(user.id))
+        })
+        .catch(err=>{
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Algo salio mal!',
+          })
+        })
+      } catch (error) {
+        console.log(error)
+      }
+      handleCloseModal()
+      setHand(false)
+      setSuccesEditImage(false)
+      setChange(false)
+    }
+  }
+
+  console.log(change)
+  
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => {
+    setEditEvento({})
+    setOpenModal(false)};
+
+  const handleEdit = (id) => {
+    handleOpenModal()
+    const editEventoNew = oneSchool?.Eventos?.find(e=>e.id===id)
+
+    const newFecha = "2014-08-18T" + editEventoNew.hora_evento + ':00'
+    setTimeEditEvento(dayjs(newFecha))
+    setDateEditEvento(editEventoNew.fecha_evento)
+    setEditEvento({
+      idColegio:editEventoNew.id,
+      nombreEvento: editEventoNew.nombre_evento,
+      descripcionEvento: editEventoNew.descripcion,
+      tipoEvento: editEventoNew.tipo_evento,
+      capacidadEvento: editEventoNew.capacidad,
+      fechaEvento: dateEditEvento,
+      horaEvento: timeEditEvento,
+      image: editEventoNew.imagen_evento
+    })
+  }
+
+  console.log(editEvento)
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -733,7 +1078,9 @@ function DashboardSchool() {
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
               page == 0 ? "bg-[#0061dd] text-white" : null
             } `}
-            onClick={() => setPage(0)}
+            onClick={() => {
+              setOpen()
+              setPage(0)}}
           >
             <CiUser
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -752,7 +1099,9 @@ function DashboardSchool() {
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
               page == 1 ? "bg-[#0061dd] text-white" : null
             } `}
-            onClick={() => setPage(1)}
+            onClick={() => {
+              setOpen()
+              setPage(1)}}
           >
             <CiClock1
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -771,7 +1120,9 @@ function DashboardSchool() {
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
               page == 5 ? "bg-[#0061dd] text-white" : null
             } `}
-            onClick={() => setPage(5)}
+            onClick={() => {
+              setOpen()
+              setPage(5)}}
           >
             <MoveToInboxOutlinedIcon
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -788,9 +1139,32 @@ function DashboardSchool() {
           </button>
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+              page == 6 ? "bg-[#0061dd] text-white" : null
+            } `}
+            onClick={() => {
+              setOpen()
+              setPage(6)}}
+          >
+            <BsCalendarCheck
+              className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                page == 6 ? "text-white" : null
+              }`}
+            />
+            <span
+              className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                page == 6 ? "text-white" : null
+              }`}
+            >
+              Eventos{" "}
+            </span>
+          </button>
+          <button
+            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
               page == 4 ? "bg-[#0061dd] text-white" : null
             } `}
-            onClick={() => setPage(4)}
+            onClick={() => {
+              setOpen()
+              setPage(4)}}
           >
             <AiOutlineIdcard
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -802,7 +1176,7 @@ function DashboardSchool() {
                 page == 4 ? "text-white" : null
               }`}
             >
-              Control de citas{" "}
+              Panel de control{" "}
             </span>
           </button>
 
@@ -810,7 +1184,9 @@ function DashboardSchool() {
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
               page == 2 ? "bg-[#0061dd] text-white" : null
             } `}
-            onClick={() => setPage(2)}
+            onClick={() => {
+              setOpen()
+              setPage(2)}}
           >
             <BsWindowDock
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -823,7 +1199,6 @@ function DashboardSchool() {
               }`}
             >
               Mi plan
-             
             </span>
           </button>
 
@@ -831,7 +1206,9 @@ function DashboardSchool() {
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
               page == 3 ? "bg-[#0061dd] text-white" : null
             } `}
-            onClick={() => setPage(3)}
+            onClick={() => {
+              setOpen()
+              setPage(3)}}
           >
             <GiHexagonalNut
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -892,8 +1269,7 @@ function DashboardSchool() {
                       Felicitaciones completaste todos los pasos
                     </h1>
                     <p className="text-center">
-                      Porfavor envia el formulario hacia nuestra base de datos
-                      para continuar
+                      Porfavor continua completando tus horarios para citas
                     </p>
                     <img src={Logo} alt="" className="object-cover mx-auto" />
                     <button
@@ -901,7 +1277,7 @@ function DashboardSchool() {
                       className="bg-[#0061dd] text-white rounded-md mx-auto p-3"
                       onClick={handleSubmitFormComplete}
                     >
-                      Enviar datos
+                      Continuar
                     </button>
                   </div>
                 </React.Fragment>
@@ -1193,8 +1569,9 @@ function DashboardSchool() {
                           <small>Puede marcar mas de una opción</small>
                         </div>
                         <div className="flex flex-col lg:grid grid-cols-3">
-                          {niveles?.map((level) => (
+                          {niveles?.map((level, key) => (
                             <FormControlLabel
+                              key={key}
                               control={
                                 <Checkbox
                                   checked={datosPrincipales.niveles.some(
@@ -1222,6 +1599,101 @@ function DashboardSchool() {
                                 />
                               }
                               label={level.nombre_nivel}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex flex-col">
+                          <label
+                            htmlFor="alumnos"
+                            className="text-lg font-medium"
+                          >
+                            ¿Aceptas estudiantes con alguna de estas
+                            dificultades?
+                          </label>
+                          <small>Puede marcar mas de una opción</small>
+                        </div>
+                        <div className="flex flex-col lg:grid grid-cols-3">
+                          {dificultades?.map((level, key) => (
+                            <FormControlLabel
+                              key={key}
+                              control={
+                                <Checkbox
+                                  checked={datosPrincipales.dificultades.some(
+                                    (niv) =>
+                                      niv.id_dificultad === level.id_dificultad
+                                  )}
+                                  onChange={(event, target) => {
+                                    if (target) {
+                                      setDatosPrincipales({
+                                        ...datosPrincipales,
+                                        dificultades: [
+                                          ...datosPrincipales.dificultades,
+                                          level,
+                                        ],
+                                      });
+                                    } else {
+                                      setDatosPrincipales({
+                                        ...datosPrincipales,
+                                        dificultades:
+                                          datosPrincipales.dificultades.filter(
+                                            (cat) =>
+                                              cat.id_dificultad !==
+                                              level.id_dificultad
+                                          ),
+                                      });
+                                    }
+                                  }}
+                                />
+                              }
+                              label={level.nombre_dificultad}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex flex-col">
+                          <label
+                            htmlFor="alumnos"
+                            className="text-lg font-medium"
+                          >
+                            ¿Utilizas alguno de estos métodos pedagógicos?{" "}
+                          </label>
+                          <small>Puede marcar mas de una opción</small>
+                        </div>
+                        <div className="flex flex-col lg:grid grid-cols-3">
+                          {metodos?.map((level, key) => (
+                            <FormControlLabel
+                              key={key}
+                              control={
+                                <Checkbox
+                                  checked={datosPrincipales.metodos.some(
+                                    (niv) => niv.id_metodo === level.id_metodo
+                                  )}
+                                  onChange={(event, target) => {
+                                    if (target) {
+                                      setDatosPrincipales({
+                                        ...datosPrincipales,
+                                        metodos: [
+                                          ...datosPrincipales.metodos,
+                                          level,
+                                        ],
+                                      });
+                                    } else {
+                                      setDatosPrincipales({
+                                        ...datosPrincipales,
+                                        metodos:
+                                          datosPrincipales.metodos.filter(
+                                            (cat) =>
+                                              cat.id_metodo !== level.id_metodo
+                                          ),
+                                      });
+                                    }
+                                  }}
+                                />
+                              }
+                              label={level.nombre_metodo}
                             />
                           ))}
                         </div>
@@ -1492,6 +1964,9 @@ function DashboardSchool() {
                         </Button>
                       ))} */}
                       </Box>
+                      <small className="flex justify-end">
+                        Al apretar NEXT estas guardando tus datos
+                      </small>
                     </form>
                   )}
                   {activeStep === 1 && (
@@ -1775,6 +2250,9 @@ function DashboardSchool() {
                         </Button>
                       ))} */}
                       </Box>
+                      <small className="flex justify-end">
+                        Al apretar NEXT estas guardando tus datos
+                      </small>
                     </div>
                   )}
                   {activeStep === 2 && (
@@ -2011,6 +2489,9 @@ function DashboardSchool() {
                         </Button>
                       ))} */}
                       </Box>
+                      <small className="flex justify-end">
+                        Al apretar NEXT estas guardando tus datos
+                      </small>
                     </div>
                   )}
                   {activeStep === 3 && (
@@ -2116,6 +2597,9 @@ function DashboardSchool() {
                         </Button>
                       ))} */}
                       </Box>
+                      <small className="flex justify-end">
+                        Al apretar NEXT estas guardando tus datos
+                      </small>
                     </div>
                   )}
                   {activeStep === 4 && (
@@ -2345,6 +2829,9 @@ function DashboardSchool() {
                                           </Button>
                                         ))} */}
                       </Box>
+                      <small className="flex justify-end">
+                        Al apretar NEXT estas guardando tus datos
+                      </small>
                     </div>
                   )}
                 </React.Fragment>
@@ -2476,7 +2963,7 @@ function DashboardSchool() {
           </div>
         ) : page === 2 ? (
           <div className="min-h-screen">
-           <Miplan/>
+            <Miplan />
           </div>
         ) : page === 3 ? (
           <div className="flex flex-col gap-5 min-h-screen px-24">
@@ -2616,10 +3103,22 @@ function DashboardSchool() {
               className={style.layout}
               style={{ display: "flex", gap: "10px" }}
             >
-              <Cards icon="solicitud" text="Solicitudes de Citas" nro={citasAgendadas.CitasInactivas.length} />
-              <Cards icon="visualizacion" text="Visualizaciones" nro={oneSchool?.visualizaciones} />
+              <Cards
+                icon="solicitud"
+                text="Solicitudes de Citas"
+                nro={citasAgendadas?.CitasInactivas?.length}
+              />
+              <Cards
+                icon="visualizacion"
+                text="Visualizaciones"
+                nro={oneSchool?.visualizaciones}
+              />
               <Cards icon="mensaje" text="Mensajes" nro={0} />
-              <Cards icon="comentario" text="Comentarios" nro={oneSchool.Reviews.length} />
+              <Cards
+                icon="comentario"
+                text="Comentarios"
+                nro={oneSchool?.Reviews?.length}
+              />
             </div>
 
             <DragAndDrop />
@@ -2660,6 +3159,297 @@ function DashboardSchool() {
             <div>
               <CardCitas filtros={Filtro} />
             </div>
+          </div>
+        ) : page === 6 ? (
+          <div className="min-h-screen p-10 flex flex-col gap-5">
+              <h1 className="text-xl font-medium">Crear nuevo evento</h1>
+              <div className="flex flex-col lg:flex-row gap-5">
+              <form
+                          onSubmit={handleFilesSubmitEvento}
+                          className="flex flex-col"
+                        >
+                          <div className="file-select flex w-full lg:min-w-[200px] ">
+                            <label
+                              htmlFor="image"
+                              className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-t-md"
+                            >
+                              <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
+                              <span className="text-sm mx-auto text-center text-[#0061dd]">
+                                Agregar imagen
+                              </span>{" "}
+                            </label>
+                            <input
+                              type="file"
+                              id="image"
+                              name="image"
+                              accept="image/png,image/jpeg"
+                              onChange={(e) => {
+                                setSpanOne(true);
+                                setFileEvento(e.target.files[0]);
+                              }}
+                              className="hidden"
+                            />
+                          </div>
+                          {fileEvento !== null && (
+                            <button
+                              type="submit"
+                              disabled={previewEvento == null}
+                              className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
+                            >
+                              Upload
+                            </button>
+                          )}
+
+                          {spanOne && (
+                            <span className="relative text-center animate-bounce text-3xl">
+                              👆
+                            </span>
+                          )}
+                                        {previewEvento !== null && (
+                <img src={previewEvento} alt="" className="object-cover mt-2 rounded-md"/>
+              )}
+                        </form>
+                <form className="flex flex-col w-full gap-2">
+                  <label htmlFor="nombreEvento">Nombre del Evento</label>
+                  <input
+                    type="text"
+                    value={evento.nombreEvento}
+                    id="nombreEvento"
+                    className="p-3 rounded-md border-2  outline-none"
+                    onChange={(e)=>{
+                      setEvento({...evento, nombreEvento: e.target.value})
+                    }}
+                  />
+                  <label htmlFor="descripcionEvento">
+                    Breve descripción del evento
+                  </label>
+                  <textarea
+                  value={evento.descripcionEvento}
+                    id="descripcionEvento"
+                    className="p-3 rounded-md border-2  outline-none"
+                    onChange={(e)=>{
+                      setEvento({...evento, descripcionEvento: e.target.value})
+                    }}
+                  />
+                  <div className="lg:grid grid-cols-3 gap-5 flex flex-col">
+                  <div className="flex flex-col">
+                      <label htmlFor="tipoEvento">Tipo de evento</label>
+                      <input
+                        type="text"
+                        value={evento.tipoEvento}
+                        id="tipoEvento"
+                        className="p-3 rounded-md border-2  outline-none"
+                        onChange={(e)=>{
+                          setEvento({...evento, tipoEvento: e.target.value})
+                        }}
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <label htmlFor="capacidadEvento">Capacidad</label>
+                      <input
+                        type="number"
+                        value={evento.capacidadEvento}
+                        id="capacidadEvento"
+                        className="p-3 rounded-md border-2  outline-none"
+                        onChange={(e)=>{
+                          setEvento({...evento, capacidadEvento: e.target.value})
+                        }
+                      }
+                      />
+                    </div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <div className="flex w-full items-center justify-between mt-4  flex-col gap-4 lg:flex-row">
+                  <MobileDatePicker
+                    label="Elejir fecha"
+                    value={dateEvento}
+                    inputFormat="DD/MM/YYYY"
+                    renderInput={(params) => <TextField {...params} />}
+                    disablePast
+                    onChange={handleChangeDate}
+                    className="bg-white"
+                  />
+                    <MobileTimePicker
+                      label="Elejir hora"
+                      renderInput={(params) => <TextField {...params} />}
+                      ampm={false}
+                      value={timeEvento}
+                      className="bg-white"
+                      onChange={handleChangeTime}
+                    />
+                </div>
+              </LocalizationProvider>
+                          
+                  </div>
+                    <button type="button" onClick={handleSubmitEvento} disabled={disableEvento()} className="p-2 mt-2 mx-auto lg:mx-0 w-fit bg-[#0061dd] text-white rounded-md disabled:bg-[#0061dd]/40">Crear evento </button>
+                </form>
+              </div>
+              {loading ? <div className="flex flex-col items-center justify-center gap-3">              
+                <h1 className="text-center text-2xl font-medium">Cargando nuevos eventos...</h1> 
+                            <CircularProgress
+              size="3rem"
+            />
+              </div> 
+              : 
+              <>
+              <h1 className="text-xl font-medium">Historial de eventos</h1>
+              {oneSchool?.Eventos?.length > 0 ? (
+                <div className="flex flex-col mx-10 gap-5">
+                  {oneSchool?.Eventos?.map((evento) => (
+                    <div className="flex lg:flex-row flex-col w-full items-center p-3 justify-around shadow-md bg-white rounded-md gap-2">
+                      <img src={evento.imagen_evento} alt={evento.nombre_evento} className="rounded-full w-24 h-24 object-cover"/>
+                      <div className="flex flex-col text-center lg:text-start gap-2">
+                        <h2 className="font-semibold">{evento.nombre_evento}</h2>
+                        <div className="flex gap-2">
+                        <small className="font-medium">Fecha: <span className="font-normal">{evento.fecha_evento}</span> </small>
+                        <small className="font-medium">Hora: <span className="font-normal"> {evento.hora_evento}</span></small>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <small className="font-medium">Capacidad: <span className="font-normal">{evento.capacidad}</span> </small>
+                        <small className="font-medium">Inscriptos: <span className="font-normal">123</span> </small>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button onClick={()=>handleEdit(evento.id)}  className="p-2 flex font-medium mx-auto lg:mx-0 w-fit text-[#0061dd] rounded-md bg-[#0061dd]/20">Editar</button>
+                       <MdDeleteForever onClick={()=>handleDelete(evento.id)} className="text-[#0061dd] text-4xl cursor-pointer"/>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : <h1>No hay eventos creados</h1>}
+              </>
+              }
+                    <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={styleModal}>
+        <div className="flex flex-col lg:flex-row gap-5">
+              <form
+                          onSubmit={handleFilesSubmitEditEvento}
+                          className="flex flex-col"
+                        >
+                          <div className="file-select flex w-full lg:min-w-[200px] ">
+                            <label
+                              htmlFor="imageEdit"
+                              className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-t-md"
+                            >
+                              <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
+                              <span className="text-sm mx-auto text-center text-[#0061dd]">
+                                Modificar imagen
+                              </span>{" "}
+                            </label>
+                            <input
+                              type="file"
+                              id="imageEdit"
+                              name="imageEdit"
+                              accept="image/png,image/jpeg"
+                              onChange={(e) => {
+                                setFileEditEvento(e.target.files[0]);
+                              }}
+                              className="hidden"
+                            />
+                          </div>
+                          {hand && (
+                            <button
+                              type="submit"
+                              disabled={previewEditEvento == null}
+                              className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
+                            >
+                              Upload
+                            </button>
+                          )}
+
+                          {hand && (
+                            <span className="relative text-center animate-bounce text-3xl">
+                              👆
+                            </span>
+                          )}
+
+                <img src={editEvento.image} alt="" className="object-cover mt-2 rounded-md"/>
+                {succesEditImage && (
+                <span className="text-green-500 text-sm">
+                  Imagen modificada con exito
+                </span>
+                )}
+                        </form>
+                <form className="flex flex-col w-full gap-2">
+                  <label htmlFor="nombreEvento">Nombre del Evento</label>
+                  <input
+                    type="text"
+                    value={editEvento.nombreEvento}
+                    id="nombreEvento"
+                    className="p-3 rounded-md border-2  outline-none"
+                    onChange={(e)=>{
+                      setEditEvento({...editEvento, nombreEvento: e.target.value})
+                    }}
+                  />
+                  <label htmlFor="descripcionEvento">
+                    Breve descripción del evento
+                  </label>
+                  <textarea
+                  value={editEvento.descripcionEvento}
+                    id="descripcionEvento"
+                    className="p-3 rounded-md border-2  outline-none"
+                    onChange={(e)=>{
+                      setEditEvento({...editEvento, descripcionEvento: e.target.value})
+                    }}
+                  />
+                  <div className="lg:grid grid-cols-3 gap-5 flex flex-col">
+                  <div className="flex flex-col">
+                      <label htmlFor="tipoEvento">Tipo de evento</label>
+                      <input
+                        type="text"
+                        value={editEvento.tipoEvento}
+                        id="tipoEvento"
+                        className="p-3 rounded-md border-2  outline-none"
+                        onChange={(e)=>{
+                          setEditEvento({...editEvento, tipoEvento: e.target.value})
+                        }}
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <label htmlFor="capacidadEvento">Capacidad</label>
+                      <input
+                        type="number"
+                        value={editEvento.capacidadEvento}
+                        id="capacidadEvento"
+                        className="p-3 rounded-md border-2  outline-none"
+                        onChange={(e)=>{
+                          setEditEvento({...editEvento, capacidadEvento: e.target.value})
+                        }
+                      }
+                      />
+                    </div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <div className="flex w-full items-center justify-between mt-4  flex-col gap-4 lg:flex-row">
+                  <MobileDatePicker
+                    label="Elejir fecha"
+                    value={dateEditEvento}
+                    inputFormat="DD/MM/YYYY"
+                    renderInput={(params) => <TextField {...params} />}
+                    disablePast
+                    onChange={handleChangeDateEdit}
+                    className="bg-white"
+                  />
+                    <MobileTimePicker
+                      label="Elejir hora"
+                      renderInput={(params) => <TextField {...params} />}
+                      ampm={false}
+                      value={timeEditEvento}
+                      className="bg-white"
+                      onChange={handleChangeTimeEdit}
+                    />
+                </div>
+              </LocalizationProvider>
+                          
+                  </div>
+                    <button type="button" onClick={()=>handleSubmitEditEvento(editEvento.idColegio)}  className="p-2 mt-2 mx-auto lg:mx-0 w-fit bg-[#0061dd] text-white rounded-md disabled:bg-[#0061dd]/40">Modificar evento </button>
+                </form>
+              </div>
+        </Box>
+      </Modal>
           </div>
         ) : null}
       </section>
