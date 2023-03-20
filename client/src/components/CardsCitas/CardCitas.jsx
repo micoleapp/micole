@@ -58,7 +58,9 @@ export default function CardCitas({ filtros }) {
  
   React.useEffect(() => {
     const allCitas= []
-    let resultadoActivas = sliceIntoChunks(
+    if(citasAgendadas.length > 0 ){
+
+        let resultadoActivas = sliceIntoChunks(
       citasAgendadas.CitasActivasMesActual,
       10
     );
@@ -79,6 +81,8 @@ export default function CardCitas({ filtros }) {
       10
     );      
     setArrCitas(resultadoAllCitas);
+    }
+  
   }, []);
 console.log(arrCita)
   return (
