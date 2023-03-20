@@ -54,13 +54,11 @@ export default function CardCitas({ filtros }) {
     await comprobacion(iD);
   };
   //  PAGINADO
-  
- 
-  React.useEffect(() => {
-    const allCitas= []
-    if(citasAgendadas.length > 0 ){
 
-        let resultadoActivas = sliceIntoChunks(
+  React.useEffect(() => {
+    const allCitas = [];
+
+    let resultadoActivas = sliceIntoChunks(
       citasAgendadas.CitasActivasMesActual,
       10
     );
@@ -75,16 +73,14 @@ export default function CardCitas({ filtros }) {
       10
     );
     setArrCitaNoPermitidas(resultadoCitaNoPermitidas);
-   const allCitasActInact = allCitas.concat( citasAgendadas.CitasPermitidasMesActual, citasAgendadas.CitasActivasMesActual)
-    let resultadoAllCitas = sliceIntoChunks(
-      allCitasActInact,
-      10
-    );      
+    const allCitasActInact = allCitas.concat(
+      citasAgendadas.CitasPermitidasMesActual,
+      citasAgendadas.CitasActivasMesActual
+    );
+    let resultadoAllCitas = sliceIntoChunks(allCitasActInact, 10);
     setArrCitas(resultadoAllCitas);
-    }
-  
   }, []);
-console.log(arrCita)
+  console.log(arrCita);
   return (
     <>
       <div
@@ -119,7 +115,6 @@ console.log(arrCita)
               </>
             )}
 
-         
             {citasAgendadas &&
               arrCita[page]?.map((cita) => {
                 return (
@@ -295,7 +290,7 @@ console.log(arrCita)
                       minHeight: "100%",
                       boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
                       fontWeight: "600",
-                      paddingBottom:'20px'
+                      paddingBottom: "20px",
                     }}
                   >
                     <ContentPasteSearchOutlinedIcon
@@ -1105,7 +1100,7 @@ console.log(arrCita)
                             handlerPutStateCita(cita.id);
                           }}
                           variant="contained"
-                          sx={{background:'green'}}
+                          sx={{ background: "green" }}
                           disabled
                         >
                           Confirmada{" "}

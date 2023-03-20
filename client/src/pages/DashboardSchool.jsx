@@ -719,6 +719,11 @@ function DashboardSchool() {
     }
   }, [files]);
 
+  // useEffect(() => {
+  //   dispatch(getCitaAgendadas());
+  //   dispatch(getCita());
+  // }, []);
+
   useEffect(() => {
     if (file !== null) {
       const reader = new FileReader();
@@ -3231,7 +3236,9 @@ function DashboardSchool() {
                 )}
               </form>
               <form className="flex flex-col w-full gap-2">
-                <label htmlFor="nombreEvento" className="font-medium">Nombre del Evento</label>
+                <label htmlFor="nombreEvento" className="font-medium">
+                  Nombre del Evento
+                </label>
                 <input
                   type="text"
                   value={evento.nombreEvento}
@@ -3254,7 +3261,9 @@ function DashboardSchool() {
                 />
                 <div className="lg:grid grid-cols-3 gap-5 flex flex-col">
                   <div className="flex flex-col">
-                    <label htmlFor="tipoEvento" className="font-medium">Tipo de evento</label>
+                    <label htmlFor="tipoEvento" className="font-medium">
+                      Tipo de evento
+                    </label>
                     <input
                       type="text"
                       value={evento.tipoEvento}
@@ -3266,7 +3275,9 @@ function DashboardSchool() {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <label htmlFor="capacidadEvento" className="font-medium">Capacidad</label>
+                    <label htmlFor="capacidadEvento" className="font-medium">
+                      Capacidad
+                    </label>
                     <input
                       type="number"
                       value={evento.capacidadEvento}
@@ -3443,7 +3454,9 @@ function DashboardSchool() {
                     )}
                   </form>
                   <form className="flex flex-col w-full gap-2">
-                    <label htmlFor="nombreEvento" className="font-medium">Nombre del Evento</label>
+                    <label htmlFor="nombreEvento" className="font-medium">
+                      Nombre del Evento
+                    </label>
                     <input
                       type="text"
                       value={editEvento.nombreEvento}
@@ -3472,7 +3485,9 @@ function DashboardSchool() {
                     />
                     <div className="gap-5 flex flex-col">
                       <div className="flex flex-col">
-                        <label htmlFor="tipoEvento" className="font-medium">Tipo de evento</label>
+                        <label htmlFor="tipoEvento" className="font-medium">
+                          Tipo de evento
+                        </label>
                         <input
                           type="text"
                           value={editEvento.tipoEvento}
@@ -3487,7 +3502,12 @@ function DashboardSchool() {
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="capacidadEvento" className="font-medium">Capacidad</label>
+                        <label
+                          htmlFor="capacidadEvento"
+                          className="font-medium"
+                        >
+                          Capacidad
+                        </label>
                         <input
                           type="number"
                           value={editEvento.capacidadEvento}
