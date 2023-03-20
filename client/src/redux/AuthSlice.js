@@ -13,7 +13,10 @@ export const authSlice = createSlice({
   },
   reducers : {
     getSchool: (state,action) => {
-      state.oneSchool = action.payload
+      state.oneSchool = action.payload,
+      state.loading = false,
+      state.success = true,
+      state.error = ""
     },
     getUser: (state,action) => {
       state.loading = false,
