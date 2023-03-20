@@ -91,7 +91,8 @@ export default function Miplan() {
               </>
             );
           })}
-        {planPago.length === 0 && (
+   
+        {planPago.length === 0 && planPago != null && (
           <div style={{width:'100%', display:'flex' , alignItems:'center', justifyContent:'center'}}>
             <div className={style.divCardFree}>
            
@@ -113,7 +114,7 @@ export default function Miplan() {
                     fontFamily: "Poppins",
                   }}
                 >
-                  Tus plan es {oneSchool.Plan_Pago.nombre_plan_pago}
+                  Tus plan es {oneSchool?.Plan_Pago?.nombre_plan_pago}
                 </Typography>
                 <p>Desbloquea más beneficios actualizando tu plan</p>
               </div>
@@ -132,7 +133,7 @@ export default function Miplan() {
           </div>
         )}
         {/* // Historial */}
-        {planPago.length > 0 && (
+        {planPago?.length > 0 && (
           <Typography
             sx={{
               fontSize: "1.3rem",
@@ -145,7 +146,7 @@ export default function Miplan() {
             Historial
           </Typography>
         )}
-        {planPago.length > 0 && (
+        {planPago?.length > 0 && (
           <div>
             {planPago &&
               planHistorial?.map((ele) => {

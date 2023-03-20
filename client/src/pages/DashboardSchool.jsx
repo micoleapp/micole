@@ -3106,7 +3106,7 @@ function DashboardSchool() {
               <Cards
                 icon="solicitud"
                 text="Solicitudes de Citas"
-                nro={citasAgendadas.CitasInactivas.length}
+                nro={citasAgendadas?.CitasInactivas?.length}
               />
               <Cards
                 icon="visualizacion"
@@ -3117,7 +3117,7 @@ function DashboardSchool() {
               <Cards
                 icon="comentario"
                 text="Comentarios"
-                nro={oneSchool.Reviews.length}
+                nro={oneSchool?.Reviews?.length}
               />
             </div>
 
