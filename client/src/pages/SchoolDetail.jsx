@@ -48,6 +48,7 @@ import { fontSize } from "@mui/system";
 import style from "./SchoolD.module.css";
 import { HiChevronDown } from "react-icons/hi";
 import { HiChevronLeft } from "react-icons/hi";
+import SwiperEventos from "../components/SwiperEventos/SwiperEventos";
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
     <div className="w-full px-4">
@@ -1230,6 +1231,10 @@ function SchoolDetail() {
                 </Link>
               </p>
             </div>
+            <div style={{width:'100%', display:'flex', justifyContent:'center',flexDirection:'column', gap:'10px'}}>
+            <h2 className="font-semibold text-xl">Eventos</h2>
+            <SwiperEventos/>
+          </div >
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Galeria</h2>
               {oneSchool.hasOwnProperty("galeria_fotos") && (
@@ -1269,6 +1274,7 @@ function SchoolDetail() {
                 </video>
               </div>
             )}
+           
             <form
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
               onSubmit={comentarioSubmit}
@@ -1416,7 +1422,9 @@ function SchoolDetail() {
                 Enviar reseña
               </button>
             </form>
+           
           </section>
+          
         </main>
       </div>
     </div>
