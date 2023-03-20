@@ -1231,8 +1231,11 @@ function SchoolDetail() {
                 </Link>
               </p>
             </div>
-            <div style={{width:'100%', display:'flex', justifyContent:'center',flexDirection:'column', gap:'10px'}}>
-            <h2 className="font-semibold text-xl">Eventos</h2>
+            <div style={{width:'100%', display:'flex', justifyContent:'center',alignItems:'center',flexDirection:'column', gap:'10px'}}>
+          <div style={{width:'100%', display:'flex', justifyContent:'flex-start'}}>
+              <h2 className="font-semibold text-xl" >Eventos</h2>
+          </div>
+          
             <SwiperEventos/>
           </div >
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">

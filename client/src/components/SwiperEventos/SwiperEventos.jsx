@@ -52,6 +52,7 @@ export default function SwiperEventos() {
                     tipoEvento={event.tipoEvento}
                     fechaEvento={event.fechaEvento}
                     horaEvento={event.horaEvento}
+                    capacidadEvento={event.capacidadEvento}
                     idColegio={event.idColegio}
                   />
                 </div>
@@ -68,13 +69,15 @@ const MockEventos = [
   {
     idColegio: 'sad',
     nombreEvento: "Esuela Abierta",
-    descripcionEvento: "Visita guiada",
+    descripcionEvento:
+    "Lorem Ipsum has been the industry's standathe 1500s, when an unknown printer took a galley",
+
     tipoEvento: "Puerta Abierta",
     capacidadEvento: 200,
-    fechaEvento: "12/02/1220",
+    fechaEvento: "12/02/2020",
     horaEvento: "08:00",
     image:
-      "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1673357908/cld-sample-3.jpg",
+      "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679350090/fzbdxjnerwn5wrqlgfx6.png",
   },
   {
     idColegio: 'sad',
@@ -83,33 +86,34 @@ const MockEventos = [
       "Lorem Ipsum has been the industry's standathe 1500s, when an unknown printer took a galley",
     tipoEvento: "Prueb1",
     capacidadEvento: 0,
-    fechaEvento: "43/12/2020",
+    fechaEvento: "12/02/2020",
     horaEvento: "08:00",
     image:
-      "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1673357908/cld-sample-3.jpg",
+      "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679350090/fzbdxjnerwn5wrqlgfx6.png",
   },
   {
     idColegio: 'sad',
-    nombreEvento: "Evento 2",
+    nombreEvento: "Recorrido del Campus",
     descripcionEvento:
       "Lorem Ipsum has been the industry's standathe 1500s, when an unknown printer took a galley",
     tipoEvento: "Prueb2",
     capacidadEvento: 0,
-    fechaEvento: "43/12/2020",
+    fechaEvento: "12/02/2020",
     horaEvento: "08:00",
     image:
-      "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1673357907/cld-sample-2.jpg",
+      "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679350090/fzbdxjnerwn5wrqlgfx6.png",
   },
   {
     idColegio: 'sad',
-    nombreEvento: "Evento 3",
+    nombreEvento: "Demostracion de talleres",
     descripcionEvento:
       "Lorem Ipsum has been the industry's standathe 1500s, when an unknown printer took a galley",
-    tipoEvento: "Prueb3",
+ 
+      tipoEvento: "Prueb3",
     capacidadEvento: 0,
-    fechaEvento: "12/02/1220",
+    fechaEvento: "12/02/2020",
     horaEvento: "08:00",
     image:
-      "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1673357907/cld-sample-2.jpg",
+      "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679350090/fzbdxjnerwn5wrqlgfx6.png",
   },
 ];
