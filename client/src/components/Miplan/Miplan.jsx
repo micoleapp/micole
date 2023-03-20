@@ -94,7 +94,7 @@ export default function Miplan() {
    
         {planPago.length === 0 && planPago != null && (
           <div style={{width:'100%', display:'flex' , alignItems:'center', justifyContent:'center'}}>
-            <div className={style.divCardFree}>
+            <div className={`${style.divCardFree} bg-white`}>
            
               <div
                 style={{

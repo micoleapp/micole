@@ -863,16 +863,13 @@ function DashboardSchool() {
           .concat(stringyDate(day[Object.keys(day)][1]["$m"]).toString()),
       },
     }));
-    Swal.fire({
-      icon: "success",
-      title: "Horarios actualizados exitosamente!",
-      text: "Cambios guardados",
-    });
+
     console.log(newDays);
-    dispatch(postHorariosVacantes(newDays));
+    dispatch(postHorariosVacantes(newDays,user.id));
+    console.log(user.id)
     try {
       axios
-        .put(`/colegios/${user.id}`, { isActive: true })
+        .put(`/colegios/${user.id}`, { ...datosPrincipales,isActive: true })
         .then((res) => {
           Swal.fire({
             icon: "success",
@@ -2861,7 +2858,8 @@ function DashboardSchool() {
             </div>
           </Box>
         ) : page === 1 ? (
-          <div className="min-h-screen">
+          <div className="min-h-screen p-5 flex flex-col gap-5">
+            <h1 className="text-xl font-medium">Deberas completar estos datos para aparecer en nuestra lista</h1>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <div className="grid lg:grid-cols-3 w-full grid-cols-2">
                 {daysWithTime.map((day, index) => (
@@ -2925,7 +2923,7 @@ function DashboardSchool() {
                         <MobileTimePicker
                           label="Desde"
                           disabled={!day[Object.keys(day)][2]}
-                          className="w-[70px]"
+                          className="w-[70px] bg-white"
                           value={day[Object.keys(day)][0]}
                           renderInput={(params) => <TextField {...params} />}
                           ampm={false}
@@ -2949,7 +2947,7 @@ function DashboardSchool() {
                         <MobileTimePicker
                           label="Hasta"
                           disabled={!day[Object.keys(day)][2]}
-                          className="w-[70px] "
+                          className="w-[70px] bg-white"
                           onChange={(newValue) => {
                             setDaysWithTime([
                               ...daysWithTime.slice(0, index),
