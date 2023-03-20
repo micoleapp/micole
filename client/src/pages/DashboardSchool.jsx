@@ -30,9 +30,9 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 import style from "./Dashboard.module.css";
-import CircularProgress from '@mui/material/CircularProgress'
+import CircularProgress from "@mui/material/CircularProgress";
 
-import {MdDeleteForever} from "react-icons/md"
+import { MdDeleteForever } from "react-icons/md";
 import {
   GoogleMap,
   useJsApiLoader,
@@ -40,7 +40,11 @@ import {
   Autocomplete,
 } from "@react-google-maps/api";
 import { steps } from "../MockupInfo/Pasos";
-import { getVacantes, postHorariosVacantes,getCitaAgendadas } from "../redux/SchoolsActions";
+import {
+  getVacantes,
+  postHorariosVacantes,
+  getCitaAgendadas,
+} from "../redux/SchoolsActions";
 import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsWindowDock } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
@@ -54,7 +58,12 @@ import { useRef } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { DateTimePicker, MobileDatePicker, MobileDateTimePicker, MobileTimePicker } from "@mui/x-date-pickers";
+import {
+  DateTimePicker,
+  MobileDatePicker,
+  MobileDateTimePicker,
+  MobileTimePicker,
+} from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -66,18 +75,18 @@ import CardCitas from "../components/CardsCitas/CardCitas";
 import SelectCitasAg from "../components/CardsCitas/SelectCitasAgendadas/SelectCitasAg";
 import { getCita } from "../redux/CitasActions";
 import Miplan from "../components/Miplan/Miplan";
-import Modal from '@mui/material/Modal';
+import Modal from "@mui/material/Modal";
 
 const styleModal = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  overflow: 'auto',
-  maxHeight:"80vh",
-  bgcolor: 'background.paper',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  overflow: "auto",
+  maxHeight: "90vh",
+  bgcolor: "background.paper",
   boxShadow: 24,
-  borderRadius:"10px",
+  borderRadius: "10px",
   p: 4,
 };
 const libraries = ["places"];
@@ -129,8 +138,8 @@ function StandardImageList({ one, list, setImage, eliminarImagenDePreview }) {
 }
 
 function DashboardSchool() {
-  const [hand,setHand] = useState(false)
-  const [editEvento, setEditEvento] = useState({})
+  const [hand, setHand] = useState(false);
+  const [editEvento, setEditEvento] = useState({});
 
   const { width, height } = useWindowSize();
   const [page, setPage] = React.useState(0);
@@ -150,7 +159,7 @@ function DashboardSchool() {
     dificultades,
     metodos,
   } = useSelector((state) => state.schools);
-  const { user, oneSchool ,loading} = useSelector((state) => state.auth);
+  const { user, oneSchool, loading } = useSelector((state) => state.auth);
 
   const id = user.id;
 
@@ -486,22 +495,20 @@ function DashboardSchool() {
 
   const [file, setFile] = useState(null);
   const [fileEvento, setFileEvento] = useState(null);
-  const [fileEditEvento,setFileEditEvento] = useState(null);
-  console.log(fileEditEvento)
+  const [fileEditEvento, setFileEditEvento] = useState(null);
+  console.log(fileEditEvento);
   const [files, setFiles] = useState(null);
 
-  const [evento,setEvento] = useState({
-    idColegio:id,
+  const [evento, setEvento] = useState({
+    idColegio: id,
     nombreEvento: "",
     descripcionEvento: "",
     tipoEvento: "",
     capacidadEvento: 0,
-          fechaEvento: dayjs(new Date()),
-          horaEvento: "08:00",
-    image: ""
-  })
-
-
+    fechaEvento: dayjs(new Date()),
+    horaEvento: "08:00",
+    image: "",
+  });
 
   const disableEvento = () => {
     if (
@@ -517,7 +524,7 @@ function DashboardSchool() {
     } else {
       return true;
     }
-  }
+  };
 
   const handleFilesSubmitOne = async (e) => {
     e.preventDefault();
@@ -583,17 +590,14 @@ function DashboardSchool() {
         formData
       );
       setEditEvento({ ...editEvento, image: res.data.secure_url });
-      setHand(false)
-      setSuccesEditImage(true)
+      setHand(false);
+      setSuccesEditImage(true);
     } catch (error) {
       console.log(error);
-
     }
     setSpanOne(false);
     setActiveUpOne(false);
   };
-
-  
 
   function handleFilesSubmit(e) {
     e.preventDefault();
@@ -650,12 +654,16 @@ function DashboardSchool() {
   const [preview, setPreview] = useState(initialPreview);
   const [previewOne, setPreviewOne] = useState(initialPreviewOne);
   const [previewEvento, setPreviewEvento] = useState(null);
-  const [previewEditEvento,setPreviewEditEvento] = useState(null);
+  const [previewEditEvento, setPreviewEditEvento] = useState(null);
   const [dateEvento, setDateEvento] = React.useState(dayjs(new Date()));
-  const [timeEvento, setTimeEvento] = React.useState(dayjs("2014-08-18T08:00:00"));
+  const [timeEvento, setTimeEvento] = React.useState(
+    dayjs("2014-08-18T08:00:00")
+  );
   const [dateEditEvento, setDateEditEvento] = React.useState(dayjs(new Date()));
-  const [timeEditEvento, setTimeEditEvento] = React.useState(dayjs("2014-08-18T08:00:00"));
-  const [change,setChange] = useState(false)
+  const [timeEditEvento, setTimeEditEvento] = React.useState(
+    dayjs("2014-08-18T08:00:00")
+  );
+  const [change, setChange] = useState(false);
   const handleChangeDate = (newValue) => {
     setDateEvento(dayjs(newValue));
     setEvento({
@@ -689,7 +697,7 @@ function DashboardSchool() {
     });
   };
   const handleChangeTimeEdit = (newValue) => {
-    setChange(true)
+    setChange(true);
     setTimeEditEvento(dayjs(newValue));
     setEditEvento({
       ...editEvento,
@@ -736,8 +744,7 @@ function DashboardSchool() {
       reader.readAsDataURL(fileEditEvento);
       reader.onloadend = () => {
         setPreviewEditEvento(reader.result);
-        setHand(true)
-
+        setHand(true);
       };
     }
   }, [fileEditEvento]);
@@ -901,161 +908,164 @@ function DashboardSchool() {
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
 
   const handleSubmitEvento = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      axios.post('/eventos',evento)
-      .then(res=>{
-        Swal.fire({
-          icon: 'success',
-          title: 'Evento creado exitosamente!',
+      axios
+        .post("/eventos", evento)
+        .then((res) => {
+          Swal.fire({
+            icon: "success",
+            title: "Evento creado exitosamente!",
+          });
+          dispatch(getSchoolDetail(id));
+          setEvento({
+            idColegio: id,
+            nombreEvento: "",
+            descripcionEvento: "",
+            tipoEvento: "",
+            capacidadEvento: 0,
+            fechaEvento: dayjs(new Date()),
+            horaEvento: "08:00",
+            image: "",
+          });
+          setFileEvento(null);
+          setPreviewEvento(null);
         })
-        dispatch(getSchoolDetail(id))
-        setEvento({
-          idColegio:id,
-          nombreEvento: "",
-          descripcionEvento: "",
-          tipoEvento: "",
-          capacidadEvento: 0,
-          fechaEvento: dayjs(new Date()),
-          horaEvento: "08:00",
-          image: ""
-        })
-        setFileEvento(null)
-        setPreviewEvento(null)
-      })
-      .catch(err=>{
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Algo salio mal!',
-        })
-      })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Algo salio mal!",
+          });
+        });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
-  
+  };
+
   const handleDelete = (id) => {
     try {
       Swal.fire({
-        title: 'Estas seguro?',
+        title: "Estas seguro?",
         text: "No podras revertir esto!",
-        icon: 'warning',
+        icon: "warning",
         showDenyButton: true,
-        confirmButtonText: 'Si, eliminar!',
-        denyButtonText: `No`
-      })
-      .then(res=>{
-        if(res.isConfirmed){
-          axios.delete(`/eventos/${id}`)
-          .then(res=>{
-            dispatch(getSchoolDetail(user.id))
-            Swal.fire({
-              icon: 'success',
-              title: 'Evento eliminado exitosamente!',
+        confirmButtonText: "Si, eliminar!",
+        denyButtonText: `No`,
+      }).then((res) => {
+        if (res.isConfirmed) {
+          axios
+            .delete(`/eventos/${id}`)
+            .then((res) => {
+              dispatch(getSchoolDetail(user.id));
+              Swal.fire({
+                icon: "success",
+                title: "Evento eliminado exitosamente!",
+              });
             })
-          }
-          )
-          .catch(err=>{
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Algo salio mal!',
-            })
-          })
+            .catch((err) => {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Algo salio mal!",
+              });
+            });
         }
-      })
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   const handleSubmitEditEvento = (id) => {
-    if(change){
+    if (change) {
       try {
-        axios.put(`/eventos/${id}`,editEvento)
-        .then(res=>{
-          Swal.fire({
-            icon: 'success',
-            title: 'Evento editado exitosamente!',
+        axios
+          .put(`/eventos/${id}`, editEvento)
+          .then((res) => {
+            Swal.fire({
+              icon: "success",
+              title: "Evento editado exitosamente!",
+            });
+            dispatch(getSchoolDetail(user.id));
           })
-          dispatch(getSchoolDetail(user.id))
-        })
-        .catch(err=>{
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Algo salio mal!',
-          })
-        })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Algo salio mal!",
+            });
+          });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-      handleCloseModal()
-      setHand(false)
-      setSuccesEditImage(false)
-      setChange(false)
-    }else{
+      handleCloseModal();
+      setHand(false);
+      setSuccesEditImage(false);
+      setChange(false);
+    } else {
       const horaEvento = [
         stringyDate(editEvento.horaEvento["$H"]).toString(),
         stringyDate(editEvento.horaEvento["$m"]).toString(),
-      ].join(":")
-      const newEvent = {...editEvento,horaEvento}
-      console.log(newEvent)
-      console.log(editEvento)
+      ].join(":");
+      const newEvent = { ...editEvento, horaEvento };
+      console.log(newEvent);
+      console.log(editEvento);
       try {
-        axios.put(`/eventos/${id}`,newEvent)
-        .then(res=>{
-          Swal.fire({
-            icon: 'success',
-            title: 'Evento editado exitosamente!',
+        axios
+          .put(`/eventos/${id}`, newEvent)
+          .then((res) => {
+            Swal.fire({
+              icon: "success",
+              title: "Evento editado exitosamente!",
+            });
+            dispatch(getSchoolDetail(user.id));
           })
-          dispatch(getSchoolDetail(user.id))
-        })
-        .catch(err=>{
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Algo salio mal!',
-          })
-        })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Algo salio mal!",
+            });
+          });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-      handleCloseModal()
-      setHand(false)
-      setSuccesEditImage(false)
-      setChange(false)
+      handleCloseModal();
+      setHand(false);
+      setSuccesEditImage(false);
+      setChange(false);
     }
-  }
+  };
 
-  console.log(change)
-  
+  console.log(change);
+
   const [openModal, setOpenModal] = React.useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => {
-    setEditEvento({})
-    setOpenModal(false)};
+    setEditEvento({});
+    setOpenModal(false);
+  };
 
   const handleEdit = (id) => {
-    handleOpenModal()
-    const editEventoNew = oneSchool?.Eventos?.find(e=>e.id===id)
+    handleOpenModal();
+    const editEventoNew = oneSchool?.Eventos?.find((e) => e.id === id);
 
-    const newFecha = "2014-08-18T" + editEventoNew.hora_evento + ':00'
-    setTimeEditEvento(dayjs(newFecha))
-    setDateEditEvento(editEventoNew.fecha_evento)
+    const newFecha = "2014-08-18T" + editEventoNew.hora_evento + ":00";
+    setTimeEditEvento(dayjs(newFecha));
+    setDateEditEvento(editEventoNew.fecha_evento);
     setEditEvento({
-      idColegio:editEventoNew.id,
+      idColegio: editEventoNew.id,
       nombreEvento: editEventoNew.nombre_evento,
       descripcionEvento: editEventoNew.descripcion,
       tipoEvento: editEventoNew.tipo_evento,
       capacidadEvento: editEventoNew.capacidad,
       fechaEvento: dateEditEvento,
       horaEvento: timeEditEvento,
-      image: editEventoNew.imagen_evento
-    })
-  }
+      image: editEventoNew.imagen_evento,
+    });
+  };
 
-  console.log(editEvento)
+  console.log(editEvento);
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -1079,8 +1089,9 @@ function DashboardSchool() {
               page == 0 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => {
-              setOpen()
-              setPage(0)}}
+              setOpen();
+              setPage(0);
+            }}
           >
             <CiUser
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -1100,8 +1111,9 @@ function DashboardSchool() {
               page == 1 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => {
-              setOpen()
-              setPage(1)}}
+              setOpen();
+              setPage(1);
+            }}
           >
             <CiClock1
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -1121,8 +1133,9 @@ function DashboardSchool() {
               page == 5 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => {
-              setOpen()
-              setPage(5)}}
+              setOpen();
+              setPage(5);
+            }}
           >
             <MoveToInboxOutlinedIcon
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -1142,8 +1155,9 @@ function DashboardSchool() {
               page == 6 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => {
-              setOpen()
-              setPage(6)}}
+              setOpen();
+              setPage(6);
+            }}
           >
             <BsCalendarCheck
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -1163,8 +1177,9 @@ function DashboardSchool() {
               page == 4 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => {
-              setOpen()
-              setPage(4)}}
+              setOpen();
+              setPage(4);
+            }}
           >
             <AiOutlineIdcard
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -1185,8 +1200,9 @@ function DashboardSchool() {
               page == 2 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => {
-              setOpen()
-              setPage(2)}}
+              setOpen();
+              setPage(2);
+            }}
           >
             <BsWindowDock
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -1207,8 +1223,9 @@ function DashboardSchool() {
               page == 3 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => {
-              setOpen()
-              setPage(3)}}
+              setOpen();
+              setPage(3);
+            }}
           >
             <GiHexagonalNut
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -3162,294 +3179,363 @@ function DashboardSchool() {
           </div>
         ) : page === 6 ? (
           <div className="min-h-screen p-10 flex flex-col gap-5">
-              <h1 className="text-xl font-medium">Crear nuevo evento</h1>
-              <div className="flex flex-col lg:flex-row gap-5">
+            <h1 className="text-xl font-medium">Crear nuevo evento</h1>
+            <div className="flex flex-col lg:flex-row gap-5">
               <form
-                          onSubmit={handleFilesSubmitEvento}
-                          className="flex flex-col"
-                        >
-                          <div className="file-select flex w-full lg:min-w-[200px] ">
-                            <label
-                              htmlFor="image"
-                              className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-t-md"
-                            >
-                              <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
-                              <span className="text-sm mx-auto text-center text-[#0061dd]">
-                                Agregar imagen
-                              </span>{" "}
-                            </label>
-                            <input
-                              type="file"
-                              id="image"
-                              name="image"
-                              accept="image/png,image/jpeg"
-                              onChange={(e) => {
-                                setSpanOne(true);
-                                setFileEvento(e.target.files[0]);
-                              }}
-                              className="hidden"
-                            />
-                          </div>
-                          {fileEvento !== null && (
-                            <button
-                              type="submit"
-                              disabled={previewEvento == null}
-                              className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
-                            >
-                              Upload
-                            </button>
-                          )}
-
-                          {spanOne && (
-                            <span className="relative text-center animate-bounce text-3xl">
-                              👆
-                            </span>
-                          )}
-                                        {previewEvento !== null && (
-                <img src={previewEvento} alt="" className="object-cover mt-2 rounded-md"/>
-              )}
-                        </form>
-                <form className="flex flex-col w-full gap-2">
-                  <label htmlFor="nombreEvento">Nombre del Evento</label>
-                  <input
-                    type="text"
-                    value={evento.nombreEvento}
-                    id="nombreEvento"
-                    className="p-3 rounded-md border-2  outline-none"
-                    onChange={(e)=>{
-                      setEvento({...evento, nombreEvento: e.target.value})
-                    }}
-                  />
-                  <label htmlFor="descripcionEvento">
-                    Breve descripción del evento
+                onSubmit={handleFilesSubmitEvento}
+                className="flex flex-col"
+              >
+                <div className="file-select flex w-full lg:min-w-[200px] ">
+                  <label
+                    htmlFor="image"
+                    className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-t-md"
+                  >
+                    <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
+                    <span className="text-sm mx-auto text-center text-[#0061dd]">
+                      Agregar imagen
+                    </span>{" "}
                   </label>
-                  <textarea
-                  value={evento.descripcionEvento}
-                    id="descripcionEvento"
-                    className="p-3 rounded-md border-2  outline-none"
-                    onChange={(e)=>{
-                      setEvento({...evento, descripcionEvento: e.target.value})
+                  <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    accept="image/png,image/jpeg"
+                    onChange={(e) => {
+                      setSpanOne(true);
+                      setFileEvento(e.target.files[0]);
                     }}
+                    className="hidden"
                   />
-                  <div className="lg:grid grid-cols-3 gap-5 flex flex-col">
-                  <div className="flex flex-col">
-                      <label htmlFor="tipoEvento">Tipo de evento</label>
-                      <input
-                        type="text"
-                        value={evento.tipoEvento}
-                        id="tipoEvento"
-                        className="p-3 rounded-md border-2  outline-none"
-                        onChange={(e)=>{
-                          setEvento({...evento, tipoEvento: e.target.value})
-                        }}
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <label htmlFor="capacidadEvento">Capacidad</label>
-                      <input
-                        type="number"
-                        value={evento.capacidadEvento}
-                        id="capacidadEvento"
-                        className="p-3 rounded-md border-2  outline-none"
-                        onChange={(e)=>{
-                          setEvento({...evento, capacidadEvento: e.target.value})
-                        }
-                      }
-                      />
-                    </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <div className="flex w-full items-center justify-between mt-4  flex-col gap-4 lg:flex-row">
-                  <MobileDatePicker
-                    label="Elejir fecha"
-                    value={dateEvento}
-                    inputFormat="DD/MM/YYYY"
-                    renderInput={(params) => <TextField {...params} />}
-                    disablePast
-                    onChange={handleChangeDate}
-                    className="bg-white"
-                  />
-                    <MobileTimePicker
-                      label="Elejir hora"
-                      renderInput={(params) => <TextField {...params} />}
-                      ampm={false}
-                      value={timeEvento}
-                      className="bg-white"
-                      onChange={handleChangeTime}
-                    />
                 </div>
-              </LocalizationProvider>
-                          
+                {fileEvento !== null && (
+                  <button
+                    type="submit"
+                    disabled={previewEvento == null}
+                    className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
+                  >
+                    Upload
+                  </button>
+                )}
+
+                {spanOne && (
+                  <span className="relative text-center animate-bounce text-3xl">
+                    👆
+                  </span>
+                )}
+                {previewEvento !== null && (
+                  <img
+                    src={previewEvento}
+                    alt=""
+                    className="object-cover mt-2 rounded-md"
+                  />
+                )}
+              </form>
+              <form className="flex flex-col w-full gap-2">
+                <label htmlFor="nombreEvento" className="font-medium">Nombre del Evento</label>
+                <input
+                  type="text"
+                  value={evento.nombreEvento}
+                  id="nombreEvento"
+                  className="p-3 rounded-md border-2  outline-none"
+                  onChange={(e) => {
+                    setEvento({ ...evento, nombreEvento: e.target.value });
+                  }}
+                />
+                <label className="font-medium" htmlFor="descripcionEvento">
+                  Breve descripción del evento
+                </label>
+                <textarea
+                  value={evento.descripcionEvento}
+                  id="descripcionEvento"
+                  className="p-3 rounded-md border-2  outline-none"
+                  onChange={(e) => {
+                    setEvento({ ...evento, descripcionEvento: e.target.value });
+                  }}
+                />
+                <div className="lg:grid grid-cols-3 gap-5 flex flex-col">
+                  <div className="flex flex-col">
+                    <label htmlFor="tipoEvento" className="font-medium">Tipo de evento</label>
+                    <input
+                      type="text"
+                      value={evento.tipoEvento}
+                      id="tipoEvento"
+                      className="p-3 rounded-md border-2  outline-none"
+                      onChange={(e) => {
+                        setEvento({ ...evento, tipoEvento: e.target.value });
+                      }}
+                    />
                   </div>
-                    <button type="button" onClick={handleSubmitEvento} disabled={disableEvento()} className="p-2 mt-2 mx-auto lg:mx-0 w-fit bg-[#0061dd] text-white rounded-md disabled:bg-[#0061dd]/40">Crear evento </button>
-                </form>
+                  <div className="flex flex-col">
+                    <label htmlFor="capacidadEvento" className="font-medium">Capacidad</label>
+                    <input
+                      type="number"
+                      value={evento.capacidadEvento}
+                      id="capacidadEvento"
+                      className="p-3 rounded-md border-2  outline-none"
+                      onChange={(e) => {
+                        setEvento({
+                          ...evento,
+                          capacidadEvento: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <div className="flex w-full items-center justify-between mt-4  flex-col gap-4 lg:flex-row">
+                      <MobileDatePicker
+                        label="Elejir fecha"
+                        value={dateEvento}
+                        inputFormat="DD/MM/YYYY"
+                        renderInput={(params) => <TextField {...params} />}
+                        disablePast
+                        onChange={handleChangeDate}
+                        className="bg-white"
+                      />
+                      <MobileTimePicker
+                        label="Elejir hora"
+                        renderInput={(params) => <TextField {...params} />}
+                        ampm={false}
+                        value={timeEvento}
+                        className="bg-white"
+                        onChange={handleChangeTime}
+                      />
+                    </div>
+                  </LocalizationProvider>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleSubmitEvento}
+                  disabled={disableEvento()}
+                  className="p-2 mt-2 mx-auto lg:mx-0 w-fit bg-[#0061dd] text-white rounded-md disabled:bg-[#0061dd]/40"
+                >
+                  Crear evento{" "}
+                </button>
+              </form>
+            </div>
+            {loading ? (
+              <div className="flex flex-col items-center justify-center gap-3">
+                <h1 className="text-center text-2xl font-medium">
+                  Cargando nuevos eventos...
+                </h1>
+                <CircularProgress size="3rem" />
               </div>
-              {loading ? <div className="flex flex-col items-center justify-center gap-3">              
-                <h1 className="text-center text-2xl font-medium">Cargando nuevos eventos...</h1> 
-                            <CircularProgress
-              size="3rem"
-            />
-              </div> 
-              : 
+            ) : (
               <>
-              <h1 className="text-xl font-medium">Historial de eventos</h1>
-              {oneSchool?.Eventos?.length > 0 ? (
-                <div className="flex flex-col mx-10 gap-5">
-                  {oneSchool?.Eventos?.map((evento) => (
-                    <div className="flex lg:flex-row flex-col w-full items-center p-3 justify-around shadow-md bg-white rounded-md gap-2">
-                      <img src={evento.imagen_evento} alt={evento.nombre_evento} className="rounded-full w-24 h-24 object-cover"/>
-                      <div className="flex flex-col text-center lg:text-start gap-2">
-                        <h2 className="font-semibold">{evento.nombre_evento}</h2>
-                        <div className="flex gap-2">
-                        <small className="font-medium">Fecha: <span className="font-normal">{evento.fecha_evento}</span> </small>
-                        <small className="font-medium">Hora: <span className="font-normal"> {evento.hora_evento}</span></small>
+                <h1 className="text-xl font-medium">Historial de eventos</h1>
+                {oneSchool?.Eventos?.length > 0 ? (
+                  <div className="flex flex-col mx-10 gap-5">
+                    {oneSchool?.Eventos?.map((evento) => (
+                      <div className="flex lg:flex-row flex-col w-full items-center p-3 justify-around shadow-md bg-white rounded-md gap-2">
+                        <img
+                          src={evento.imagen_evento}
+                          alt={evento.nombre_evento}
+                          className="rounded-full w-24 h-24 object-cover"
+                        />
+                        <div className="flex flex-col text-center lg:text-start gap-2">
+                          <h2 className="font-semibold">
+                            {evento.nombre_evento}
+                          </h2>
+                          <div className="flex gap-2">
+                            <small className="font-medium">
+                              Fecha:{" "}
+                              <span className="font-normal">
+                                {evento.fecha_evento}
+                              </span>{" "}
+                            </small>
+                            <small className="font-medium">
+                              Hora:{" "}
+                              <span className="font-normal">
+                                {" "}
+                                {evento.hora_evento}
+                              </span>
+                            </small>
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <small className="font-medium">
+                            Capacidad:{" "}
+                            <span className="font-normal">
+                              {evento.capacidad}
+                            </span>{" "}
+                          </small>
+                          <small className="font-medium">
+                            Inscriptos: <span className="font-normal">123</span>{" "}
+                          </small>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleEdit(evento.id)}
+                            className="p-2 flex font-medium mx-auto lg:mx-0 w-fit text-[#0061dd] rounded-md bg-[#0061dd]/20"
+                          >
+                            Editar
+                          </button>
+                          <MdDeleteForever
+                            onClick={() => handleDelete(evento.id)}
+                            className="text-[#0061dd] text-4xl cursor-pointer"
+                          />
                         </div>
                       </div>
-                      <div className="flex flex-col gap-2">
-                        <small className="font-medium">Capacidad: <span className="font-normal">{evento.capacidad}</span> </small>
-                        <small className="font-medium">Inscriptos: <span className="font-normal">123</span> </small>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button onClick={()=>handleEdit(evento.id)}  className="p-2 flex font-medium mx-auto lg:mx-0 w-fit text-[#0061dd] rounded-md bg-[#0061dd]/20">Editar</button>
-                       <MdDeleteForever onClick={()=>handleDelete(evento.id)} className="text-[#0061dd] text-4xl cursor-pointer"/>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : <h1>No hay eventos creados</h1>}
-              </>
-              }
-                    <Modal
-        open={openModal}
-        onClose={handleCloseModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={styleModal}>
-        <div className="flex flex-col lg:flex-row gap-5">
-              <form
-                          onSubmit={handleFilesSubmitEditEvento}
-                          className="flex flex-col"
-                        >
-                          <div className="file-select flex w-full lg:min-w-[200px] ">
-                            <label
-                              htmlFor="imageEdit"
-                              className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-t-md"
-                            >
-                              <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
-                              <span className="text-sm mx-auto text-center text-[#0061dd]">
-                                Modificar imagen
-                              </span>{" "}
-                            </label>
-                            <input
-                              type="file"
-                              id="imageEdit"
-                              name="imageEdit"
-                              accept="image/png,image/jpeg"
-                              onChange={(e) => {
-                                setFileEditEvento(e.target.files[0]);
-                              }}
-                              className="hidden"
-                            />
-                          </div>
-                          {hand && (
-                            <button
-                              type="submit"
-                              disabled={previewEditEvento == null}
-                              className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
-                            >
-                              Upload
-                            </button>
-                          )}
-
-                          {hand && (
-                            <span className="relative text-center animate-bounce text-3xl">
-                              👆
-                            </span>
-                          )}
-
-                <img src={editEvento.image} alt="" className="object-cover mt-2 rounded-md"/>
-                {succesEditImage && (
-                <span className="text-green-500 text-sm">
-                  Imagen modificada con exito
-                </span>
-                )}
-                        </form>
-                <form className="flex flex-col w-full gap-2">
-                  <label htmlFor="nombreEvento">Nombre del Evento</label>
-                  <input
-                    type="text"
-                    value={editEvento.nombreEvento}
-                    id="nombreEvento"
-                    className="p-3 rounded-md border-2  outline-none"
-                    onChange={(e)=>{
-                      setEditEvento({...editEvento, nombreEvento: e.target.value})
-                    }}
-                  />
-                  <label htmlFor="descripcionEvento">
-                    Breve descripción del evento
-                  </label>
-                  <textarea
-                  value={editEvento.descripcionEvento}
-                    id="descripcionEvento"
-                    className="p-3 rounded-md border-2  outline-none"
-                    onChange={(e)=>{
-                      setEditEvento({...editEvento, descripcionEvento: e.target.value})
-                    }}
-                  />
-                  <div className="lg:grid grid-cols-3 gap-5 flex flex-col">
-                  <div className="flex flex-col">
-                      <label htmlFor="tipoEvento">Tipo de evento</label>
-                      <input
-                        type="text"
-                        value={editEvento.tipoEvento}
-                        id="tipoEvento"
-                        className="p-3 rounded-md border-2  outline-none"
-                        onChange={(e)=>{
-                          setEditEvento({...editEvento, tipoEvento: e.target.value})
-                        }}
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <label htmlFor="capacidadEvento">Capacidad</label>
-                      <input
-                        type="number"
-                        value={editEvento.capacidadEvento}
-                        id="capacidadEvento"
-                        className="p-3 rounded-md border-2  outline-none"
-                        onChange={(e)=>{
-                          setEditEvento({...editEvento, capacidadEvento: e.target.value})
-                        }
-                      }
-                      />
-                    </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <div className="flex w-full items-center justify-between mt-4  flex-col gap-4 lg:flex-row">
-                  <MobileDatePicker
-                    label="Elejir fecha"
-                    value={dateEditEvento}
-                    inputFormat="DD/MM/YYYY"
-                    renderInput={(params) => <TextField {...params} />}
-                    disablePast
-                    onChange={handleChangeDateEdit}
-                    className="bg-white"
-                  />
-                    <MobileTimePicker
-                      label="Elejir hora"
-                      renderInput={(params) => <TextField {...params} />}
-                      ampm={false}
-                      value={timeEditEvento}
-                      className="bg-white"
-                      onChange={handleChangeTimeEdit}
-                    />
-                </div>
-              </LocalizationProvider>
-                          
+                    ))}
                   </div>
-                    <button type="button" onClick={()=>handleSubmitEditEvento(editEvento.idColegio)}  className="p-2 mt-2 mx-auto lg:mx-0 w-fit bg-[#0061dd] text-white rounded-md disabled:bg-[#0061dd]/40">Modificar evento </button>
-                </form>
-              </div>
-        </Box>
-      </Modal>
+                ) : (
+                  <h1>No hay eventos creados</h1>
+                )}
+              </>
+            )}
+            <Modal
+              open={openModal}
+              onClose={handleCloseModal}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={styleModal}>
+                <div className="flex flex-col lg:flex-row gap-5">
+                  <form
+                    onSubmit={handleFilesSubmitEditEvento}
+                    className="flex flex-col"
+                  >
+                    <div className="file-select flex w-full lg:min-w-[200px] ">
+                      <label
+                        htmlFor="imageEdit"
+                        className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-t-md"
+                      >
+                        <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
+                        <span className="text-sm mx-auto text-center text-[#0061dd]">
+                          Modificar imagen
+                        </span>{" "}
+                      </label>
+                      <input
+                        type="file"
+                        id="imageEdit"
+                        name="imageEdit"
+                        accept="image/png,image/jpeg"
+                        onChange={(e) => {
+                          setFileEditEvento(e.target.files[0]);
+                        }}
+                        className="hidden"
+                      />
+                    </div>
+                    {hand && (
+                      <button
+                        type="submit"
+                        disabled={previewEditEvento == null}
+                        className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
+                      >
+                        Upload
+                      </button>
+                    )}
+
+                    {hand && (
+                      <span className="relative text-center animate-bounce text-3xl">
+                        👆
+                      </span>
+                    )}
+
+                    <img
+                      src={editEvento.image}
+                      alt=""
+                      className="object-cover mt-2 rounded-md"
+                    />
+                    {succesEditImage && (
+                      <span className="text-green-500 text-sm">
+                        Imagen modificada con exito
+                      </span>
+                    )}
+                  </form>
+                  <form className="flex flex-col w-full gap-2">
+                    <label htmlFor="nombreEvento" className="font-medium">Nombre del Evento</label>
+                    <input
+                      type="text"
+                      value={editEvento.nombreEvento}
+                      id="nombreEvento"
+                      className="p-3 rounded-md border-2  outline-none"
+                      onChange={(e) => {
+                        setEditEvento({
+                          ...editEvento,
+                          nombreEvento: e.target.value,
+                        });
+                      }}
+                    />
+                    <label htmlFor="descripcionEvento" className="font-medium">
+                      Breve descripción del evento
+                    </label>
+                    <textarea
+                      value={editEvento.descripcionEvento}
+                      id="descripcionEvento"
+                      className="p-3 rounded-md border-2  outline-none"
+                      onChange={(e) => {
+                        setEditEvento({
+                          ...editEvento,
+                          descripcionEvento: e.target.value,
+                        });
+                      }}
+                    />
+                    <div className="gap-5 flex flex-col">
+                      <div className="flex flex-col">
+                        <label htmlFor="tipoEvento" className="font-medium">Tipo de evento</label>
+                        <input
+                          type="text"
+                          value={editEvento.tipoEvento}
+                          id="tipoEvento"
+                          className="p-3 rounded-md border-2  outline-none"
+                          onChange={(e) => {
+                            setEditEvento({
+                              ...editEvento,
+                              tipoEvento: e.target.value,
+                            });
+                          }}
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <label htmlFor="capacidadEvento" className="font-medium">Capacidad</label>
+                        <input
+                          type="number"
+                          value={editEvento.capacidadEvento}
+                          id="capacidadEvento"
+                          className="p-3 rounded-md border-2  outline-none"
+                          onChange={(e) => {
+                            setEditEvento({
+                              ...editEvento,
+                              capacidadEvento: e.target.value,
+                            });
+                          }}
+                        />
+                      </div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <div className="flex w-full items-center justify-between mt-4  flex-col gap-4 lg:flex-row">
+                          <MobileDatePicker
+                            label="Elejir fecha"
+                            value={dateEditEvento}
+                            inputFormat="DD/MM/YYYY"
+                            renderInput={(params) => <TextField {...params} />}
+                            disablePast
+                            onChange={handleChangeDateEdit}
+                            className="bg-white"
+                          />
+                          <MobileTimePicker
+                            label="Elejir hora"
+                            renderInput={(params) => <TextField {...params} />}
+                            ampm={false}
+                            value={timeEditEvento}
+                            className="bg-white"
+                            onChange={handleChangeTimeEdit}
+                          />
+                        </div>
+                      </LocalizationProvider>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleSubmitEditEvento(editEvento.idColegio)
+                      }
+                      className="p-2 mt-2 mx-auto lg:mx-0 w-fit bg-[#0061dd] text-white rounded-md disabled:bg-[#0061dd]/40"
+                    >
+                      Modificar evento{" "}
+                    </button>
+                  </form>
+                </div>
+              </Box>
+            </Modal>
           </div>
         ) : null}
       </section>

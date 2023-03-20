@@ -77,7 +77,7 @@ const createEvento = async (req, res, next) => {
 
 const updateEvento = async (req, res, next) => {
   const { idEvento } = req.params;
-  const { nombre, descripcion, date, time, tipo, capacidad, imagen } = req.body;
+  const { nombreEvento:nombre, descripcionEvento:descripcion, fechaEvento:date, horaEvento:time, tipoEvento:tipo, capacidadEvento:capacidad, image:imagen } = req.body;
 
   const updateEvento = {
     nombre_evento: nombre ? nombre : undefined,
