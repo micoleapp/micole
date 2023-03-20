@@ -20,7 +20,9 @@ import {
   getFilterSchool,
   getCitasAgendado,
   getHorarios,
-  getPagination
+  getPagination,
+  getMetodos,
+  getDificultades
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -159,10 +161,20 @@ export const postHorariosVacantes = (horarios,ColegioId) => (dispatch) => {
   console.log(ColegioId)
   console.log(horarios)
   dispatch(isLoading());
-  axios
-    .post("/horarios", { horarios , ColegioId })
-    // .then(res=>dispatch((res.data)))
-    .catch((err) => console.log(err));
+  try {
+    axios
+      .post("/horarios", { horarios , ColegioId })
+      .then(res=>
+        Swal.fire({
+          icon: "success",
+          title: "Horarios actualizados exitosamente!",
+          text: "Cambios guardados",
+        })
+        )
+      .catch((err) => console.log(err));
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const postCita = (cita) => (dispatch) => {
@@ -240,3 +252,27 @@ export const getHorariosSchool = () => (dispatch) => {
       });
     });
 };
+
+export const getAllMetodos = () => (dispatch) => {
+  dispatch(isLoading());
+  try {
+    axios
+      .get("/metodos")
+      .then((res) => dispatch(getMetodos(res.data)))
+      .catch((err) => dispatch(getError(err.message)));
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getAllDificultades = () => (dispatch) => {
+  dispatch(isLoading());
+  try {
+    axios
+      .get("/dificultades")
+      .then((res) => dispatch(getDificultades(res.data)))
+      .catch((err) => dispatch(getError(err.message)));
+  } catch (error) {
+    console.log(error)
+  }
+}

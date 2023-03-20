@@ -136,7 +136,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                   />{" "}
                 </td>
                 <td className=" relative">
-                  <span className="absolute top-[33%] left-[20%] font-bold">
+                  <span className="absolute top-[33%] left-[10%] font-bold">
                     $
                   </span>
                   <input
@@ -147,12 +147,12 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     ).map((el) => el.cuota_ingreso)}
                     onChange={handleChange}
                     className="border-b-2 text-center w-[100px] border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
-                    placeholder="Ingrese nro"
+                    placeholder="..."
                     type="number"
                   />{" "}
                 </td>
                 <td className=" relative">
-                  <span className="absolute top-[33%] left-[20%] font-bold">
+                  <span className="absolute top-[33%] left-[10%] font-bold">
                     $
                   </span>
                   <input
@@ -163,12 +163,12 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     name="matricula"
                     onChange={handleChange}
                     className="border-b-2 text-center border-l w-[100px] border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
-                    placeholder="Ingrese nro"
+                    placeholder="..."
                     type="number"
                   />{" "}
                 </td>
                 <td className="relative pr-2">
-                  <span className="absolute top-[33%] left-[20%] font-bold">
+                  <span className="absolute top-[33%] left-[10%] font-bold">
                     $
                   </span>
                   <input
@@ -179,7 +179,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     name="cuota_pension"
                     onChange={handleChange}
                     className="border-b-2 text-center border-l w-[100px] border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
-                    placeholder="Ingrese nro"
+                    placeholder="..."
                     type="number"
                   />{" "}
                 </td>

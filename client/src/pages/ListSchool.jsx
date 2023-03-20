@@ -37,8 +37,6 @@ import ListItemText from "@mui/material/ListItemText";
 const yearNow = new Date().getFullYear();
 const Ingreso2 = [yearNow, yearNow + 1, yearNow + 2];
 
-const pageSize = 5;
-
 const types = [
   {
     value: "mayor_precio_pension",
@@ -207,27 +205,26 @@ function ListSchool() {
     grados,
     categories,
     pagination,
-  } = useSelector((state) => state.schools);
-
-  useEffect(() => {
-    dispatch(getAllDepartaments());
-    dispatch(getAllDistrits());
-  }, []);
-
+    dificultades,
+    metodos
+  } = useSelector((state) => state.schools);  
 /*   useEffect(() => {
     console.log(data);
   }, [order]); */
+  const [dificultadesArray, setDificultadesArray] = useState([]);
+  const [metodosArray, setMetodosArray] = useState([]);
 
   useEffect(() => {
     dispatch(getFilterListSchool(data, page));
   }, [page, order]);
-  console.log(allschools);
   const items = [1, 2, 3, 4, 5];
   const [toggle, setToggle] = useState(false);
   const [toggleDistrits, setToggleDistrits] = useState(false);
   const [toggleGrado, setToggleGrado] = useState(false);
   const [toggleTypes, setToggleTypes] = useState(false);
   const [toggleAño, setToggleAño] = useState(false);
+  const [toggleDificultad, setToggleDificultad] = useState(false);
+  const [toggleMetodo, setToggleMetodo] = useState(false);
 
   const data = {
     distrits: distritName,
@@ -239,7 +236,10 @@ function ListSchool() {
     ingles: english,
     ingreso: ingresoName,
     order: order,
+    dificultades: dificultadesArray,
+    metodos: metodosArray
   };
+  console.log(data)
   const handleSubmitData = (e) => {
     e.preventDefault();
     setPage(1);
@@ -383,7 +383,7 @@ function ListSchool() {
                 }
               >
                 <FormGroup>
-                  {categories?.map((cat) => (
+                  {categories && categories.length > 0 && categories?.map((cat) => (
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -495,6 +495,99 @@ function ListSchool() {
                 </FormGroup>
               </div>
             </div>
+            <div>
+              <div className="flex items-center gap-5 z-50 ">
+                <Typography id="input-slider" gutterBottom fontWeight="bold">
+                  Apto para
+                </Typography>
+                <button onClick={() => setToggleDificultad(!toggleDificultad)}>
+                  {" "}
+                  <FontAwesomeIcon
+                    size="lg"
+                    icon={toggleDificultad ? faArrowUp : faArrowDown}
+                  />
+                </button>
+              </div>
+              <div
+                className={
+                  toggleDificultad ? "block h-[150px] overflow-y-scroll" : "hidden"
+                }
+              >
+                <FormGroup>
+                  {dificultades?.map((dif, index) => (
+                    <FormControlLabel
+                      key={index}
+                      control={
+                        <Checkbox
+                          size="small"
+                          checked={
+                            dificultadesArray.includes(dif.id_dificultad)
+                          }
+                          onChange={(event, target) => {
+                            if (target) {
+                              setDificultadesArray([...dificultadesArray, dif.id_dificultad]);
+                            } else {
+                              setDificultadesArray(
+                                dificultadesArray.filter(
+                                  (dificultad) => dificultad !== dif.id_dificultad
+                                )
+                              );
+                            }
+                          }}
+                        />
+                      }
+                      label={dif.nombre_dificultad}
+                    />
+                  ))}
+                </FormGroup>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-5 z-50 ">
+                <Typography id="input-slider" gutterBottom fontWeight="bold">
+                Métodos pedagógicos
+                </Typography>
+                <button onClick={() => setToggleMetodo(!toggleMetodo)}>
+                  {" "}
+                  <FontAwesomeIcon
+                    size="lg"
+                    icon={toggleMetodo ? faArrowUp : faArrowDown}
+                  />
+                </button>
+              </div>
+              <div
+                className={
+                  toggleMetodo ? "block h-[150px] overflow-y-scroll" : "hidden"
+                }
+              >
+                <FormGroup>
+                  {metodos?.map((dif, index) => (
+                    <FormControlLabel
+                      key={index}
+                      control={
+                        <Checkbox
+                          checked={
+                            metodosArray.includes(dif.id_metodo)
+                          }
+                          onChange={(event, target) => {
+                            if (target) {
+                              setMetodosArray([...metodosArray, dif.id_metodo]);
+                            } else {
+                              setMetodosArray(
+                                metodosArray.filter(
+                                  (dificultad) => dificultad !== dif.id_metodo
+                                )
+                              );
+                            }
+                          }}
+                        />
+                      }
+                      label={dif.nombre_metodo}
+                    />
+                  ))}
+                </FormGroup>
+              </div>
+            </div>
             <div className="drop-shadow-md">
               <Typography id="input-slider" gutterBottom fontWeight="bold">
                 Pensión (s/)
@@ -586,7 +679,7 @@ function ListSchool() {
           <div className="flex items-center justify-between drop-shadow-md">
             <small>
               Mostrando{" "}
-              <span className="font-semibold">{allschools.length} de {pagination?.count}</span>{" "}
+              <span className="font-semibold">{allschools.length}</span> de <span className="font-semibold"> {pagination?.count}</span>{" "}
               {/* de <span className="font-semibold">{pagination?.count}</span>{" "} */}
               resultados{" "}
             </small>
@@ -626,18 +719,18 @@ function ListSchool() {
                   return (
                     <div
                       key={school.id}
-                      className={`flex border rounded-md shadow-md bg-white p-2 items-center gap-2 flex-col md:flex-row`}
+                      className={`flex border rounded-md shadow-md h-auto bg-white items-center gap-2 flex-col md:flex-row`}
                     >
                       {" "}
                       <div className="relative">
                         <img
                           src={school.primera_imagen}
                           alt={school.title}
-                          className="w-[400px] h-64 object-cover"
+                          className="w-[400px] h-auto lg:h-[220px] object-cover"
                         />
-                        <span className="absolute bg-[#0061dd] text-white p-1 px-2 rounded-md top-3 left-3">
+                        {/* <span className="absolute bg-[#0061dd] text-white p-1 px-2 rounded-md top-3 left-3">
                           DESTACADO
-                        </span>
+                        </span> */}
                         {school?.Vacantes?.length > 0 &&
                           ingresoName &&
                           gradoName &&
@@ -726,13 +819,14 @@ function ListSchool() {
                                 </div>
                               ))}
                             </div> */}
+                            
                             <div className="grid grid-cols-2 grid-rows-3 w-full gap-y-2">
                               {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"> <span className="text-xl"><CiBag1></CiBag1></span> Cuota de ingreso: S/{" "}
-                                {school.Vacantes[0].cuota_ingreso}
+                                {school.Vacantes.filter(el=>el.año === ingresoName && el.GradoId === gradoName)[0]?.cuota_ingreso}
                               </small> }
                               <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><HiOutlineUsers></HiOutlineUsers></span> {school.numero_estudiantes} Alumnos</small>
                               {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><FaRegMoneyBillAlt></FaRegMoneyBillAlt></span>Matricula: S/{" "}
-                                {school.Vacantes[0].matricula}
+                              {school.Vacantes.filter(el=>el.año === ingresoName && el.GradoId === gradoName)[0]?.matricula}
                               </small> }
                               {school?.Categoria.length < 4 ?                               <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl text-gray-400"><ImAttachment></ImAttachment></span>{school?.Categoria?.map(cat=>
                                 cat.nombre_categoria
@@ -741,7 +835,7 @@ function ListSchool() {
                                 cat.nombre_categoria
                               ).join(', ')}... +{school?.Categoria?.slice(3).length} </small>}
                               {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><ImTicket></ImTicket></span>Pensión: S/{" "}
-                                {school.Vacantes[0].pension}
+                              {school.Vacantes.filter(el=>el.año === ingresoName && el.GradoId === gradoName)[0]?.cuota_pension}
                               </small> }
 
 

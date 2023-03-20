@@ -30,17 +30,15 @@ export default function CardCitas({ filtros }) {
   const dispatch = useDispatch();
   const [Inactivas, setInactivas] = useState([]);
   const [Activas, setActivas] = useState([]);
-//LOGICA CONFIRMACION DE CITAS
-console.log(citasAgendadas)
+  //LOGICA CONFIRMACION DE CITAS
+  console.log(citasAgendadas);
   const comprobacion = (iD) => {
     if (success === "Se activo la Cita.") {
       console.log(Inactivas);
       const CitasConfirmadas = Inactivas.find((ele) => ele.id === iD);
       setActivas([...Activas, CitasConfirmadas]);
-      setInactivas([
-        Inactivas[0].filter((ele) => ele.id !== iD),
-      ]);
-
+      setInactivas([Inactivas[0].filter((ele) => ele.id !== iD)]);
+      // setArrCitas([arrCita.filter((ele) => ele.id !== iD)]);
       Swal.fire({
         icon: "success",
         title: "La cita ha sido confirmada con exito",
@@ -50,28 +48,39 @@ console.log(citasAgendadas)
       dispatch(cleanSuccessState());
     }
   };
-  // console.log(Inactivas[0].length)
-// CitasPermitidasMesActual
-// CantidadCitasNoPermitidasMesActual
-// CitasActivasMesActual
+
   const handlerPutStateCita = async (iD) => {
     dispatch(putCita(iD));
     await comprobacion(iD);
   };
-//  PAGINADO 
-// CitasInactivas
+  //  PAGINADO
 
   React.useEffect(() => {
-    let resultadoActivas = sliceIntoChunks(citasAgendadas.CitasActivasMesActual, 10);
-    setActivas(resultadoActivas);
-    let resultadoInactivas = sliceIntoChunks(citasAgendadas.CitasPermitidasMesActual, 10);
-    setInactivas(resultadoInactivas);
-    let resultadoCitaNoPermitidas = sliceIntoChunks(citasAgendadas.CitasInactivas, 10);
-    setArrCitaNoPermitidas(resultadoCitaNoPermitidas);
-    setArrCitas( resultadoActivas )
-    
-  }, []);
+    const allCitas = [];
 
+    let resultadoActivas = sliceIntoChunks(
+      citasAgendadas.CitasActivasMesActual,
+      10
+    );
+    setActivas(resultadoActivas);
+    let resultadoInactivas = sliceIntoChunks(
+      citasAgendadas.CitasPermitidasMesActual,
+      10
+    );
+    setInactivas(resultadoInactivas);
+    let resultadoCitaNoPermitidas = sliceIntoChunks(
+      citasAgendadas.CitasInactivas,
+      10
+    );
+    setArrCitaNoPermitidas(resultadoCitaNoPermitidas);
+    const allCitasActInact = allCitas.concat(
+      citasAgendadas.CitasPermitidasMesActual,
+      citasAgendadas.CitasActivasMesActual
+    );
+    let resultadoAllCitas = sliceIntoChunks(allCitasActInact, 10);
+    setArrCitas(resultadoAllCitas);
+  }, []);
+  console.log(arrCita);
   return (
     <>
       <div
@@ -96,6 +105,7 @@ console.log(citasAgendadas)
                     minHeight: "100%",
                     boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
                     fontWeight: "600",
+                    backgroundColor: "#fff",
                   }}
                 >
                   <ContentPasteSearchOutlinedIcon
@@ -105,6 +115,7 @@ console.log(citasAgendadas)
                 </div>
               </>
             )}
+
             {citasAgendadas &&
               arrCita[page]?.map((cita) => {
                 return (
@@ -258,185 +269,186 @@ console.log(citasAgendadas)
               })}
           </div>
         )}
-        {/* BLUR Y MUESTRA DE CITAS SEGUN EL PLAN CORRESPONDIENTE */}
-        {/*PLAN FREE*/}
-        {filtros === "SinConfirmar" &&
-       (
-            <>
-              {/* solo lo correspondiente al plan */}
-              <div className={style.layout}>
-                  {citasAgendadas && Inactivas?.length === 0 && (
-                  <>
-                    <div
-                  data-aos="flip-up"
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "row",
-                    color: "#0C2B42",
-                    gap: "10px",
-                    padding: "20px",
-                    minHeight: "100%",
-                    boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
-                    fontWeight: "600",
-                  }}
-                >
-                  <ContentPasteSearchOutlinedIcon
-                    style={{ color: "#0061DF" }}
-                  />
-                 {  Inactivas.length ===0 && <h1>No hay solicitudes pendientes</h1>}
-                 {/* { arrCitaNoPermitidas.length > 0 && <h1>Ya has llegado al limite de tu plan</h1>} */}
-                </div>
-                  </>
-                )}
-                {citasAgendadas &&
-                  Inactivas[page]?.map((cita, i) => {
-               
-                      return (
-                        <>
-                          <div className={style.container}>
-                            <div
-                              style={{
-                                display: "flex",
-                                gap: "5px",
-                                flexDirection: "column",
-                                width: "100%",
-                                fontSize: "1.8vh",
-                              }}
-                            >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  gap: "10px",
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                  fontSize: "1.8vh",
-                                }}
-                              >
-                                <img
-                                  style={{ width: "50px", height: "50px" }}
-                                  src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
-                                  alt=""
-                                />
-                                <div>
-                                  <div className={style.divNombreGrado}>
-                                    <p>{cita.nombre}</p>
-                                    {grados &&
-                                      grados.map((ele) => {
-                                        console.log(ele.id === cita.GradoId);
-                                        if (ele.id === cita.GradoId) {
-                                          return (
-                                            <Chip
-                                              sx={{ height: "20px" }}
-                                              color="primary"
-                                              label={ele.nombre_grado}
-                                            />
-                                          );
-                                        }
-                                      })}
-                                  </div>
+        {/* BLUR */}
 
-                                  <div className={style.itemDiv}>
-                                    <div className={style.itemDiv}>
-                                      <AccessTimeIcon
-                                        style={{
-                                          width: "20px",
-                                          height: "20px",
-                                          color: "grey",
-                                        }}
-                                      />
-                                      <p>{cita.hora_cita}</p>
-                                    </div>{" "}
-                                    <div className={style.itemDiv}>
-                                      <EventIcon
-                                        style={{
-                                          width: "20px",
-                                          height: "20px",
-                                          color: "grey",
-                                        }}
-                                      />{" "}
-                                      <p>{cita.fecha_cita}</p>
-                                    </div>
-                                  </div>
+        {filtros === "SinConfirmar" && (
+          <>
+            {/* solo lo correspondiente al plan */}
+            <div className={style.layout}>
+              {citasAgendadas && Inactivas.length === 0 && (
+                <>
+                  <div
+                    data-aos="flip-up"
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "row",
+                      color: "#0C2B42",
+                      gap: "10px",
+                      padding: "20px",
+                      minHeight: "100%",
+                      boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+                      fontWeight: "600",
+                      paddingBottom: "20px",
+                    }}
+                  >
+                    <ContentPasteSearchOutlinedIcon
+                      style={{ color: "#0061DF" }}
+                    />
+                    {Inactivas.length === 0 && (
+                      <h1>No hay solicitudes pendientes</h1>
+                    )}
+                    {/* { arrCitaNoPermitidas.length > 0 && <h1>Ya has llegado al limite de tu plan</h1>} */}
+                  </div>
+                </>
+              )}
+              {citasAgendadas &&
+                Inactivas[page]?.map((cita, i) => {
+                  return (
+                    <>
+                      <div className={style.container}>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "5px",
+                            flexDirection: "column",
+                            width: "100%",
+                            fontSize: "1.8vh",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "10px",
+                              flexDirection: "row",
+                              alignItems: "center",
+                              fontSize: "1.8vh",
+                            }}
+                          >
+                            <img
+                              style={{ width: "50px", height: "50px" }}
+                              src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
+                              alt=""
+                            />
+                            <div>
+                              <div className={style.divNombreGrado}>
+                                <p>{cita.nombre}</p>
+                                {grados &&
+                                  grados.map((ele) => {
+                                    console.log(ele.id === cita.GradoId);
+                                    if (ele.id === cita.GradoId) {
+                                      return (
+                                        <Chip
+                                          sx={{ height: "20px" }}
+                                          color="primary"
+                                          label={ele.nombre_grado}
+                                        />
+                                      );
+                                    }
+                                  })}
+                              </div>
+
+                              <div className={style.itemDiv}>
+                                <div className={style.itemDiv}>
+                                  <AccessTimeIcon
+                                    style={{
+                                      width: "20px",
+                                      height: "20px",
+                                      color: "grey",
+                                    }}
+                                  />
+                                  <p>{cita.hora_cita}</p>
+                                </div>{" "}
+                                <div className={style.itemDiv}>
+                                  <EventIcon
+                                    style={{
+                                      width: "20px",
+                                      height: "20px",
+                                      color: "grey",
+                                    }}
+                                  />{" "}
+                                  <p>{cita.fecha_cita}</p>
                                 </div>
                               </div>
                             </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                gap: "5px",
-                                width: "100%",
-                                justifyContent: "center",
-                              }}
-                            >
-                              {cita.modalidad === "Virtual" && (
-                                <LaptopWindowsIcon
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    color: "grey",
-                                  }}
-                                />
-                              )}
-                              {cita.modalidad === "Presencial" && (
-                                <PersonPinIcon
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    color: "grey",
-                                  }}
-                                />
-                              )}
-                              <p>{cita.modalidad}</p>
-                            </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                gap: "5px",
-                                width: "100%",
-                                justifyContent: "center",
-                                flexDirection: "column",
-                              }}
-                            >
-                              <div className={style.itemDiv}>
-                                <PhoneIcon
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    color: "grey",
-                                  }}
-                                />
-                                <p>{cita.telefono}</p>
-                              </div>
-
-                              <p>{cita.email}</p>
-                            </div>
-                            <div>
-                              <Button
-                                onClick={() => {
-                                  handlerPutStateCita(cita.id);
-                                }}
-                                variant="contained"
-                              >
-                                Confirmar{" "}
-                              </Button>
-                            </div>
                           </div>
-                        </>
-                      );
-                    
-                  })}
-              </div>
-              {/* blur + promocion de planes  */}
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "5px",
+                            width: "100%",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {cita.modalidad === "Virtual" && (
+                            <LaptopWindowsIcon
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                color: "grey",
+                              }}
+                            />
+                          )}
+                          {cita.modalidad === "Presencial" && (
+                            <PersonPinIcon
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                color: "grey",
+                              }}
+                            />
+                          )}
+                          <p>{cita.modalidad}</p>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "5px",
+                            width: "100%",
+                            justifyContent: "center",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <div className={style.itemDiv}>
+                            <PhoneIcon
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                color: "grey",
+                              }}
+                            />
+                            <p>{cita.telefono}</p>
+                          </div>
+
+                          <p>{cita.email}</p>
+                        </div>
+                        <div>
+                          <Button
+                            onClick={() => {
+                              handlerPutStateCita(cita.id);
+                            }}
+                            variant="contained"
+                          >
+                            Confirmar{" "}
+                          </Button>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })}
+            </div>
+            {/* blur + promocion de planes  */}
+            {arrCitaNoPermitidas != 0 && (
               <div className={style.promoPlan}>
                 <Card
                   sx={{
                     position: "absolute",
-                    top:'50%',
-                     right:'40%',
-                 
+                    top: "50%",
+                    right: "40%",
+
                     backgroundColor: "#FFF",
                     maxWidth: "30vh",
                   }}
@@ -459,9 +471,176 @@ console.log(citasAgendadas)
                   </CardContent>
                 </Card>
               </div>
-              <div className="blur-sm  z-10">
-                {citasAgendadas && arrCitaNoPermitidas.length != 0 &&
-                 arrCitaNoPermitidas[page]?.map((cita, i) => {
+            )}
+            <div className="blur-sm  z-10">
+              {citasAgendadas &&
+                arrCitaNoPermitidas.length != 0 &&
+                arrCitaNoPermitidas[page]?.map((cita, i) => {
+                  return (
+                    <>
+                      <div className={style.container}>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "5px",
+                            flexDirection: "column",
+                            width: "100%",
+                            fontSize: "1.8vh",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "10px",
+                              flexDirection: "row",
+                              alignItems: "center",
+                              fontSize: "1.8vh",
+                            }}
+                          >
+                            <img
+                              style={{ width: "50px", height: "50px" }}
+                              src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
+                              alt=""
+                            />
+                            <div>
+                              <div className={style.divNombreGrado}>
+                                <p>{cita.nombre}</p>
+                                {grados &&
+                                  grados.map((ele) => {
+                                    console.log(ele.id === cita.GradoId);
+                                    if (ele.id === cita.GradoId) {
+                                      return (
+                                        <Chip
+                                          sx={{ height: "20px" }}
+                                          color="primary"
+                                          label={ele.nombre_grado}
+                                        />
+                                      );
+                                    }
+                                  })}
+                              </div>
+
+                              <div className={style.itemDiv}>
+                                <div className={style.itemDiv}>
+                                  <AccessTimeIcon
+                                    style={{
+                                      width: "20px",
+                                      height: "20px",
+                                      color: "grey",
+                                    }}
+                                  />
+                                  <p>{cita.hora_cita}</p>
+                                </div>{" "}
+                                <div className={style.itemDiv}>
+                                  <EventIcon
+                                    style={{
+                                      width: "20px",
+                                      height: "20px",
+                                      color: "grey",
+                                    }}
+                                  />{" "}
+                                  <p>{cita.fecha_cita}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "5px",
+                            width: "100%",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {cita.modalidad === "Virtual" && (
+                            <LaptopWindowsIcon
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                color: "grey",
+                              }}
+                            />
+                          )}
+                          {cita.modalidad === "Presencial" && (
+                            <PersonPinIcon
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                color: "grey",
+                              }}
+                            />
+                          )}
+                          <p>{cita.modalidad}</p>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "5px",
+                            width: "100%",
+                            justifyContent: "center",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <div className={style.itemDiv}>
+                            <PhoneIcon
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                color: "grey",
+                              }}
+                            />
+                            <p>{cita.telefono}</p>
+                          </div>
+
+                          <p>{cita.email}</p>
+                        </div>
+                        <div>
+                          <Button
+                            onClick={() => {
+                              handlerPutStateCita(cita.id);
+                            }}
+                            variant="contained"
+                          >
+                            Confirmar{" "}
+                          </Button>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })}
+            </div>
+          </>
+        )}
+
+        {/*PLAN PREMIUM*/}
+        {filtros === "SinConfirmar" &&
+          oneSchool.Plan_Pago.nombre_plan_pago === "Premium" && (
+            <>
+              {/* solo lo correspondiente al plan */}
+              <div className={style.layout}>
+                {citasAgendadas && Inactivas?.length === 0 && (
+                  <>
+                    <div
+                      data-aos="flip-up"
+                      style={{
+                        width: "60%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        padding: "20px",
+                        minHeight: "100%",
+                        boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+                      }}
+                    >
+                      <NotFound />
+                      <h1>No hay solicitudes pendientes</h1>
+                    </div>
+                  </>
+                )}
+                {citasAgendadas &&
+                  Inactivas[page]?.map((cita, i) => {
                     return (
                       <>
                         <div className={style.container}>
@@ -596,181 +775,14 @@ console.log(citasAgendadas)
                     );
                   })}
               </div>
-            </>
-          )}
- 
-       {/*PLAN PREMIUM*/}
-    {filtros === "SinConfirmar" &&
-          oneSchool.Plan_Pago.nombre_plan_pago === "Premium" && (
-            <>
-              {/* solo lo correspondiente al plan */}
-              <div className={style.layout}>
-                {citasAgendadas && Inactivas?.length === 0 && (
-                  <>
-                    <div
-                      data-aos="flip-up"
-                      style={{
-                        width: "60%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                        padding: "20px",
-                        minHeight: "100%",
-                        boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
-                      }}
-                    >
-                      <NotFound />
-                      <h1>No hay solicitudes pendientes</h1>
-                    </div>
-                  </>
-                )}
-                {citasAgendadas &&
-                  Inactivas[page]?.map((cita, i) => {
-                 
-                      return (
-                        <>
-                          <div className={style.container}>
-                            <div
-                              style={{
-                                display: "flex",
-                                gap: "5px",
-                                flexDirection: "column",
-                                width: "100%",
-                                fontSize: "1.8vh",
-                              }}
-                            >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  gap: "10px",
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                  fontSize: "1.8vh",
-                                }}
-                              >
-                                <img
-                                  style={{ width: "50px", height: "50px" }}
-                                  src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
-                                  alt=""
-                                />
-                                <div>
-                                  <div className={style.divNombreGrado}>
-                                    <p>{cita.nombre}</p>
-                                    {grados &&
-                                      grados.map((ele) => {
-                                        console.log(ele.id === cita.GradoId);
-                                        if (ele.id === cita.GradoId) {
-                                          return (
-                                            <Chip
-                                              sx={{ height: "20px" }}
-                                              color="primary"
-                                              label={ele.nombre_grado}
-                                            />
-                                          );
-                                        }
-                                      })}
-                                  </div>
-
-                                  <div className={style.itemDiv}>
-                                    <div className={style.itemDiv}>
-                                      <AccessTimeIcon
-                                        style={{
-                                          width: "20px",
-                                          height: "20px",
-                                          color: "grey",
-                                        }}
-                                      />
-                                      <p>{cita.hora_cita}</p>
-                                    </div>{" "}
-                                    <div className={style.itemDiv}>
-                                      <EventIcon
-                                        style={{
-                                          width: "20px",
-                                          height: "20px",
-                                          color: "grey",
-                                        }}
-                                      />{" "}
-                                      <p>{cita.fecha_cita}</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                gap: "5px",
-                                width: "100%",
-                                justifyContent: "center",
-                              }}
-                            >
-                              {cita.modalidad === "Virtual" && (
-                                <LaptopWindowsIcon
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    color: "grey",
-                                  }}
-                                />
-                              )}
-                              {cita.modalidad === "Presencial" && (
-                                <PersonPinIcon
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    color: "grey",
-                                  }}
-                                />
-                              )}
-                              <p>{cita.modalidad}</p>
-                            </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                gap: "5px",
-                                width: "100%",
-                                justifyContent: "center",
-                                flexDirection: "column",
-                              }}
-                            >
-                              <div className={style.itemDiv}>
-                                <PhoneIcon
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    color: "grey",
-                                  }}
-                                />
-                                <p>{cita.telefono}</p>
-                              </div>
-
-                              <p>{cita.email}</p>
-                            </div>
-                            <div>
-                              <Button
-                                onClick={() => {
-                                  handlerPutStateCita(cita.id);
-                                }}
-                                variant="contained"
-                              >
-                                Confirmar{" "}
-                              </Button>
-                            </div>
-                          </div>
-                        </>
-                      );
-                    
-                  })}
-              </div>
               {/* blur + promocion de planes  */}
               <div className={style.promoPlan}>
                 <Card
                   sx={{
                     position: "absolute",
-                    top:'50%',
-                     right:'40%',
-                 
+                    top: "50%",
+                    right: "40%",
+
                     backgroundColor: "#FFF",
                     maxWidth: "30vh",
                   }}
@@ -936,171 +948,173 @@ console.log(citasAgendadas)
         {/* citas ya confirmadas */}
         {filtros === "Confirmados" && (
           <div className={style.layout}>
-            {citasAgendadas && Activas[page]?.length === 0 && (
+            {citasAgendadas && Activas?.length === 0 && (
               <>
                 <div
                   data-aos="flip-up"
                   style={{
-                    width: "60%",
+                    width: "100%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    flexDirection: "column",
+                    flexDirection: "row",
+                    color: "#0C2B42",
+                    gap: "10px",
                     padding: "20px",
                     minHeight: "100%",
                     boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+                    fontWeight: "600",
                   }}
                 >
-                  <NotFound />
-                  <h1>Aun no has confirmado ninguna cita </h1>
+                  <ContentPasteSearchOutlinedIcon
+                    style={{ color: "#0061DF" }}
+                  />
+                  <h1>Aun no has confirmado ninguna cita</h1>
                 </div>
               </>
             )}
 
             {Activas &&
-              
               Activas[page]?.map((cita, i) => {
-              
-                  return (
-                    <>
-                      <div className={style.container}>
+                return (
+                  <>
+                    <div className={style.container}>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "5px",
+                          flexDirection: "column",
+                          width: "100%",
+                          fontSize: "1.8vh",
+                        }}
+                      >
                         <div
                           style={{
                             display: "flex",
-                            gap: "5px",
-                            flexDirection: "column",
-                            width: "100%",
+                            gap: "10px",
+                            flexDirection: "row",
+                            alignItems: "center",
                             fontSize: "1.8vh",
                           }}
                         >
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "10px",
-                              flexDirection: "row",
-                              alignItems: "center",
-                              fontSize: "1.8vh",
-                            }}
-                          >
-                            <img
-                              style={{ width: "50px", height: "50px" }}
-                              src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
-                              alt=""
-                            />
-                            <div>
-                              <div className={style.divNombreGrado}>
-                                <p>{cita.nombre}</p>
-                                {grados &&
-                                  grados.map((ele) => {
-                                    console.log(ele.id === cita.GradoId);
-                                    if (ele.id === cita.GradoId) {
-                                      return (
-                                        <Chip
-                                          sx={{ height: "20px" }}
-                                          color="primary"
-                                          label={ele.nombre_grado}
-                                        />
-                                      );
-                                    }
-                                  })}
-                              </div>
+                          <img
+                            style={{ width: "50px", height: "50px" }}
+                            src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
+                            alt=""
+                          />
+                          <div>
+                            <div className={style.divNombreGrado}>
+                              <p>{cita.nombre}</p>
+                              {grados &&
+                                grados.map((ele) => {
+                                  console.log(ele.id === cita.GradoId);
+                                  if (ele.id === cita.GradoId) {
+                                    return (
+                                      <Chip
+                                        sx={{ height: "20px" }}
+                                        color="primary"
+                                        label={ele.nombre_grado}
+                                      />
+                                    );
+                                  }
+                                })}
+                            </div>
 
+                            <div className={style.itemDiv}>
                               <div className={style.itemDiv}>
-                                <div className={style.itemDiv}>
-                                  <AccessTimeIcon
-                                    style={{
-                                      width: "20px",
-                                      height: "20px",
-                                      color: "grey",
-                                    }}
-                                  />
-                                  <p>{cita.hora_cita}</p>
-                                </div>{" "}
-                                <div className={style.itemDiv}>
-                                  <EventIcon
-                                    style={{
-                                      width: "20px",
-                                      height: "20px",
-                                      color: "grey",
-                                    }}
-                                  />{" "}
-                                  <p>{cita.fecha_cita}</p>
-                                </div>
+                                <AccessTimeIcon
+                                  style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    color: "grey",
+                                  }}
+                                />
+                                <p>{cita.hora_cita}</p>
+                              </div>{" "}
+                              <div className={style.itemDiv}>
+                                <EventIcon
+                                  style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    color: "grey",
+                                  }}
+                                />{" "}
+                                <p>{cita.fecha_cita}</p>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "5px",
-                            width: "100%",
-                            justifyContent: "center",
-                          }}
-                        >
-                          {cita.modalidad === "Virtual" && (
-                            <LaptopWindowsIcon
-                              style={{
-                                width: "20px",
-                                height: "20px",
-                                color: "grey",
-                              }}
-                            />
-                          )}
-                          {cita.modalidad === "Presencial" && (
-                            <PersonPinIcon
-                              style={{
-                                width: "20px",
-                                height: "20px",
-                                color: "grey",
-                              }}
-                            />
-                          )}
-                          <p>{cita.modalidad}</p>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "5px",
-                            width: "100%",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                          }}
-                        >
-                          <div className={style.itemDiv}>
-                            <PhoneIcon
-                              style={{
-                                width: "20px",
-                                height: "20px",
-                                color: "grey",
-                              }}
-                            />
-                            <p>{cita.telefono}</p>
-                          </div>
-
-                          <p>{cita.email}</p>
-                        </div>
-                        <div>
-                          <Button
-                            onClick={() => {
-                              handlerPutStateCita(cita.id);
-                            }}
-                            variant="contained"
-                            disabled
-                          >
-                            Confirmada{" "}
-                          </Button>
-                        </div>
                       </div>
-                    </>
-                  );
-               
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "5px",
+                          width: "100%",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {cita.modalidad === "Virtual" && (
+                          <LaptopWindowsIcon
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                              color: "grey",
+                            }}
+                          />
+                        )}
+                        {cita.modalidad === "Presencial" && (
+                          <PersonPinIcon
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                              color: "grey",
+                            }}
+                          />
+                        )}
+                        <p>{cita.modalidad}</p>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "5px",
+                          width: "100%",
+                          justifyContent: "center",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <div className={style.itemDiv}>
+                          <PhoneIcon
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                              color: "grey",
+                            }}
+                          />
+                          <p>{cita.telefono}</p>
+                        </div>
+
+                        <p>{cita.email}</p>
+                      </div>
+                      <div>
+                        <Button
+                          onClick={() => {
+                            handlerPutStateCita(cita.id);
+                          }}
+                          variant="contained"
+                          sx={{ background: "green" }}
+                          disabled
+                        >
+                          Confirmada{" "}
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                );
               })}
           </div>
         )}
-     
       </div>
-        {/* PAGINADO */}
+      {/* PAGINADO */}
       <PaginationCitas
         nroPaginas={
           filtros === "Confirmados"

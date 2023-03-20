@@ -74,7 +74,7 @@ const informeAdminMail = (user, actualDate) => {
       <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
         <tbody>
           <tr>
-            <td class="o_hide" align="center" style="display: none;font-size: 0;max-height: 0;width: 0;line-height: 0;overflow: hidden;mso-hide: all;visibility: hidden;">Email Summary (Hidden)</td>
+            <td class="o_hide" align="center" style="display: none;font-size: 0;max-height: 0;width: 0;line-height: 0;overflow: hidden;mso-hide: all;visibility: hidden;">Estimado colegio ${user.nombre_colegio} confirmamos tu solicitud de información sobre MiCole.</td>
           </tr>
         </tbody>
       </table>
@@ -88,7 +88,7 @@ const informeAdminMail = (user, actualDate) => {
                 <tbody>
                   <tr>
                     <td class="o_bg-dark o_px o_py-md o_br-t o_sans o_text" align="center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;                        background-image: url('https://i.imgur.com/vqKaXyJ.png');background-size: cover;border-radius: 4px 4px 0px 0px;padding-left: 16px;padding-right: 16px;padding-top: 24px;padding-bottom: 24px;">
-                      <p style="margin-top: 0px;margin-bottom: 0px;"><a class="o_text-white" href="https://example.com/" style="text-decoration: none;outline: none;color: #ffffff;"><img src="https://i.imgur.com/bq5PLes.png" width="136" height="36" alt="SimpleApp" style="max-width: 136px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a></p>
+                      <p style="margin-top: 0px;margin-bottom: 0px;"><a class="o_text-white" href="https://example.com/" style="text-decoration: none;outline: none;color: #ffffff;"><img src="https://i.imgur.com/bq5PLes.png" width="136" height="36" alt="MiCole" style="max-width: 136px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a></p>
                     </td>
                   </tr>
                 </tbody>

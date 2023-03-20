@@ -19,6 +19,8 @@ export const schoolsSlice = createSlice({
     niveles: [],
     afiliaciones: [],
     grados: [],
+    metodos: [],
+    dificultades: [],
     horarios:null,
     vacantesGrados: [],
     citasAgendadas: [],
@@ -27,6 +29,16 @@ export const schoolsSlice = createSlice({
     pagination: {}
   },
   reducers: {
+    getMetodos: (state,action) => {
+      (state.metodos = action.payload),
+        (state.loading = false),
+        (state.error = "");
+    },
+    getDificultades: (state,action) => {
+      (state.dificultades = action.payload),
+        (state.loading = false),
+        (state.error = "");
+    },
     getPagination: (state, action) => {
       (state.pagination = action.payload),
         (state.loading = false),
@@ -154,7 +166,9 @@ export const {
   getProvincias,
   getCitasAgendado,
   getHorarios,
-  getPagination
+  getPagination,
+  getMetodos,
+  getDificultades
 } = schoolsSlice.actions;
 
 export default schoolsSlice.reducer;

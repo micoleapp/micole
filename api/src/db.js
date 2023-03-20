@@ -88,6 +88,7 @@ const {
   Ventas,
   Metodos,
   Dificultades,
+  Evento
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -216,6 +217,24 @@ Categoria.belongsToMany(Colegio, {
   timestamps: false,
 });
 
+Colegio.belongsToMany(Metodos, {
+  through: "Colegio_Metodos",
+  timestamps: false,
+});
+Metodos.belongsToMany(Colegio, {
+  through: "Colegio_Metodos",
+  timestamps: false,
+});
+
+Colegio.belongsToMany(Dificultades, {
+  through: "Colegio_Dificultades",
+  timestamps: false,
+});
+Dificultades.belongsToMany(Colegio, {
+  through: "Colegio_Dificultades",
+  timestamps: false,
+});
+
 Colegio.hasMany(Vacante, {
   foreignKey: "ColegioId",
 });
@@ -250,20 +269,6 @@ Ventas.belongsTo(Plan_Pago, {
   foreignKey: "PlanPagoId",
 });
 
-Colegio.hasMany(Ventas, {
-  foreignKey: 'ColegioId',
-});
-Ventas.belongsTo(Colegio, {
-  foreignKey: 'ColegioId',
-});
-
-Plan_Pago.hasMany(Ventas, {
-  foreignKey: 'PlanPagoId',
-});
-Ventas.belongsTo(Plan_Pago, {
-  foreignKey: 'PlanPagoId',
-});
-
 Colegio.hasMany(Cita, {
   foreignKey: "ColegioId",
 });
@@ -284,6 +289,16 @@ Colegio.hasMany(Review, {
 Review.belongsTo(Colegio, {
   foreignKey: "ColegioId",
 });
+
+Colegio.hasMany(Evento, {
+  foreignKey: "ColegioId",
+});
+Evento.belongsTo(Colegio, {
+  foreignKey: "ColegioId",
+});
+
+User.belongsToMany(Evento, { through: "Evento_Usuario", timestamps: false });
+Evento.belongsToMany(User, { through: "Evento_Usuario", timestamps: false });
 
 Infraestructura_tipo.hasMany(Infraestructura);
 Infraestructura.belongsTo(Infraestructura_tipo);

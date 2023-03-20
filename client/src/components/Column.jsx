@@ -25,7 +25,7 @@ const Column = ({ column, tasksArr }) => {
   return (
     <>
       <div className="rounded-md bg-white shadow-md border max-w-xs h-min w-full flex flex-col">
-        <div className="flex items-center   bg-[#0061dd] justify-center text-center py-2 rounded-t-md px-2 h-20">
+        <div className="flex items-center   bg-[#0061dd] justify-center text-center rounded-t-md py-3">
           <h1 className="text-sm text-white">{column.title}</h1>
         </div>
         <Droppable droppableId={column.id}>
