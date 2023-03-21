@@ -5,9 +5,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { padding } from "@mui/system";
+
 import React from "react";
-import TextEvento from "../TextEvento";
+
 
 export default function InscripcionEvento({
   idEvento,

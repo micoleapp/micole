@@ -49,6 +49,7 @@ import style from "./SchoolD.module.css";
 import { HiChevronDown } from "react-icons/hi";
 import { HiChevronLeft } from "react-icons/hi";
 import SwiperEventos from "../components/SwiperEventos/SwiperEventos";
+import es_AM_PM from "../components/SwiperEventos/utils/horaFormat";
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
     <div className="w-full px-4">
@@ -1115,9 +1116,9 @@ function SchoolDetail() {
                                 {/* <div className={style.itemTable}> */}
                                   <p style={{ fontSize: "14px", color:'#515151', fontWeight:'700' }}>{ele.dia}</p>
                                   <div style={{ display: "flex", gap: "10px",fontSize: "12px" ,flexDirection:'column'}}>
-                                    <p>{ele.horarios[0].desde} AM</p>
+                                    <p>{ es_AM_PM(ele.horarios[0].desde)} </p>
                                  
-                                    <p>{ele.horarios[0].hasta} PM</p>
+                                    <p>{ ele.horarios[0].hasta +' '+  es_AM_PM(ele.horarios[0].hasta)} </p>
                                   </div>
                                 {/* </div> */}
                               {/* </div> */}
