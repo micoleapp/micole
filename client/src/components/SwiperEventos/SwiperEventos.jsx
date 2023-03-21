@@ -13,10 +13,7 @@ import "swiper/css/effect-fade";
 import 'swiper/css/parallax'
 import TextEvento from "./TextEvento";
 export default function SwiperEventos({data}) {
-
-  console.log(data);
-
-
+console.log(data)
   return (
     <div style={{ width: "60vh" }}>
       <Swiper
@@ -48,6 +45,7 @@ export default function SwiperEventos({data}) {
 
                 <div className={style.content}>
                   <TextEvento
+                    
                     nombreEvento={event.nombre_evento}
                     description={event.descripcion}
                     tipoEvento={event.tipo_evento}
@@ -55,7 +53,7 @@ export default function SwiperEventos({data}) {
                     horaEvento={event.hora_evento}
                     capacidadEvento={event.capacidad}
                    logo={event.imagen_evento}
-                    idColegio={event.id}
+                    idEvento={event.id}
                   />
                 </div>
               </SwiperSlide>

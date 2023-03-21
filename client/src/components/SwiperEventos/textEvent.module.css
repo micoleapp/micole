@@ -9,7 +9,7 @@
   height: 100%;
   align-items: center;
   justify-content: center;
-  gap:1rem;
+  gap:2rem;
 }
 .title {
   font-family: Poppins;
@@ -30,14 +30,14 @@
 .divDetalles{
     display :flex;
    flex-direction: column; 
-  padding: 1rem;
+  /* padding: 1rem; */
   gap: 1vh;
    align-items: center;
 }
 .p {
     color:#4D4747;
     font-weight: 400;
-    font-size: 1.8vh;
+    font-size: 1.6vh;
 }
 .pTittle{
     color:#156BAA;
