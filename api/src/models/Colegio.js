@@ -193,10 +193,10 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      // isBanned: {
-      //   type: DataTypes.BOOLEAN,
-      //   defaultValue: false,
-      // },
+      mes_prueba: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
       // avatar: {
       //   type: DataTypes.STRING,
       //   defaultValue:
