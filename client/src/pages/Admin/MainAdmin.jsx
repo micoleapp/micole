@@ -6,13 +6,17 @@ import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import { GiHexagonalNut } from "react-icons/gi";
 import { AiOutlineLogout } from "react-icons/ai";
+import Hamburger from "hamburger-react";
 export default function MainAdmin() {
   const [page, setPage] = React.useState(0);
   const [isOpen, setOpen] = useState(false);
   return (
     <>
-      {/* Menu de navegacion */}
-      <section
+   
+      <div  className="flex lg:flex-row flex-col">  
+      {/* <div style={{display:'flex', flexDirection:'row'}}> */}
+         {/* Menu de navegacion */}
+         <section
         className={`leftshadow ${
           !isOpen
             ? "h-[50px] lg:h-full lg:min-h-full"
@@ -20,7 +24,7 @@ export default function MainAdmin() {
         } duration-300 overflow-hidden bg-white w-full lg:w-1/4 shadow-leftshadow flex justify-center z-50`}
       >
         <div className="absolute left-5 block lg:hidden">
-          {/* <Hamburger toggled={isOpen} toggle={setOpen} color="#0061dd" /> */}
+          <Hamburger toggled={isOpen} toggle={setOpen} color="#0061dd" />
         </div>
         <ul
           className={`${
@@ -73,21 +77,21 @@ export default function MainAdmin() {
           </button>
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
-              page == 5 ? "bg-[#0061dd] text-white" : null
+              page == 2 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => {
               setOpen();
-              setPage(5);
+              setPage(2);
             }}
           >
             <FormatListNumberedOutlinedIcon
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
-                page == 5 ? "text-white" : null
+                page == 2 ? "text-white" : null
               }`}
             />
             <span
               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
-                page == 5 ? "text-white" : null
+                page == 2? "text-white" : null
               }`}
             >
               Vacantes{" "}
@@ -95,21 +99,21 @@ export default function MainAdmin() {
           </button>
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
-              page == 6 ? "bg-[#0061dd] text-white" : null
+              page == 3 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => {
               setOpen();
-              setPage(6);
+              setPage(3);
             }}
           >
             <LeaderboardOutlinedIcon
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
-                page == 6 ? "text-white" : null
+                page == 3 ? "text-white" : null
               }`}
             />
             <span
               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
-                page == 6 ? "text-white" : null
+                page == 3 ? "text-white" : null
               }`}
             >
               Infraestructura
@@ -138,46 +142,25 @@ export default function MainAdmin() {
             </span>
           </button>
 
-          {/* <button
-            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
-              page == 2 ? "bg-[#0061dd] text-white" : null
-            } `}
-            onClick={() => {
-              setOpen();
-              setPage(2);
-            }}
-          >
-            <BsWindowDock
-              className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
-                page == 2 ? "text-white" : null
-              }`}
-            />
-            <span
-              className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
-                page == 2 ? "text-white" : null
-              }`}
-            >
-            Configuracion
-            </span>
-          </button> */}
+        
 
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
-              page == 3 ? "bg-[#0061dd] text-white" : null
+              page == 5 ? "bg-[#0061dd] text-white" : null
             } `}
             onClick={() => {
               setOpen();
-              setPage(3);
+              setPage(5);
             }}
           >
             <GiHexagonalNut
               className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
-                page == 3 ? "text-white" : null
+                page == 5? "text-white" : null
               }`}
             />
             <span
               className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
-                page == 3 ? "text-white" : null
+                page == 5 ? "text-white" : null
               }`}
             >
               Configuración
@@ -185,7 +168,7 @@ export default function MainAdmin() {
           </button>
           <button
             className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
-            onClick={() => dispatch(logout())}
+            // onClick={() => dispatch(logout())}
           >
             <AiOutlineLogout className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
             <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">
@@ -195,23 +178,43 @@ export default function MainAdmin() {
         </ul>
       </section>
       {/* Renderizado de componentes  */}
-      <section>
+      <section className="right w-full bg-[#f6f7f8] p-5 lg:px-31 lg:py-12">
         {page === 0 ? (
-          <h1>Panel de Control</h1>
+          <div className="min-h-screen">
+            <h1>Panel de Control</h1>
+          </div>
         ) : page === 1 ? (
-          <h1>Colegios</h1>
+          <div className="min-h-screen">
+            <h1>Colegios</h1>
+          </div>
         ) : page === 2 ? (
-          <h1>Vacantes</h1>
+          <div className="min-h-screen">
+            <h1>Vacantes</h1>
+          </div>
         ) : page === 3 ? (
-          <h1>Infraestructura</h1>
+          <div className="min-h-screen">
+            <h1>Infraestructura</h1>
+          </div>
         ) : page === 4 ? (
-          <h1>Afiliaciones</h1>
+          <div className="min-h-screen">
+            <h1>Afiliaciones</h1>
+          </div>
         ) : page === 5 ? (
-          <h1>Configuracion</h1>
+          <div className="min-h-screen">
+            <h1>Configuracion</h1>
+          </div>
         ) : page === 6 ? (
-          <h1>Cerrar sesion</h1>
+          <div className="min-h-screen">
+            <h1>Cerrar sesion</h1>
+          </div>
         ) : null}
       </section>
+      {/* </div> */}
+        
+ 
+
+      </div>
+    
     </>
   );
 }
