@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import InscripcionModal from "./ModalInscripcion/InscripcionModal";
 import style from "./textEvent.module.css";
 import fechaFormat from "./utils/fechaFormat";
+import es_AM_PM from "./utils/horaFormat";
 export default function TextEvento({
   nombreEvento,
   description,
@@ -15,6 +16,8 @@ export default function TextEvento({
 }) {
   const [open, setOpen] = useState(false);
   const fecha = fechaFormat(fechaEvento);
+  const hora = es_AM_PM(horaEvento);
+  console.log(hora);
   console.log(fecha);
   const handleOpen = () => setOpen(true);
   return (
@@ -29,7 +32,7 @@ export default function TextEvento({
        
         <div className={style.divDetalles}>
           <p className={style.pTittle}>Horario</p>
-          {fechaEvento && <p className={style.p}>{horaEvento}</p>}
+          {fechaEvento && <p className={style.p}>{hora}</p>}
         </div>
         <div className={style.divDetalles}>
           <p className={style.pTittle}>Fecha</p>
@@ -51,7 +54,7 @@ export default function TextEvento({
           open={open}
           idEvento={idEvento}
           fechaEvento={fecha}
-          horaEvento={horaEvento}
+          horaEvento={hora}
           nombreEvento={nombreEvento}
           setOpen={setOpen}
         />

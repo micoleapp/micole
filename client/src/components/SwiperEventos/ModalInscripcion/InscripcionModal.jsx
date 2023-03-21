@@ -7,7 +7,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-//   maxWidth:'100vh',
+  maxWidth:'100vh',
   bgcolor: "background.paper",
   boxShadow: " 0px 1px 5px rgba(0, 0, 0, 0.40)",
   border: "none",
@@ -28,7 +28,7 @@ export default function InscripcionModal({
   return (
     <>
       <Modal
-        sx={{ display: "flex" }}
+        sx={{ display: "flex" , minWidth:'100vh'}}
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
