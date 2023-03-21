@@ -40,7 +40,7 @@ export default function SwiperEventos({data}) {
           return (
             <>
               <SwiperSlide className={style.swiper_slide}>
-                <img src='https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679350090/fzbdxjnerwn5wrqlgfx6.png' alt="" />
+                <img  style={{width:'50vh',height:'60vh'}}  src='https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679362147/eesjwe0dwaabi37gzuj9.png' alt="" />
 
                 <div className={style.content}>
                   <TextEvento
