@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Pagination, Autoplay, EffectFade } from "swiper";
+import { Pagination, Autoplay, EffectFade ,Navigation,Parallax} from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -8,25 +8,29 @@ import "swiper/css";
 import "swiper/swiper.min.css";
 import style from "./SwiperEvenos.module.css";
 import "swiper/css/pagination";
-
+import 'swiper/css/navigation'
 import "swiper/css/effect-fade";
+import 'swiper/css/parallax'
 import TextEvento from "./TextEvento";
 export default function SwiperEventos({data}) {
-  const { oneSchool } = useSelector((state) => state.schools)
-  console.log(data);
 
+  console.log(data);
 
 
   return (
     <div style={{ width: "60vh" }}>
       <Swiper
-        modules={[Autoplay, Pagination, EffectFade]}
+        modules={[Autoplay, Pagination,Parallax, EffectFade,Navigation]}
+        // modules={[ Pagination, Scrollbar, A11y]}
         effect="fade"
+        scrollbar={{ draggable: true }}
         fadeEffect={{
           crossFade: true, // enables slides to cross fade
         }}
         lazy="true"
         spaceBetween={0}
+        navigation
+
         slidesPerView={1}
         pagination={{ clickable: true }}
         autoplay={{
@@ -36,7 +40,7 @@ export default function SwiperEventos({data}) {
         centeredSlides="true"
         className={style.swiper}
       >
-        {data.Eventos.map((event) => {
+        {data.Eventos?.map((event) => {
           return (
             <>
               <SwiperSlide className={style.swiper_slide}>
