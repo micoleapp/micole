@@ -26,13 +26,14 @@ export default function TextEvento({
       {nombreEvento && <h1 className={style.title}>{nombreEvento}</h1>}
       {description && <p className={style.descripcion}>{description}</p>}
       <div style={{ display: "flex", width:'100%', justifyContent:'space-around' }}>
-        <div className={style.divDetalles}>
-          <p className={style.pTittle}>Dia</p>
-          {fechaEvento && <p className={style.p}>{fecha}</p>}
-        </div>
+       
         <div className={style.divDetalles}>
           <p className={style.pTittle}>Horario</p>
           {fechaEvento && <p className={style.p}>{horaEvento}</p>}
+        </div>
+        <div className={style.divDetalles}>
+          <p className={style.pTittle}>Fecha</p>
+          {fechaEvento && <p className={style.p}>{fecha}</p>}
         </div>
         <div className={style.divDetalles}>
           <p className={style.pTittle}>Capacidad</p>
