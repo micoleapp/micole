@@ -119,7 +119,7 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
 function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool, grados, horarios } = useSelector((state) => state.schools);
-
+  console.log(oneSchool)
 
   const location = useLocation();
   console.log();
@@ -1235,8 +1235,8 @@ function SchoolDetail() {
           <div style={{width:'100%', display:'flex', justifyContent:'flex-start'}}>
               <h2 className="font-semibold text-xl" >Eventos</h2>
           </div>
-          
-            <SwiperEventos/>
+     
+            <SwiperEventos data={oneSchool}/>
           </div >
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Galeria</h2>

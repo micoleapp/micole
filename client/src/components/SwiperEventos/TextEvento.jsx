@@ -9,28 +9,14 @@ export default function TextEvento({
   horaEvento,
   idColegio,
   capacidadEvento,
+  logo
 }) {
-  const { oneSchool } = useSelector((state) => state.schools);
-  console.log(oneSchool.id);
 
-  useEffect(() => {
-    axios
-      .put(`/citas/${idCita}`, { estado: NuevoEstado })
-      .then((res) => console.log(res.data))
-      .catch((err) => {
-        dispatch(getError(err.response.data.error));
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: err.response.data.error,
-        });
-      });
-  }, []);
 
   return (
     <div className={style.card}>
       <div style={{ maxWidth: "10vh", maxHeight: "12vh" }}>
-        <img style={{ display: "flex" }} src={idColegio} alt="Logo" />
+        <img style={{ display: "flex" }} src={logo} alt="Logo" />
       </div>
 
       {nombreEvento && <h1 className={style.title}>{nombreEvento}</h1>}

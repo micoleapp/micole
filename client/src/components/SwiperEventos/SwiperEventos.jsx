@@ -11,12 +11,12 @@ import "swiper/css/pagination";
 
 import "swiper/css/effect-fade";
 import TextEvento from "./TextEvento";
-export default function SwiperEventos() {
-  const { oneSchool } = useSelector((state) => state.schools);
-  console.log(oneSchool.Eventos);
+export default function SwiperEventos({data}) {
+  const { oneSchool } = useSelector((state) => state.schools)
+  console.log(data);
 
 
-  console.log(Data)
+
   return (
     <div style={{ width: "60vh" }}>
       <Swiper
@@ -36,21 +36,22 @@ export default function SwiperEventos() {
         centeredSlides="true"
         className={style.swiper}
       >
-        {MockEventos.map((event) => {
+        {data.Eventos.map((event) => {
           return (
             <>
               <SwiperSlide className={style.swiper_slide}>
-                <img src={event.image} alt="" />
+                <img src='https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679350090/fzbdxjnerwn5wrqlgfx6.png' alt="" />
 
                 <div className={style.content}>
                   <TextEvento
-                    nombreEvento={event.nombreEvento}
-                    description={event.descripcionEvento}
-                    tipoEvento={event.tipoEvento}
-                    fechaEvento={event.fechaEvento}
-                    horaEvento={event.horaEvento}
-                    capacidadEvento={event.capacidadEvento}
-                    idColegio={event.idColegio}
+                    nombreEvento={event.nombre_evento}
+                    description={event.descripcion}
+                    tipoEvento={event.tipo_evento}
+                    fechaEvento={event.fecha_evento}
+                    horaEvento={event.hora_evento}
+                    capacidadEvento={event.capacidad}
+                   logo={event.imagen_evento}
+                    idColegio={event.id}
                   />
                 </div>
               </SwiperSlide>
@@ -61,6 +62,14 @@ export default function SwiperEventos() {
     </div>
   );
 }
+// id(pin):"b0e003bf-9a33-4f72-9e22-92cf9ac35e3e"
+// nombre_evento(pin):"Charla Orientacion"
+// descripcion(pin):"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry'"
+// tipo_evento(pin):"Familiar"
+// fecha_evento(pin):"2023-03-21"
+// hora_evento(pin):"08:00"
+// capacidad(pin):60
+// imagen_evento(pin):"https://res.cloudinary.com/de4i6biay/image/upload/v1679360608/micole/zxlrdrjjqdgyuom2umje.png"
 
 const MockEventos = [
   {
