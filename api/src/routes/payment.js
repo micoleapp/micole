@@ -47,7 +47,6 @@ router.post("/notification", async (req, res) => {
           ventas.InicioPlan = merchantOrder.body.payments[0].date_approved;
           ventas.months = merchantOrder.body.items[0].quantity;
           ventas.PlanPagoId = merchantOrder.body.items[0].id;
-          ventas.vencimientoPlan = fecha;
 
           const plan = merchantOrder.body.items[0].id;
           const idColegio = merchantOrder.body.external_reference;
@@ -64,6 +63,13 @@ router.post("/notification", async (req, res) => {
           await ventas.setColegio(idColegio);
 
           colegio = await Colegio.findOne({ where: { id: idColegio } });
+          if (colegio.mes_prueba === true) {
+            fecha.setMonth(fecha.getMonth() + Number(1));
+            colegio.mes_prueba = false;
+            await colegio.save();
+          }
+          ventas.vencimientoPlan = fecha;
+          console.log(colegio.mes_prueba + "----->" + fecha);
           await colegio.setPlan_Pago(plan);
           await ventas.save();
           await planVencido.save();

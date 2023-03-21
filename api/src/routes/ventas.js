@@ -38,6 +38,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/vacantes", getGradosByNivel);
+// router.post("/vacantes", getGradosByNivel);
 
 module.exports = router;
