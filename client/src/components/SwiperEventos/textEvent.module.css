@@ -11,6 +11,14 @@
   justify-content: center;
   gap:2rem;
 }
+.imgDiv{
+  /*    <div style={{ maxWidth: "10vh", maxHeight: "10vh" }}> */
+max-width: 10vh;
+max-height: 12vh;
+
+}
+
+
 .title {
   font-family: Poppins;
   color: #184680;
@@ -44,4 +52,12 @@
     font-weight: 700;
     font-size: 1rem;
 
+}
+@media (max-width: 800px) {
+  .card {
+    gap:1rem;
+  }
+  .imgDiv{
+    max-height: 10vh;
+  }
 }

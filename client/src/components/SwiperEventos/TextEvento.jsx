@@ -22,14 +22,19 @@ export default function TextEvento({
   const handleOpen = () => setOpen(true);
   return (
     <div className={style.card}>
-      <div style={{ maxWidth: "10vh", maxHeight: "12vh" }}>
+      <div className={style.imgDiv}>
         <img style={{ display: "flex" }} src={logo} alt="Logo" />
       </div>
 
       {nombreEvento && <h1 className={style.title}>{nombreEvento}</h1>}
       {description && <p className={style.descripcion}>{description}</p>}
-      <div style={{ display: "flex", width:'100%', justifyContent:'space-around' }}>
-       
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-around",
+        }}
+      >
         <div className={style.divDetalles}>
           <p className={style.pTittle}>Horario</p>
           {fechaEvento && <p className={style.p}>{hora}</p>}
