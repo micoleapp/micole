@@ -21,7 +21,7 @@ export default function InscripcionEvento({
     <>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <Typography
-          sx={{paddingBottom: "1rem"}}
+          sx={{paddingBottom: "1rem" , fontSize:'2.4vh'}}
           id="modal-modal-title"
           variant="h6"
           component="h2"
@@ -34,7 +34,7 @@ export default function InscripcionEvento({
         </Typography>
 
         <Typography
-          sx={{ paddingBottom: "1rem", fontSize: "1rem" }}
+         sx={{paddingBottom: "1rem" , fontSize:'1.8vh'}}
           id="modal-modal-title"
           variant="p"
           component="p"
@@ -56,7 +56,7 @@ export default function InscripcionEvento({
         </Typography>
 
         <FormControl style={{ display: "flex", gap: "2vh" }}>
-          <div style={{ display: "flex", gap: "0.5vh" }}>
+          <div style={{ display: "flex", gap: "1vh"}}>
             <TextField
               sx={{ width: "30vh" }}
               id="outlined-search"
@@ -74,7 +74,7 @@ export default function InscripcionEvento({
           </div>
 
           <TextField
-            sx={{ width: "60vh" }}
+            sx={{ width: "100%" }}
             id="outlined-search"
             label="Correo"
             type="email"
