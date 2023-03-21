@@ -21,7 +21,7 @@
   font-family: Poppins;
   font-weight: 400;
   color: #4d4747;
-  font-size: 1rem;
+  font-size: 1.8vh;
   text-align: center;
   width: 100%;
 
@@ -37,7 +37,7 @@
 .p {
     color:#4D4747;
     font-weight: 400;
-    font-size: 0.90rem;
+    font-size: 1.8vh;
 }
 .pTittle{
     color:#156BAA;
