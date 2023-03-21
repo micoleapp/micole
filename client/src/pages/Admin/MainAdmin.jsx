@@ -14,7 +14,7 @@ export default function MainAdmin() {
     <>
    
       <div  className="flex lg:flex-row flex-col">  
-      {/* <div style={{display:'flex', flexDirection:'row'}}> */}
+ 
          {/* Menu de navegacion */}
          <section
         className={`leftshadow ${
@@ -209,8 +209,7 @@ export default function MainAdmin() {
           </div>
         ) : null}
       </section>
-      {/* </div> */}
-        
+   
  
 
       </div>
