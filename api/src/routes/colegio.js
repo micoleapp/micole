@@ -413,26 +413,6 @@ router.post("/filter", async (req, res) => {
   }
 });
 
-//-----Cambiar estado activo de Colegio
-router.put("/activo/:id"), async (req,res) => {
-  try {
-    const { id } = req.params;
-    const colegio = await Colegio.findByPk(id);
-    if (!colegio) {
-      return next({
-        statusCode: 404,
-        message: 'El colegio ha modificar no existe',
-      });
-    }
-    colegio.isActive = true;
-    colegio.save();
-  } catch (error) {
-    res.status(500).send({
-      message: err.message,
-    });
-  }
-}
-
 //--------------------PUT  UN COLEGIO POR ID-------
 router.put("/:id", async (req, res) => {
   try {
