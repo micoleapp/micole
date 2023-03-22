@@ -7,6 +7,7 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import { GiHexagonalNut } from "react-icons/gi";
 import { AiOutlineLogout } from "react-icons/ai";
 import Hamburger from "hamburger-react";
+import PageColegio from "./pageColegios/PageColegio";
 export default function MainAdmin() {
   const [page, setPage] = React.useState(0);
   const [isOpen, setOpen] = useState(false);
@@ -185,7 +186,7 @@ export default function MainAdmin() {
           </div>
         ) : page === 1 ? (
           <div className="min-h-screen">
-            <h1>Colegios</h1>
+           <PageColegio/>
           </div>
         ) : page === 2 ? (
           <div className="min-h-screen">
