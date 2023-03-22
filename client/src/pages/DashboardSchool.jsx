@@ -324,10 +324,10 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    console.log({ ...datosPrincipales, multimedia });
+
     try {
       axios
-        .put(`/colegios/${user.id}`, { ...datosPrincipales, multimedia })
+        .put(`/colegios/multimedia/${user.id}`, { multimedia })
         .then((res) => {
           console.log(res);
         })
@@ -869,7 +869,7 @@ function DashboardSchool() {
     console.log(user.id)
     try {
       axios
-        .put(`/colegios/${user.id}`, { ...datosPrincipales,isActive: true })
+        .put(`/colegios/activo/${user.id}`, { isActive: true })
         .then((res) => {
           Swal.fire({
             icon: "success",
@@ -904,10 +904,21 @@ function DashboardSchool() {
     dispatch(getCitaAgendadas());
     dispatch(getCita());
   }, [page === 5]);
-
+  
+  useEffect(() => {
+    if (user) {
+      dispatch(getSchoolDetail(user.id));
+    }
+    return () => {
+      dispatch(getSchoolDetail(user.id))
+    }
+  }, [user]);
+  
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
+
+  console.log(multimedia)
 
   const handleSubmitEvento = (e) => {
     e.preventDefault();
@@ -2248,7 +2259,6 @@ function DashboardSchool() {
                         <button
                           onClick={handleCompleteInfraestructura}
                           sx={{ mr: 1 }}
-                          disabled={infraestructuraCompleted()}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
@@ -2487,7 +2497,6 @@ function DashboardSchool() {
                         <button
                           onClick={handleCompleteAcreditaciones}
                           sx={{ mr: 1 }}
-                          disabled={acreditacionesCompleted()}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
