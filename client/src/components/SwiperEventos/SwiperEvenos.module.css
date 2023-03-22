@@ -35,11 +35,11 @@
     display: flex;
     text-align: center;
     align-items: center;
-    top: 5%;
-    height: 80%;
-    width: 50%;
+    top: 2%;
+    height: 95%;
+    width: 80%;
     background: transparent;
-    left: 80px;
+    left: 6vh;
     padding: 8px 14px;
     color: #fff;
     font-family: "Poppins", sans-serif;
@@ -47,15 +47,15 @@
 
 
 
-.content p {
+/* .content p {
     max-width: 350px;
     font-size: 12px;
     word-wrap: break-word;
     
     text-align: left;
-}
+} */
 
-.content button {
+/* .content button {
     display: flex;
     background: #fff;
     border-radius: 5px;
@@ -72,8 +72,8 @@
     justify-content: center;
     letter-spacing: 0.5px;
 text-transform: uppercase;
-}
-.content button:hover {
+} */
+/* .content button:hover {
     transform: scale(1.06);
 
-}
+} */

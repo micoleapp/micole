@@ -9,7 +9,7 @@ import SchoolDetail from "./pages/SchoolDetail";
 import InfoPlanes from "./components/FormPayment/utils/InfoPlanes";
 import { useSelector, useDispatch } from "react-redux";
 import Error from "./pages/Error";
-import Payment from "./pages/Payment/Payment";
+
 import DashboardSchool from "./pages/DashboardSchool";
 import { getUserByToken, getSchoolDetail } from "./redux/AuthActions";
 import { useNavigate } from "react-router-dom";
@@ -31,6 +31,7 @@ import {
 
 import RequireAuth from "./components/RequireAuth";
 import { getCita } from "./redux/CitasActions";
+import MainAdmin from "./pages/Admin/MainAdmin";
 
 function App() {
   const { error: errorSchool } = useSelector((state) => state.schools);
@@ -71,8 +72,10 @@ function App() {
           <Route exact path="/enroll" element={<EnrollSchool />} />
           <Route path="/listschool" element={<ListSchool />} />
           <Route path="/schooldetail/:id" er element={<SchoolDetail />} />
+       
           <Route path="/*" element={<Error />} />
-          <Route path="*" element={<Error />} />
+          <Route path="*" element={<Error />} />  
+          
           <Route
             exact
             path="/dashboardschool"
@@ -82,7 +85,7 @@ function App() {
               </RequireAuth>
             }
           />
-          <Route path="/payment" element={<Payment />} />
+  <Route path="/admin"  element={<MainAdmin />} />
         </Routes>
       )}
 

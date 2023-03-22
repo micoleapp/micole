@@ -6,19 +6,17 @@ import PersonPinIcon from "@mui/icons-material/PersonPin";
 import LaptopWindowsIcon from "@mui/icons-material/LaptopWindows";
 import EventIcon from "@mui/icons-material/Event";
 import PhoneIcon from "@mui/icons-material/Phone";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { Button, Card, CardContent } from "@mui/material";
-import { cleanSuccessState, putCita } from "../../redux/CitasActions";
-import { getCitaAgendadas } from "../../redux/SchoolsActions";
+import { cleanSuccessState, getCita, putCita } from "../../redux/CitasActions";
 import Chip from "@mui/material/node/Chip";
 import NotFound from "./svg/notFound";
 import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
 import Swal from "sweetalert2";
 import sliceIntoChunks from "./Paginacion/utils/SliceCitas";
 import PaginationCitas from "./Paginacion/PaginationCitas";
-import LoadingButton from "@mui/lab/LoadingButton";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
 import Paddock from "./svg/Paddock";
+import { getCitaAgendadas } from "../../redux/SchoolsActions";
 // import sliceIntoChunks from "../"
 export default function CardCitas({ filtros }) {
   const { success, loading } = useSelector((state) => state.citas);
@@ -31,14 +29,14 @@ export default function CardCitas({ filtros }) {
   const [Inactivas, setInactivas] = useState([]);
   const [Activas, setActivas] = useState([]);
   //LOGICA CONFIRMACION DE CITAS
-  console.log(citasAgendadas);
+console.log(arrCita)
   const comprobacion = (iD) => {
     if (success === "Se activo la Cita.") {
       console.log(Inactivas);
       const CitasConfirmadas = Inactivas.find((ele) => ele.id === iD);
       setActivas([...Activas, CitasConfirmadas]);
       setInactivas([Inactivas[0].filter((ele) => ele.id !== iD)]);
-      // setArrCitas([arrCita.filter((ele) => ele.id !== iD)]);
+      setArrCitas([arrCita[0].filter((ele) => ele.id !== iD)])
       Swal.fire({
         icon: "success",
         title: "La cita ha sido confirmada con exito",
@@ -47,6 +45,8 @@ export default function CardCitas({ filtros }) {
 
       dispatch(cleanSuccessState());
     }
+
+
   };
 
   const handlerPutStateCita = async (iD) => {
@@ -57,6 +57,8 @@ export default function CardCitas({ filtros }) {
 
   React.useEffect(() => {
     const allCitas = [];
+  dispatch(getCitaAgendadas());
+  dispatch(getCita());
 
     let resultadoActivas = sliceIntoChunks(
       citasAgendadas.CitasActivasMesActual,
@@ -79,8 +81,9 @@ export default function CardCitas({ filtros }) {
     );
     let resultadoAllCitas = sliceIntoChunks(allCitasActInact, 10);
     setArrCitas(resultadoAllCitas);
+
   }, []);
-  console.log(arrCita);
+
   return (
     <>
       <div

@@ -49,6 +49,7 @@ import style from "./SchoolD.module.css";
 import { HiChevronDown } from "react-icons/hi";
 import { HiChevronLeft } from "react-icons/hi";
 import SwiperEventos from "../components/SwiperEventos/SwiperEventos";
+import es_AM_PM from "../components/SwiperEventos/utils/horaFormat";
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
     <div className="w-full px-4">
@@ -119,7 +120,7 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
 function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool, grados, horarios } = useSelector((state) => state.schools);
-
+  console.log(oneSchool)
 
   const location = useLocation();
   console.log();
@@ -1115,9 +1116,9 @@ function SchoolDetail() {
                                 {/* <div className={style.itemTable}> */}
                                   <p style={{ fontSize: "14px", color:'#515151', fontWeight:'700' }}>{ele.dia}</p>
                                   <div style={{ display: "flex", gap: "10px",fontSize: "12px" ,flexDirection:'column'}}>
-                                    <p>{ele.horarios[0].desde} AM</p>
+                                    <p>{ es_AM_PM(ele.horarios[0].desde)} </p>
                                  
-                                    <p>{ele.horarios[0].hasta} PM</p>
+                                    <p>{ ele.horarios[0].hasta +' '+  es_AM_PM(ele.horarios[0].hasta)} </p>
                                   </div>
                                 {/* </div> */}
                               {/* </div> */}
@@ -1231,9 +1232,12 @@ function SchoolDetail() {
                 </Link>
               </p>
             </div>
-            <div style={{width:'100%', display:'flex', justifyContent:'center',flexDirection:'column', gap:'10px'}}>
-            <h2 className="font-semibold text-xl">Eventos</h2>
-            <SwiperEventos/>
+            <div style={{width:'100%', display:'flex', justifyContent:'center',alignItems:'center',flexDirection:'column', gap:'10px'}}>
+          <div style={{width:'100%', display:'flex', justifyContent:'flex-start'}}>
+              <h2 className="font-semibold text-xl" >Eventos</h2>
+          </div>
+     
+            <SwiperEventos data={oneSchool}/>
           </div >
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Galeria</h2>
