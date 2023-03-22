@@ -26,10 +26,7 @@ const getDistritoById = async (req, res, next) => {
 };
 
 const createDistrito = async (req, res, next) => {
-  const {
-    ProvinciaId,
-    nombre_distrito,
-  } = req.body;
+  const { ProvinciaId, nombre_distrito } = req.body;
   try {
     const idDistrito = await Distrito.count();
     const newDistrito = await Distrito.create({
@@ -38,6 +35,27 @@ const createDistrito = async (req, res, next) => {
       ProvinciaId,
     });
     res.status(200).send(newDistrito);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const updateDistrito = async (req, res, next) => {
+  const { id } = req.params;
+  const { ProvinciaId, nombre_distrito } = req.body;
+  try {
+    const distrito = await Distrito.findByPk(id);
+    if (!distrito) {
+      return next({
+        statusCode: 400,
+        message: 'El registro solicitado no existe',
+      });
+    }
+    const updatedDistrito = await Distrito.update({
+      nombre_distrito,
+      ProvinciaId
+    });
+    res.status(200).json(updatedDistrito);
   } catch (error) {
     return next(error);
   }
@@ -64,5 +82,6 @@ module.exports = {
   getDistritos,
   getDistritoById,
   createDistrito,
-  deleteDistritoById
+  deleteDistritoById,
+  updateDistrito
 };

@@ -15,6 +15,22 @@ const getReviews = async (req, res, next) => {
   }
 };
 
+const getReviewById = async (req, res, next) => {
+  const { idReview } = req.params;
+  try {
+    const review = await Review.findByPk(idReview);
+    if (!review) {
+      return next({
+        statusCode: 400,
+        message: 'El registro solicitado no existe',
+      });
+    }
+    res.status(200).send(review);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const createReview = async (req, res, next) => {
   const { nombre, email, comentario, rating, ColegioId } = req.body;
   console.log(req.body)
@@ -41,6 +57,29 @@ const createReview = async (req, res, next) => {
   }
 };
 
+const updateReview = async (req, res, next) => {
+  const { idReview } = req.params;
+  const { nombre, email, comentario, rating } = req.body;
+  try {
+    const review = await Review.findByPk(idReview);
+    if (!review) {
+      return next({
+        statusCode: 400,
+        message: 'El registro solicitado no existe',
+      });
+    }
+    const updatedReview = await Review.update({
+      nombre,
+      email,
+      comentario,
+      rating
+    });
+    res.status(200).json(updatedReview);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const deleteReviewById = async (req, res, next) => {
   const { idReview } = req.params;
   try {
@@ -61,5 +100,7 @@ const deleteReviewById = async (req, res, next) => {
 module.exports = {
   getReviews,
   createReview,
-  deleteReviewById
+  deleteReviewById,
+  updateReview,
+  getReviewById
 };
