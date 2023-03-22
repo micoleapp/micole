@@ -501,4 +501,26 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+
+router.put("/activo/:id", async (req, res) => {
+  const { id } = req.params;
+  const { isActive } = req.body;
+  try {
+    const colegio = await Colegio.findByPk(id);
+    if (!colegio) {
+      return next({
+        statusCode: 400,
+        message: 'El registro solicitado no existe',
+      });
+    }
+    colegio.isActive = isActive;
+    await colegio.save();
+    return res.status(200).send({ message: 'El registro se modifico' });
+  } catch (error) {
+    res.status(500).send({
+      message: err.message,
+    });
+  }
+});
+
 module.exports = router;
