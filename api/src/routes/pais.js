@@ -55,5 +55,18 @@ router.put("/:id", async (req, res) => {
     res.status(500).send({ err });
   }
 });
+//--------------------DELETE UN PAIS--------------------
 
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletePais = awaiPais.findOne({ where: { id: id } });
+    await deletePais.destroy();
+    res.status(200).send({ message: "País borrado" });
+  } catch (err) {
+    res.status(500).send({
+      message: "El país no pudo ser borrado",
+    });
+  }
+});
 module.exports = router;

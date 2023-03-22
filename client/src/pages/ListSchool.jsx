@@ -293,7 +293,7 @@ function ListSchool() {
       </h1>
       <div className="flex flex-col lg:flex-row p-5 gap-10 m-5 ">
         <section
-          className={`lg:w-1/4 w-full flex flex-col gap-5 rounded-md relative duration-300 lg:h-min bg-white shadow-lg p-10 `}
+          className={`lg:w-1/4 w-full flex flex-col gap-5 rounded-md relative duration-300 lg:h-min bg-white shadow-lg p-10 transition-all`}
         >
           <h2 className="font-semibold text-2xl drop-shadow-md">Filtros</h2>
           <button
@@ -304,7 +304,8 @@ function ListSchool() {
             <FontAwesomeIcon
               size="lg"
               color="rgb(156 163 175)"
-              icon={toggle ? faArrowUp : faArrowDown}
+              icon={faArrowDown}
+              className={`${toggle ? "-rotate-180" : ""} duration-200`}
             />
           </button>
           <div
@@ -323,7 +324,8 @@ function ListSchool() {
                   {" "}
                   <FontAwesomeIcon
                     size="lg"
-                    icon={toggleDistrits ? faArrowUp : faArrowDown}
+                    icon={faArrowDown}
+                    className={`${toggleDistrits ? "-rotate-180" : ""} duration-200`}
                   />
                 </button>
               </div>
@@ -373,7 +375,8 @@ function ListSchool() {
                   {" "}
                   <FontAwesomeIcon
                     size="lg"
-                    icon={toggleTypes ? faArrowUp : faArrowDown}
+                    icon={faArrowDown}
+                    className={`${toggleTypes ? "-rotate-180" : ""} duration-200`}
                   />
                 </button>
               </div>
@@ -416,7 +419,8 @@ function ListSchool() {
                   {" "}
                   <FontAwesomeIcon
                     size="lg"
-                    icon={toggleGrado ? faArrowUp : faArrowDown}
+                    icon={faArrowDown}
+                    className={`${toggleGrado ? "-rotate-180" : ""} duration-200`}
                   />
                 </button>
               </div>
@@ -460,7 +464,8 @@ function ListSchool() {
                   {" "}
                   <FontAwesomeIcon
                     size="lg"
-                    icon={toggleAño ? faArrowUp : faArrowDown}
+                    icon={faArrowDown}
+                    className={`${toggleAño ? "-rotate-180" : ""} duration-200`}
                   />
                 </button>
               </div>
@@ -504,7 +509,8 @@ function ListSchool() {
                   {" "}
                   <FontAwesomeIcon
                     size="lg"
-                    icon={toggleDificultad ? faArrowUp : faArrowDown}
+                    icon={faArrowDown}
+                    className={`${toggleDificultad ? "-rotate-180" : ""} duration-200`}
                   />
                 </button>
               </div>
@@ -551,7 +557,8 @@ function ListSchool() {
                   {" "}
                   <FontAwesomeIcon
                     size="lg"
-                    icon={toggleMetodo ? faArrowUp : faArrowDown}
+                    icon={faArrowDown}
+                    className={`${toggleMetodo ? "-rotate-180" : ""} duration-200`}
                   />
                 </button>
               </div>
