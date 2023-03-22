@@ -530,10 +530,12 @@ router.put("/multimedia/:id", async (req, res) => {
     let video_url = "";
     let primera_imagen = "";
     let galeria_fotos = "";
+    let logo = "";
     if (multimedia) {
       video_url = multimedia.video_url;
       primera_imagen = multimedia.image;
       galeria_fotos = JSON.stringify(multimedia.images);
+      logo = multimedia.logo;
     }
 
     const editedColegio = await Colegio.update(
@@ -542,6 +544,7 @@ router.put("/multimedia/:id", async (req, res) => {
         primera_imagen: primera_imagen,
         galeria_fotos: galeria_fotos,
         video_url: video_url,
+        logo: logo,
       },
       { where: { id: id } }
     );
