@@ -324,10 +324,10 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    console.log({ ...datosPrincipales, multimedia });
+
     try {
       axios
-        .put(`/colegios/${user.id}`, { ...datosPrincipales, multimedia })
+        .put(`/colegios/multimedia/${user.id}`, { multimedia })
         .then((res) => {
           console.log(res);
         })
@@ -442,8 +442,6 @@ function DashboardSchool() {
       oneSchool?.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
     dificultades: oneSchool?.Dificultades ? oneSchool.Dificultades : [],
     metodos: oneSchool?.Metodos ? oneSchool.Metodos : [],
-    primera_imagen: oneSchool?.primera_imagen ? oneSchool.primera_imagen : "",
-    galeria_fotos: oneSchool?.galeria_fotos ? oneSchool.galeria_fotos : "",
   };
 
   const [datosPrincipales, setDatosPrincipales] = useState(
