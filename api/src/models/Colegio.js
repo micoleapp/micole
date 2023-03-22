@@ -197,12 +197,18 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
+      createdAt: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
       // avatar: {
       //   type: DataTypes.STRING,
       //   defaultValue:
       //     "http://www.elblogdecha.org/wp-content/uploads/2021/06/perfil-vacio.jpg",
       // },
     },
+    
     {
       timestamps: false,
     }
