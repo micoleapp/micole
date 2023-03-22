@@ -1,0 +1,30 @@
+.container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: #BDD0DD;
+    border-radius: 8px;
+    padding: 1rem;
+
+}
+
+.divItem{
+    display: flex;
+    width: 50%;
+}
+.divItem p{
+    color:#0D263B;
+    font-family: Poppins;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+.divItemGrande{
+    display: flex;
+    width: 100%;
+}
+.divItemGrande p {
+    color:#0D263B;
+    font-family: Poppins;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
