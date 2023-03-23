@@ -19,8 +19,7 @@ import Paddock from "./svg/Paddock";
 import { getCitaAgendadas } from "../../redux/SchoolsActions";
 // import sliceIntoChunks from "../"
 
-export default function CardCitas({ filtros }) {
-  const { success, loading } = useSelector((state) => state.citas);
+export default function CardCitas({ data, filtros }) {
   const { oneSchool } = useSelector((state) => state.auth);
   const { citasAgendadas, grados } = useSelector((state) => state.schools);
   const [arrCita, setArrCitas] = React.useState([]);
@@ -45,7 +44,7 @@ export default function CardCitas({ filtros }) {
       axios
         .put(`/citas/activo/${iD}`, { activo: true })
         .then((res) => {
-          dispatch(getCitaAgendadas());
+          // dispatch(getCitaAgendadas());
 
           Swal.fire("Exito", "Datos actualizados", "success");
         })
@@ -73,29 +72,20 @@ export default function CardCitas({ filtros }) {
     dispatch(getCitaAgendadas());
     dispatch(getCita());
 
-    let resultadoActivas = sliceIntoChunks(
-      citasAgendadas.CitasActivasMesActual,
-      10
-    );
+    let resultadoActivas = sliceIntoChunks(data.CitasActivasMesActual, 10);
     setActivas(resultadoActivas);
-    let resultadoInactivas = sliceIntoChunks(
-      citasAgendadas.CitasPermitidasMesActual,
-      10
-    );
+    let resultadoInactivas = sliceIntoChunks(data.CitasPermitidasMesActual, 10);
     setInactivas(resultadoInactivas);
-    let resultadoCitaNoPermitidas = sliceIntoChunks(
-      citasAgendadas.CitasInactivas,
-      10
-    );
+    let resultadoCitaNoPermitidas = sliceIntoChunks(data.CitasInactivas, 10);
     setArrCitaNoPermitidas(resultadoCitaNoPermitidas);
     const allCitasActInact = allCitas.concat(
-      citasAgendadas.CitasPermitidasMesActual,
-      citasAgendadas.CitasActivasMesActual
+      data.CitasPermitidasMesActual,
+      data.CitasActivasMesActual
     );
     let resultadoAllCitas = sliceIntoChunks(allCitasActInact, 10);
     setArrCitas(resultadoAllCitas);
   }, []);
-  useEffect(() => {}, [citasAgendadas]);
+
   const putStateCita = (id, setLoading) => {
     console.log(id);
     setLoading(true);
@@ -103,7 +93,7 @@ export default function CardCitas({ filtros }) {
       axios
         .put(`/citas/activo/${id}`, { activo: true })
         .then((res) => {
-          dispatch(getCitaAgendadas());
+          // dispatch(getCitaAgendadas());
           setLoading(false);
           Swal.fire("Exito", "Datos actualizados", "success");
         })
@@ -123,20 +113,21 @@ export default function CardCitas({ filtros }) {
     }
   };
 
-  function BtnPutCitas({ state, id }) {
-    console.log(state, id);
+  function BtnPutCitas({ id }) {
+    console.log( id);
     const [Toggle, setToggle] = useState(false);
     const [loading, setLoading] = useState(false);
     const toggleBtn = () => {
-      setToggle(!Toggle);
-      if (state === false) {
-        putStateCita(id, setLoading);
-      }
+      setToggle(true);
+
+      putStateCita(id, setLoading);
     };
+    console.log(Toggle);
+
     return (
       <>
         <div>
-          {state === true && (
+          {/* {state === true && (
             <Button
               // onClick={toggleBtn}
               variant="contained"
@@ -144,17 +135,16 @@ export default function CardCitas({ filtros }) {
             >
               Confirmada
             </Button>
-          )}
-          {state === false && (
-            <Button
-              variant="contained"
-              onClick={toggleBtn}
-              disabled={Toggle === true && true}
-            >
-              {Toggle === false ? "Confirmar" : "Confirmada"}
-              {loading === true && <div className={style.loader}></div>}
-            </Button>
-          )}
+          )} */}
+
+          <Button
+            variant="contained"
+            onClick={toggleBtn}
+            disabled={Toggle === true && true}
+          >
+            {Toggle === false ? "Confirmar" : "Confirmada"}
+            {loading === true && <div className={style.loader}></div>}
+          </Button>
         </div>
       </>
     );
@@ -168,7 +158,7 @@ export default function CardCitas({ filtros }) {
       >
         {filtros === "" && (
           <div className={style.layout}>
-            {citasAgendadas && arrCita?.length === 0 && (
+            {data && arrCita?.length === 0 && (
               <>
                 <div
                   data-aos="flip-up"
@@ -195,7 +185,7 @@ export default function CardCitas({ filtros }) {
               </>
             )}
 
-            {citasAgendadas &&
+            {data &&
               arrCita[page]?.map((cita) => {
                 return (
                   <>
@@ -317,8 +307,7 @@ export default function CardCitas({ filtros }) {
                         <p>{cita.email}</p>
                       </div>
                       {/*ACA BOTON CONFIRMAR  */}
-
-                      <BtnPutCitas id={cita.id} state={cita.activo} />
+                      {cita.activo === false && <BtnPutCitas id={cita.id} />}
 
                       {/* {cita.activo === false && (
                         <div>
@@ -333,19 +322,17 @@ export default function CardCitas({ filtros }) {
                         </div>
                       )} */}
 
-                      {/* {cita.activo === true && (
+                      {cita.activo === true && (
                         <div>
                           <Button
-                            disabled
-                            onClick={() => {
-                              handlerPutStateCita(cita.id);
-                            }}
+                            // onClick={toggleBtn}
                             variant="contained"
+                            disabled
                           >
-                            Confirmar{" "}
+                            Confirmada
                           </Button>
                         </div>
-                      )} */}
+                      )}
                     </div>
                   </>
                 );
@@ -358,7 +345,7 @@ export default function CardCitas({ filtros }) {
           <>
             {/* solo lo correspondiente al plan */}
             <div className={style.layout}>
-              {citasAgendadas && Inactivas.length === 0 && (
+              {data && Inactivas.length === 0 && (
                 <>
                   <div
                     data-aos="flip-up"
@@ -387,7 +374,7 @@ export default function CardCitas({ filtros }) {
                   </div>
                 </>
               )}
-              {citasAgendadas &&
+              {data &&
                 Inactivas[page]?.map((cita, i) => {
                   return (
                     <>
@@ -556,7 +543,7 @@ export default function CardCitas({ filtros }) {
               </div>
             )}
             <div className="blur-sm  z-10">
-              {citasAgendadas &&
+              {data &&
                 arrCitaNoPermitidas.length != 0 &&
                 arrCitaNoPermitidas[page]?.map((cita, i) => {
                   return (
@@ -702,7 +689,7 @@ export default function CardCitas({ filtros }) {
             <>
               {/* solo lo correspondiente al plan */}
               <div className={style.layout}>
-                {citasAgendadas && Inactivas?.length === 0 && (
+                {data && Inactivas?.length === 0 && (
                   <>
                     <div
                       data-aos="flip-up"
@@ -722,7 +709,7 @@ export default function CardCitas({ filtros }) {
                     </div>
                   </>
                 )}
-                {citasAgendadas &&
+                {data &&
                   Inactivas[page]?.map((cita, i) => {
                     return (
                       <>
@@ -889,7 +876,7 @@ export default function CardCitas({ filtros }) {
                 </Card>
               </div>
               <div className="blur-sm  z-10">
-                {citasAgendadas &&
+                {data &&
                   Inactivas[page]?.map((cita, i) => {
                     return (
                       <>
@@ -1031,7 +1018,7 @@ export default function CardCitas({ filtros }) {
         {/* citas ya confirmadas */}
         {filtros === "Confirmados" && (
           <div className={style.layout}>
-            {citasAgendadas && Activas?.length === 0 && (
+            {data && Activas?.length === 0 && (
               <>
                 <div
                   data-aos="flip-up"

@@ -953,7 +953,8 @@ function DashboardSchool() {
   useEffect(() => {
     dispatch(getCitaAgendadas());
     dispatch(getCita());
-  }, [citasAgendadas.CitasActivas?.length, success ]);
+  }, []);
+  // citasAgendadas.CitasActivas?.length,success
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
@@ -3301,7 +3302,7 @@ function DashboardSchool() {
               <div>{/* <SelectCitasAg/> */}</div>
             </div>
             <div>
-              <CardCitas filtros={Filtro} />
+              <CardCitas  data={citasAgendadas&&citasAgendadas} filtros={Filtro} />
             </div>
           </div>
         ) : page === 6 ? (
