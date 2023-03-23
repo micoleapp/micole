@@ -131,13 +131,7 @@ function SchoolDetail() {
   const [ingresoParams, setIngresoParams] = React.useState(
     params.get("ingreso")
   );
-
-  const [listaParams, setListaParams] = React.useState(
-    params.get("lista")
-  );
-
-  console.log(listaParams)
-
+  console.log(oneSchool);
   const nombre_grado = grados?.find(
     (grado) => grado.id == gradoParams
   )?.nombre_grado;
@@ -1078,11 +1072,7 @@ function SchoolDetail() {
             </div> */}
           </section>
           <section className="right mt-5  flex flex-col gap-8 w-full">
-            {listaParams === 'true' ? 
-              <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
-                <h2 className="font-semibold text-xl">Solicitar lista de espera</h2>
-              </div>
-             :           <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
+            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Solicitar una visita</h2>
               <div
                 onClick={toggleHorarios}
@@ -1241,15 +1231,14 @@ function SchoolDetail() {
                   Términos y Condiciones de Uso y la Política de Privacidad
                 </Link>
               </p>
-            </div> }
-            {oneSchool?.Eventos?.length > 0 &&             <div style={{width:'100%', display:'flex', justifyContent:'center',alignItems:'center',flexDirection:'column', gap:'10px'}}>
+            </div>
+            <div style={{width:'100%', display:'flex', justifyContent:'center',alignItems:'center',flexDirection:'column', gap:'10px'}}>
           <div style={{width:'100%', display:'flex', justifyContent:'flex-start'}}>
               <h2 className="font-semibold text-xl" >Eventos</h2>
           </div>
      
             <SwiperEventos data={oneSchool}/>
-          </div >}
-
+          </div >
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Galeria</h2>
               {oneSchool.hasOwnProperty("galeria_fotos") && (

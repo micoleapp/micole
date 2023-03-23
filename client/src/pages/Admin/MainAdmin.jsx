@@ -8,8 +8,6 @@ import { GiHexagonalNut } from "react-icons/gi";
 import { AiOutlineLogout } from "react-icons/ai";
 import Hamburger from "hamburger-react";
 import PageColegio from "./pageColegios/PageColegio";
-import PageInfraestructura from "./PageInfraestructura/PageInfraestructura";
-
 import { getAllSchools } from "../../redux/SchoolsActions";
 import { useDispatch } from "react-redux";
 export default function MainAdmin() {
@@ -205,7 +203,7 @@ export default function MainAdmin() {
           </div>
         ) : page === 3 ? (
           <div className="min-h-screen">
-            <PageInfraestructura/>
+            <h1>Infraestructura</h1>
           </div>
         ) : page === 4 ? (
           <div className="min-h-screen">
