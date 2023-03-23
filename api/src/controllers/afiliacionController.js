@@ -5,7 +5,7 @@ const getAfiliacion = async (req, res, next) => {
     const Afiliaciones = await Afiliacion.findAll({
       include: {
         model: Afiliacion_tipo,
-      }
+      },
     });
     res.status(200).send(Afiliaciones);
   } catch (error) {
@@ -17,6 +17,38 @@ const getAfiliacion_tipo = async (req, res, next) => {
   try {
     const Afiliaciones_tipos = await Afiliacion_tipo.findAll();
     res.status(200).send(Afiliaciones_tipos);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getAfiliacionById = async (req, res, next) => {
+  const { idAfiliacion } = req.params;
+  try {
+    const afiliacion = await Afiliacion.findByPk(idAfiliacion);
+    if (!afiliacion) {
+      return next({
+        statusCode: 404,
+        message: 'El registro solicitado no existe',
+      });
+    }
+    res.status(200).send(afiliacion);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getTipoAfiliacionById = async (req, res, next) => {
+  const { idTipoAfiliacion } = req.params;
+  try {
+    const tipoAfiliacion = await Afiliacion_tipo.findByPk(idTipoAfiliacion);
+    if (!tipoAfiliacion) {
+      return next({
+        statusCode: 404,
+        message: 'El registro solicitado no existe',
+      });
+    }
+    res.status(200).send(tipoAfiliacion);
   } catch (error) {
     return next(error);
   }
@@ -46,6 +78,29 @@ const createAfiliacion = async (req, res, next) => {
   }
 };
 
+const updateAfiliacion = async (req, res, next) => {
+  const { idAfiliacion } = req.params;
+  const { nombre_afiliacion, slug, logo, Afiliacion_tipo_Id } = req.body;
+  try {
+    const afiliacion = await Afiliacion.findByPk(idAfiliacion);
+    if (!afiliacion) {
+      return next({
+        statusCode: 400,
+        message: 'El registro solicitado no existe',
+      });
+    }
+    const updatedAfiliacion = await Afiliacion.update({
+      nombre_afiliacion,
+      slug,
+      logo,
+      Afiliacion_tipo_Id,
+    });
+    res.status(200).json(updatedAfiliacion);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const createAfiliacion_tipo = async (req, res, next) => {
   const { afiliacion_tipo } = req.body;
   try {
@@ -69,9 +124,69 @@ const createAfiliacion_tipo = async (req, res, next) => {
   }
 };
 
+const updateTipoAfiliacion = async (req, res, next) => {
+  const { idTipoAfiliacion } = req.params;
+  const { afiliacion_tipo } = req.body;
+  try {
+    const tipoAfiliacion = await Afiliacion_tipo.findByPk(idTipoAfiliacion);
+    if (!tipoAfiliacion) {
+      return next({
+        statusCode: 400,
+        message: 'El registro solicitado no existe',
+      });
+    }
+    const updatedTipoAfiliacion = await Afiliacion_tipo.update({
+      afiliacion_tipo
+    });
+    res.status(200).json(updatedTipoAfiliacion);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const deleteAfiliacionById = async (req, res, next) => {
+  const { idAfiliacion } = req.params;
+  try {
+    const Afiliacion = await Afiliacion.findByPk(idAfiliacion);
+    if (!Afiliacion) {
+      return next({
+        statusCode: 404,
+        message: 'El registro solicitado no existe',
+      });
+    }
+    await Afiliacion.destroy({ where: { id: idAfiliacion } });
+    res.status(200).send('Registro eliminado correctamente');
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const deleteTipoAfiliacionById = async (req, res, next) => {
+  const { idTipoAfiliacion } = req.params;
+  try {
+    const TipoAfiliacion = await Afiliacion_tipo.findByPk(idTipoAfiliacion);
+    if (!TipoAfiliacion) {
+      return next({
+        statusCode: 404,
+        message: 'El registro solicitado no existe',
+      });
+    }
+    await Afiliacion_tipo.destroy({ where: { id: idTipoAfiliacion } });
+    res.status(200).send('Registro eliminado correctamente');
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getAfiliacion,
   createAfiliacion,
   getAfiliacion_tipo,
   createAfiliacion_tipo,
+  getAfiliacionById,
+  getTipoAfiliacionById,
+  deleteAfiliacionById,
+  deleteTipoAfiliacionById,
+  updateAfiliacion,
+  updateTipoAfiliacion
 };

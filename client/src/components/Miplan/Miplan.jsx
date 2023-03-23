@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import CheckIcon from "@mui/icons-material/Check";
 import ModalInscripcion from "../ModalInscripcion/ModalInscripcion";
 import { display } from "@mui/system";
+import es_AM_PM from "../SwiperEventos/utils/horaFormat";
+import fechaFormat from "../SwiperEventos/utils/fechaFormat";
 export default function Miplan() {
   const [planPago, setPlanPago] = useState([]);
   const [OpenRegister, setOpenRegister] = useState(false);
@@ -22,7 +24,7 @@ export default function Miplan() {
   console.log(oneSchool);
   // Plan_Pago: nombre_plan_pago
   //user.id-----
-  const ID = user.id;
+  const ID = "13b57af0-d887-4bb5-ba41-f5d3f38c650b";
   useEffect(() => {
     axios
       .get(`/ventas?id=${ID}`)
@@ -37,6 +39,7 @@ export default function Miplan() {
     planPago && planPago?.filter((ele) => ele.activo === true);
 
   console.log(planActual);
+  // vencimientoPlan
   return (
     <>
       <div className={style.layout}>
@@ -69,7 +72,11 @@ export default function Miplan() {
                     </div>
                     <div className={style.divItem}>
                       <p className={style.ItemTitle}> Fecha de Compra </p>
-                      <p>{ele.InicioPlan}</p>
+                      <p>{fechaFormat(ele.InicioPlan)}</p>
+                    </div>
+                    <div className={style.divItem}>
+                      <p className={style.ItemTitle}> Fecha de Vencimiento </p>
+                      <p> {fechaFormat(ele.vencimientoPlan)}</p>
                     </div>
                     <div className={style.divItem}>
                       <p className={style.ItemTitle}>Monto</p>
@@ -91,18 +98,24 @@ export default function Miplan() {
               </>
             );
           })}
-   
+
         {planPago.length === 0 && planPago != null && (
-          <div style={{width:'100%', display:'flex' , alignItems:'center', justifyContent:'center'}}>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <div className={`${style.divCardFree} bg-white`}>
-           
               <div
                 style={{
                   width: "100%",
                   display: "flex",
                   justifyContent: " center",
                   flexDirection: "column",
-                  alignItems:'center'
+                  alignItems: "center",
                 }}
               >
                 <Typography
@@ -127,8 +140,6 @@ export default function Miplan() {
                   Cambiar Plan
                 </Button>
               </div>
-
-           
             </div>
           </div>
         )}
@@ -164,7 +175,18 @@ export default function Miplan() {
                         </div>
                         <div className={style.divItem}>
                           <p className={style.ItemTitle}> Fecha de Compra </p>
-                          <p>{ele.InicioPlan}</p>
+                          <p>{  fechaFormat(ele.InicioPlan)}</p>
+                        </div>
+                        <div className={style.divItem}>
+                          <p className={style.ItemTitle}>
+                            {" "}
+                            Fecha de Vencimiento{" "}
+                          </p>
+                          <p> {fechaFormat(ele.vencimientoPlan)}</p>
+                        </div>
+                        <div className={style.divItem}>
+                          <p className={style.ItemTitle}>Monto</p>
+                          <p> S/ {ele.totalprice}</p>
                         </div>
                         <div className={style.divItem}>
                           <p className={style.ItemTitle}>Monto</p>

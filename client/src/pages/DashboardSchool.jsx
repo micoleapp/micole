@@ -324,10 +324,10 @@ function DashboardSchool() {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
-    console.log({ ...datosPrincipales, multimedia });
+
     try {
       axios
-        .put(`/colegios/${user.id}`, { ...datosPrincipales, multimedia })
+        .put(`/colegios/multimedia/${user.id}`, { multimedia })
         .then((res) => {
           console.log(res);
         })
@@ -338,6 +338,8 @@ function DashboardSchool() {
       console.log(error);
     }
     handleNext();
+    setActiveUpOne(true);
+    setActiveUpTwo(true);
   };
 
   const handleReset = () => {
@@ -494,9 +496,10 @@ function DashboardSchool() {
   const [isOpen, setOpen] = useState(false);
 
   const [file, setFile] = useState(null);
+  const [fileLogo, setFileLogo] = useState(null);
   const [fileEvento, setFileEvento] = useState(null);
   const [fileEditEvento, setFileEditEvento] = useState(null);
-  console.log(fileEditEvento);
+
   const [files, setFiles] = useState(null);
 
   const [evento, setEvento] = useState({
@@ -551,6 +554,32 @@ function DashboardSchool() {
     });
     setSpanOne(false);
     setActiveUpOne(false);
+  };
+    const handleFilesSubmitLogo = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    try {
+      formData.append("file", previewLogo);
+      formData.append("upload_preset", "tcotxf16");
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/de4i6biay/image/upload",
+        formData
+      );
+      setMultimedia({ ...multimedia, logo: res.data.secure_url });
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: "Intenta nuevamente",
+      });
+    }
+    Swal.fire({
+      icon: "success",
+      title: "Imagen subida correctamente",
+    });
+    setSpanLogo(false);
+    setActiveUpLogo(false);
   };
   const handleFilesSubmitEvento = async (e) => {
     e.preventDefault();
@@ -641,6 +670,7 @@ function DashboardSchool() {
         ? JSON.parse(oneSchool.galeria_fotos)
         : [],
     video_url: oneSchool?.video_url?.length > 0 ? oneSchool.video_url : "",
+    logo: oneSchool?.logo?.length > 0 ? oneSchool.logo : "",
   };
 
   const [multimedia, setMultimedia] = useState(initialMultimedia);
@@ -651,8 +681,12 @@ function DashboardSchool() {
     oneSchool?.galeria_fotos?.length > 0
       ? JSON.parse(oneSchool.galeria_fotos)
       : [];
+      const initialPreviewLogo =
+      oneSchool?.logo?.length > 0 ? oneSchool.logo : "";
   const [preview, setPreview] = useState(initialPreview);
   const [previewOne, setPreviewOne] = useState(initialPreviewOne);
+  const [previewLogo, setPreviewLogo] = useState(initialPreviewLogo);
+
   const [previewEvento, setPreviewEvento] = useState(null);
   const [previewEditEvento, setPreviewEditEvento] = useState(null);
   const [dateEvento, setDateEvento] = React.useState(dayjs(new Date()));
@@ -753,6 +787,16 @@ function DashboardSchool() {
       };
     }
   }, [fileEditEvento]);
+  
+  useEffect(() => {
+    if (fileLogo !== null) {
+      const reader = new FileReader();
+      reader.readAsDataURL(fileLogo);
+      reader.onloadend = () => {
+        setPreviewLogo(reader.result);
+      };
+    }
+  }, [fileLogo]);
 
   const eliminarImagenDePreview = (img) => {
     setPreview(preview.filter((image) => image !== img));
@@ -760,8 +804,11 @@ function DashboardSchool() {
   const eliminarImagenDePreviewOne = (img) => {
     setPreviewOne("");
   };
-
+  const eliminarImagenDePreviewLogo = (img) => {
+    setPreviewLogo("");
+  };
   const [image, setImage] = useState(null);
+  const [imageLogo, setImageLogo] = useState(null);
 
   const multimediaCompleted = () => {
     if (multimedia.image !== "" && multimedia.images.length !== 0) {
@@ -869,7 +916,7 @@ function DashboardSchool() {
     console.log(user.id)
     try {
       axios
-        .put(`/colegios/${user.id}`, { ...datosPrincipales,isActive: true })
+        .put(`/colegios/activo/${user.id}`, { isActive: true })
         .then((res) => {
           Swal.fire({
             icon: "success",
@@ -887,7 +934,10 @@ function DashboardSchool() {
 
   const [spanOne, setSpanOne] = useState(false);
   const [spanTwo, setSpanTwo] = useState(false);
+  const [spanLogo, setSpanLogo] = useState(false);
   const [activeUpOne, setActiveUpOne] = useState(true);
+  const [activeUpLogo, setActiveUpLogo] = useState(true);
+
   const [activeUpTwo, setActiveUpTwo] = useState(true);
 
   const [seePassword, setSeePassword] = useState(false);
@@ -904,7 +954,6 @@ function DashboardSchool() {
     dispatch(getCitaAgendadas());
     dispatch(getCita());
   }, [page === 5]);
-
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
@@ -1066,8 +1115,6 @@ function DashboardSchool() {
       image: editEventoNew.imagen_evento,
     });
   };
-
-  console.log(editEvento);
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -2248,7 +2295,6 @@ function DashboardSchool() {
                         <button
                           onClick={handleCompleteInfraestructura}
                           sx={{ mr: 1 }}
-                          disabled={infraestructuraCompleted()}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
@@ -2487,7 +2533,6 @@ function DashboardSchool() {
                         <button
                           onClick={handleCompleteAcreditaciones}
                           sx={{ mr: 1 }}
-                          disabled={acreditacionesCompleted()}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
                           Next
@@ -2781,6 +2826,85 @@ function DashboardSchool() {
                               </button>
                               <img
                                 src={image}
+                                alt=""
+                                className="absolute border-4 top-1/2 left-1/2 -translate-x-1/2 rounded-md -translate-y-1/2 block max-w-[80%] max-h-[80%] object-cover "
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div className="flex flex-col lg:flex-row gap-5">
+                        <form
+                          onSubmit={handleFilesSubmitLogo}
+                          className="flex flex-col"
+                        >
+                          <div className="file-select flex w-full lg:min-w-[200px] ">
+                            <label
+                              htmlFor="imageLogo"
+                              className="bg-white cursor-pointer p-5 w-full h-full shadow-md flex justify-center flex-col items-center rounded-t-md"
+                            >
+                              <RiImageAddLine className="text-7xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
+                              <span className="text-sm mx-auto text-center text-[#0061dd]">
+                                Agregar logo
+                              </span>{" "}
+                            </label>
+                            <input
+                              type="file"
+                              id="imageLogo"
+                              name="imageLogo"
+                              accept="image/png,image/jpeg"
+                              onChange={(e) => {
+                                setSpanLogo(true);
+                                setFileLogo(e.target.files[0]);
+                              }}
+                              className="hidden"
+                            />
+                          </div>
+                          {activeUpLogo && (
+                            <button
+                              type="submit"
+                              disabled={
+                                fileLogo !== null && previewLogo !== null
+                                  ? false
+                                  : true
+                              }
+                              className="p-2 bg-[#0061dd] disabled:bg-[#0061dd]/50 text-white rounded-b-md"
+                            >
+                              Upload
+                            </button>
+                          )}
+
+                          {spanLogo && (
+                            <span className="relative text-center animate-bounce text-3xl">
+                              👆
+                            </span>
+                          )}
+                        </form>
+                        {previewLogo !== "" && (
+                          <>
+                            <div className="border-2 rounded-md overflow-hidden p-2 bg-white">
+                              <StandardImageList
+                                eliminarImagenDePreview={
+                                  eliminarImagenDePreviewLogo
+                                }
+                                one={true}
+                                setImage={setImageLogo}
+                                list={previewLogo}
+                              />
+                            </div>
+                            <div
+                              className={`fixed top-0 left-0 z-50 bg-black/90 w-full h-full ${
+                                imageLogo ? "block" : "hidden"
+                              }`}
+                            >
+                              <button
+                                onClick={() => setImageLogo(null)}
+                                className="absolute top-2 right-4 z-[100] text-white"
+                              >
+                                Atras
+                              </button>
+                              <img
+                                src={imageLogo}
                                 alt=""
                                 className="absolute border-4 top-1/2 left-1/2 -translate-x-1/2 rounded-md -translate-y-1/2 block max-w-[80%] max-h-[80%] object-cover "
                               />

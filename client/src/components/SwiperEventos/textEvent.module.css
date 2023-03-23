@@ -1,0 +1,63 @@
+.card {
+    display: flex;
+    flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #000000;
+  padding: 6px;
+  box-shadow: 10px 10px 4px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  gap:2rem;
+}
+.imgDiv{
+  /*    <div style={{ maxWidth: "10vh", maxHeight: "10vh" }}> */
+max-width: 10vh;
+max-height: 12vh;
+
+}
+
+
+.title {
+  font-family: Poppins;
+  color: #184680;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+.descripcion {
+  font-family: Poppins;
+  font-weight: 400;
+  color: #4d4747;
+  font-size: 1.8vh;
+  text-align: center;
+  width: 100%;
+
+}
+
+.divDetalles{
+    display :flex;
+   flex-direction: column; 
+  /* padding: 1rem; */
+  gap: 1vh;
+   align-items: center;
+}
+.p {
+    color:#4D4747;
+    font-weight: 400;
+    font-size: 1.6vh;
+}
+.pTittle{
+    color:#156BAA;
+    font-weight: 700;
+    font-size: 1rem;
+
+}
+@media (max-width: 800px) {
+  .card {
+    gap:1rem;
+  }
+  .imgDiv{
+    max-height: 10vh;
+  }
+}

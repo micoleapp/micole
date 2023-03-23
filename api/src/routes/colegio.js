@@ -18,7 +18,7 @@ const {
   Metodos,
   Dificultades,
   Review,
-  Evento
+  Evento,
 } = require("../db.js");
 const { Op } = require("sequelize");
 const getPagination = require("../utils/getPagination");
@@ -445,7 +445,6 @@ router.put("/:id", async (req, res) => {
       fundacion,
       nombreDirector,
       nombreColegio,
-      multimedia,
       ruc,
       area,
       ugel,
@@ -464,18 +463,6 @@ router.put("/:id", async (req, res) => {
       metodos,
       dificultades,
     } = req.body;
-    let video_url = "";
-    let primera_imagen = "";
-    let galeria_fotos = "";
-    console.log(multimedia)
-    if(multimedia){      
-      video_url = multimedia.video_url;
-      primera_imagen = multimedia.image;
-      galeria_fotos = JSON.stringify(multimedia.images);
-    }
-    console.log(video_url)
-    console.log(primera_imagen)
-    console.log(galeria_fotos)
     const ubicacion = { lat, lng };
     const editedColegio = await Colegio.update(
       {
@@ -484,10 +471,6 @@ router.put("/:id", async (req, res) => {
         fecha_fundacion: fundacion,
         nombre_director: nombreDirector,
         nombre_colegio: nombreColegio,
-        //multimedia
-        primera_imagen: primera_imagen,
-        galeria_fotos: galeria_fotos,
-        video_url: video_url,
         ruc: ruc,
         area: area,
         ugel: ugel,
@@ -504,7 +487,7 @@ router.put("/:id", async (req, res) => {
     );
     const colegio = await Colegio.findByPk(id);
     await colegio.setMetodos(metodos.map((i) => i.id_metodo));
-    await colegio.setDificultades(dificultades.map((i)=> i.id_dificultad));
+    await colegio.setDificultades(dificultades.map((i) => i.id_dificultad));
     if (colegio === null) {
       console.log("Not found!");
     } else {
@@ -516,6 +499,61 @@ router.put("/:id", async (req, res) => {
 
     res.json(editedColegio);
   } catch (err) {
+    res.status(500).send({
+      message: err.message,
+    });
+  }
+});
+
+//--------------------PUT  MULTIMEDIA POR ID-------
+router.put("/multimedia/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { multimedia } = req.body;
+    let video_url = "";
+    let primera_imagen = "";
+    let galeria_fotos = "";
+    let logo = "";
+    if (multimedia) {
+      video_url = multimedia.video_url;
+      primera_imagen = multimedia.image;
+      galeria_fotos = JSON.stringify(multimedia.images);
+      logo = multimedia.logo;
+    }
+
+    const editedColegio = await Colegio.update(
+      {
+        //multimedia
+        primera_imagen: primera_imagen,
+        galeria_fotos: galeria_fotos,
+        video_url: video_url,
+        logo: logo,
+      },
+      { where: { id: id } }
+    );
+    res.json(editedColegio);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message,
+    });
+  }
+});
+
+router.put("/activo/:id", async (req, res) => {
+  const { id } = req.params;
+  const { isActive } = req.body;
+  try {
+    const colegio = await Colegio.findByPk(id);
+    if (!colegio) {
+      return next({
+        statusCode: 400,
+        message: "El registro solicitado no existe",
+      });
+    }
+    colegio.isActive = isActive;
+    await colegio.save();
+    return res.status(200).send({ message: "El registro se modifico" });
+  } catch (error) {
     res.status(500).send({
       message: err.message,
     });

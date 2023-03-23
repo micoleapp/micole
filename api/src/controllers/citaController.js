@@ -32,7 +32,7 @@ const getCitas = async (req, res, next) => {
       order: [['fecha_cita', 'ASC']],
     });
 
-    const CitasInactivas = await Cita.findAll({
+    const CitasInactivasTotales = await Cita.findAll({
       where: {
         ColegioId: user.id,
         activo: false,
@@ -97,6 +97,10 @@ const getCitas = async (req, res, next) => {
       CitasPermitidasMesActual = [];
     }
 
+    const CitasInactivas = CitasInactivasTotales.filter(cita => {
+      return !CitasPermitidasMesActual.some(permitida => permitida.id === cita.id);
+    });
+
     res.status(200).send({
       CitasActivas,
       CitasActivasMesActual,
@@ -104,7 +108,7 @@ const getCitas = async (req, res, next) => {
       CantidadCitasNoPermitidasMesActual:
         CitasInactivasMesActual.length - CitasPermitidasMesActual.length,
       CitasInactivasTotales:
-        CitasInactivas.length - CitasPermitidasMesActual.length,
+        CitasInactivasTotales.length - CitasPermitidasMesActual.length,
       CitasInactivas,
     });
   } catch (error) {
