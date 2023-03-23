@@ -5,10 +5,10 @@ import HeadTable from "./headTable/HeadTable";
 import style from "./cardColegio.module.css";
 import Swal from "sweetalert2";
 import axios from "axios";
-import {getAllSchoolsPageAdmin } from "../../../../redux/SchoolsActions";
+import { getAllSchoolsPageAdmin } from "../../../../redux/SchoolsActions";
 
 import ContentLoader from "react-content-loader";
-export default function CardColegio({ input, data, isLoading,page }) {
+export default function CardColegio({ input, data, isLoading, page }) {
   const dispatch = useDispatch();
   const items = [1, 2, 3, 4, 5];
 
@@ -45,7 +45,6 @@ export default function CardColegio({ input, data, isLoading,page }) {
       axios
         .put(`/colegios/activo/${id}`, { isActive: false })
         .then((res) => {
-         
           dispatch(getAllSchoolsPageAdmin(page));
           setLoading(false);
           Swal.fire("Exito", "Datos actualizados", "success");
@@ -132,7 +131,7 @@ export default function CardColegio({ input, data, isLoading,page }) {
                       <div>
                         <Typography
                           sx={{
-                            padding: "1vh",
+                            paddingLeft: "1vh",
                             color: "#0D263B",
                             fontWeight: "600",
                             fontSize: "2.4vh",
@@ -145,7 +144,7 @@ export default function CardColegio({ input, data, isLoading,page }) {
                         </Typography>
                         <Typography
                           sx={{
-                            padding: "1vh",
+                            paddingLeft: "1vh",
                             color: "#0D263B",
                             fontWeight: "600",
                             fontSize: "1.5vh",
@@ -165,7 +164,7 @@ export default function CardColegio({ input, data, isLoading,page }) {
                         </Typography>
                         <Typography
                           sx={{
-                            padding: "1vh",
+                            paddingLeft: "1vh",
                             color: "#0D263B",
                             fontWeight: "600",
                             fontSize: "1.5vh",
@@ -176,18 +175,52 @@ export default function CardColegio({ input, data, isLoading,page }) {
                             <p>{ele.telefono}</p>
                           </div>
                         </Typography>
+
+                        {/*  fecha */}
+                        <div className={style.planFechaResponsive}>
+                          <Typography
+                            sx={{
+                              paddingLeft: "1vh",
+                              color: "#0D263B",
+                              fontWeight: "600",
+                              fontSize: "1.5vh",
+                            }}
+                          >
+                            <div className={style.divTypo}>
+                              <b style={{ color: "#0061DF" }}>Fecha</b>
+                              <p>12 de abril del 2023</p>
+                            </div>
+                          </Typography>
+                        </div>
+                        {/*  plan */}
+                        <div className={style.planFechaResponsive}>
+                          <Typography
+                            sx={{
+                              paddingLeft: "1vh",
+                              color: "#0D263B",
+                              fontWeight: "600",
+                              fontSize: "1.5vh",
+                            }}
+                          >
+                            <div className={style.divTypo}>
+                              <b style={{ color: "#0061DF" }}>Plan</b>
+                              <p>{ele.Plan_Pago.nombre_plan_pago}</p>
+                            </div>
+                          </Typography>
+                        </div>
                       </div>
                     </div>
-
                     {/*  fecha */}
-                    <div className={style.itemDiv}>
+                    <div className={style.divThanos}>
                       <p>12 de abril del 2023</p>
                     </div>
+
                     {/*  plan */}
-                    <div className={style.itemDiv}>
+                    <div className={style.divThanos}>
                       {/* //   Plan_Pago: { id: 1, nombre_plan_pago: 'Free' }, */}
                       <p> {ele.Plan_Pago.nombre_plan_pago}</p>
                     </div>
+
                     {/* boton */}
 
                     <ActDesButton

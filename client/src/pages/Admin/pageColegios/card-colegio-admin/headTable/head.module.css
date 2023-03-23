@@ -16,7 +16,7 @@
     color:#0D263B;
     font-family: Poppins;
     font-weight: 600;
-    font-size: 1.8vh;
+    font-size: 1.6vh;
 }
 .divItemGrande{
     display: flex;
@@ -28,6 +28,7 @@
     font-weight: 600;
     font-size: 1.8vh;
 }
+
 
 @media (max-width: 900px) {
     .container{display: none;}
