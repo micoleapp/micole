@@ -17,7 +17,7 @@ export default function CardColegio({ input, data, isLoading }) {
         .put(`/colegios/activo/${id}`, { isActive: true })
         .then((res) => {
           dispatch(getAllSchools());
-          // Swal.fire("Exito", "Datos actualizados", "success");
+          Swal.fire("Exito", "Datos actualizados", "success");
         })
         .catch((err) => {
           Swal.fire({
@@ -41,7 +41,7 @@ export default function CardColegio({ input, data, isLoading }) {
         .put(`/colegios/activo/${id}`, { isActive: false })
         .then((res) => {
           dispatch(getAllSchools());
-          // Swal.fire("Exito", "Datos actualizados", "success");
+          Swal.fire("Exito", "Datos actualizados", "success");
         })
         .catch((err) => {
           Swal.fire({
@@ -61,7 +61,7 @@ export default function CardColegio({ input, data, isLoading }) {
 
   function ActDesButton({ isActive, id }) {
     const [Toggle, setToggle] = useState(false);
- 
+    const [loading, setLoading,] = useState(Toggle);
     const toggleBtn = () => {
       setToggle(true);
       if (isActive === true) {
