@@ -22,7 +22,7 @@ import {
   getHorarios,
   getPagination,
   getMetodos,
-  getDificultades
+  getDificultades,
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -33,24 +33,27 @@ export const getVacantes = (niveles) => (dispatch) => {
     .catch((err) => console.log(err));
 };
 
-export const getFilterHome = (distritos, grado, ingreso, page) => (dispatch) => {
-  dispatch(isLoading());
-  axios
-    .get(`/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}&limit=5&page=${page}`)
-    .then((res) => {
-      dispatch(getPagination(res.data))
-      dispatch(getFilterSchool(res.data.colegios))
-    })
-    .catch((err) => dispatch(getError(err.message)));
-};
+export const getFilterHome =
+  (distritos, grado, ingreso, page) => (dispatch) => {
+    dispatch(isLoading());
+    axios
+      .get(
+        `/colegios?distritos=${distritos}&grado=${grado}&ingreso=${ingreso}&limit=5&page=${page}`
+      )
+      .then((res) => {
+        dispatch(getPagination(res.data));
+        dispatch(getFilterSchool(res.data.colegios));
+      })
+      .catch((err) => dispatch(getError(err.message)));
+  };
 
 export const getFilterListSchool = (data, page) => (dispatch) => {
   dispatch(isLoading());
   axios
     .post(`/colegios/filter?limit=5&page=${page}`, data)
     .then((res) => {
-      dispatch(getPagination(res.data))
-      dispatch(getFilterSchool(res.data.colegios))
+      dispatch(getPagination(res.data));
+      dispatch(getFilterSchool(res.data.colegios));
     })
     .catch((err) => dispatch(getError(err.message)));
 };
@@ -134,9 +137,36 @@ export const getAllDepartaments = () => (dispatch) => {
 
 export const getAllSchools = () => (dispatch) => {
   dispatch(isLoading());
+
   axios
     .get("/colegios")
-    .then((res) => dispatch(getSchools(res.data.colegios)))
+    .then((res) => {
+      dispatch(getPagination(res.data));
+      dispatch(getSchools(res.data.colegios));
+    })
+    .catch((err) => dispatch(getError(err.message)));
+};
+export const getAllSchoolsPage = (page) => (dispatch) => {
+  dispatch(isLoading());
+console.log(page)
+  axios
+    .get(`/colegios?limit=5&page=${page}`)
+    .then((res) => {
+      dispatch(getPagination(res.data));
+      dispatch(getSchools(res.data.colegios));
+    })
+    .catch((err) => dispatch(getError(err.message)));
+};
+
+export const getAllSchoolsPageAdmin = (page) => (dispatch) => {
+
+console.log(page)
+  axios
+    .get(`/colegios?limit=5&page=${page}`)
+    .then((res) => {
+      dispatch(getPagination(res.data));
+      dispatch(getSchools(res.data.colegios));
+    })
     .catch((err) => dispatch(getError(err.message)));
 };
 
@@ -157,33 +187,33 @@ export const clannDetailid = () => (dispatch) => {
   }
 };
 
-export const postHorariosVacantes = (horarios,ColegioId) => (dispatch) => {
-  console.log(ColegioId)
-  console.log(horarios)
+export const postHorariosVacantes = (horarios, ColegioId) => (dispatch) => {
+  console.log(ColegioId);
+  console.log(horarios);
   dispatch(isLoading());
   try {
     axios
-      .post("/horarios", { horarios , ColegioId })
-      .then(res=>
+      .post("/horarios", { horarios, ColegioId })
+      .then((res) =>
         Swal.fire({
           icon: "success",
           title: "Horarios actualizados exitosamente!",
           text: "Cambios guardados",
         })
-        )
+      )
       .catch((err) => console.log(err));
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
 export const postCita = (cita) => (dispatch) => {
   const { celular, correo, date, time, modo, nombre, añoIngreso, grado } = cita;
-  console.log("test")
- const  ColegioId = localStorage.getItem('ColegioId')
+  console.log("test");
+  const ColegioId = localStorage.getItem("ColegioId");
 
   dispatch(isLoading());
-  try {    
+  try {
     axios
       .post("/citas", {
         celular,
@@ -195,10 +225,9 @@ export const postCita = (cita) => (dispatch) => {
         ColegioId,
         añoIngreso,
         grado,
-        ColegioId
-
+        ColegioId,
       })
-      .then(res=>{
+      .then((res) => {
         Swal.fire({
           icon: "success",
           title: "Perfecto !",
@@ -206,7 +235,7 @@ export const postCita = (cita) => (dispatch) => {
         });
       })
       // .then((res) => dispatch(getVacantesGrados(res.data)))
-      .catch((err) =>{
+      .catch((err) => {
         Swal.fire({
           icon: "error",
           title: "Algo salio mal",
@@ -214,35 +243,32 @@ export const postCita = (cita) => (dispatch) => {
         });
       });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
 export const getCitaAgendadas = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
-  token && 
-  axios
-    .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
-    .then((res) => dispatch(getCitasAgendado(res.data)))
-    .catch((err) => {
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
-        text: err.response.data.error,
+  token &&
+    axios
+      .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => dispatch(getCitasAgendado(res.data)))
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Algo salio mal",
+          text: err.response.data.error,
+        });
       });
-    });
 };
 
-
-
 export const getHorariosSchool = () => (dispatch) => {
-
   dispatch(isLoading());
-  const idColegio= localStorage.getItem('ColegioId')
-  console.log(idColegio)
+  const idColegio = localStorage.getItem("ColegioId");
+  console.log(idColegio);
   axios
-    .get(`/horarios/${idColegio}` )
+    .get(`/horarios/${idColegio}`)
     .then((res) => dispatch(getHorarios(res.data)))
     .catch((err) => {
       Swal.fire({
@@ -261,9 +287,9 @@ export const getAllMetodos = () => (dispatch) => {
       .then((res) => dispatch(getMetodos(res.data)))
       .catch((err) => dispatch(getError(err.message)));
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 export const getAllDificultades = () => (dispatch) => {
   dispatch(isLoading());
@@ -273,8 +299,6 @@ export const getAllDificultades = () => (dispatch) => {
       .then((res) => dispatch(getDificultades(res.data)))
       .catch((err) => dispatch(getError(err.message)));
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
-
-
+};
