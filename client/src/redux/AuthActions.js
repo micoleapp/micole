@@ -158,7 +158,8 @@ export const logout = () => (dispatch) => {
 
 export const getSchoolDetail = (id) => (dispatch) => {
   dispatch(isLoading())
-  axios.get(`/colegios/${id}`)
+  const token = localStorage.getItem("token");
+  axios.get(`/colegios/${id}`,{headers:{'Authorization': `Bearer ${token}`}})
   .then(res=>dispatch(getSchool(res.data[0])))
   .catch(err=>dispatch(getError(err.message)))
 }

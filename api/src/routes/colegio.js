@@ -445,7 +445,6 @@ router.put("/:id", async (req, res) => {
       fundacion,
       nombreDirector,
       nombreColegio,
-      multimedia,
       ruc,
       area,
       ugel,
@@ -464,18 +463,6 @@ router.put("/:id", async (req, res) => {
       metodos,
       dificultades,
     } = req.body;
-    let video_url = "";
-    let primera_imagen = "";
-    let galeria_fotos = "";
-    console.log(multimedia);
-    if (multimedia) {
-      video_url = multimedia.video_url;
-      primera_imagen = multimedia.image;
-      galeria_fotos = JSON.stringify(multimedia.images);
-    }
-    console.log(video_url);
-    console.log(primera_imagen);
-    console.log(galeria_fotos);
     const ubicacion = { lat, lng };
     const editedColegio = await Colegio.update(
       {
@@ -484,10 +471,6 @@ router.put("/:id", async (req, res) => {
         fecha_fundacion: fundacion,
         nombre_director: nombreDirector,
         nombre_colegio: nombreColegio,
-        //multimedia
-        primera_imagen: primera_imagen,
-        galeria_fotos: galeria_fotos,
-        video_url: video_url,
         ruc: ruc,
         area: area,
         ugel: ugel,

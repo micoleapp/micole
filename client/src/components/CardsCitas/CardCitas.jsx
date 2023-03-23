@@ -29,7 +29,7 @@ export default function CardCitas({ filtros }) {
   const [Inactivas, setInactivas] = useState([]);
   const [Activas, setActivas] = useState([]);
   //LOGICA CONFIRMACION DE CITAS
-console.log(arrCita)
+
   const comprobacion = (iD) => {
     if (success === "Se activo la Cita.") {
       console.log(Inactivas);
@@ -57,6 +57,7 @@ console.log(arrCita)
 
   React.useEffect(() => {
     const allCitas = [];
+
   dispatch(getCitaAgendadas());
   dispatch(getCita());
 
@@ -84,6 +85,7 @@ console.log(arrCita)
 
   }, []);
 
+  console.log(arrCita);
   return (
     <>
       <div

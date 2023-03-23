@@ -954,21 +954,9 @@ function DashboardSchool() {
     dispatch(getCitaAgendadas());
     dispatch(getCita());
   }, [page === 5]);
-  
-  useEffect(() => {
-    if (user) {
-      dispatch(getSchoolDetail(user.id));
-    }
-    return () => {
-      dispatch(getSchoolDetail(user.id))
-    }
-  }, [user]);
-  
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
-
-  console.log(multimedia)
 
   const handleSubmitEvento = (e) => {
     e.preventDefault();
@@ -1127,8 +1115,6 @@ function DashboardSchool() {
       image: editEventoNew.imagen_evento,
     });
   };
-
-  console.log(multimedia);
 
   return (
     <div className="flex lg:flex-row flex-col">
