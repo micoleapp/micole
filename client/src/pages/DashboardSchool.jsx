@@ -953,7 +953,7 @@ function DashboardSchool() {
   useEffect(() => {
     dispatch(getCitaAgendadas());
     dispatch(getCita());
-  }, [page === 5]);
+  }, [citasAgendadas.CitasActivas?.length, success ]);
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
