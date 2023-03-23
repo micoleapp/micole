@@ -1,10 +1,62 @@
 import { Button, Card, Typography } from "@mui/material";
-import React from "react";
-import HeadTable from "./headTable/HeadTable";
+import React, { useState } from "react";
 
+import HeadTable from "./headTable/HeadTable";
+import style from "./cardColegio.module.css";
+import Swal from "sweetalert2";
+import axios from "axios";
 export default function CardColegio({ input, data }) {
   console.log(input, data);
 
+  const [success, setSuccess] = useState(false);
+  const putActiveColegio = (id) => {
+    console.log(id);
+    try {
+      axios
+        .put(`/colegios/activo/${id}`, { isActive: true })
+        .then((res) => {
+          setSuccess(true);
+          Swal.fire("Exito", "Datos actualizados", "success");
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: err.response.data.error,
+          });
+        });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: error.response,
+      });
+    }
+  };
+  const putDesactiveColegio = (id) => {
+    console.log(id);
+    try {
+      axios
+        .put(`/colegios/activo/${id}`, { isActive: false })
+        .then((res) => {
+          setSuccess(true);
+          Swal.fire("Exito", "Datos actualizados", "success");
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: err.response.data.error,
+          });
+        });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: error.response,
+      });
+    }
+  };
   return (
     <>
       <HeadTable />
@@ -17,25 +69,9 @@ export default function CardColegio({ input, data }) {
           console.log(str2);
           return (
             <>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  padding: "1rem",
-                }}
-              >
+              <div className={style.layout}>
                 {/* foto mas info */}
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
+                <div className={style.imgInfoDiv}>
                   <img
                     className="object-cover w-40 h-40"
                     src={ele.primera_imagen}
@@ -67,21 +103,12 @@ export default function CardColegio({ input, data }) {
                         style={{
                           display: "flex",
                           gap: "1vh",
-                          textOverflow: "ellipsis",
                         }}
                       >
-                        <div
-                          style={{
-                            maxWidth: "35vh",
-                            display: "flex",
-                            gap: "1vh",
-                          }}
-                        >
+                        <div className={style.divTypo}>
                           <b style={{ color: "#0061DF" }}>Dirección</b>
                           <p>{str2}</p>
                         </div>
-
-                        {}
                       </div>
                     </Typography>
                     <Typography
@@ -92,7 +119,7 @@ export default function CardColegio({ input, data }) {
                         fontSize: "1.5vh",
                       }}
                     >
-                      <div style={{ display: "flex", gap: "1vh" }}>
+                      <div className={style.divTypo}>
                         <b style={{ color: "#0061DF" }}>Teléfono</b>
                         <p>{ele.telefono}</p>
                       </div>
@@ -101,17 +128,43 @@ export default function CardColegio({ input, data }) {
                 </div>
 
                 {/*  fecha */}
-                <div style={{width:'50%'}}>
+                <div className={style.itemDiv}>
                   <p>12 de abril del 2023</p>
                 </div>
                 {/*  plan */}
-                <div style={{width:'50%'}}>
-                  <p>Premiun</p>
-                </div >
-                {/* boton */}
-                <div style={{width:'50%'}}>
-                  <Button variant="outlined">Desactivar</Button>
+                <div className={style.itemDiv}>
+                  {/* //   Plan_Pago: { id: 1, nombre_plan_pago: 'Free' }, */}
+                  <p> {ele.Plan_Pago.nombre_plan_pago}</p>
                 </div>
+                {/* boton */}
+                {ele.isActive && (
+                  <div className={style.itemDiv}>
+                    <Button
+                      onClick={() => {
+                        setSuccess(true);
+                        putDesactiveColegio(ele.id);
+                      }}
+                      variant="outlined"
+                      sx={{ fontWeight: "600", fontFamily: "Poppins" }}
+                    >
+                      Desactivar
+                    </Button>
+                  </div>
+                )}
+                {ele.isActive === false && (
+                  <div className={style.itemDiv}>
+                    <Button
+                      onClick={() => {
+                        setSuccess(true);
+                        putActiveColegio(ele.id);
+                      }}
+                      variant="outlined"
+                      sx={{ fontWeight: "600", fontFamily: "Poppins" }}
+                    >
+                     Ativar
+                    </Button>
+                  </div>
+                )}
               </div>
             </>
           );

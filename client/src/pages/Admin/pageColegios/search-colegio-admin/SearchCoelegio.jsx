@@ -10,7 +10,7 @@ import { useState } from "react";
 import { Button, IconButton, Typography } from "@mui/material";
 
 import { useSelector } from "react-redux";
-export default function SearchCoelegio({ handlerInput, data }) {
+export default function SearchCoelegio({ handlerInput, data , nroColegios }) {
   const [OptionSelected, setOptionSelected] = useState("");
 
   const SubmitSearch = (event) => {
@@ -23,7 +23,7 @@ console.log(OptionSelected)
         <Typography
         sx={{fontFamily:'Poppins', fontWeight:'600' , color:'#0061DF', fontSize:'1.4vh'}}
         >
-              {data.length} Colegios
+              { nroColegios} Colegios
         </Typography>
       
            <Autocomplete

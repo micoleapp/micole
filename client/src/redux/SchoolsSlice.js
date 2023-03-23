@@ -26,7 +26,8 @@ export const schoolsSlice = createSlice({
     citasAgendadas: [],
     error: "",
     loading: false,
-    pagination: {}
+    pagination: {},
+    success:false
   },
   reducers: {
     getMetodos: (state,action) => {
@@ -142,6 +143,9 @@ export const schoolsSlice = createSlice({
     },
     isLoading: (state) => {
       state.loading = true;
+    },
+    setSuccess: (state) => {
+      state.success= true;
     },
   },
 });
