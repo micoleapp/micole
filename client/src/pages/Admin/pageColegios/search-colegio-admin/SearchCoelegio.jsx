@@ -23,7 +23,7 @@ console.log(OptionSelected)
         <Typography
         sx={{fontFamily:'Poppins', fontWeight:'600' , color:'#0061DF', fontSize:'1.4vh'}}
         >
-              { nroColegios} Colegios
+              {  nroColegios && nroColegios} Colegios
         </Typography>
       
            <Autocomplete

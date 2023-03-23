@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import FormatListNumberedOutlinedIcon from "@mui/icons-material/FormatListNumberedOutlined";
@@ -10,9 +10,18 @@ import Hamburger from "hamburger-react";
 import PageColegio from "./pageColegios/PageColegio";
 import PageInfraestructura from "./PageInfraestructura/PageInfraestructura";
 
+import { getAllSchools } from "../../redux/SchoolsActions";
+import { useDispatch } from "react-redux";
 export default function MainAdmin() {
   const [page, setPage] = React.useState(0);
   const [isOpen, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllSchools());
+   
+  }, []);
+
+  // useEffect(() => {}, [allschools]);
   return (
     <>
    
