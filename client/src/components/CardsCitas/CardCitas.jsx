@@ -14,10 +14,11 @@ import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSear
 import Swal from "sweetalert2";
 import sliceIntoChunks from "./Paginacion/utils/SliceCitas";
 import PaginationCitas from "./Paginacion/PaginationCitas";
-
+import axios from "axios";
 import Paddock from "./svg/Paddock";
 import { getCitaAgendadas } from "../../redux/SchoolsActions";
 // import sliceIntoChunks from "../"
+
 export default function CardCitas({ filtros }) {
   const { success, loading } = useSelector((state) => state.citas);
   const { oneSchool } = useSelector((state) => state.auth);
@@ -31,35 +32,46 @@ export default function CardCitas({ filtros }) {
   //LOGICA CONFIRMACION DE CITAS
 
   const comprobacion = (iD) => {
-    if (success === "Se activo la Cita.") {
-      console.log(Inactivas);
-      const CitasConfirmadas = Inactivas.find((ele) => ele.id === iD);
-      setActivas([...Activas, CitasConfirmadas]);
-      setInactivas([Inactivas[0].filter((ele) => ele.id !== iD)]);
-      setArrCitas([arrCita[0].filter((ele) => ele.id !== iD)])
-      Swal.fire({
-        icon: "success",
-        title: "La cita ha sido confirmada con exito",
-        text: "Se notificará a la familia interesada. Ademas podrás administrar tus citas en la pestaña de control de citas",
-      });
-
-      dispatch(cleanSuccessState());
-    }
-
-
+    console.log(Inactivas);
+    const CitasConfirmadas = Inactivas.find((ele) => ele.id === iD);
+    setActivas([...Activas, CitasConfirmadas]);
+    setInactivas([Inactivas[0].filter((ele) => ele.id !== iD)]);
+    setArrCitas([arrCita[0].filter((ele) => ele.id !== iD)]);
   };
 
   const handlerPutStateCita = async (iD) => {
-    dispatch(putCita(iD));
+    comprobacion(iD);
+    try {
+      axios
+        .put(`/citas/activo/${iD}`, { activo: true })
+        .then((res) => {
+          dispatch(getCitaAgendadas());
+
+          Swal.fire("Exito", "Datos actualizados", "success");
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: err,
+          });
+        });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: error,
+      });
+    }
     await comprobacion(iD);
   };
   //  PAGINADO
 
-  React.useEffect(() => {
+  useEffect(() => {
     const allCitas = [];
 
-  dispatch(getCitaAgendadas());
-  dispatch(getCita());
+    dispatch(getCitaAgendadas());
+    dispatch(getCita());
 
     let resultadoActivas = sliceIntoChunks(
       citasAgendadas.CitasActivasMesActual,
@@ -82,10 +94,72 @@ export default function CardCitas({ filtros }) {
     );
     let resultadoAllCitas = sliceIntoChunks(allCitasActInact, 10);
     setArrCitas(resultadoAllCitas);
-
   }, []);
+  useEffect(() => {}, [citasAgendadas]);
+  const putStateCita = (id, setLoading) => {
+    console.log(id);
+    setLoading(true);
+    try {
+      axios
+        .put(`/citas/activo/${id}`, { activo: true })
+        .then((res) => {
+          dispatch(getCitaAgendadas());
+          setLoading(false);
+          Swal.fire("Exito", "Datos actualizados", "success");
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: err,
+          });
+        });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Algo salio mal",
+        text: error,
+      });
+    }
+  };
 
-  console.log(arrCita);
+  function BtnPutCitas({ state, id }) {
+    console.log(state, id);
+    const [Toggle, setToggle] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const toggleBtn = () => {
+      setToggle(!Toggle);
+      if (state === false) {
+        putStateCita(id, setLoading);
+      }
+    };
+    return (
+      <>
+        <div>
+          {state === true && (
+            <Button
+              // onClick={toggleBtn}
+              variant="contained"
+              disabled
+            >
+              Confirmada
+            </Button>
+          )}
+          {state === false && (
+            <Button
+              variant="contained"
+              onClick={toggleBtn}
+              disabled={Toggle === true && true}
+            >
+              {Toggle === false ? "Confirmar" : "Confirmada"}
+              {loading === true && <div className={style.loader}></div>}
+            </Button>
+          )}
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <div
@@ -242,7 +316,11 @@ export default function CardCitas({ filtros }) {
 
                         <p>{cita.email}</p>
                       </div>
-                      {cita.activo === false && (
+                      {/*ACA BOTON CONFIRMAR  */}
+
+                      <BtnPutCitas id={cita.id} state={cita.activo} />
+
+                      {/* {cita.activo === false && (
                         <div>
                           <Button
                             onClick={() => {
@@ -253,9 +331,9 @@ export default function CardCitas({ filtros }) {
                             Confirmar{" "}
                           </Button>
                         </div>
-                      )}
+                      )} */}
 
-                      {cita.activo === true && (
+                      {/* {cita.activo === true && (
                         <div>
                           <Button
                             disabled
@@ -267,7 +345,7 @@ export default function CardCitas({ filtros }) {
                             Confirmar{" "}
                           </Button>
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </>
                 );

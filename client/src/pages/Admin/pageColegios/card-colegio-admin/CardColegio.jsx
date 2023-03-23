@@ -217,7 +217,7 @@ export default function CardColegio({ input, data, isLoading, page }) {
 
                     {/*  plan */}
                     <div className={style.divThanos}>
-                      {/* //   Plan_Pago: { id: 1, nombre_plan_pago: 'Free' }, */}
+                     
                       <p> {ele.Plan_Pago.nombre_plan_pago}</p>
                     </div>
 
