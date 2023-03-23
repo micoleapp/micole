@@ -28,107 +28,32 @@ const getPagination = require('../utils/getPagination');
 
 //------- PEDIR TODOS LOS COLEGIOS A LA BD--------
 router.get('/', async (req, res) => {
-  const { distritos, grado, ingreso } = req.query;
   const cleanedUrl = req.originalUrl.replace(/limit=\d+&page=\d+&?/, '');
   const url = `${req.protocol}://${req.get('host')}${cleanedUrl}`;
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
   try {
-    const totalColegios = await Colegio.findAll({
-      include: [
-        {
-          model: Vacante,
-          include: [{ model: Grado }],
-        },
-      ],
-      where: {
-        ...(distritos && distritos !== 'false' && { DistritoId: distritos }),
-        ...(grado && grado !== 'false' && { '$Vacantes.GradoId$': grado }),
-        ...(ingreso && ingreso !== 'false' && { '$Vacantes.año$': ingreso }),
-      },
-      subQuery: false,
-    });
-
+    const totalColegios = await Colegio.count();
     const colegios = await Colegio.findAll({
-      include: [
-        {
-          model: Nivel,
-          attributes: ['nombre_nivel', 'id'],
-        },
-        {
-          model: Idioma,
-          attributes: ['nombre_idioma', 'id'],
-          through: {
-            attributes: [],
-          },
-        },
-        {
-          model: Vacante,
-          include: [{ model: Grado, attributes: ['nombre_grado'] }],
-          required: grado !== 'false' || ingreso !== 'false' ? true : false,
-          duplicating: grado !== 'false' || ingreso !== 'false' ? false : true,
-        },
-        {
-          model: Pais,
-          attributes: ['id', 'nombre_pais'],
-        },
-        {
-          model: Departamento,
-          attributes: ['id', 'nombre_departamento'],
-        },
-        {
-          model: Provincia,
-          attributes: ['id', 'nombre_provincia'],
-        },
-        {
-          model: Distrito,
-          attributes: ['id', 'nombre_distrito'],
-        },
-        {
-          model: Plan_Pago,
-          attributes: ['id', 'nombre_plan_pago'],
-        },
-        {
-          model: Horario,
-          attributes: ['dia', 'horarios'],
-        },
-        {
-          model: Review,
-        },
-        {
-          model: Categoria,
-          attributes: [
-            'id',
-            'nombre_categoria',
-            'imagen_categoria',
-            'logo_categoria',
-          ],
-          through: {
-            attributes: [],
-          },
-        },
-      ],
-      where: {
-        ...(distritos && distritos !== 'false' && { DistritoId: distritos }),
-        ...(grado && grado !== 'false' && { '$Vacantes.GradoId$': grado }),
-        ...(ingreso && ingreso !== 'false' && { '$Vacantes.año$': ingreso }),
+      attributes: ['id', 'nombre_colegio', 'direccion', 'telefono', 'isActive'],
+      include: {
+        model: Plan_Pago,
+        attributes: ['id', 'nombre_plan_pago'],
       },
       //(Sequelize) Problemas con Limit y Offset con los includes hasMany -> https://github.com/sequelize/sequelize/issues/7585
-      /*    limit: limit,
-      offset: skip, */
+      limit: limit,
+      offset: skip,
     });
-    const endIndex = skip + limit;
-    const colegiosPaginados = colegios.slice(skip, endIndex);
-    const pagination = getPagination(url, page, limit, colegios.length);
+    const pagination = getPagination(url, page, limit, totalColegios);
     res.json({
-      count: totalColegios.length,
-      pages: Math.ceil(totalColegios.length / limit),
+      count: totalColegios,
+      pages: Math.ceil(totalColegios / limit),
       prev: pagination.prev,
       next: pagination.next,
       first: pagination.first,
       last: pagination.last,
-      colegios: colegiosPaginados,
+      colegios,
     });
   } catch (err) {
     console.log(err);
@@ -141,9 +66,10 @@ router.get('/:Colegio_id', async (req, res) => {
   const { Colegio_id } = req.params;
   const tokenUser = req.user;
   try {
-    if(!tokenUser){
+    if (!tokenUser) {
       const addVisualizacion = await Colegio.findByPk(Colegio_id);
-      addVisualizacion.visualizaciones = Number(addVisualizacion.visualizaciones) + 1;
+      addVisualizacion.visualizaciones =
+        Number(addVisualizacion.visualizaciones) + 1;
       await addVisualizacion.save();
     }
     const cole = await Colegio.findByPk(Colegio_id, {
@@ -233,7 +159,7 @@ router.get('/:Colegio_id', async (req, res) => {
           },
         },
       ],
-    }); 
+    });
     res.json(cole);
   } catch (err) {
     res.json({ err });
