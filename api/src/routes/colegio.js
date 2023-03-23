@@ -33,15 +33,44 @@ router.get('/', async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
+  const {search, order} = req.query;
+  let where = {};
+  let orderBy = null;
+  
+  if (search) {
+    where = {
+      nombre_colegio: {
+        [Op.iLike]: `%${search}%`,
+      },
+    };
+  }
+  if (order) {
+    switch (order) {
+      case 'fechaCreacion':
+        orderBy = [['createdAt', 'DESC']];
+        break;
+      case 'A-Z':
+        orderBy = [['nombre_colegio', 'ASC']];
+        break;
+      case 'Z-A':
+        orderBy = [['nombre_colegio', 'DESC']];
+        break;
+      default:
+        orderBy = null;
+        break;
+    }
+  }
+
   try {
-    const totalColegios = await Colegio.count();
+    const totalColegios = await Colegio.count({ where });
     const colegios = await Colegio.findAll({
       attributes: ['id', 'nombre_colegio', 'direccion', 'telefono', 'isActive'],
       include: {
         model: Plan_Pago,
         attributes: ['id', 'nombre_plan_pago'],
       },
-      //(Sequelize) Problemas con Limit y Offset con los includes hasMany -> https://github.com/sequelize/sequelize/issues/7585
+      where,
+      order: orderBy,
       limit: limit,
       offset: skip,
     });
