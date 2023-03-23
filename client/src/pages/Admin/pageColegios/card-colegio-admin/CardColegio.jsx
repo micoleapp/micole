@@ -47,7 +47,7 @@ export default function CardColegio({ input, data, isLoading }) {
           Swal.fire({
             icon: "error",
             title: "Algo salio mal",
-            text: err.response.data.error,
+            text: err,
           });
         });
     } catch (error) {
@@ -61,7 +61,7 @@ export default function CardColegio({ input, data, isLoading }) {
 
   function ActDesButton({ isActive, id }) {
     const [Toggle, setToggle] = useState(false);
-    const [loading, setLoading,] = useState(Toggle);
+
     const toggleBtn = () => {
       setToggle(true);
       if (isActive === true) {
@@ -76,29 +76,31 @@ export default function CardColegio({ input, data, isLoading }) {
         {isActive === true && (
           <div className={style.itemDiv}>
             {/* {isLoading && <div className={style.loader}></div>} */}
-           
-              <Button
-                onClick={toggleBtn}
-                variant="outlined"
-                sx={{ fontFamily: "Poppins", fontSize: "1.4vh" }}
-              >
-                {Toggle === false ? "Desactivar" : "Activar"}
-              </Button>
-            
+
+            <Button
+              onClick={toggleBtn}
+              variant="outlined"
+              sx={{ fontFamily: "Poppins", fontSize: "1.4vh" }}
+            >
+              {Toggle === false && isLoading === false
+                ? "Desactivar"
+                : "Activar"}
+              {Toggle === true && isLoading === true&&
+               <div className={style.loader}></div>}
+            </Button>
           </div>
         )}
         {isActive === false && (
           <div className={style.itemDiv}>
             {/* {isLoading && <div className={style.loader}></div>} */}
-          
-              <Button
-                variant="outlined"
-                sx={{ fontFamily: "Poppins", fontSize: "1.4vh" }}
-                onClick={toggleBtn}
-              >
-                {Toggle === false ? "Activar" : "Desactivar"}
-              </Button>
-          
+
+            <Button
+              variant="outlined"
+              sx={{ fontFamily: "Poppins", fontSize: "1.4vh" }}
+              onClick={toggleBtn}
+            >
+              {Toggle === false ? "Activar" : "Desactivar"}
+            </Button>
           </div>
         )}
       </>
