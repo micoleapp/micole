@@ -37,7 +37,7 @@ router.post("/notification", async (req, res) => {
 
       if (ventas && ventas.status === "Pending") {
         if (merchantOrder.body.payments[0].status === "approved") {
-          console.log("Venta aprobada*********************");
+
           ventas.status = "Paid";
           ventas.mp_payment_id = paymentId;
           ventas.InicioPlan = merchantOrder.body.payments[0].date_approved;
@@ -110,12 +110,6 @@ router.post("/notification", async (req, res) => {
           mp_merchantOrder_id: [merchantOrder.body.id],
         },
       });
-
-      // const colegio = await Colegio.findOne({
-      //   where: { email: merchantOrder.body.aditional_info },
-      // });
-
-      // await ventas.setColegioId(colegio);
       res.status(200).send(merchantOrder);
       break;
   }

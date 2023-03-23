@@ -29,19 +29,25 @@ router.get("/", async (req, res) => {
 
 //------- POST A INFRAESTRUCTURA-------
 router.post("/", async (req, res) => {
-  const { nombre_infraestructura } = req.body;
+  const {  nombre_infraestructura, imagen, categoriaId } = req.body;
+  console.log(nombre_infraestructura+ "    "+ imagen + categoriaId);
   try {
+    const ultimaInfraestructura = await Infraestructura.findOne({
+      order: [["id", "DESC"]],
+    });
+    console.log(ultimaInfraestructura.id);
     const [infraestructura, created] = await Infraestructura.findOrCreate({
       where: {
+        id: Number(ultimaInfraestructura.id) + 1,
         nombre_infraestructura: nombre_infraestructura,
+        slug: nombre_infraestructura,
+        imagen: imagen,
       },
     });
+    console.log(infraestructura);
+    await infraestructura.setInfraestructura_tipo(categoriaId);
     if (created) {
       console.log("Infra creado exitosamente");
-      infraestructura.nombre_infraestructura = nombre_infraestructura;
-      infraestructura.slug = slug;
-      infraestructura.imagen = imagen;
-      infraestructura.save();
       res.status(200).json(infraestructura);
     } else {
       res.status(500).json([{ error: "Infraestructura existente" }]);
