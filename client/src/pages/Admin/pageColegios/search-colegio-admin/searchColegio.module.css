@@ -1,0 +1,107 @@
+/* .search {
+    background-color: transparent;
+    width: 60vh;
+    padding: 4px;
+    height: 50px;
+
+    border-radius: 8px;
+    
+    outline: none !important;
+  }
+  
+  .searchSmall {
+    background-color: transparent;
+    width: 30vh;
+    padding: 4px;
+    height: 30px;
+
+    border-radius: 8px;
+    outline: none !important;
+  }
+  
+  .metaContainer {
+    display: flex;
+    flex-direction: row;
+ 
+    gap: 10px;
+  }
+  .searchDiv button {
+    display: none;
+  }
+  .btnSearch {
+    cursor: pointer;
+    width: 100px;
+    height: 55px;
+    border: 1px solid #d4e2f5d2;
+    color: #092c4c;
+    font-size: 16px;
+    border-radius: 10px;
+    background-color: #ffff;
+  }
+  .search:hover {
+    outline: none !important;
+    border: none;
+  }
+  
+  .search::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+  
+  .search::-webkit-scrollbar:vertical {
+    width: 8px;
+  }
+  
+  .search::-webkit-scrollbar-button:increment,
+  .contenedor::-webkit-scrollbar-button {
+    display: none;
+  }
+  
+  .search::-webkit-scrollbar:horizontal {
+    height: 5px;
+  }
+  
+  .search::-webkit-scrollbar-thumb {
+    background-color: #dfdfdf;
+    border-radius: 10px;
+    border: 0.5px solid #424242;
+  }
+  
+  .search::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+  .searchMobile {
+    display: none;
+  }
+  
+  @media (max-width: 1200px) {
+    .search {
+      width: 30vh;
+      justify-content: flex-end;
+    }
+  }
+  
+  @media (max-width: 500px) {
+    .btnSearch {
+      width: 100%;
+      height: 50px;
+    }
+    .search {
+      width: 20vh;
+      justify-content: flex-end;
+    }
+  
+    .desktopSearch {
+      display: none;
+    }
+    .searchMobile {
+      display: flex;
+      align-items: center;
+    }
+    .metaContainer{
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  }
+   */
