@@ -89,6 +89,7 @@ export default function CardCitas({ data, filtros }) {
   const putStateCita = (id, setLoading) => {
     console.log(id);
     setLoading(true);
+
     try {
       axios
         .put(`/citas/activo/${id}`, { activo: true })
