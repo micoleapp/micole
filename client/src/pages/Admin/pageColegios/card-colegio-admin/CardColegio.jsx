@@ -5,20 +5,22 @@ import HeadTable from "./headTable/HeadTable";
 import style from "./cardColegio.module.css";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { getAllSchools } from "../../../../redux/SchoolsActions";
+import {getAllSchoolsPageAdmin } from "../../../../redux/SchoolsActions";
 
 import ContentLoader from "react-content-loader";
-export default function CardColegio({ input, data, isLoading }) {
+export default function CardColegio({ input, data, isLoading,page }) {
   const dispatch = useDispatch();
   const items = [1, 2, 3, 4, 5];
 
-  const putActiveColegio = (id) => {
+  const putActiveColegio = (id, setLoading) => {
     console.log(id);
+    setLoading(true);
     try {
       axios
         .put(`/colegios/activo/${id}`, { isActive: true })
         .then((res) => {
-          dispatch(getAllSchools());
+          dispatch(getAllSchoolsPageAdmin(page));
+          setLoading(false);
           Swal.fire("Exito", "Datos actualizados", "success");
         })
         .catch((err) => {
@@ -32,17 +34,20 @@ export default function CardColegio({ input, data, isLoading }) {
       Swal.fire({
         icon: "error",
         title: "Algo salio mal",
-        text: error.response,
+        text: error,
       });
     }
   };
-  const putDesactiveColegio = (id) => {
+  const putDesactiveColegio = (id, setLoading) => {
     console.log(id);
+    setLoading(true);
     try {
       axios
         .put(`/colegios/activo/${id}`, { isActive: false })
         .then((res) => {
-          dispatch(getAllSchools());
+         
+          dispatch(getAllSchoolsPageAdmin(page));
+          setLoading(false);
           Swal.fire("Exito", "Datos actualizados", "success");
         })
         .catch((err) => {
@@ -56,20 +61,20 @@ export default function CardColegio({ input, data, isLoading }) {
       Swal.fire({
         icon: "error",
         title: "Algo salio mal",
-        text: error.response,
+        text: error,
       });
     }
   };
 
   function ActDesButton({ isActive, id }) {
     const [Toggle, setToggle] = useState(false);
-
+    const [loading, setLoading] = useState(false);
     const toggleBtn = () => {
-      setToggle(true);
+      setToggle(!Toggle);
       if (isActive === true) {
-        putDesactiveColegio(id);
+        putDesactiveColegio(id, setLoading);
       } else {
-        putActiveColegio(id);
+        putActiveColegio(id, setLoading);
       }
     };
 
@@ -82,8 +87,8 @@ export default function CardColegio({ input, data, isLoading }) {
               variant="outlined"
               sx={{ fontFamily: "Poppins", fontSize: "1.4vh" }}
             >
-              {/* {Toggle === false ? "Desactivar" : "Activar"} */}
-              Desactivar
+              {Toggle === false ? "Desactivar" : "Activar"}
+              {loading === true && <div className={style.loader}></div>}
             </Button>
           </div>
         )}
@@ -94,8 +99,8 @@ export default function CardColegio({ input, data, isLoading }) {
               sx={{ fontFamily: "Poppins", fontSize: "1.4vh" }}
               onClick={toggleBtn}
             >
-              {/* {Toggle === false ?  "Activar": "Desactivar"} */}
-              Activar
+              {Toggle === false ? "Activar" : "Desactivar"}
+              {loading === true && <div className={style.loader}></div>}
             </Button>
           </div>
         )}
@@ -103,12 +108,11 @@ export default function CardColegio({ input, data, isLoading }) {
     );
   }
 
-
   return (
     <>
       <HeadTable />
       <div>
-        {data?.length > 0 &&isLoading===false
+        {data?.length > 0 && isLoading === false
           ? data?.map((ele) => {
               let str = ele.direccion;
 
@@ -197,6 +201,26 @@ export default function CardColegio({ input, data, isLoading }) {
                 </>
               );
             })
+          : data?.length > 0 && isLoading === true
+          ? items.map((item, key) => (
+              <ContentLoader
+                key={key}
+                speed={3}
+                width={"100%"}
+                height={"100%"}
+                viewBox="0 0 500 120"
+                backgroundColor="#dcdce2"
+                foregroundColor="#ecebeb"
+              >
+                <rect x="110" y="8" rx="3" ry="3" width="120" height="10" />
+                <rect x="110" y="25" rx="3" ry="3" width="100" height="6" />
+                <rect x="48" y="26" rx="3" ry="3" width="52" height="6" />
+                <rect x="110" y="56" rx="3" ry="3" width="310" height="6" />
+                <rect x="110" y="72" rx="3" ry="3" width="300" height="6" />
+                <rect x="110" y="88" rx="3" ry="3" width="178" height="6" />
+                <rect width="100" height="100" />
+              </ContentLoader>
+            ))
           : items.map((item, key) => (
               <ContentLoader
                 key={key}

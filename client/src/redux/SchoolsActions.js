@@ -157,6 +157,19 @@ console.log(page)
     })
     .catch((err) => dispatch(getError(err.message)));
 };
+
+export const getAllSchoolsPageAdmin = (page) => (dispatch) => {
+
+console.log(page)
+  axios
+    .get(`/colegios?limit=5&page=${page}`)
+    .then((res) => {
+      dispatch(getPagination(res.data));
+      dispatch(getSchools(res.data.colegios));
+    })
+    .catch((err) => dispatch(getError(err.message)));
+};
+
 export const getSchoolDetail = (id) => (dispatch) => {
   dispatch(isLoading());
   axios

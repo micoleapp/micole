@@ -33,6 +33,7 @@ export default function PageColegio() {
           input={Input}
           data={allschools && allschools}
           isLoading={loading && loading}
+          page={page}
         />
       </div>
       <Box
