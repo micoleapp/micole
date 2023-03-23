@@ -75,31 +75,26 @@ export default function CardColegio({ input, data, isLoading }) {
       <>
         {isActive === true && (
           <div className={style.itemDiv}>
-            {/* {isLoading && <div className={style.loader}></div>} */}
-
             <Button
               onClick={toggleBtn}
               variant="outlined"
               sx={{ fontFamily: "Poppins", fontSize: "1.4vh" }}
             >
-              {Toggle === false && isLoading === false
-                ? "Desactivar"
-                : "Activar"}
-              {Toggle === true && isLoading === true&&
-               <div className={style.loader}></div>}
+              {/* {Toggle === false ? "Desactivar" : "Activar"} */}
+              Desactivar
+       
             </Button>
           </div>
         )}
         {isActive === false && (
           <div className={style.itemDiv}>
-            {/* {isLoading && <div className={style.loader}></div>} */}
-
             <Button
               variant="outlined"
               sx={{ fontFamily: "Poppins", fontSize: "1.4vh" }}
               onClick={toggleBtn}
             >
-              {Toggle === false ? "Activar" : "Desactivar"}
+              {/* {Toggle === false ?  "Activar": "Desactivar"} */}
+              Activar
             </Button>
           </div>
         )}
@@ -107,7 +102,7 @@ export default function CardColegio({ input, data, isLoading }) {
     );
   }
 
-  // useEffect(() => {}, [data]);
+  useEffect(() => {}, [data]);
 
   return (
     <>
