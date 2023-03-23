@@ -16,6 +16,8 @@ router.post("/notification", async (req, res) => {
   var colegio;
   var fecha;
   var planVencido;
+  var today = new Date();
+  var fechaHoy = today.toISOString().split("T")[0];
 
   switch (topic) {
     case "payment":
@@ -24,13 +26,6 @@ router.post("/notification", async (req, res) => {
 
       merchantOrder = await mercadopago.merchant_orders.findById(
         payment.body.order.id
-      );
-
-      fecha = merchantOrder.body.payments[0].date_approved;
-      fecha = new Date(fecha);
-
-      fecha.setMonth(
-        fecha.getMonth() + Number(merchantOrder.body.items[0].quantity)
       );
 
       ventas = await Ventas.findOne({
@@ -42,6 +37,7 @@ router.post("/notification", async (req, res) => {
 
       if (ventas && ventas.status === "Pending") {
         if (merchantOrder.body.payments[0].status === "approved") {
+          console.log("Venta aprobada*********************");
           ventas.status = "Paid";
           ventas.mp_payment_id = paymentId;
           ventas.InicioPlan = merchantOrder.body.payments[0].date_approved;
@@ -58,6 +54,19 @@ router.post("/notification", async (req, res) => {
             },
           });
 
+          if (fechaHoy <= planVencido.vencimientoPlan) {
+            fecha = new Date(planVencido.vencimientoPlan);
+            fecha.setMonth(
+              fecha.getMonth() + Number(merchantOrder.body.items[0].quantity)
+            );
+          } else {
+            fecha = merchantOrder.body.payments[0].date_approved;
+            fecha = new Date(fecha);
+
+            fecha.setMonth(
+              fecha.getMonth() + Number(merchantOrder.body.items[0].quantity)
+            );
+          }
           planVencido.activo = false;
           await ventas.setPlan_Pago(plan);
           await ventas.setColegio(idColegio);
