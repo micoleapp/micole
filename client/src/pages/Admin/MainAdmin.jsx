@@ -13,6 +13,7 @@ import PageAfiliaciones from "./PageAfiliaciones/PageAfiliaciones";
 
 import { getAllSchools } from "../../redux/SchoolsActions";
 import { useDispatch } from "react-redux";
+import VacanteAdmin from "./PageVacantes/VacanteAdmin";
 export default function MainAdmin() {
   const [page, setPage] = React.useState(0);
   const [isOpen, setOpen] = useState(false);
@@ -202,7 +203,7 @@ export default function MainAdmin() {
           </div>
         ) : page === 2 ? (
           <div className="min-h-screen">
-            <h1>Vacantes</h1>
+           <VacanteAdmin/>
           </div>
         ) : page === 3 ? (
           <div className="min-h-screen">
