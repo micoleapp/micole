@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { getGradosByNivel } = require("../controllers/gradoController.js");
 const router = Router();
-const { Grado } = require("../db.js");
+const { Grado, Nivel } = require("../db.js");
 
 //------- PEDIR TODOS LOS GRADOS A LA BD--------
 router.get("/", async (req, res) => {
@@ -18,22 +18,29 @@ router.get("/", async (req, res) => {
 });
 //------- POST A GRADO--------
 router.post("/", async (req, res) => {
-  const { nombre_grado } = req.body;
+  const { nombre_grado, NivelId } = req.body;
   try {
+    const ultimoGrado = await Grado.findOne({
+      order: [["id", "DESC"]],
+    });
     const [grado, created] = await Grado.findOrCreate({
       where: {
+        id: Number(ultimoGrado.id) + 1,
         nombre_grado: nombre_grado,
       },
     });
+    await grado.setNivel(NivelId);
     if (created) {
-      grado.nombre_grado = nombre_grado;
-      grado.save();
       res.status(200).json(grado);
     } else {
-      res.status(500).json([{ error: "Grado existente" }]);
+      res.status(501).json({
+        message: "Nivel existente",
+      });
     }
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(501).json({
+      message: "Nivel existente",
+    });
   }
 });
 
