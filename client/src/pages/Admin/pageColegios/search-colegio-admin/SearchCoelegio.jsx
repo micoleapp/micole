@@ -9,13 +9,17 @@ import { useState } from "react";
 
 import { Button, IconButton, Typography } from "@mui/material";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getColegiosSearch } from "../../../../redux/SchoolsActions";
 export default function SearchCoelegio({ handlerInput, data , nroColegios }) {
   const [OptionSelected, setOptionSelected] = useState("");
-
+  const  dispatch   = useDispatch()
+  // "http://localhost:3001/colegios?limit=10&page=1&search="mateo""
   const SubmitSearch = (event) => {
     handlerInput(OptionSelected);
+    dispatch(getColegiosSearch(OptionSelected))
   };
+
 console.log(OptionSelected)
   return (
     <>
