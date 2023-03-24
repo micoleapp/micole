@@ -1,21 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GridVacantes from "../../../components/GridVacantes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Box from "@mui/material/Box";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { getOneSchool } from "../../../redux/SchoolsSlice";
+import { useDispatch } from "react-redux";
 export default function VacanteAdmin() {
   const [vacantes, setVacantes] = useState(0);
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
   const yearNow = new Date().getFullYear();
+  const dispatch = useDispatch()
+
+  
   return (
     // <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
     //       <GridVacantes/>
     // </div>
     <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
       <h1 className="text-2xl">Vacantes disponibles</h1>
-      <small>
+  
+  
+  
+  
+      {/* <small>
         Debera enviar el formulario de al menos 1 de los 3 años antes de
         continuar
       </small>
@@ -60,7 +69,7 @@ export default function VacanteAdmin() {
       </button>
       {vacantes === 2 && (
         <GridVacantes setVacantesOff={setVacantesOffThree} año={yearNow + 2} />
-      )}
+      )} */}
     </div>
   );
 }

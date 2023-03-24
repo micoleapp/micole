@@ -1,22 +1,30 @@
 import { Box, Pagination } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllSchoolsPage, getColegiosSearch } from "../../../redux/SchoolsActions";
-
+import {
+  getAllSchoolsPage,
+  getColegiosSearch,
+  getNombresColegios,
+} from "../../../redux/SchoolsActions";
+import axios from "axios";
 import CardColegio from "./card-colegio-admin/CardColegio";
 import SearchCoelegio from "./search-colegio-admin/SearchCoelegio";
+import { getNombreColegios } from "../../../redux/SchoolsSlice";
 export default function PageColegio() {
   const dispatch = useDispatch();
   const [page, setPage] = React.useState(1);
-  const { allschools, pagination, loading } = useSelector(
+  const [data, setData] = React.useState();
+  const { allschools, pagination, loading, nameColegio } = useSelector(
     (state) => state.schools
   );
-
+  const url = "/colegios?limit=50&";
   const [Input, setInput] = useState("");
   useEffect(() => {
     dispatch(getAllSchoolsPage(page));
-  
+    dispatch(getNombresColegios());
   }, [page]);
+
+  console.log(data);
 
   const handlePageChange = (event, value) => {
     setPage(value);
@@ -27,9 +35,8 @@ export default function PageColegio() {
       <div style={{ display: "flex", flexDirection: "column", gap: "3vh" }}>
         <SearchCoelegio
           handlerInput={setInput}
-          nroColegios={allschools?.length}
-          data={allschools && allschools}
-       
+          nroColegios={nameColegio?.length}
+          data={nameColegio &&nameColegio}
         />
         <CardColegio
           input={Input}
