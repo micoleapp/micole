@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 import { AiOutlineSearch } from "react-icons/ai";
 import Pagination from "@mui/material/Pagination";
 import Modal from "@mui/material/Modal";
-import { getAllInfraestructura } from "../../../redux/SchoolsActions";
+import { getAllAfiliaciones } from "../../../redux/SchoolsActions";
 const styleModal = {
   position: "absolute",
   top: "50%",
@@ -27,30 +27,30 @@ const styleModal = {
   borderRadius: "10px",
   p: 4,
 };
-export default function PageInfraestructura() {
+export default function PageAfiliaciones() {
   const dispatch = useDispatch();
-  const { infraestructura } = useSelector((state) => state.schools);
+  const { afiliaciones } = useSelector((state) => state.schools);
 
   const [newInfraestructura, setNewInfraestructura] = useState({
-    nombre_infraestructura: "",
-    imagen: "",
-    categoriaId: "",
+    nombre_afiliacion: "",
+    logo: "",
+    Afiliacion_tipo_Id: "",
   });
 
   const newArray = [];
 
-  for (let i = 0; i < infraestructura?.length; i++) {
+  for (let i = 0; i < afiliaciones?.length; i++) {
     const index = newArray.findIndex(
       (obj) =>
-        obj.InfraestructuraTipoId ===
-          infraestructura[i].InfraestructuraTipoId &&
-        obj.Infraestructura_tipo.infraestructura_tipo ===
-          infraestructura[i].Infraestructura_tipo.infraestructura_tipo
+        obj.Afiliacion_tipo_Id ===
+        afiliaciones[i].Afiliacion_tipo_Id &&
+        obj.Afiliacion_tipo.afiliacion_tipo ===
+        afiliaciones[i].Afiliacion_tipo.afiliacion_tipo
     );
     if (index === -1) {
       newArray.push({
-        InfraestructuraTipoId: infraestructura[i].InfraestructuraTipoId,
-        Infraestructura_tipo: infraestructura[i].Infraestructura_tipo,
+        Afiliacion_tipo_Id: afiliaciones[i].Afiliacion_tipo_Id,
+        Afiliacion_tipo: afiliaciones[i].Afiliacion_tipo,
       });
     }
   }
@@ -80,7 +80,7 @@ export default function PageInfraestructura() {
       );
       setNewInfraestructura({
         ...newInfraestructura,
-        imagen: res.data.secure_url,
+        logo: res.data.secure_url,
       });
     } catch (error) {
       console.log(error);
@@ -100,18 +100,18 @@ export default function PageInfraestructura() {
     e.preventDefault();
     try {
       axios
-        .post("/infraestructuras", newInfraestructura)
+        .post("/afiliaciones", newInfraestructura)
         .then((res) => {
           Swal.fire({
             icon: "success",
-            title: "Infraestructura creada correctamente",
+            title: "Afiliacion creada correctamente",
           });
           setNewInfraestructura({
-            nombre_infraestructura: "",
-            imagen: "",
-            categoriaId: "",
+            nombre_afiliacion: "",
+            logo: "",
+            Afiliacion_tipo_Id: "",
           });
-          dispatch(getAllInfraestructura());
+          dispatch(getAllAfiliaciones());
 
           setSpanOne(false);
           setFile(null);
@@ -131,9 +131,9 @@ export default function PageInfraestructura() {
 
   const disabledInfra = () => {
     if (
-      newInfraestructura.nombre_infraestructura === "" ||
-      newInfraestructura.imagen === "" ||
-      newInfraestructura.categoriaId === ""
+      newInfraestructura.nombre_afiliacion === "" ||
+      newInfraestructura.logo === "" ||
+      newInfraestructura.Afiliacion_tipo_Id === ""
     ) {
       return true;
     }
@@ -152,13 +152,13 @@ export default function PageInfraestructura() {
       }).then((res) => {
         if (res.isConfirmed) {
           axios
-            .delete("/infraestructuras/" + id)
+            .delete("/afiliaciones/" + id)
             .then((res) => {
               Swal.fire({
                 icon: "success",
                 title: "Infraestructura eliminada correctamente",
               });
-              dispatch(getAllInfraestructura());
+              dispatch(getAllAfiliaciones());
             })
             .catch((err) => {
               Swal.fire({
@@ -189,7 +189,7 @@ export default function PageInfraestructura() {
     let filteredElements = filterElements(elements, searchTerm);
     if (categoria) {
       filteredElements = filteredElements.filter(
-        (element) => element.InfraestructuraTipoId === categoria
+        (element) => element.Afiliacion_tipo_Id === categoria
       );
     }
     const start = (page - 1) * itemsPerPage;
@@ -202,7 +202,7 @@ export default function PageInfraestructura() {
   };
   const filterElements = (elements, searchTerm) => {
     return elements.filter((element) =>
-      element.nombre_infraestructura
+      element.nombre_afiliacion
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
     );
@@ -218,20 +218,20 @@ export default function PageInfraestructura() {
   };
   const handleEditInfra = (id) => {
     handleOpenModal();
-    const newInfra = infraestructura.find((infra) => infra.id === id);
+    const newInfra = afiliaciones.find((infra) => infra.id === id);
     setEditedInfra({
       id: newInfra.id,
-      nombre_infraestructura: newInfra.nombre_infraestructura,
-      imagen: newInfra.imagen,
-      categoriaId: newInfra.InfraestructuraTipoId,
+      nombre_afiliacion: newInfra.nombre_afiliacion,
+      logo: newInfra.logo,
+      Afiliacion_tipo_Id: newInfra.Afiliacion_tipo_Id,
     });
   };
 
   const [editedInfra, setEditedInfra] = useState({
     id: "",
-    nombre_infraestructura: "",
-    imagen: "",
-    categoriaId: "",
+    nombre_afiliacion: "",
+    logo: "",
+    Afiliacion_tipo_Id: "",
   });
 
   const [previewEdit, setPreviewEdit] = useState(null);
@@ -248,7 +248,7 @@ export default function PageInfraestructura() {
         "https://api.cloudinary.com/v1_1/de4i6biay/image/upload",
         formData
       );
-      setEditedInfra({ ...editedInfra, imagen: res.data.secure_url });
+      setEditedInfra({ ...editedInfra, logo: res.data.secure_url });
       setHand(false);
       setSuccesEditImage(true);
     } catch (error) {
@@ -274,13 +274,13 @@ export default function PageInfraestructura() {
     e.preventDefault();
     try {
       axios
-        .put("/infraestructuras/" + editedInfra.id, editedInfra)
+        .put("/afiliaciones/" + editedInfra.id, editedInfra)
         .then((res) => {
           Swal.fire({
             icon: "success",
             title: "Infraestructura editada correctamente",
           });
-          dispatch(getAllInfraestructura());
+          dispatch(getAllAfiliaciones());
           setHand(false);
           setSpanOne(false);
           setSuccesEditImage(false);
@@ -302,22 +302,22 @@ export default function PageInfraestructura() {
     <div className="p-5 flex flex-col gap-4 mx-[50px] ">
       <>
         <h1 className="font-lg mb-4 font-medium">
-          Añadir nueva Infraestructura
+          Añadir nueva Afiliacion
         </h1>
         <form className="flex flex-col gap-4">
           <label htmlFor="nameInfraestructura" className="text-sm font-normal">
-            Nombre de la infraestructura
+            Nombre de la afiliacion
           </label>
           <input
             type="text"
             id="nameInfraestructura"
             name="nameInfraestructura"
             className="p-2 rounded-md border-2 lg:w-1/2 outline-none"
-            value={newInfraestructura.nombre_infraestructura}
+            value={newInfraestructura.nombre_afiliacion}
             onChange={(e) =>
               setNewInfraestructura({
                 ...newInfraestructura,
-                nombre_infraestructura: e.target.value,
+                nombre_afiliacion: e.target.value,
               })
             }
           />
@@ -328,19 +328,19 @@ export default function PageInfraestructura() {
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-type-select-standard"
-              value={newInfraestructura.categoriaId}
+              value={newInfraestructura.Afiliacion_tipo_Id}
               onChange={(e) => {
                 setNewInfraestructura({
                   ...newInfraestructura,
-                  categoriaId: e.target.value,
+                  Afiliacion_tipo_Id: e.target.value,
                 });
               }}
-              defaultValue={newInfraestructura.categoriaId}
+              defaultValue={newInfraestructura.Afiliacion_tipo_Id}
             >
               {newArray?.map((type, index) => (
-                <MenuItem value={type.InfraestructuraTipoId} key={type.index}>
+                <MenuItem value={type.Afiliacion_tipo_Id} key={type.index}>
                   <ListItemText
-                    primary={type.Infraestructura_tipo.infraestructura_tipo}
+                    primary={type.Afiliacion_tipo.afiliacion_tipo}
                   />
                 </MenuItem>
               ))}
@@ -400,11 +400,11 @@ export default function PageInfraestructura() {
           onClick={(e) => handleSubmitInfra(e)}
           className="p-2 flex font-medium mx-auto lg:mx-0 w-fit text-[#0061dd] rounded-md disabled:bg-black/20 disabled:text-black/40 bg-[#0061dd]/20 "
         >
-          Agregar infraestructura
+          Agregar afiliacion
         </button>
       </>
       <div className="mt-4">
-        <h1 className="font-lg mb-4 font-medium">Todas las infraestructuras</h1>
+        <h1 className="font-lg mb-4 font-medium">Todas las afiliaciones</h1>
         <div className="flex justify-between flex-col lg:flex-row items-center">
           <div className="flex items-center bg-white w-fit rounded-md h-min">
             <input
@@ -439,9 +439,9 @@ export default function PageInfraestructura() {
                 <ListItemText primary="Todos" />
               </MenuItem>
               {newArray.map((type, index) => (
-                <MenuItem value={type.InfraestructuraTipoId} key={index}>
+                <MenuItem value={type.Afiliacion_tipo_Id} key={index}>
                   <ListItemText
-                    primary={type.Infraestructura_tipo.infraestructura_tipo}
+                    primary={type.Afiliacion_tipo.afiliacion_tipo}
                   />
                 </MenuItem>
               ))}
@@ -450,7 +450,7 @@ export default function PageInfraestructura() {
         </div>
         <div className="flex flex-col gap-4">
           {getElementsForPage(
-            infraestructura,
+            afiliaciones,
             page,
             itemsPerPage,
             searchTerm,
@@ -463,20 +463,20 @@ export default function PageInfraestructura() {
               <div className="flex justify-around flex-col lg:flex-row gap-4 items-center">
                 <div className="flex flex-col lg:flex-row items-center gap-4">
                   <img
-                    src={infra.imagen}
+                    src={infra.logo}
                     alt=""
                     className="object-cover w-[80px] h-[80px] rounded-md"
                   />
                   <div className="flex flex-col gap-2 lg:w-[300px] items-center">
-                    <h2>Nombre infraestructura</h2>
+                    <h2>Nombre afiliacion</h2>
                     <h1 className="font-medium">
-                      {infra.nombre_infraestructura}
+                      {infra.nombre_afiliacion}
                     </h1>
                   </div>
                   <div className="flex flex-col gap-2 lg:w-[300px] items-center">
                     <h2>Categoria</h2>
                     <h1 className="font-medium">
-                      {infra.Infraestructura_tipo.infraestructura_tipo}
+                      {infra.Afiliacion_tipo.afiliacion_tipo}
                     </h1>
                   </div>
                 </div>
@@ -501,8 +501,8 @@ export default function PageInfraestructura() {
           ))}
           <Pagination
             count={Math.ceil(
-              filterElements(infraestructura, searchTerm).filter((element) =>
-                categoria ? element.InfraestructuraTipoId === categoria : true
+              filterElements(afiliaciones, searchTerm).filter((element) =>
+                categoria ? element.Afiliacion_tipo_Id === categoria : true
               ).length / itemsPerPage
             )}
             page={page}
@@ -522,18 +522,18 @@ export default function PageInfraestructura() {
               htmlFor="nameInfraestructura"
               className="text-sm font-normal"
             >
-              Nombre de la infraestructura
+              Nombre de la afiliacion
             </label>
             <input
               type="text"
               id="nameInfraestructura"
               name="nameInfraestructura"
               className="p-2 rounded-md border-2 outline-none"
-              value={editedInfra.nombre_infraestructura}
+              value={editedInfra.nombre_afiliacion}
               onChange={(e) =>
                 setEditedInfra({
                   ...editedInfra,
-                  nombre_infraestructura: e.target.value,
+                  nombre_afiliacion: e.target.value,
                 })
               }
             />
@@ -544,20 +544,20 @@ export default function PageInfraestructura() {
               <Select
                 labelId="demo-simple-select-standard-label"
                 id="demo-type-select-standard"
-                value={editedInfra.categoriaId}
+                value={editedInfra.Afiliacion_tipo_Id}
                 onChange={(e) => {
                   setEditedInfra({
                     ...editedInfra,
-                    categoriaId: e.target.value,
+                    Afiliacion_tipo_Id: e.target.value,
                   });
                 }}
-                defaultValue={editedInfra.categoriaId}
+                defaultValue={editedInfra.Afiliacion_tipo_Id}
               >
                 <MenuItem></MenuItem>
                 {newArray?.map((type, index) => (
-                  <MenuItem value={type.InfraestructuraTipoId} key={type.index}>
+                  <MenuItem value={type.Afiliacion_tipo_Id} key={type.index}>
                     <ListItemText
-                      primary={type.Infraestructura_tipo.infraestructura_tipo}
+                      primary={type.Afiliacion_tipo.afiliacion_tipo}
                     />
                   </MenuItem>
                 ))}
@@ -603,7 +603,7 @@ export default function PageInfraestructura() {
             )}
 
             <img
-              src={editedInfra.imagen}
+              src={editedInfra.logo}
               alt=""
               className="object-cover mt-5 rounded-md h-[100px] w-[100px] mx-auto"
             />

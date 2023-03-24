@@ -9,6 +9,7 @@ import { AiOutlineLogout } from "react-icons/ai";
 import Hamburger from "hamburger-react";
 import PageColegio from "./pageColegios/PageColegio";
 import PageInfraestructura from "./PageInfraestructura/PageInfraestructura";
+import PageAfiliaciones from "./PageAfiliaciones/PageAfiliaciones";
 
 import { getAllSchools } from "../../redux/SchoolsActions";
 import { useDispatch } from "react-redux";
@@ -209,7 +210,7 @@ export default function MainAdmin() {
           </div>
         ) : page === 4 ? (
           <div className="min-h-screen">
-            <h1>Afiliaciones</h1>
+            <PageAfiliaciones/>
           </div>
         ) : page === 5 ? (
           <div className="min-h-screen">
