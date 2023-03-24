@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import FormatListNumberedOutlinedIcon from "@mui/icons-material/FormatListNumberedOutlined";
@@ -8,9 +8,20 @@ import { GiHexagonalNut } from "react-icons/gi";
 import { AiOutlineLogout } from "react-icons/ai";
 import Hamburger from "hamburger-react";
 import PageColegio from "./pageColegios/PageColegio";
+import PageInfraestructura from "./PageInfraestructura/PageInfraestructura";
+
+import { getAllSchools } from "../../redux/SchoolsActions";
+import { useDispatch } from "react-redux";
 export default function MainAdmin() {
   const [page, setPage] = React.useState(0);
   const [isOpen, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllSchools());
+   
+  }, []);
+
+  // useEffect(() => {}, [allschools]);
   return (
     <>
    
@@ -194,7 +205,7 @@ export default function MainAdmin() {
           </div>
         ) : page === 3 ? (
           <div className="min-h-screen">
-            <h1>Infraestructura</h1>
+            <PageInfraestructura/>
           </div>
         ) : page === 4 ? (
           <div className="min-h-screen">
