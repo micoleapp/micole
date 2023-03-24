@@ -33,10 +33,10 @@ router.get('/', async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
-  const {search, order} = req.query;
+  const { search, order } = req.query;
   let where = {};
   let orderBy = null;
-  
+
   if (search) {
     where = {
       nombre_colegio: {
@@ -64,7 +64,16 @@ router.get('/', async (req, res) => {
   try {
     const totalColegios = await Colegio.count({ where });
     const colegios = await Colegio.findAll({
-      attributes: ['id', 'nombre_colegio', 'direccion', 'telefono', 'isActive'],
+      attributes: [
+        'id',
+        'nombre_colegio',
+        'direccion',
+        'telefono',
+        'isActive',
+        'primera_imagen',
+        'logo',
+        'createdAt'
+      ],
       include: {
         model: Plan_Pago,
         attributes: ['id', 'nombre_plan_pago'],
@@ -101,7 +110,8 @@ router.get('/:Colegio_id', async (req, res) => {
         Number(addVisualizacion.visualizaciones) + 1;
       await addVisualizacion.save();
     }
-    const cole = await Colegio.findByPk(Colegio_id, {
+    const cole = await Colegio.findAll({
+      where: { id: [Colegio_id] },
       include: [
         {
           model: Nivel,

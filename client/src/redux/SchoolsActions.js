@@ -170,6 +170,18 @@ console.log(page)
     .catch((err) => dispatch(getError(err.message)));
 };
 
+export const getColegiosSearch = (Input) => (dispatch) => {
+  // "http://localhost:3001/colegios?limit=10&page=1&search="mateo""
+  console.log(Input)
+    axios
+      .get(`/colegios?&search=${Input}`)
+      .then((res) => {
+        dispatch(getPagination(res.data));
+        dispatch(getSchools(res.data.colegios));
+      })
+      .catch((err) => dispatch(getError(err.message)));
+  };
+
 export const getSchoolDetail = (id) => (dispatch) => {
   dispatch(isLoading());
   axios

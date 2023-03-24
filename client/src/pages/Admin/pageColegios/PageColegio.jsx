@@ -1,7 +1,7 @@
 import { Box, Pagination } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllSchoolsPage } from "../../../redux/SchoolsActions";
+import { getAllSchoolsPage, getColegiosSearch } from "../../../redux/SchoolsActions";
 
 import CardColegio from "./card-colegio-admin/CardColegio";
 import SearchCoelegio from "./search-colegio-admin/SearchCoelegio";
@@ -15,12 +15,13 @@ export default function PageColegio() {
   const [Input, setInput] = useState("");
   useEffect(() => {
     dispatch(getAllSchoolsPage(page));
+  
   }, [page]);
 
   const handlePageChange = (event, value) => {
     setPage(value);
   };
-
+  // "http://localhost:3001/colegios?limit=10&page=1&search="mateo""
   return (
     <>
       <div style={{ display: "flex", flexDirection: "column", gap: "3vh" }}>
@@ -28,6 +29,7 @@ export default function PageColegio() {
           handlerInput={setInput}
           nroColegios={allschools?.length}
           data={allschools && allschools}
+       
         />
         <CardColegio
           input={Input}
