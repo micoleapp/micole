@@ -12,7 +12,9 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { AiOutlineSearch } from "react-icons/ai";
 import Pagination from '@mui/material/Pagination';
+import { getAllInfraestructura } from "../../../redux/SchoolsActions";
 export default function PageInfraestructura() {
+  const dispatch = useDispatch()
   const { infraestructura } = useSelector((state) => state.schools);
 
   const [newInfraestructura, setNewInfraestructura] = useState({
@@ -95,6 +97,8 @@ export default function PageInfraestructura() {
             imagen: "",
             categoriaId: "",
           });
+    dispatch(getAllInfraestructura());
+
           setSpanOne(false);
           setFile(null);
           setPreviewImage(null);
@@ -140,7 +144,11 @@ export default function PageInfraestructura() {
               icon: "success",
               title: "Infraestructura eliminada correctamente",
             });
-          })
+    dispatch(getAllInfraestructura());
+
+          }
+          
+          )
           .catch(err=>{
             Swal.fire({
               icon: "error",
