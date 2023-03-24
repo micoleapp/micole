@@ -42,7 +42,7 @@ const types = [
     value: "mayor_precio_pension",
     label: "Mayor Precio Pensión",
     onClick: () => {
-      console.log("Mayor Precio");    
+      console.log("Mayor Precio");
     },
   },
   {
@@ -56,8 +56,8 @@ const types = [
     value: "",
     label: "",
     onClick: () => {
-      console.log("divider")
-    }
+      console.log("divider");
+    },
   },
   {
     value: "mayor_precio_matricula",
@@ -77,9 +77,9 @@ const types = [
     value: "",
     label: "",
     onClick: () => {
-      console.log("divider")
-    }
-  },  
+      console.log("divider");
+    },
+  },
   {
     value: "mayor_precio_ingreso",
     label: "Mayor Precio Ingreso",
@@ -98,9 +98,9 @@ const types = [
     value: "",
     label: "",
     onClick: () => {
-      console.log("divider")
-    }
-  },  
+      console.log("divider");
+    },
+  },
   {
     value: "mayor_rating",
     label: "Mayor Rating",
@@ -166,7 +166,6 @@ function ListSchool() {
   const [value1, setValue1] = React.useState([0, 4000]);
   const [rating, setRating] = React.useState(null);
 
-
   const handleChange1 = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
       return;
@@ -206,9 +205,9 @@ function ListSchool() {
     categories,
     pagination,
     dificultades,
-    metodos
-  } = useSelector((state) => state.schools);  
-/*   useEffect(() => {
+    metodos,
+  } = useSelector((state) => state.schools);
+  /*   useEffect(() => {
     console.log(data);
   }, [order]); */
   const [dificultadesArray, setDificultadesArray] = useState([]);
@@ -237,9 +236,9 @@ function ListSchool() {
     ingreso: ingresoName,
     order: order,
     dificultades: dificultadesArray,
-    metodos: metodosArray
+    metodos: metodosArray,
   };
-  console.log(data)
+  console.log(data);
   const handleSubmitData = (e) => {
     e.preventDefault();
     setPage(1);
@@ -248,9 +247,9 @@ function ListSchool() {
 
   const handleSort = (value) => {
     setPage(1);
-    setOrder(value)
+    setOrder(value);
   };
-  const goToDetails = (id) => {
+  const goToDetails = (id,lista) => {
     if (gradoName.length === 0 || ingresoName.length === 0) {
       Swal.fire({
         icon: "error",
@@ -259,7 +258,7 @@ function ListSchool() {
       });
       return;
     } else {
-      navigate(`/schooldetail/${id}?grado=${gradoName}&ingreso=${ingresoName}`);
+      navigate(`/schooldetail/${id}?grado=${gradoName}&ingreso=${ingresoName}&lista=${lista}`);
     }
   };
 
@@ -277,9 +276,11 @@ function ListSchool() {
     );
   }
 
-  const handlePageChange = (event,value) => {
+  const handlePageChange = (event, value) => {
     setPage(value);
-  }
+  };
+
+  console.log(ingresoName)
 
   return (
     <div
@@ -325,7 +326,9 @@ function ListSchool() {
                   <FontAwesomeIcon
                     size="lg"
                     icon={faArrowDown}
-                    className={`${toggleDistrits ? "-rotate-180" : ""} duration-200`}
+                    className={`${
+                      toggleDistrits ? "-rotate-180" : ""
+                    } duration-200`}
                   />
                 </button>
               </div>
@@ -376,7 +379,9 @@ function ListSchool() {
                   <FontAwesomeIcon
                     size="lg"
                     icon={faArrowDown}
-                    className={`${toggleTypes ? "-rotate-180" : ""} duration-200`}
+                    className={`${
+                      toggleTypes ? "-rotate-180" : ""
+                    } duration-200`}
                   />
                 </button>
               </div>
@@ -386,27 +391,29 @@ function ListSchool() {
                 }
               >
                 <FormGroup>
-                  {categories && categories.length > 0 && categories?.map((cat) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={
-                            categorias == cat.id || categoriaParam == cat.id
-                          }
-                          onChange={(event, target) => {
-                            if (target) {
-                              setCategoriaParam(cat.id);
-                              setCategorias(cat.id);
-                            } else {
-                              setCategoriaParam(null);
-                              setCategorias([]);
+                  {categories &&
+                    categories.length > 0 &&
+                    categories?.map((cat) => (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={
+                              categorias == cat.id || categoriaParam == cat.id
                             }
-                          }}
-                        />
-                      }
-                      label={cat.nombre_categoria}
-                    />
-                  ))}
+                            onChange={(event, target) => {
+                              if (target) {
+                                setCategoriaParam(cat.id);
+                                setCategorias(cat.id);
+                              } else {
+                                setCategoriaParam(null);
+                                setCategorias([]);
+                              }
+                            }}
+                          />
+                        }
+                        label={cat.nombre_categoria}
+                      />
+                    ))}
                 </FormGroup>
               </div>
             </div>
@@ -420,7 +427,9 @@ function ListSchool() {
                   <FontAwesomeIcon
                     size="lg"
                     icon={faArrowDown}
-                    className={`${toggleGrado ? "-rotate-180" : ""} duration-200`}
+                    className={`${
+                      toggleGrado ? "-rotate-180" : ""
+                    } duration-200`}
                   />
                 </button>
               </div>
@@ -510,13 +519,17 @@ function ListSchool() {
                   <FontAwesomeIcon
                     size="lg"
                     icon={faArrowDown}
-                    className={`${toggleDificultad ? "-rotate-180" : ""} duration-200`}
+                    className={`${
+                      toggleDificultad ? "-rotate-180" : ""
+                    } duration-200`}
                   />
                 </button>
               </div>
               <div
                 className={
-                  toggleDificultad ? "block h-[150px] overflow-y-scroll" : "hidden"
+                  toggleDificultad
+                    ? "block h-[150px] overflow-y-scroll"
+                    : "hidden"
                 }
               >
                 <FormGroup>
@@ -526,16 +539,20 @@ function ListSchool() {
                       control={
                         <Checkbox
                           size="small"
-                          checked={
-                            dificultadesArray.includes(dif.id_dificultad)
-                          }
+                          checked={dificultadesArray.includes(
+                            dif.id_dificultad
+                          )}
                           onChange={(event, target) => {
                             if (target) {
-                              setDificultadesArray([...dificultadesArray, dif.id_dificultad]);
+                              setDificultadesArray([
+                                ...dificultadesArray,
+                                dif.id_dificultad,
+                              ]);
                             } else {
                               setDificultadesArray(
                                 dificultadesArray.filter(
-                                  (dificultad) => dificultad !== dif.id_dificultad
+                                  (dificultad) =>
+                                    dificultad !== dif.id_dificultad
                                 )
                               );
                             }
@@ -551,14 +568,16 @@ function ListSchool() {
             <div>
               <div className="flex items-center gap-5 z-50 ">
                 <Typography id="input-slider" gutterBottom fontWeight="bold">
-                Métodos pedagógicos
+                  Métodos pedagógicos
                 </Typography>
                 <button onClick={() => setToggleMetodo(!toggleMetodo)}>
                   {" "}
                   <FontAwesomeIcon
                     size="lg"
                     icon={faArrowDown}
-                    className={`${toggleMetodo ? "-rotate-180" : ""} duration-200`}
+                    className={`${
+                      toggleMetodo ? "-rotate-180" : ""
+                    } duration-200`}
                   />
                 </button>
               </div>
@@ -573,9 +592,7 @@ function ListSchool() {
                       key={index}
                       control={
                         <Checkbox
-                          checked={
-                            metodosArray.includes(dif.id_metodo)
-                          }
+                          checked={metodosArray.includes(dif.id_metodo)}
                           onChange={(event, target) => {
                             if (target) {
                               setMetodosArray([...metodosArray, dif.id_metodo]);
@@ -686,7 +703,8 @@ function ListSchool() {
           <div className="flex items-center justify-between drop-shadow-md">
             <small>
               Mostrando{" "}
-              <span className="font-semibold">{allschools.length}</span> de <span className="font-semibold"> {pagination?.count}</span>{" "}
+              <span className="font-semibold">{allschools.length}</span> de{" "}
+              <span className="font-semibold"> {pagination?.count}</span>{" "}
               {/* de <span className="font-semibold">{pagination?.count}</span>{" "} */}
               resultados{" "}
             </small>
@@ -751,20 +769,8 @@ function ListSchool() {
                               vac.GradoId === gradoName &&
                               vac.año === ingresoName
                           )[0]?.hasOwnProperty("año") && (
-                            <span className="absolute bg-black/80 text-white p-1 px-2 rounded-md top-14 xl:top-3 xl:right-3 ml-3 w-fit">
-                              {school?.Vacantes?.length > 0 &&
-                                ingresoName &&
-                                gradoName &&
-                                school?.Vacantes?.filter(
-                                  (vac) =>
-                                    vac.GradoId === gradoName &&
-                                    vac.año === ingresoName
-                                )[0].hasOwnProperty("capacidad") &&
-                                school?.Vacantes?.filter(
-                                  (vac) =>
-                                    vac.GradoId === gradoName &&
-                                    vac.año === ingresoName
-                                )[0].hasOwnProperty("año") &&
+                            <span
+                              className={`absolute ${
                                 school?.Vacantes?.filter(
                                   (vac) =>
                                     vac.GradoId === gradoName &&
@@ -774,8 +780,48 @@ function ListSchool() {
                                     (vac) =>
                                       vac.GradoId === gradoName &&
                                       vac.año === ingresoName
-                                  )[0].alumnos_matriculados}{" "}
-                              Vacantes
+                                  )[0].alumnos_matriculados >
+                                0
+                                  ? "bg-green-500/80"
+                                  : "bg-red-500/80"
+                              } text-white p-1 px-2 rounded-md top-14 xl:top-3 xl:right-3 ml-3 w-fit`}
+                            >
+                              {school?.Vacantes?.length > 0 &&
+                              ingresoName &&
+                              gradoName &&
+                              school?.Vacantes?.filter(
+                                (vac) =>
+                                  vac.GradoId === gradoName &&
+                                  vac.año === ingresoName
+                              )[0].hasOwnProperty("capacidad") &&
+                              school?.Vacantes?.filter(
+                                (vac) =>
+                                  vac.GradoId === gradoName &&
+                                  vac.año === ingresoName
+                              )[0].hasOwnProperty("año") &&
+                              school?.Vacantes?.filter(
+                                (vac) =>
+                                  vac.GradoId === gradoName &&
+                                  vac.año === ingresoName
+                              )[0].capacidad -
+                                school?.Vacantes?.filter(
+                                  (vac) =>
+                                    vac.GradoId === gradoName &&
+                                    vac.año === ingresoName
+                                )[0].alumnos_matriculados >
+                                0
+                                ? school?.Vacantes?.filter(
+                                    (vac) =>
+                                      vac.GradoId === gradoName &&
+                                      vac.año === ingresoName
+                                  )[0].capacidad -
+                                  school?.Vacantes?.filter(
+                                    (vac) =>
+                                      vac.GradoId === gradoName &&
+                                      vac.año === ingresoName
+                                  )[0].alumnos_matriculados +
+                                  " Vacantes"
+                                : "No hay vacantes"}{" "}
                             </span>
                           )}
 
@@ -826,26 +872,80 @@ function ListSchool() {
                                 </div>
                               ))}
                             </div> */}
-                            
+
                             <div className="grid grid-cols-2 grid-rows-3 w-full gap-y-2">
-                              {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"> <span className="text-xl"><CiBag1></CiBag1></span> Cuota de ingreso: S/{" "}
-                                {school.Vacantes.filter(el=>el.año === ingresoName && el.GradoId === gradoName)[0]?.cuota_ingreso}
-                              </small> }
-                              <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><HiOutlineUsers></HiOutlineUsers></span> {school.numero_estudiantes} Alumnos</small>
-                              {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><FaRegMoneyBillAlt></FaRegMoneyBillAlt></span>Matricula: S/{" "}
-                              {school.Vacantes.filter(el=>el.año === ingresoName && el.GradoId === gradoName)[0]?.matricula}
-                              </small> }
-                              {school?.Categoria.length < 4 ?                               <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl text-gray-400"><ImAttachment></ImAttachment></span>{school?.Categoria?.map(cat=>
-                                cat.nombre_categoria
-                              ).join(', ')} </small> :                               <small className="text-gray-400 flex gap-1 items-center">
-                                <span className="text-xl text-gray-400"><ImAttachment></ImAttachment></span>{school?.Categoria?.slice(0,3).map(cat=>
-                                cat.nombre_categoria
-                              ).join(', ')}... +{school?.Categoria?.slice(3).length} </small>}
-                              {school.Vacantes.length > 0 && <small className="text-gray-400 flex gap-1 items-center"><span className="text-xl"><ImTicket></ImTicket></span>Pensión: S/{" "}
-                              {school.Vacantes.filter(el=>el.año === ingresoName && el.GradoId === gradoName)[0]?.cuota_pension}
-                              </small> }
-
-
+                              {school.Vacantes.length > 0 && (
+                                <small className="text-gray-400 flex gap-1 items-center">
+                                  {" "}
+                                  <span className="text-xl">
+                                    <CiBag1></CiBag1>
+                                  </span>{" "}
+                                  Cuota de ingreso: S/{" "}
+                                  {
+                                    school.Vacantes.filter(
+                                      (el) =>
+                                        el.año === ingresoName &&
+                                        el.GradoId === gradoName
+                                    )[0]?.cuota_ingreso
+                                  }
+                                </small>
+                              )}
+                              <small className="text-gray-400 flex gap-1 items-center">
+                                <span className="text-xl">
+                                  <HiOutlineUsers></HiOutlineUsers>
+                                </span>{" "}
+                                {school.numero_estudiantes} Alumnos
+                              </small>
+                              {school.Vacantes.length > 0 && (
+                                <small className="text-gray-400 flex gap-1 items-center">
+                                  <span className="text-xl">
+                                    <FaRegMoneyBillAlt></FaRegMoneyBillAlt>
+                                  </span>
+                                  Matricula: S/{" "}
+                                  {
+                                    school.Vacantes.filter(
+                                      (el) =>
+                                        el.año === ingresoName &&
+                                        el.GradoId === gradoName
+                                    )[0]?.matricula
+                                  }
+                                </small>
+                              )}
+                              {school?.Categoria.length < 4 ? (
+                                <small className="text-gray-400 flex gap-1 items-center">
+                                  <span className="text-xl text-gray-400">
+                                    <ImAttachment></ImAttachment>
+                                  </span>
+                                  {school?.Categoria?.map(
+                                    (cat) => cat.nombre_categoria
+                                  ).join(", ")}{" "}
+                                </small>
+                              ) : (
+                                <small className="text-gray-400 flex gap-1 items-center">
+                                  <span className="text-xl text-gray-400">
+                                    <ImAttachment></ImAttachment>
+                                  </span>
+                                  {school?.Categoria?.slice(0, 3)
+                                    .map((cat) => cat.nombre_categoria)
+                                    .join(", ")}
+                                  ... +{school?.Categoria?.slice(3).length}{" "}
+                                </small>
+                              )}
+                              {school.Vacantes.length > 0 && (
+                                <small className="text-gray-400 flex gap-1 items-center">
+                                  <span className="text-xl">
+                                    <ImTicket></ImTicket>
+                                  </span>
+                                  Pensión: S/{" "}
+                                  {
+                                    school.Vacantes.filter(
+                                      (el) =>
+                                        el.año === ingresoName &&
+                                        el.GradoId === gradoName
+                                    )[0]?.cuota_pension
+                                  }
+                                </small>
+                              )}
                             </div>
                           </div>
                           <div className="flex flex-col gap-2 justify-between">
@@ -853,13 +953,51 @@ function ListSchool() {
                               {school.Provincium.nombre_provincia},{" "}
                               {school.Distrito.nombre_distrito}{" "}
                             </h1>
-                            <button
-                              onClick={() => goToDetails(school.id)}
-                              className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#0061dd] w-max text-center font-semibold"
-                            >
-                              VER DETALLE
-                            </button>
-  
+                            
+                            {school?.Vacantes?.length > 0 &&
+                              school?.Vacantes?.filter(
+                                (vac) =>
+                                  vac.GradoId === gradoName &&
+                                  vac.año === ingresoName
+                              )[0]?.hasOwnProperty("capacidad") &&
+                              school?.Vacantes?.filter(
+                                (vac) =>
+                                  vac.GradoId === gradoName &&
+                                  vac.año === ingresoName
+                              )[0]?.hasOwnProperty("año") &&
+                              school?.Vacantes?.filter(
+                                (vac) =>
+                                  vac.GradoId === gradoName &&
+                                  vac.año === ingresoName
+                              )[0].capacidad -
+                                school?.Vacantes?.filter(
+                                  (vac) =>
+                                    vac.GradoId === gradoName &&
+                                    vac.año === ingresoName
+                                )[0].alumnos_matriculados >
+                                0
+                                ?                             <button
+                                onClick={() => goToDetails(school.id,false)}
+                                className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md disabled:bg-slate-500/20 disabled:text-white disabled:line-through p-2 text-[#0061dd] w-max text-center font-semibold"
+                              >
+                                VER DETALLE
+                              </button>
+                                : school?.Vacantes?.filter(
+                                  (vac) =>
+                                    vac.GradoId === gradoName &&
+                                    vac.año === ingresoName
+                                )[0]?.capacidad -
+                                  school?.Vacantes?.filter(
+                                    (vac) =>
+                                      vac.GradoId === gradoName &&
+                                      vac.año === ingresoName
+                                  )[0]?.alumnos_matriculados ==
+                                  0
+                                  ?   <button onClick={() => goToDetails(school.id,true)} className="bg-[#dcffe2] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#3cff7d] font-semibold">
+                                Lista de espera
+                              </button> : null}
+
+
                           </div>
                         </div>
 

@@ -1,38 +1,54 @@
+import { Box, Pagination } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import PaginationCitas from "../../../components/CardsCitas/Paginacion/PaginationCitas";
-import sliceIntoChunks from "../../../components/CardsCitas/Paginacion/utils/SliceCitas";
-import { getAllSchools } from "../../../redux/SchoolsActions";
+import { getAllSchoolsPage } from "../../../redux/SchoolsActions";
+
 import CardColegio from "./card-colegio-admin/CardColegio";
 import SearchCoelegio from "./search-colegio-admin/SearchCoelegio";
 export default function PageColegio() {
   const dispatch = useDispatch();
-  const { allschools } = useSelector((state) => state.schools);
-  const [colegio, setColegio] = useState([]);
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = React.useState(1);
+  const { allschools, pagination, loading } = useSelector(
+    (state) => state.schools
+  );
+
   const [Input, setInput] = useState("");
   useEffect(() => {
-    dispatch(getAllSchools());
-    let paginaColegios = sliceIntoChunks( allschools&&allschools, 5);
-    setColegio(paginaColegios);
-  }, []);
-  console.log(colegio);
-  console.log(Input);
+    dispatch(getAllSchoolsPage(page));
+  }, [page]);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   return (
     <>
-      {/* searh colegio */}
-
       <div style={{ display: "flex", flexDirection: "column", gap: "3vh" }}>
-        <SearchCoelegio handlerInput={setInput}   nroColegios={allschools?.length} data={ colegio&& colegio} />
-        <CardColegio input={Input} data={colegio&& colegio[page]} />
+        <SearchCoelegio
+          handlerInput={setInput}
+          nroColegios={allschools?.length}
+          data={allschools && allschools}
+        />
+        <CardColegio
+          input={Input}
+          data={allschools && allschools}
+          isLoading={loading && loading}
+          page={page}
+        />
       </div>
-
-      <PaginationCitas
-        nroPaginas={colegio?.length}
-        page={page}
-        setPage={setPage}
-      />
+      <Box
+        justifyContent={"start"}
+        alignItems={"center"}
+        display={"flex"}
+        sx={{ margin: "20px 0px" }}
+      >
+        <Pagination
+          count={pagination.pages}
+          onChange={handlePageChange}
+          page={page}
+          color="primary"
+        />
+      </Box>
     </>
   );
 }

@@ -61,12 +61,12 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre_infraestructura, slug, imagen } = req.body;
+    const { nombre_infraestructura, categoriaId, imagen } = req.body;
     const editedInfra = await Infraestructura.update(
       {
         nombre_infraestructura: nombre_infraestructura,
-        slug: slug,
         imagen: imagen,
+        InfraestructuraTipoId: categoriaId
       },
       { where: { id: id } }
     );
