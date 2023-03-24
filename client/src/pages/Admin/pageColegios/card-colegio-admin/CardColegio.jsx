@@ -217,7 +217,7 @@ export default function CardColegio({ input, data, isLoading, page }) {
 
                     {/*  plan */}
                     <div className={style.divThanos}>
-                      {/* //   Plan_Pago: { id: 1, nombre_plan_pago: 'Free' }, */}
+                     
                       <p> {ele.Plan_Pago.nombre_plan_pago}</p>
                     </div>
 
@@ -239,8 +239,8 @@ export default function CardColegio({ input, data, isLoading, page }) {
               <ContentLoader
                 key={key}
                 speed={3}
-                width={"100%"}
-                height={"100%"}
+                width={"50%"}
+                height={"50%"}
                 viewBox="0 0 500 120"
                 backgroundColor="#dcdce2"
                 foregroundColor="#ecebeb"
@@ -256,21 +256,21 @@ export default function CardColegio({ input, data, isLoading, page }) {
             ))
           : items.map((item, key) => (
               <ContentLoader
-                key={key}
-                speed={3}
-                width={"50%"}
-                height={"50%"}
-                viewBox="0 0 500 120"
-                backgroundColor="#dcdce2"
-                foregroundColor="#ecebeb"
-              >
-                {/* <rect x="110" y="8" rx="3" ry="3" width="120" height="10" /> */}
-                <rect x="110" y="25" rx="3" ry="3" width="100" height="6" />
-            
-                <rect x="110" y="56" rx="3" ry="3" width="310" height="6" />
-                <rect x="110" y="72" rx="3" ry="3" width="300" height="6" />
-                <rect x="110" y="88" rx="3" ry="3" width="178" height="6" />
-                <rect width="50" height="50" />
+              key={key}
+              speed={3}
+              width={"50%"}
+              height={"50%"}
+              viewBox="0 0 500 120"
+              backgroundColor="#dcdce2"
+              foregroundColor="#ecebeb"
+            >
+              <rect x="110" y="8" rx="3" ry="3" width="120" height="10" />
+              <rect x="110" y="25" rx="3" ry="3" width="100" height="6" />
+              <rect x="48" y="26" rx="3" ry="3" width="52" height="6" />
+              <rect x="110" y="56" rx="3" ry="3" width="310" height="6" />
+              <rect x="110" y="72" rx="3" ry="3" width="300" height="6" />
+              <rect x="110" y="88" rx="3" ry="3" width="178" height="6" />
+              <rect width="100" height="100" />
               </ContentLoader>
             ))}
       </div>

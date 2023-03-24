@@ -16,11 +16,11 @@ export default function PageColegio() {
   useEffect(() => {
     dispatch(getAllSchoolsPage(page));
   }, [page]);
-  console.log(Input);
+
   const handlePageChange = (event, value) => {
     setPage(value);
   };
-  console.log(pagination.pages);
+
   return (
     <>
       <div style={{ display: "flex", flexDirection: "column", gap: "3vh" }}>
