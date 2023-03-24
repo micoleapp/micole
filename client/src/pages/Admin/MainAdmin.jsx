@@ -12,6 +12,7 @@ import PageInfraestructura from "./PageInfraestructura/PageInfraestructura";
 
 import { getAllSchools } from "../../redux/SchoolsActions";
 import { useDispatch } from "react-redux";
+import PanelControl from "./PanelControl/PanelControl";
 export default function MainAdmin() {
   const [page, setPage] = React.useState(0);
   const [isOpen, setOpen] = useState(false);
@@ -193,7 +194,7 @@ export default function MainAdmin() {
       <section className="right w-full bg-[#f6f7f8] p-5 lg:px-31 lg:py-12">
         {page === 0 ? (
           <div className="min-h-screen">
-            <h1>Panel de Control</h1>
+            <PanelControl />
           </div>
         ) : page === 1 ? (
           <div className="min-h-screen">
