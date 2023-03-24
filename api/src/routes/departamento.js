@@ -21,20 +21,26 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const { nombre_departamento } = req.body;
   try {
+    const ultimoDepartameto = await Departamento.findOne({
+      order: [["id", "DESC"]],
+    });
     const [departament, created] = await Departamento.findOrCreate({
       where: {
+        id:Number(ultimoDepartameto.id)+1,
         nombre_departamento: nombre_departamento,
       },
     });
     if (created) {
-      departament.nombre_departamento = nombre_departamento;
-      departament.save();
       res.status(200).json(departament);
     } else {
-      res.status(500).json([{ error: "Departamento existente" }]);
+      res.status(501).json({
+        message: "Departamento existente",
+      });
     }
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(501).json({
+      message: "Departamento existente",
+    });
   }
 });
 

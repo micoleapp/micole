@@ -29,13 +29,11 @@ router.get("/", async (req, res) => {
 
 //------- POST A INFRAESTRUCTURA-------
 router.post("/", async (req, res) => {
-  const {  nombre_infraestructura, imagen, categoriaId } = req.body;
-  console.log(nombre_infraestructura+ "    "+ imagen + categoriaId);
+  const { nombre_infraestructura, imagen, categoriaId } = req.body;
   try {
     const ultimaInfraestructura = await Infraestructura.findOne({
       order: [["id", "DESC"]],
     });
-    console.log(ultimaInfraestructura.id);
     const [infraestructura, created] = await Infraestructura.findOrCreate({
       where: {
         id: Number(ultimaInfraestructura.id) + 1,
@@ -44,10 +42,8 @@ router.post("/", async (req, res) => {
         imagen: imagen,
       },
     });
-    console.log(infraestructura);
     await infraestructura.setInfraestructura_tipo(categoriaId);
     if (created) {
-      console.log("Infra creado exitosamente");
       res.status(200).json(infraestructura);
     } else {
       res.status(501).json({
@@ -55,9 +51,9 @@ router.post("/", async (req, res) => {
       });
     }
   } catch (err) {
-    res.status(500).json({
+    res.status(501).json({
       message: "Infraestructura existente",
-    });  
+    });
   }
 });
 
@@ -70,7 +66,7 @@ router.put("/:id", async (req, res) => {
       {
         nombre_infraestructura: nombre_infraestructura,
         imagen: imagen,
-        InfraestructuraTipoId: categoriaId
+        InfraestructuraTipoId: categoriaId,
       },
       { where: { id: id } }
     );

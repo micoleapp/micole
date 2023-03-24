@@ -19,23 +19,26 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const { nombre_nivel } = req.body;
   try {
+    const ultimoNivel = await Nivel.findOne({
+      order: [["id", "DESC"]],
+    });
     const [nivel, created] = await Nivel.findOrCreate({
       where: {
+        id:Number(ultimoNivel.id)+1,
         nombre_nivel: nombre_nivel,
       },
     });
     if (created) {
-      nivel.nombre_nivel = nombre_nivel;
-      nivel.save();
       res.status(200).json(nivel);
     } else {
-      res.status(500).json([{ error: "Nivel existente" }]);
+      res.status(500).json({ message: "Nivel existente" });
     }
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(501).json({
+      message: "Nivel existente",
+    });
   }
 });
-
 //--------------------PUT  NIVEL-------------------
 router.put("/:id", async (req, res) => {
   try {

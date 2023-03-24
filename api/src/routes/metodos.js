@@ -18,21 +18,27 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const { nombre_metodo } = req.body;
   try {
+    const ultimoMetodo = await Metodos.findOne({
+      order: [["id_metodo", "DESC"]],
+    });
+    console.log(ultimoMetodo);
     const [metodo, created] = await Metodos.findOrCreate({
       where: {
+        id_metodo:Number(ultimoMetodo.id_metodo)+1,
         nombre_metodo: nombre_metodo,
       },
     });
     if (created) {
-      console.log("Metodo creado exitosamente");
-      metodo.nombre_metodo = nombre_metodo;
-      metodo.save();
       res.status(200).json(metodo);
     } else {
-      res.status(500).json([{ error: "Metodo existente" }]);
+      res.status(501).json({
+        message: "Metodo existente",
+      });
     }
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(501).json({
+      message: "Metodo existente",
+    });
   }
 });
 
@@ -45,7 +51,7 @@ router.put("/:id", async (req, res) => {
       {
         nombre_metodo: nombre_metodo,
       },
-      { where: { id: id } }
+      { where: { id_metodo: id } }
     );
     res.json(editedMetodo);
   } catch (err) {
@@ -57,7 +63,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const deleteMetodo = await Metodos.findOne({ where: { id: id } });
+    const deleteMetodo = await Metodos.findOne({ where: { id_metodo: id } });
     await deleteMetodo.destroy();
     res.status(200).send({ message: "Metodo borrado" });
   } catch (err) {

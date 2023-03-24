@@ -18,21 +18,27 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const { nombre_dificultad } = req.body;
   try {
+    const ultimaDificultad = await Dificultades.findOne({
+      order: [["id_dificultad", "DESC"]],
+    });
+    
     const [dificultad, created] = await Dificultades.findOrCreate({
       where: {
+        id_dificultad: Number(ultimaDificultad.id_dificultad) + 1,
         nombre_dificultad: nombre_dificultad,
       },
     });
     if (created) {
-      console.log("Metodo creado exitosamente");
-      dificultad.nombre_dificultad = nombre_dificultad;
-      dificultad.save();
       res.status(200).json(dificultad);
     } else {
-      res.status(500).json([{ error: "Dificultad existente" }]);
+      res.status(501).json({
+        message: "Dificultad existente",
+      });
     }
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(501).json({
+      message: "Dificultad existente",
+    });
   }
 });
 
@@ -45,7 +51,7 @@ router.put("/:id", async (req, res) => {
       {
         nombre_dificultad: nombre_dificultad,
       },
-      { where: { id: id } }
+      { where: { id_dificultad: id } }
     );
     res.json(editedDificultad);
   } catch (err) {
@@ -57,7 +63,9 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const deleteDificultad = await Dificultades.findOne({ where: { id: id } });
+    const deleteDificultad = await Dificultades.findOne({
+      where: { id_dificultad: id },
+    });
     await deleteDificultad.destroy();
     res.status(200).send({ message: "Metodo borrado" });
   } catch (err) {
