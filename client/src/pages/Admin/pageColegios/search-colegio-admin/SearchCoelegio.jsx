@@ -2,60 +2,83 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
-import SearchIcon from "@mui/icons-material/Search";
 
+import SearchIcon from "@mui/icons-material/Search";
 import style from "./searchColegio.module.css";
 import { useState } from "react";
 
 import { Button, IconButton, Typography } from "@mui/material";
-
+import TuneIcon from "@mui/icons-material/Tune";
 import { useDispatch, useSelector } from "react-redux";
 import { getColegiosSearch } from "../../../../redux/SchoolsActions";
-export default function SearchCoelegio({ handlerInput, data , nroColegios }) {
+import SelectCRM from "../../../../components/CardsDrgAndDrp/SelectsCRM/SelectsCRM";
+export default function SearchCoelegio({ handlerInput, data, nroColegios }) {
   const [OptionSelected, setOptionSelected] = useState("");
-  const  dispatch   = useDispatch()
+  const dispatch = useDispatch();
   // "http://localhost:3001/colegios?limit=10&page=1&search="mateo""
   const SubmitSearch = (event) => {
     handlerInput(OptionSelected);
-    dispatch(getColegiosSearch(OptionSelected))
+    dispatch(getColegiosSearch(OptionSelected));
   };
 
-console.log(OptionSelected)
+  console.log(OptionSelected);
   return (
     <>
-    <div style={{display:'flex', gap:'1rem' ,alignItems:'center'}}>
-        <Typography
-        sx={{fontFamily:'Poppins', fontWeight:'600' , color:'#0061DF', fontSize:'1.4vh'}}
+      <div style={{ display: "flex", gap: "1rem", fontSize:'10px' ,alignItems: "center" }}>
+      <div className={style.FiltrosResponsive}>
+          <Typography
+          sx={{
+            fontFamily: "Poppins",
+            fontWeight: "600",
+            color: "#0061DF",
+            fontSize: "1.2vh",
+          }}
         >
-              {  nroColegios && nroColegios} Colegios
+          {nroColegios && nroColegios} Colegios
         </Typography>
+
+      </div>
       
-           <Autocomplete
-        sx={{ width: "40vh" }}
-        size='small'
-        id="Tipo"
-        freeSolo
-        onChange={(e, v) => setOptionSelected(v)}
-        options={data?.map((option) => option.nombre_colegio)}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            onChange={({ target }) => setOptionSelected(target.value)}
-            label="Buscar Colegio"
-           
-          />
-        )}
-      />
+        <Autocomplete
+          sx={{ width: "40vh", fontSize:'1vh' }}
+          size="small"
+          id="Tipo"
+          freeSolo
+          onChange={(e, v) => setOptionSelected(v)}
+          options={data?.map((option) => option.nombre_colegio)}
+          renderInput={(params) => (
+            <TextField
+            sx={{ fontSize:'1vh' }}
+              {...params}
+              onChange={({ target }) => setOptionSelected(target.value)}
+              label="Buscar Colegio"
+            />
+          )}
+        />
         <Button
-            size="small"
-            sx={{fontWeight:'600', height:'4vh'}}
+          
+          sx={{ fontWeight: "600", height: "4.2vh" }}
+          variant="contained"
+          onClick={SubmitSearch}
+        >
+          <SearchIcon />
+        </Button>
+        <div className={style.btnFiltroResponsive}>
+          <Button
+           
+            sx={{ fontWeight: "600", height: "4.2vh", backgroundColor:'#FFFF', color:'#0D263B' }}
             variant="contained"
             onClick={SubmitSearch}
           >
-            Buscar
+            <TuneIcon />
           </Button>
-    </div>
+        </div>
+        <div className={style.FiltrosResponsive}>
+               <SelectCRM label={"Estado"} filtro={"estado"} />
+        {/* <SelectCRM label={"Fecha"} filtro={"fecha"} /> */}
+        </div>
    
+      </div>
     </>
   );
 }

@@ -1,3 +1,18 @@
+.btnFiltroResponsive{
+  display: none;
+}
+.FiltrosResponsive{
+  display: flex;
+  flex-direction: row;
+}
+@media (max-width: 800px) {
+  .btnFiltroResponsive{
+    display: flex;
+  }
+  .FiltrosResponsive{
+    display:none;
+  }
+}
 /* .search {
     background-color: transparent;
     width: 60vh;
