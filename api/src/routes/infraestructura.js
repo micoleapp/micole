@@ -50,10 +50,14 @@ router.post("/", async (req, res) => {
       console.log("Infra creado exitosamente");
       res.status(200).json(infraestructura);
     } else {
-      res.status(500).json([{ error: "Infraestructura existente" }]);
+      res.status(501).json({
+        message: "Infraestructura existente",
+      });
     }
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({
+      message: "Infraestructura existente",
+    });  
   }
 });
 
