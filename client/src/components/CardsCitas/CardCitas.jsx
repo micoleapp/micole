@@ -44,9 +44,9 @@ export default function CardCitas({ data, filtros }) {
       axios
         .put(`/citas/activo/${iD}`, { activo: true })
         .then((res) => {
-          // dispatch(getCitaAgendadas());
+          dispatch(getCitaAgendadas());
 
-          Swal.fire("Exito", "Datos actualizados", "success");
+          Swal.fire("Exito", "Cita Confirmada", "success");
         })
         .catch((err) => {
           Swal.fire({
