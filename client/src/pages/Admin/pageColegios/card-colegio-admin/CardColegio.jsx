@@ -240,7 +240,7 @@ export default function CardColegio({ input, data, isLoading, page }) {
                 key={key}
                 speed={3}
                 width={"50%"}
-                height={"50%"}
+                height={"80%"}
                 viewBox="0 0 500 120"
                 backgroundColor="#dcdce2"
                 foregroundColor="#ecebeb"
@@ -259,7 +259,7 @@ export default function CardColegio({ input, data, isLoading, page }) {
               key={key}
               speed={3}
               width={"50%"}
-              height={"50%"}
+              height={"80%"}
               viewBox="0 0 500 120"
               backgroundColor="#dcdce2"
               foregroundColor="#ecebeb"

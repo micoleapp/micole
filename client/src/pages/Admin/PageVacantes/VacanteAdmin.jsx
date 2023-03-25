@@ -4,26 +4,50 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Box from "@mui/material/Box";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { getOneSchool } from "../../../redux/SchoolsSlice";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import SearchCoelegio from "../pageColegios/search-colegio-admin/SearchCoelegio";
+import { getNombresColegios } from "../../../redux/SchoolsActions";
 export default function VacanteAdmin() {
   const [vacantes, setVacantes] = useState(0);
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
   const yearNow = new Date().getFullYear();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [Input, setInput] = useState("");
+  const {  nameColegio } = useSelector(
+    (state) => state.schools
+  );
 
-  
+
+
+  useEffect(() => {
+    
+    dispatch(getNombresColegios());
+  }, []);
+
+  console.log(Input)
   return (
     // <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
     //       <GridVacantes/>
     // </div>
     <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
       <h1 className="text-2xl">Vacantes disponibles</h1>
-  
-  
-  
-  
+
+      <div style={{padding:'1rem'}}>
+        <p  style={{paddingBottom:'1rem'}}>
+           Elegir Colegio
+        </p>
+       
+        <SearchCoelegio
+       
+          handlerInput={setInput}
+          nroColegios={nameColegio?.length}
+          data={nameColegio && nameColegio}
+          vacante={true}
+        />
+      </div>
+
       {/* <small>
         Debera enviar el formulario de al menos 1 de los 3 años antes de
         continuar

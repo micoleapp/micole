@@ -37,6 +37,7 @@ export default function PageColegio() {
           handlerInput={setInput}
           nroColegios={nameColegio?.length}
           data={nameColegio &&nameColegio}
+          vacante={false}
         />
         <CardColegio
           input={Input}
