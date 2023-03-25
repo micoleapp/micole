@@ -142,6 +142,7 @@ const signUp = async (req, res, next) => {
     telefono,
     DistritoId,
     esColegio,
+    esAdmin
   } = req.body;
 
   try {
@@ -160,7 +161,7 @@ const signUp = async (req, res, next) => {
       const userValidation = User.build({
         nombre,
         apellidos,
-        dni,
+        telefono,
       });
       await userValidation.validate();
     }
@@ -175,7 +176,7 @@ const signUp = async (req, res, next) => {
     const newAuth = await Auth.create({
       email,
       password,
-      rol: esColegio ? "Colegio" : "Usuario",
+      rol: esColegio ? "Colegio" : esAdmin ? "Admin" : "Usuario",
     });
     const idAuth = newAuth.id;
     if (esColegio) {
@@ -203,7 +204,7 @@ const signUp = async (req, res, next) => {
       //mailer.sendMailSignUp(sanitizedSchool, "Colegio"); //Enviamos el mail de Confirmación de Registro para el Usuario Colegio
       return res.status(201).send(sanitizedSchool);
     }
-    const newUser = await User.create({ nombre, apellidos, dni, idAuth });
+    const newUser = await User.create({ nombre, apellidos, telefono, idAuth });
     const sanitizedUser = {
       email: newAuth.email,
       nombre: `${newUser.nombre} ${newUser.apellidos}`,

@@ -87,6 +87,9 @@ router.get("/", async (req, res) => {
           model: Provincia,
           attributes: ["id", "nombre_provincia"],
         },
+        {
+          model: Vacante,
+        },
       ],
       where,
       order: orderBy,
