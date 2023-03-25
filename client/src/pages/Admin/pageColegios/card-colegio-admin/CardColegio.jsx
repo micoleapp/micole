@@ -8,6 +8,7 @@ import axios from "axios";
 import { getAllSchoolsPageAdmin } from "../../../../redux/SchoolsActions";
 
 import ContentLoader from "react-content-loader";
+import fechaFormat from "../../../../components/SwiperEventos/utils/fechaFormat";
 export default function CardColegio({ input, data, isLoading, page }) {
   const dispatch = useDispatch();
   const items = [1, 2, 3, 4, 5];
@@ -212,13 +213,29 @@ export default function CardColegio({ input, data, isLoading, page }) {
                     </div>
                     {/*  fecha */}
                     <div className={style.divThanos}>
-                      <p>12 de abril del 2023</p>
+                      <p
+                        style={{
+                          color: "#0D263B",
+
+                          fontSize: "1.6vh",
+                        }}
+                      >
+                        {fechaFormat(ele.createdAt)}
+                      </p>
                     </div>
 
                     {/*  plan */}
                     <div className={style.divThanos}>
-                     
-                      <p> {ele.Plan_Pago.nombre_plan_pago}</p>
+                      <p
+                        style={{
+                          color: "#0D263B",
+
+                          fontSize: "1.5vh",
+                        }}
+                      >
+                        {" "}
+                        {ele.Plan_Pago.nombre_plan_pago}
+                      </p>
                     </div>
 
                     {/* boton */}
@@ -256,21 +273,21 @@ export default function CardColegio({ input, data, isLoading, page }) {
             ))
           : items.map((item, key) => (
               <ContentLoader
-              key={key}
-              speed={3}
-              width={"50%"}
-              height={"80%"}
-              viewBox="0 0 500 120"
-              backgroundColor="#dcdce2"
-              foregroundColor="#ecebeb"
-            >
-              <rect x="110" y="8" rx="3" ry="3" width="120" height="10" />
-              <rect x="110" y="25" rx="3" ry="3" width="100" height="6" />
-              <rect x="48" y="26" rx="3" ry="3" width="52" height="6" />
-              <rect x="110" y="56" rx="3" ry="3" width="310" height="6" />
-              <rect x="110" y="72" rx="3" ry="3" width="300" height="6" />
-              <rect x="110" y="88" rx="3" ry="3" width="178" height="6" />
-              <rect width="100" height="100" />
+                key={key}
+                speed={3}
+                width={"50%"}
+                height={"80%"}
+                viewBox="0 0 500 120"
+                backgroundColor="#dcdce2"
+                foregroundColor="#ecebeb"
+              >
+                <rect x="110" y="8" rx="3" ry="3" width="120" height="10" />
+                <rect x="110" y="25" rx="3" ry="3" width="100" height="6" />
+                <rect x="48" y="26" rx="3" ry="3" width="52" height="6" />
+                <rect x="110" y="56" rx="3" ry="3" width="310" height="6" />
+                <rect x="110" y="72" rx="3" ry="3" width="300" height="6" />
+                <rect x="110" y="88" rx="3" ry="3" width="178" height="6" />
+                <rect width="100" height="100" />
               </ContentLoader>
             ))}
       </div>
