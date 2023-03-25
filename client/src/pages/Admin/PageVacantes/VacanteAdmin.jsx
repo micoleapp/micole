@@ -74,7 +74,7 @@ export default function VacanteAdmin() {
               <GridVacantesAdmin
                 oneSchool={oneSchool}
                 setVacantesOff={setVacantesOffTwo}
-                año={yearNow + 2}
+                año={yearNow + 1}
               />
             </div>
           </TabPanel>
@@ -82,7 +82,7 @@ export default function VacanteAdmin() {
           <GridVacantesAdmin
                 oneSchool={oneSchool}
                 setVacantesOff={setVacantesOffTwo}
-                año={yearNow + 3}
+                año={yearNow + 2}
               />
           </TabPanel>
         </TabContext>

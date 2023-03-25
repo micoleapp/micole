@@ -134,7 +134,7 @@ export default function SearchCoelegio({
         )}
         {vacante === true && (
           <div className={style.FiltrosResponsive}>
-            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+            {/* <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
               <InputLabel id="demo-select-small">Año</InputLabel>
 
               <Select
@@ -171,7 +171,7 @@ export default function SearchCoelegio({
                 <MenuItem value={20}>2024</MenuItem>
                 <MenuItem value={20}>2025</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
           </div>
         )}
       </div>
