@@ -33,7 +33,6 @@ const getReviewById = async (req, res, next) => {
 
 const createReview = async (req, res, next) => {
   const { nombre, email, comentario, rating, ColegioId } = req.body;
-  console.log(req.body)
   try {
     const colegio = await Colegio.findByPk(ColegioId);
     const reviews = await Review.findAll({ where: { ColegioId } });
@@ -46,7 +45,6 @@ const createReview = async (req, res, next) => {
     });
     let totalRating = rating;
     for (let i = 0; i < reviews.length; i++) {
-      console.log(reviews[i]);
       totalRating += reviews[i].rating;
     }
     colegio.rating = (totalRating / (reviews.length + 1)).toFixed(1);

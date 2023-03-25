@@ -70,7 +70,6 @@ const createEvento = async (req, res, next) => {
     });
     res.status(200).json(newEvento);
   } catch (error) {
-    console.log(error);
     return next(error);
   }
 };

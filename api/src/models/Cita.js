@@ -10,27 +10,6 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      /* fecha_cita: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: 'El campo fecha_cita no puede estar vacío',
-          },
-          validarFecha: function (fecha) {
-            if (!moment(fecha, 'DD/MM/YYYY').isValid()) {
-              throw new Error(
-                'El formato de la fecha debe ser DD/MM/YYYY'
-              );
-            }
-            if (moment(fecha, 'DD/MM/YYYY') < moment().startOf('day')) {
-              throw new Error(
-                'La fecha de la cita debe ser en días posteriores al actual'
-              );
-            }
-          },
-        },
-      }, */
       fecha_cita: {
         type: DataTypes.DATEONLY,
         allowNull: false,

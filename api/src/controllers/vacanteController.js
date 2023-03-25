@@ -70,7 +70,6 @@ const createVacante = async (req, res, next) => {
       .status(200)
       .send({ message: 'Los registros se guardaron correctamente' });
   } catch (error) {
-    console.log(error);
     return next(error);
   }
 };
