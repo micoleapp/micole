@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
   sequelize.define(
@@ -62,9 +62,14 @@ module.exports = (sequelize) => {
         defaultValue:
           'http://www.elblogdecha.org/wp-content/uploads/2021/06/perfil-vacio.jpg',
       },
+      createdAt: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
     },
     {
-      timestamps: true,
+      timestamps: false,
     }
   );
 };
