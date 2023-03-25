@@ -37,7 +37,7 @@ module.exports = (sequelize) => {
           },
         },
       },
-      dni: {
+/*       dni: {
         type: DataTypes.STRING,
         allowNull: true,
         validate: {
@@ -46,7 +46,7 @@ module.exports = (sequelize) => {
             msg: 'El DNI debe tener 8 caracteres',
           },
         },
-      },
+      }, */
       telefono: {
         type: DataTypes.BIGINT,
         unique: true,
@@ -64,7 +64,7 @@ module.exports = (sequelize) => {
       },
     },
     {
-      timestamps: false,
+      timestamps: true,
     }
   );
 };
