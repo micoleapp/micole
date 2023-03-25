@@ -25,6 +25,7 @@ export default function SearchCoelegio({
 }) {
   const { distrits } = useSelector((state) => state.schools);
   const [OptionSelected, setOptionSelected] = useState("");
+
   const [filterSelected, setFilterSelected] = useState({
     año: "",
     distrito: "",
@@ -55,6 +56,7 @@ export default function SearchCoelegio({
           .get(`/colegios?&search=${OptionSelected}`)
           .then((res) => {
             handlerInput(res.data.colegios);
+    
           })
           .catch((err) => console.log(err.message));
       } catch (err) {
