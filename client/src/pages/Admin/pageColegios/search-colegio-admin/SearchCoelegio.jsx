@@ -30,6 +30,12 @@ export default function SearchCoelegio({
     año: "",
     distrito: "",
   });
+
+  let nombresColegio = data&& data.map((x) => x.nombre_colegio);
+  let nameUnique = nombresColegio.filter(
+    (x, i) => nombresColegio.indexOf(x) === i
+  );
+
   const dispatch = useDispatch();
   console.log(filterSelected);
   const handleChangeAño = (event) => {
@@ -56,7 +62,6 @@ export default function SearchCoelegio({
           .get(`/colegios?&search=${OptionSelected}`)
           .then((res) => {
             handlerInput(res.data.colegios);
-    
           })
           .catch((err) => console.log(err.message));
       } catch (err) {
@@ -96,7 +101,7 @@ export default function SearchCoelegio({
           id="Tipo"
           freeSolo
           onChange={(e, v) => setOptionSelected(v)}
-          options={data&&data?.map((option) => option.nombre_colegio)}
+          options={data && nameUnique?.map((option) => option)}
           renderInput={(params) => (
             <TextField
               sx={{ fontSize: "1vh" }}
