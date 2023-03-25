@@ -6,7 +6,7 @@ import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { getOneSchool } from "../../../redux/SchoolsSlice";
 import { useSelector, useDispatch } from "react-redux";
 import SearchCoelegio from "../pageColegios/search-colegio-admin/SearchCoelegio";
-import { getNombresColegios } from "../../../redux/SchoolsActions";
+import { getNombresColegios, getVacantes } from "../../../redux/SchoolsActions";
 import GridVacantesAdmin from "./grid-vacantes-admin/GridVacantesAdmin";
 export default function VacanteAdmin() {
   const [vacantes, setVacantes] = useState(0);
@@ -17,9 +17,15 @@ export default function VacanteAdmin() {
   const dispatch = useDispatch();
   const [Input, setInput] = useState("");
   const { nameColegio } = useSelector((state) => state.schools);
+  let oneSchool = Input && Object.assign({}, ...Input);
+  
 
   useEffect(() => {
     dispatch(getNombresColegios());
+
+      let gradoNiveles = oneSchool?.Nivels?.filter((ele) => ele.id);
+      dispatch(getVacantes(gradoNiveles));
+ 
   }, []);
 
   console.log(Input);
@@ -40,7 +46,7 @@ export default function VacanteAdmin() {
 
       <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
         <GridVacantesAdmin
-          oneSchool={Input}
+          oneSchool={oneSchool}
           setVacantesOff={setVacantesOffTwo}
           año={yearNow + 1}
         />

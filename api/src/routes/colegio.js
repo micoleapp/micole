@@ -19,7 +19,7 @@ const {
   Dificultades,
   Review,
   Evento,
-  Trafico
+  Trafico,
 } = require("../db.js");
 const { Op } = require("sequelize");
 const getPagination = require("../utils/getPagination");
@@ -91,12 +91,21 @@ router.get("/", async (req, res) => {
         {
           model: Vacante,
         },
+        {
+          model: Nivel,
+          attributes: ["id", "nombre_nivel"],
+        },
       ],
       where,
       order: orderBy,
       limit: limit,
       offset: skip,
     });
+    let vacantesGrados;
+    vacantesGrados = await Grado.findAll({
+      attributes: ["id", "nombre_grado"],
+    });
+
     const pagination = getPagination(url, page, limit, totalColegios);
     res.json({
       count: totalColegios,
@@ -106,6 +115,7 @@ router.get("/", async (req, res) => {
       first: pagination.first,
       last: pagination.last,
       colegios,
+      vacantesGrados,
     });
   } catch (err) {
     console.log(err);
@@ -117,7 +127,7 @@ router.get("/", async (req, res) => {
 router.get("/:Colegio_id", async (req, res) => {
   const { Colegio_id } = req.params;
   const tokenUser = req.user;
-  const fechaActual = moment().format('YYYY-MM-DD');
+  const fechaActual = moment().format("YYYY-MM-DD");
   try {
     if (!tokenUser) {
       const addVisualizacion = await Colegio.findByPk(Colegio_id);
@@ -127,9 +137,9 @@ router.get("/:Colegio_id", async (req, res) => {
     }
     const [trafico, created] = await Trafico.findOrCreate({
       where: { fecha: fechaActual, ColegioId: Colegio_id },
-      defaults: { visitas: 1 }
+      defaults: { visitas: 1 },
     });
-    
+
     if (!created) {
       trafico.visitas += 1;
       await trafico.save();

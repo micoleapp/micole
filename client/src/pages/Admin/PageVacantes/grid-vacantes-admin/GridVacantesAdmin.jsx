@@ -1,12 +1,19 @@
+import { Checkbox } from "@mui/material";
 import axios from "axios";
-import * as React from "react";
-import { useSelector } from "react-redux";
+import  React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import { getVacantes } from "../../../../redux/SchoolsActions";
 
-export default function GridVacantesAdmin({ año, setVacantesOff , oneSchool}) {
+export default function GridVacantesAdmin({ año, setVacantesOff, oneSchool }) {
+//   const { grados } = useSelector((state) => state.schools);
   const { vacantesGrados } = useSelector((state) => state.schools);
   const { token } = useSelector((state) => state.auth);
-console.log(oneSchool)
+
+  const dispatch = useDispatch();
+
+  console.log(vacantesGrados);
+  console.log(oneSchool);
   const [datos, setDatos] = React.useState({ año });
 
   const handleChange = (e) => {
@@ -43,7 +50,12 @@ console.log(oneSchool)
 
   console.log(datos);
 
-  return (
+
+useEffect(() => {
+
+  }, [vacantesGrados]);
+
+return (
     <>
       <div className=" relative overflow-x-auto pb-5">
         <table className="text-sm shadow-md relative ">

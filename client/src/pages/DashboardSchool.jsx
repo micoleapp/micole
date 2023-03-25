@@ -944,6 +944,7 @@ function DashboardSchool() {
   const [seeNewPassword, setSeeNewPassword] = useState(false);
 
   useEffect(() => {
+    console.log(datosPrincipales.niveles)
     dispatch(getVacantes(datosPrincipales.niveles));
   }, [datosPrincipales.niveles]);
 

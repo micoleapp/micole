@@ -24,7 +24,7 @@ export default function PageColegio() {
     dispatch(getNombresColegios());
   }, [page]);
 
-  console.log(data);
+  console.log(nameColegio);
 
   const handlePageChange = (event, value) => {
     setPage(value);

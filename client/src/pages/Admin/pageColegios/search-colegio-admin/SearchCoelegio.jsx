@@ -96,7 +96,7 @@ export default function SearchCoelegio({
           id="Tipo"
           freeSolo
           onChange={(e, v) => setOptionSelected(v)}
-          options={data?.map((option) => option.nombre_colegio)}
+          options={data&&data?.map((option) => option.nombre_colegio)}
           renderInput={(params) => (
             <TextField
               sx={{ fontSize: "1vh" }}
