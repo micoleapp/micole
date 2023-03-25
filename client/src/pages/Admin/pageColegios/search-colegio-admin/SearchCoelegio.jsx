@@ -31,8 +31,8 @@ export default function SearchCoelegio({
     distrito: "",
   });
 
-  let nombresColegio = data&& data.map((x) => x.nombre_colegio);
-  let nameUnique = nombresColegio.filter(
+  let nombresColegio = data&& data?.map((x) => x.nombre_colegio);
+  let nameUnique = nombresColegio?.filter(
     (x, i) => nombresColegio.indexOf(x) === i
   );
 

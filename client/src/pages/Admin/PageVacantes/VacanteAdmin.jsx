@@ -13,7 +13,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-
+import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
 export default function VacanteAdmin() {
   const [vacantes, setVacantes] = useState(0);
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
@@ -31,8 +31,8 @@ export default function VacanteAdmin() {
 
   useEffect(() => {
     dispatch(getNombresColegios());
-  }, [Input !=='']);
-  
+  }, [Input !== ""]);
+
   useEffect(() => {
     let gradoNiveles = oneSchool?.Nivels?.filter((ele) => ele.id);
     dispatch(getVacantes(gradoNiveles));
@@ -63,27 +63,101 @@ export default function VacanteAdmin() {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <GridVacantesAdmin
-              oneSchool={oneSchool}
-              setVacantesOff={setVacantesOffTwo}
-              año={yearNow}
-            />
+            {!oneSchool && (
+              <div
+                data-aos="flip-up"
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                  color: "#0C2B42",
+                  gap: "10px",
+                  padding: "20px",
+                  minHeight: "100%",
+                  boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+                  fontWeight: "600",
+                  backgroundColor: "#fff",
+                }}
+              >
+                <ContentPasteSearchOutlinedIcon style={{ color: "#0061DF" }} />
+                <h1>Debes realizar una busqueda</h1>
+              </div>
+            )}
+            {oneSchool && (
+              <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
+                <GridVacantesAdmin
+                  oneSchool={oneSchool && oneSchool}
+                  setVacantesOff={setVacantesOffTwo}
+                  año={yearNow}
+                />
+              </div>
+            )}
           </TabPanel>
           <TabPanel value="2">
-            <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
-              <GridVacantesAdmin
-                oneSchool={oneSchool}
-                setVacantesOff={setVacantesOffTwo}
-                año={yearNow + 1}
-              />
-            </div>
+            {!oneSchool && (
+              <div
+                data-aos="flip-up"
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                  color: "#0C2B42",
+                  gap: "10px",
+                  padding: "20px",
+                  minHeight: "100%",
+                  boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+                  fontWeight: "600",
+                  backgroundColor: "#fff",
+                }}
+              >
+                <ContentPasteSearchOutlinedIcon style={{ color: "#0061DF" }} />
+                <h1>Debes realizar una busqueda</h1>
+              </div>
+            )}
+            {oneSchool && (
+              <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
+                <GridVacantesAdmin
+                  oneSchool={oneSchool && oneSchool}
+                  setVacantesOff={setVacantesOffTwo}
+                  año={yearNow + 1}
+                />
+              </div>
+            )}
           </TabPanel>
           <TabPanel value="3">
-          <GridVacantesAdmin
-                oneSchool={oneSchool}
+            {!oneSchool && (
+              <div
+                data-aos="flip-up"
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                  color: "#0C2B42",
+                  gap: "10px",
+                  padding: "20px",
+                  minHeight: "100%",
+                  boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+                  fontWeight: "600",
+                  backgroundColor: "#fff",
+                }}
+              >
+                <ContentPasteSearchOutlinedIcon style={{ color: "#0061DF" }} />
+                <h1>Debes realizar una busqueda</h1>
+              </div>
+            )}
+            {oneSchool && (
+              <GridVacantesAdmin
+                oneSchool={oneSchool && oneSchool}
                 setVacantesOff={setVacantesOffTwo}
                 año={yearNow + 2}
               />
+            )}
           </TabPanel>
         </TabContext>
       </Box>
