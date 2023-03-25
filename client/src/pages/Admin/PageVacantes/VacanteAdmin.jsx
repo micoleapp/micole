@@ -8,6 +8,12 @@ import { useSelector, useDispatch } from "react-redux";
 import SearchCoelegio from "../pageColegios/search-colegio-admin/SearchCoelegio";
 import { getNombresColegios, getVacantes } from "../../../redux/SchoolsActions";
 import GridVacantesAdmin from "./grid-vacantes-admin/GridVacantesAdmin";
+
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+
 export default function VacanteAdmin() {
   const [vacantes, setVacantes] = useState(0);
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
@@ -18,16 +24,19 @@ export default function VacanteAdmin() {
   const [Input, setInput] = useState("");
   const { nameColegio } = useSelector((state) => state.schools);
   let oneSchool = Input && Object.assign({}, ...Input);
-  
+  const [value, setValue] = useState("1");
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   useEffect(() => {
     dispatch(getNombresColegios());
-
-      let gradoNiveles = oneSchool?.Nivels?.filter((ele) => ele.id);
-      dispatch(getVacantes(gradoNiveles));
- 
-  }, []);
-
+  }, [Input !=='']);
+  
+  useEffect(() => {
+    let gradoNiveles = oneSchool?.Nivels?.filter((ele) => ele.id);
+    dispatch(getVacantes(gradoNiveles));
+  }, [Input]);
   console.log(Input);
   return (
     <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
@@ -44,13 +53,40 @@ export default function VacanteAdmin() {
         />
       </div>
 
-      <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
-        <GridVacantesAdmin
-          oneSchool={oneSchool}
-          setVacantesOff={setVacantesOffTwo}
-          año={yearNow + 1}
-        />
-      </div>
+      <Box sx={{ width: "100%", typography: "body1" }}>
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab label={yearNow} value="1" />
+              <Tab label={yearNow + 1} value="2" />
+              <Tab label={yearNow + 2} value="3" />
+            </TabList>
+          </Box>
+          <TabPanel value="1">
+            <GridVacantesAdmin
+              oneSchool={oneSchool}
+              setVacantesOff={setVacantesOffTwo}
+              año={yearNow}
+            />
+          </TabPanel>
+          <TabPanel value="2">
+            <div className="flex gap-2 min-h-screen flex-col w-full lg:w-[900px] overflow-hidden">
+              <GridVacantesAdmin
+                oneSchool={oneSchool}
+                setVacantesOff={setVacantesOffTwo}
+                año={yearNow + 2}
+              />
+            </div>
+          </TabPanel>
+          <TabPanel value="3">
+          <GridVacantesAdmin
+                oneSchool={oneSchool}
+                setVacantesOff={setVacantesOffTwo}
+                año={yearNow + 3}
+              />
+          </TabPanel>
+        </TabContext>
+      </Box>
 
       {/* <small>
         Debera enviar el formulario de al menos 1 de los 3 años antes de
