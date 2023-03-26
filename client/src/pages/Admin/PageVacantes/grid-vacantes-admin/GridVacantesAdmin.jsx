@@ -1,12 +1,15 @@
 import { Checkbox } from "@mui/material";
 import axios from "axios";
-import  React, { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import { getNombresColegios, getVacantes } from "../../../../redux/SchoolsActions";
+import {
+  getNombresColegios,
+  getVacantes,
+} from "../../../../redux/SchoolsActions";
 
 export default function GridVacantesAdmin({ año, setVacantesOff, oneSchool }) {
-//   const { grados } = useSelector((state) => state.schools);
+  //   const { grados } = useSelector((state) => state.schools);
   const { vacantesGrados } = useSelector((state) => state.schools);
   const { token } = useSelector((state) => state.auth);
 
@@ -22,8 +25,6 @@ export default function GridVacantesAdmin({ año, setVacantesOff, oneSchool }) {
       [e.target.id]: { ...datos[e.target.id], [e.target.name]: e.target.value },
     });
   };
- 
-  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,13 +53,17 @@ export default function GridVacantesAdmin({ año, setVacantesOff, oneSchool }) {
   };
 
   console.log(datos);
+  useEffect(() => {
+    return () => {
+      dispatch(getNombresColegios());
+    };
+  }, []);
 
+  // useEffect(() => {
 
-useEffect(() => {
+  //   }, [vacantesGrados]);
 
-  }, [vacantesGrados]);
-
-return (
+  return (
     <>
       <div className=" relative overflow-x-auto pb-5">
         <table className="text-sm shadow-md relative ">
