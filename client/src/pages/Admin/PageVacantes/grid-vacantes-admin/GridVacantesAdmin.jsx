@@ -3,7 +3,7 @@ import axios from "axios";
 import  React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import { getVacantes } from "../../../../redux/SchoolsActions";
+import { getNombresColegios, getVacantes } from "../../../../redux/SchoolsActions";
 
 export default function GridVacantesAdmin({ año, setVacantesOff, oneSchool }) {
 //   const { grados } = useSelector((state) => state.schools);
@@ -22,6 +22,8 @@ export default function GridVacantesAdmin({ año, setVacantesOff, oneSchool }) {
       [e.target.id]: { ...datos[e.target.id], [e.target.name]: e.target.value },
     });
   };
+ 
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,6 +36,7 @@ export default function GridVacantesAdmin({ año, setVacantesOff, oneSchool }) {
           { headers: { Authorization: `Bearer ${token}` } }
         )
         .then((res) => {
+          dispatch(getNombresColegios());
           Swal.fire("Success", "Formulario enviado correctamente", "success");
         })
         .catch((err) => {
