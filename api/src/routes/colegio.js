@@ -34,14 +34,23 @@ router.get("/", async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
-  const { search, order } = req.query;
+  const { search, order,active } = req.query;
   let where = {};
   let orderBy = null;
+ 
 
   if (search) {
     where = {
       nombre_colegio: {
         [Op.iLike]: `%${search}%`,
+      },
+    };
+  }
+  if (active) {
+    let bool=active.toLocaleLowerCase()=="true"?true:false;
+    where = {
+      isActive: {
+        [Op.is]: bool,
       },
     };
   }
