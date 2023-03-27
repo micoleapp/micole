@@ -55,6 +55,9 @@ router.get("/", async (req, res) => {
       case "Z-A":
         orderBy = [["nombre_colegio", "DESC"]];
         break;
+      case "activo":
+        orderBy = [["isActive", "ASC"]];
+        break;
       default:
         orderBy = null;
         break;
