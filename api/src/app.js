@@ -31,7 +31,6 @@ server.use(errorHandler);
 // Error catching endware.
 server.use((err, req, res, next) => {
   // eslint-disable-line no-unused-vars
-  console.log("dafaf");
   const status = err.status || 500;
   const message = err.message || err;
   console.error(err);

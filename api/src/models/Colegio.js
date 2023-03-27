@@ -77,10 +77,6 @@ module.exports = (sequelize) => {
       ruc: {
         type: DataTypes.BIGINT,
         allowNull: false,
-        // validate: {
-        //   len: [12],
-        //   msg: "El RUC debe contener 12 caracteres",
-        // },
       },
 
       numero_estudiantes: {
@@ -91,10 +87,6 @@ module.exports = (sequelize) => {
       fecha_fundacion: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        // validate: {
-        //   len: [4, 4],
-        //   msg: "Debe colocar un año valido",
-        // },
       },
 
       nombre_director: {
@@ -142,8 +134,6 @@ module.exports = (sequelize) => {
         allowNull: true,
       },
 
-      //HACER UNA RELACION CON VACANTE DE MUCHOS A MUCHOS
-
       ugel: {
         type: DataTypes.BIGINT,
         allowNull: true,
@@ -165,9 +155,6 @@ module.exports = (sequelize) => {
       telefono: {
         type: DataTypes.BIGINT,
         allowNull: true,
-        // validate: {
-        //   len: [11],
-        // },
       },
 
       propuesta_valor: {
@@ -202,11 +189,6 @@ module.exports = (sequelize) => {
         allowNull: true,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      // avatar: {
-      //   type: DataTypes.STRING,
-      //   defaultValue:
-      //     "http://www.elblogdecha.org/wp-content/uploads/2021/06/perfil-vacio.jpg",
-      // },
     },
     
     {

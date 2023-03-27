@@ -19,10 +19,11 @@ const {
   Dificultades,
   Review,
   Evento,
+  Trafico
 } = require("../db.js");
 const { Op } = require("sequelize");
 const getPagination = require("../utils/getPagination");
-
+const moment = require("moment");
 // const getComponentData = require("../funciones/getComponentData.js");
 // const ratingProm = require("../funciones/ratingProm.js");
 
@@ -90,6 +91,9 @@ router.get("/", async (req, res) => {
           model: Provincia,
           attributes: ["id", "nombre_provincia"],
         },
+        {
+          model: Vacante,
+        },
       ],
       where,
       order: orderBy,
@@ -116,6 +120,7 @@ router.get("/", async (req, res) => {
 router.get("/:Colegio_id", async (req, res) => {
   const { Colegio_id } = req.params;
   const tokenUser = req.user;
+  const fechaActual = moment().format('YYYY-MM-DD');
   try {
     if (!tokenUser) {
       const addVisualizacion = await Colegio.findByPk(Colegio_id);
@@ -123,6 +128,16 @@ router.get("/:Colegio_id", async (req, res) => {
         Number(addVisualizacion.visualizaciones) + 1;
       await addVisualizacion.save();
     }
+    const [trafico, created] = await Trafico.findOrCreate({
+      where: { fecha: fechaActual, ColegioId: Colegio_id },
+      defaults: { visitas: 1 }
+    });
+    
+    if (!created) {
+      trafico.visitas += 1;
+      await trafico.save();
+    }
+
     const cole = await Colegio.findAll({
       where: { id: [Colegio_id] },
       include: [

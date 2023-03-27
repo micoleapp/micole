@@ -88,7 +88,8 @@ const {
   Ventas,
   Metodos,
   Dificultades,
-  Evento
+  Evento,
+  Trafico
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -294,6 +295,13 @@ Colegio.hasMany(Evento, {
   foreignKey: "ColegioId",
 });
 Evento.belongsTo(Colegio, {
+  foreignKey: "ColegioId",
+});
+
+Colegio.hasMany(Trafico, {
+  foreignKey: "ColegioId",
+});
+Trafico.belongsTo(Colegio, {
   foreignKey: "ColegioId",
 });
 

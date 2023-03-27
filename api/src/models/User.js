@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
   sequelize.define(
@@ -37,7 +37,7 @@ module.exports = (sequelize) => {
           },
         },
       },
-      dni: {
+/*       dni: {
         type: DataTypes.STRING,
         allowNull: true,
         validate: {
@@ -46,7 +46,7 @@ module.exports = (sequelize) => {
             msg: 'El DNI debe tener 8 caracteres',
           },
         },
-      },
+      }, */
       telefono: {
         type: DataTypes.BIGINT,
         unique: true,
@@ -61,6 +61,11 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         defaultValue:
           'http://www.elblogdecha.org/wp-content/uploads/2021/06/perfil-vacio.jpg',
+      },
+      createdAt: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
     },
     {
