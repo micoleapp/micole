@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const { Departamento } = require("../db.js");
+const { Departamento, Pais } = require("../db.js");
 // const getComponentData = require("../funciones/getComponentData.js");
 // const ratingProm = require("../funciones/ratingProm.js");
 
@@ -19,18 +19,20 @@ router.get("/", async (req, res) => {
 });
 //------- POST A DEPARTAMENTO--------
 router.post("/", async (req, res) => {
-  const { nombre_departamento } = req.body;
+  const { nombre_departamento, id_pais } = req.body;
   try {
     const ultimoDepartameto = await Departamento.findOne({
       order: [["id", "DESC"]],
     });
     const [departament, created] = await Departamento.findOrCreate({
       where: {
-        id:Number(ultimoDepartameto.id)+1,
         nombre_departamento: nombre_departamento,
+        id:Number(ultimoDepartameto.id)+1,
+        PaisId:id_pais
       },
     });
     if (created) {
+      
       res.status(200).json(departament);
     } else {
       res.status(501).json({

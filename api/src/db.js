@@ -128,6 +128,14 @@ Distrito.hasMany(Colegio, {
 Colegio.belongsTo(Distrito, {
   foreignKey: "DistritoId",
 });
+//------RELACIONES DE DIVISIÓN POLITICA------
+
+Pais.hasMany(Departamento, {
+  foreignKey: "PaisId",
+});
+Departamento.belongsTo(Pais, {
+  foreignKey: "PaisId",
+});
 
 Departamento.hasMany(Provincia, {
   foreignKey: "DepartamentoId",
