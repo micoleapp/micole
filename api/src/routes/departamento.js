@@ -50,10 +50,11 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre_departamento } = req.body;
+    const { nombre_departamento,id_pais } = req.body;
     const editedDepartamento = await Departamento.update(
       {
         nombre_departamento: nombre_departamento,
+        PaisId:id_pais
       },
       { where: { id: id } }
     );
