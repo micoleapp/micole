@@ -52,13 +52,15 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre_provincia } = req.body;
+    const { nombre_provincia,departamentoId } = req.body;
     const editedProvincia = await Provincia.update(
       {
         nombre_provincia: nombre_provincia,
+        DepartamentoId:departamentoId
       },
       { where: { id: id } }
     );
+    // await editedProvincia.setDepartamento(departamentoId);
     res.json(editedProvincia);
   } catch (err) {
     res.status(500).send({ err });

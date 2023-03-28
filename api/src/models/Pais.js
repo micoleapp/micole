@@ -7,8 +7,8 @@ module.exports = (sequelize) => {
     "Pais",
     {
       id: {
-        type: DataTypes.INTEGER, //alfanumerico random
-        allowNull: false, // allowNull = Permite un vacio ----> seteamos en falso
+        type: DataTypes.INTEGER, 
+        allowNull: false,
         primaryKey: true,
       },
       nombre_pais: {
