@@ -10,6 +10,7 @@ import Hamburger from "hamburger-react";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { getAllSchools } from "../../redux/SchoolsActions";
 import { useDispatch } from "react-redux";
+import CitasUser from "./pegeCitas/CitasUser";
 
 export default function MainUser() {
   const [page, setPage] = React.useState(0);
@@ -132,7 +133,7 @@ export default function MainUser() {
         <section className="right w-full bg-[#f6f7f8] p-5 lg:px-31 lg:py-12">
           {page === 0 ? (
             <div className="min-h-screen">
-              <p>Citas</p>
+            <CitasUser/>
             </div>
           ) : page === 1 ? (
             <div className="min-h-screen">
