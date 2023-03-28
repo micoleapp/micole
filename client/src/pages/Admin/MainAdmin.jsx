@@ -15,6 +15,7 @@ import { getAllSchools } from "../../redux/SchoolsActions";
 import { useDispatch } from "react-redux";
 import VacanteAdmin from "./PageVacantes/VacanteAdmin";
 import PanelControl from "./PanelControl/PanelControl";
+import ConfigAdmin from "./Config/ConfigAdmin";
 export default function MainAdmin() {
   const [page, setPage] = React.useState(0);
   const [isOpen, setOpen] = useState(false);
@@ -24,7 +25,7 @@ export default function MainAdmin() {
    
   }, []);
 
-  // useEffect(() => {}, [allschools]);
+
   return (
     <>
    
@@ -216,7 +217,7 @@ export default function MainAdmin() {
           </div>
         ) : page === 5 ? (
           <div className="min-h-screen">
-            <h1>Configuracion</h1>
+          <ConfigAdmin/>
           </div>
         ) : page === 6 ? (
           <div className="min-h-screen">

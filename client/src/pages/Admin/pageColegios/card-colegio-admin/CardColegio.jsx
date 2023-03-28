@@ -189,7 +189,7 @@ export default function CardColegio({ input, data, isLoading, page }) {
                           >
                             <div className={style.divTypo}>
                               <b style={{ color: "#0061DF" }}>Fecha</b>
-                              <p>12 de abril del 2023</p>
+                              <p>{fechaFormat(ele.createdAt)}</p>
                             </div>
                           </Typography>
                         </div>
