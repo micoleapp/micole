@@ -469,13 +469,13 @@ export default function PageInfraestructura() {
                   />
                   <div className="flex flex-col gap-2 lg:w-[300px] items-center">
                     <h2>Nombre infraestructura</h2>
-                    <h1 className="font-medium">
+                    <h1 className="font-medium text-center">
                       {infra.nombre_infraestructura}
                     </h1>
                   </div>
                   <div className="flex flex-col gap-2 lg:w-[300px] items-center">
                     <h2>Categoria</h2>
-                    <h1 className="font-medium">
+                    <h1 className="font-medium text-center">
                       {infra.Infraestructura_tipo.infraestructura_tipo}
                     </h1>
                   </div>

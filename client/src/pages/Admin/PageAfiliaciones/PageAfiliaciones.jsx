@@ -36,9 +36,7 @@ export default function PageAfiliaciones() {
     logo: "",
     Afiliacion_tipo_Id: "",
   });
-
   const newArray = [];
-
   for (let i = 0; i < afiliaciones?.length; i++) {
     const index = newArray.findIndex(
       (obj) =>
@@ -271,6 +269,7 @@ export default function PageAfiliaciones() {
   }, [fileEdit]);
 
   const handleSubmitEdit = (e) => {
+    console.log(editedInfra)
     e.preventDefault();
     try {
       axios
@@ -411,7 +410,7 @@ export default function PageAfiliaciones() {
               id="search"
               name="search"
               type="text"
-              placeholder="Buscar infraestructura.."
+              placeholder="Buscar afiliacion.."
               class="p-2 outline-none rounded-md lg:w-[400px]"
               value={searchTerm}
               onChange={handleSearch}
@@ -469,13 +468,13 @@ export default function PageAfiliaciones() {
                   />
                   <div className="flex flex-col gap-2 lg:w-[300px] items-center">
                     <h2>Nombre afiliacion</h2>
-                    <h1 className="font-medium">
+                    <h1 className="font-medium text-center">
                       {infra.nombre_afiliacion}
                     </h1>
                   </div>
                   <div className="flex flex-col gap-2 lg:w-[300px] items-center">
                     <h2>Categoria</h2>
-                    <h1 className="font-medium">
+                    <h1 className="font-medium text-center">
                       {infra.Afiliacion_tipo.afiliacion_tipo}
                     </h1>
                   </div>
