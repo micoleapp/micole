@@ -205,7 +205,7 @@ export default function CardColegio({ input, data, isLoading, page }) {
                           >
                             <div className={style.divTypo}>
                               <b style={{ color: "#0061DF" }}>Plan</b>
-                              <p>{ele.Plan_Pago.nombre_plan_pago}</p>
+                              <p>{ele.Plan_Pago?.nombre_plan_pago}</p>
                             </div>
                           </Typography>
                         </div>

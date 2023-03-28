@@ -328,3 +328,20 @@ export const getNombresColegios = () => (dispatch) => {
     console.log(error);
   }
 };
+
+export const filterAdminState = (state, page) => (dispatch) => {
+  try {
+    axios
+
+    .get(`/colegios?limit=5&page=${page}&active=${state}`)
+    .then((res) => {
+      let data =[]
+      data.push(res.data)
+      console.log(data)
+      dispatch(getSchools(res.data.colegios));
+    })
+    .catch((err) => console.log(err.message));
+  } catch (error) {
+    console.log(error);
+  }
+};

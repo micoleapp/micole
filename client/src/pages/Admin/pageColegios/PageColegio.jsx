@@ -1,7 +1,15 @@
-import { Box, Pagination } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Pagination,
+  Select,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  filterAdminState,
   getAllSchoolsPage,
   getColegiosSearch,
   getNombresColegios,
@@ -14,6 +22,11 @@ export default function PageColegio() {
   const dispatch = useDispatch();
   const [page, setPage] = React.useState(1);
   const [data, setData] = React.useState();
+  const [OptionSelectedState, seOptionSelectedState] = useState("");
+  const [filterSelected, setFilterSelected] = useState({
+    state: "",
+    distrito: "",
+  });
   const { allschools, pagination, loading, nameColegio } = useSelector(
     (state) => state.schools
   );
@@ -29,16 +42,45 @@ export default function PageColegio() {
   const handlePageChange = (event, value) => {
     setPage(value);
   };
+
+  const handleChangeState = (event) => {
+    let state = event.target.value;
+    dispatch(filterAdminState(state, page));
+
+    setFilterSelected({
+      ...filterSelected,
+      state: event.target.value,
+    });
+  };
+
   // "http://localhost:3001/colegios?limit=10&page=1&search="mateo""
   return (
     <>
       <div style={{ display: "flex", flexDirection: "column", gap: "3vh" }}>
-        <SearchCoelegio
-          handlerInput={setInput}
-          nroColegios={nameColegio?.length}
-          data={nameColegio &&nameColegio}
-          vacante={false}
-        />
+        <div style={{ display: "flex" }}>
+          <SearchCoelegio
+            handlerInput={setInput}
+            nroColegios={nameColegio?.length}
+            data={nameColegio && nameColegio}
+            vacante={false}
+          />
+          <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+            <InputLabel id="demo-select-small">Estado</InputLabel>
+
+            <Select
+              sx={{ border: "none", outline: "none" }}
+              labelId="demo-select-small"
+              id="demo-select-small"
+              value={filterSelected.state}
+              label={"Estado"}
+              onChange={handleChangeState}
+            >
+              <MenuItem value={true}>Activo</MenuItem>
+              <MenuItem value={false}>Inactivo</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+
         <CardColegio
           input={Input}
           data={allschools && allschools}

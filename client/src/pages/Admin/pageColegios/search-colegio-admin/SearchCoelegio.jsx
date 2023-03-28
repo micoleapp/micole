@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { Button, IconButton, Typography } from "@mui/material";
 import TuneIcon from "@mui/icons-material/Tune";
 import { useDispatch, useSelector } from "react-redux";
-import { getColegiosSearch } from "../../../../redux/SchoolsActions";
+import { filterAdminState, getColegiosSearch } from "../../../../redux/SchoolsActions";
 import SelectCRM from "../../../../components/CardsDrgAndDrp/SelectsCRM/SelectsCRM";
 import axios from "axios";
 import InputLabel from "@mui/material/InputLabel";
@@ -25,9 +25,9 @@ export default function SearchCoelegio({
 }) {
   const { distrits } = useSelector((state) => state.schools);
   const [OptionSelected, setOptionSelected] = useState("");
-
+  const [OptionSelectedState, seOptionSelectedState] = useState("");
   const [filterSelected, setFilterSelected] = useState({
-    año: "",
+    state: "",
     distrito: "",
   });
 
@@ -38,10 +38,11 @@ export default function SearchCoelegio({
 
   const dispatch = useDispatch();
   console.log(filterSelected);
-  const handleChangeAño = (event) => {
+  const handleChangeState = (event) => {
+    dispatch(filterAdminState())
     setFilterSelected({
       ...filterSelected,
-      año: event.target.value,
+      state: event.target.value,
     });
   };
 
@@ -69,7 +70,8 @@ export default function SearchCoelegio({
       }
     }
   };
-
+  // filterAdminState
+  console.log(OptionSelectedState)
   return (
     <>
       <div
@@ -132,14 +134,30 @@ export default function SearchCoelegio({
             <TuneIcon />
           </Button>
         </div>
-        {vacante === false && (
+        {/* {vacante === false && (
           <div className={style.FiltrosResponsive}>
-            <SelectCRM label={"Estado"} filtro={"estado"} />
+            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+              <InputLabel id="demo-select-small">Estado</InputLabel>
+
+              <Select
+                sx={{ border: "none", outline: "none" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                value={filterSelected.state}
+                label={"Estado"}
+                onChange={handleChangeState}
+              >
+                <MenuItem value={true}>Activo</MenuItem>
+                <MenuItem value={false}>Inactivo</MenuItem>
+           
+              </Select>
+            </FormControl>
           </div>
-        )}
+        )} */}
         {vacante === true && (
           <div className={style.FiltrosResponsive}>
-            {/* <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+            {/*
+             <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
               <InputLabel id="demo-select-small">Año</InputLabel>
 
               <Select

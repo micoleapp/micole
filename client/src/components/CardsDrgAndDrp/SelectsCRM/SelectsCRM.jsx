@@ -4,11 +4,12 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function SelectCRM({ label, filtro }) {
+export default function SelectCRM({ label, filtro,setState }) {
   const [age, setAge] = React.useState("");
 
   const handleChange = (event) => {
     setAge(event.target.value);
+    setState(event.target.value);
   };
 
   return (
@@ -22,18 +23,18 @@ export default function SelectCRM({ label, filtro }) {
         label={label}
         onChange={handleChange}
       >
-        {filtro === "estado" && (
+     
           <>
-            <MenuItem value={10}>Inactivos</MenuItem>
-            <MenuItem value={20}>Activo</MenuItem>
+            <MenuItem value={false}>Inactivos</MenuItem>
+            <MenuItem value={true}>Activo</MenuItem>
           </>
-        )}
-          {filtro === "fecha" && (
+  
+          {/* {filtro === "fecha" && (
           <>
             <MenuItem value={10}>Desactivado</MenuItem>
             <MenuItem value={20}>Activos</MenuItem>
           </>
-        )}
+        )} */}
         
        
       </Select>
