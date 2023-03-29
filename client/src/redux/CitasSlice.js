@@ -7,7 +7,7 @@ export const citasSlice = createSlice({
     success: null,
     error: "",
     loading: false,
-    citasUsuario:[],
+    citasUsuario:null,
     columns: {
       "column-1": {
         id: "column-1",
