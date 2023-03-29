@@ -1,4 +1,4 @@
-const { Cita, Colegio, Grado, Plan_Pago, User } = require('../db');
+const { Cita, Colegio, Grado, Plan_Pago, User, Auth } = require('../db');
 const { Op } = require('sequelize');
 const moment = require('moment');
 const mailer = require('../utils/sendMails/mailer');
@@ -119,7 +119,7 @@ const getCitas = async (req, res, next) => {
 const getCitasUser = async (req, res, next) => {
   const tokenUser = req.user;
   try {
-    const user = await User.findOne({ where: { idAuth: tokenUser.id } });
+    const user = await Auth.findOne({ where: { id: tokenUser.id } });
     if (!user) {
       return next({
         statusCode: 400,
