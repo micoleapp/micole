@@ -97,8 +97,10 @@ const getCitas = async (req, res, next) => {
       CitasPermitidasMesActual = [];
     }
 
-    const CitasInactivas = CitasInactivasTotales.filter(cita => {
-      return !CitasPermitidasMesActual.some(permitida => permitida.id === cita.id);
+    const CitasInactivas = CitasInactivasTotales.filter((cita) => {
+      return !CitasPermitidasMesActual.some(
+        (permitida) => permitida.id === cita.id
+      );
     });
 
     res.status(200).send({
@@ -126,7 +128,15 @@ const getCitasUser = async (req, res, next) => {
         message: 'El usuario no es un Colegio',
       });
     }
-    const include = { include: [{ model: Grado }, {model: Colegio, attributes: ['id', 'nombre_colegio', 'logo', 'direccion', 'telefono'],}] };
+    const include = {
+      include: [
+        { model: Grado },
+        {
+          model: Colegio,
+          attributes: ['id', 'nombre_colegio', 'logo', 'direccion', 'telefono'],
+        },
+      ],
+    };
     const CitasUsuario = await Cita.findAll({
       where: {
         email: user.email,
@@ -136,9 +146,7 @@ const getCitasUser = async (req, res, next) => {
       order: [['fecha_cita', 'ASC']],
     });
 
-    res.status(200).send({
-      CitasUsuario,
-    });
+    res.status(200).send(CitasUsuario);
   } catch (error) {
     return next(error);
   }
@@ -283,5 +291,5 @@ module.exports = {
   changeStatusCita,
   changeActivoCita,
   deleteCita,
-  getCitasUser
+  getCitasUser,
 };
