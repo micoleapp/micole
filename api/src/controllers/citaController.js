@@ -133,7 +133,7 @@ const getCitasUser = async (req, res, next) => {
         { model: Grado },
         {
           model: Colegio,
-          attributes: ['id', 'nombre_colegio', 'logo', 'direccion', 'telefono'],
+          attributes: ['id', 'nombre_colegio', 'logo', 'direccion', 'primera_imagen','telefono'],
         },
       ],
     };

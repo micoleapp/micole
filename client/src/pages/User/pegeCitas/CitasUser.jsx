@@ -9,20 +9,32 @@ import axios from "axios";
 
 import ContentLoader from "react-content-loader";
 import fechaFormat from "../../../components/SwiperEventos/utils/fechaFormat";
+import es_AM_PM from "../../../components/SwiperEventos/utils/horaFormat";
 
 export default function CitasUser() {
   const { allschools, loading } = useSelector((state) => state.schools);
+  const { citasUsuario } = useSelector((state) => state.citas);
   const items = [1, 2, 3, 4, 5];
 
   return (
     <>
-      <Typography variant="h6" sx={{color:'#0D263B',fontSize: "2.4vh", fontWeight:'700', padding:'1vh'}}>Listado de Citas</Typography>
+      <Typography
+        variant="h6"
+        sx={{
+          color: "#0D263B",
+          fontSize: "2.4vh",
+          fontWeight: "700",
+          padding: "1vh",
+        }}
+      >
+        Listado de Citas
+      </Typography>
 
       <>
         <div style={{ display: "flex", gap: "4vh", flexDirection: "column" }}>
-          {allschools?.length > 0 && loading === false
-            ? allschools?.map((ele) => {
-                let str = ele.direccion;
+          {citasUsuario?.length > 0 && loading === false
+            ? citasUsuario?.map((ele) => {
+                let str = ele.Colegio.direccion;
 
                 console.log(str);
                 let str2 = str?.slice(0, 60);
@@ -39,7 +51,7 @@ export default function CitasUser() {
                             padding: "1vh",
                           }}
                           className="object-cover w-40 h-40"
-                          src={ele.primera_imagen}
+                          src={ele.Colegio.logo}
                         />
 
                         <div>
@@ -54,7 +66,7 @@ export default function CitasUser() {
                             variant="h6"
                             component="h2"
                           >
-                            {ele.nombre_colegio}
+                            {ele.Colegio.nombre_colegio}
                           </Typography>
                           <Typography
                             sx={{
@@ -86,7 +98,7 @@ export default function CitasUser() {
                           >
                             <div className={style.divTypo}>
                               <b style={{ color: "#0061DF" }}>Teléfono</b>
-                              <p>{ele.telefono}</p>
+                              <p>{ele.Colegio.telefono}</p>
                             </div>
                           </Typography>
                         </div>
@@ -105,7 +117,11 @@ export default function CitasUser() {
                               <b style={{ color: "#0061DF" }}>
                                 Horarios / Fecha
                               </b>
-                              <p>22 de agosto del 2023 8:00 AM</p>
+                              <div style={{display:'flex'}}>
+                                  <p>{es_AM_PM(ele.hora_cita)}</p>
+                              <p>{fechaFormat(ele.fecha_cita)}</p>
+                              </div>
+                            
                             </div>
                           </Typography>
                         </div>
