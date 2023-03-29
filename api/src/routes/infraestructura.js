@@ -29,25 +29,31 @@ router.get("/", async (req, res) => {
 
 //------- POST A INFRAESTRUCTURA-------
 router.post("/", async (req, res) => {
-  const { nombre_infraestructura } = req.body;
+  const { nombre_infraestructura, imagen, categoriaId } = req.body;
   try {
+    const ultimaInfraestructura = await Infraestructura.findOne({
+      order: [["id", "DESC"]],
+    });
     const [infraestructura, created] = await Infraestructura.findOrCreate({
       where: {
+        id: Number(ultimaInfraestructura.id) + 1,
         nombre_infraestructura: nombre_infraestructura,
+        slug: nombre_infraestructura,
+        imagen: imagen,
       },
     });
+    await infraestructura.setInfraestructura_tipo(categoriaId);
     if (created) {
-      console.log("Infra creado exitosamente");
-      infraestructura.nombre_infraestructura = nombre_infraestructura;
-      infraestructura.slug = slug;
-      infraestructura.imagen = imagen;
-      infraestructura.save();
       res.status(200).json(infraestructura);
     } else {
-      res.status(500).json([{ error: "Infraestructura existente" }]);
+      res.status(501).json({
+        message: "Infraestructura existente",
+      });
     }
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(501).json({
+      message: "Infraestructura existente",
+    });
   }
 });
 
@@ -55,12 +61,12 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre_infraestructura, slug, imagen } = req.body;
+    const { nombre_infraestructura, categoriaId, imagen } = req.body;
     const editedInfra = await Infraestructura.update(
       {
         nombre_infraestructura: nombre_infraestructura,
-        slug: slug,
         imagen: imagen,
+        InfraestructuraTipoId: categoriaId,
       },
       { where: { id: id } }
     );

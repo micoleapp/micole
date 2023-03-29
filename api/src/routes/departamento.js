@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const { Departamento } = require("../db.js");
+const { Departamento, Pais } = require("../db.js");
 // const getComponentData = require("../funciones/getComponentData.js");
 // const ratingProm = require("../funciones/ratingProm.js");
 
@@ -8,9 +8,7 @@ const { Departamento } = require("../db.js");
 router.get("/", async (req, res) => {
   try {
     let departamento;
-    departamento = await Departamento.findAll({
-      attributes: ["id", "nombre_departamento"],
-    });
+    departamento = await Departamento.findAll();
 
     res.json(departamento);
   } catch (err) {
@@ -19,22 +17,30 @@ router.get("/", async (req, res) => {
 });
 //------- POST A DEPARTAMENTO--------
 router.post("/", async (req, res) => {
-  const { nombre_departamento } = req.body;
+  const { nombre_departamento, id_pais } = req.body;
   try {
+    const ultimoDepartameto = await Departamento.findOne({
+      order: [["id", "DESC"]],
+    });
     const [departament, created] = await Departamento.findOrCreate({
       where: {
         nombre_departamento: nombre_departamento,
+        id:Number(ultimoDepartameto.id)+1,
+        PaisId:id_pais
       },
     });
     if (created) {
-      departament.nombre_departamento = nombre_departamento;
-      departament.save();
+      
       res.status(200).json(departament);
     } else {
-      res.status(500).json([{ error: "Departamento existente" }]);
+      res.status(501).json({
+        message: "Departamento existente",
+      });
     }
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(501).json({
+      message: "Departamento existente",
+    });
   }
 });
 
@@ -42,10 +48,11 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre_departamento } = req.body;
+    const { nombre_departamento,id_pais } = req.body;
     const editedDepartamento = await Departamento.update(
       {
         nombre_departamento: nombre_departamento,
+        PaisId:id_pais
       },
       { where: { id: id } }
     );

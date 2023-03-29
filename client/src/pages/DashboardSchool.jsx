@@ -110,11 +110,11 @@ function StandardImageList({ one, list, setImage, eliminarImagenDePreview }) {
           src={list}
           alt={list}
           onClick={() => setImage(list)}
-          className="cursor-pointer object-cover w-[370px] h-[400px] "
+          className="cursor-pointer object-cover w-[200px] h-[200px] "
         />
       </div>
     ) : (
-      <ImageList sx={{ width: "100%", height: 400 }} cols={2} rowHeight={400}>
+      <ImageList sx={{ width: "100%", height: 200 }} cols={2} rowHeight={200}>
         {list.map((item) => (
           <ImageListItem key={item}>
             <button
@@ -128,7 +128,7 @@ function StandardImageList({ one, list, setImage, eliminarImagenDePreview }) {
               alt={item}
               loading="lazy"
               onClick={() => setImage(item)}
-              className="cursor-pointer min-h-[200px] "
+              className="cursor-pointer max-h-[200px] max-w-[200px] "
             />
           </ImageListItem>
         ))}
@@ -944,6 +944,7 @@ function DashboardSchool() {
   const [seeNewPassword, setSeeNewPassword] = useState(false);
 
   useEffect(() => {
+    console.log(datosPrincipales.niveles)
     dispatch(getVacantes(datosPrincipales.niveles));
   }, [datosPrincipales.niveles]);
 
@@ -953,7 +954,8 @@ function DashboardSchool() {
   useEffect(() => {
     dispatch(getCitaAgendadas());
     dispatch(getCita());
-  }, [page === 5]);
+  }, [citasAgendadas.CitasActivas?.length]);
+  // citasAgendadas.CitasActivas?.length,success
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);
   const [vacantesOffThree, setVacantesOffThree] = useState(true);
@@ -3301,7 +3303,7 @@ function DashboardSchool() {
               <div>{/* <SelectCitasAg/> */}</div>
             </div>
             <div>
-              <CardCitas filtros={Filtro} />
+              <CardCitas  data={citasAgendadas&&citasAgendadas} filtros={Filtro} />
             </div>
           </div>
         ) : page === 6 ? (

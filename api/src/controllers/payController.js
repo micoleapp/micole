@@ -38,7 +38,7 @@ const payController = async (req, res) => {
     external_reference: id_colegio,
     back_urls: {
       //definir las verdaderas aca
-      success: "https://1ea4-177-246-245-112.ngrok.io/payments/success",
+      success: " https://bc48-177-246-245-112.ngrok.io/payments/success",
       failure:
         "https://www.microsoft.com/es-mx/download/internet-explorer.aspx",
       pending: "https://tupcideal.vercel.app/",

@@ -19,116 +19,112 @@ const {
   Dificultades,
   Review,
   Evento,
+  Trafico,
 } = require("../db.js");
 const { Op } = require("sequelize");
 const getPagination = require("../utils/getPagination");
-
+const moment = require("moment");
 // const getComponentData = require("../funciones/getComponentData.js");
 // const ratingProm = require("../funciones/ratingProm.js");
 
 //------- PEDIR TODOS LOS COLEGIOS A LA BD--------
 router.get("/", async (req, res) => {
-  const { distritos, grado, ingreso } = req.query;
   const cleanedUrl = req.originalUrl.replace(/limit=\d+&page=\d+&?/, "");
   const url = `${req.protocol}://${req.get("host")}${cleanedUrl}`;
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
-  try {
-    const totalColegios = await Colegio.findAll({
-      include: [
-        {
-          model: Vacante,
-          include: [{ model: Grado }],
-        },
-      ],
-      where: {
-        ...(distritos && distritos !== "false" && { DistritoId: distritos }),
-        ...(grado && grado !== "false" && { "$Vacantes.GradoId$": grado }),
-        ...(ingreso && ingreso !== "false" && { "$Vacantes.año$": ingreso }),
-      },
-      subQuery: false,
-    });
+  const { search, order,active } = req.query;
+  let where = {};
+  let orderBy = null;
+ 
 
+  if (search) {
+    where = {
+      nombre_colegio: {
+        [Op.iLike]: `%${search}%`,
+      },
+    };
+  }
+  if (active) {
+    let bool=active.toLocaleLowerCase()=="true"?true:false;
+    where = {
+      isActive: {
+        [Op.is]: bool,
+      },
+    };
+  }
+  if (order) {
+    switch (order) {
+      case "fechaCreacion":
+        orderBy = [["createdAt", "DESC"]];
+        break;
+      case "A-Z":
+        orderBy = [["nombre_colegio", "ASC"]];
+        break;
+      case "Z-A":
+        orderBy = [["nombre_colegio", "DESC"]];
+        break;
+      default:
+        orderBy = null;
+        break;
+    }
+  }
+
+  try {
+    const totalColegios = await Colegio.count({ where });
     const colegios = await Colegio.findAll({
+      attributes: [
+        "id",
+        "nombre_colegio",
+        "direccion",
+        "telefono",
+        "isActive",
+        "primera_imagen",
+        "logo",
+        "createdAt",
+      ],
       include: [
         {
-          model: Nivel,
-          attributes: ["nombre_nivel", "id"],
-        },
-        {
-          model: Idioma,
-          attributes: ["nombre_idioma", "id"],
-          through: {
-            attributes: [],
-          },
-        },
-        {
-          model: Vacante,
-          include: [{ model: Grado, attributes: ["nombre_grado"] }],
-          required: grado !== "false" || ingreso !== "false" ? true : false,
-          duplicating: grado !== "false" || ingreso !== "false" ? false : true,
-        },
-        {
-          model: Pais,
-          attributes: ["id", "nombre_pais"],
-        },
-        {
-          model: Departamento,
-          attributes: ["id", "nombre_departamento"],
-        },
-        {
-          model: Provincia,
-          attributes: ["id", "nombre_provincia"],
+          model: Plan_Pago,
+          attributes: ["id", "nombre_plan_pago"],
         },
         {
           model: Distrito,
           attributes: ["id", "nombre_distrito"],
         },
         {
-          model: Plan_Pago,
-          attributes: ["id", "nombre_plan_pago"],
+          model: Provincia,
+          attributes: ["id", "nombre_provincia"],
         },
         {
-          model: Horario,
-          attributes: ["dia", "horarios"],
+          model: Vacante,
         },
         {
-          model: Review,
-        },
-        {
-          model: Categoria,
-          attributes: [
-            "id",
-            "nombre_categoria",
-            "imagen_categoria",
-            "logo_categoria",
-          ],
-          through: {
-            attributes: [],
-          },
+          model: Nivel,
+          attributes: ["id", "nombre_nivel"],
         },
       ],
-      where: {
-        ...(distritos && distritos !== "false" && { DistritoId: distritos }),
-        ...(grado && grado !== "false" && { "$Vacantes.GradoId$": grado }),
-        ...(ingreso && ingreso !== "false" && { "$Vacantes.año$": ingreso }),
-      },
-      //(Sequelize) Problemas con Limit y Offset con los includes hasMany -> https://github.com/sequelize/sequelize/issues/7585
-      /*    limit: limit,
-      offset: skip, */
+      where,
+      order: orderBy,
+      limit: limit,
+      offset: skip,
     });
-    const endIndex = skip + limit;
-    const colegiosPaginados = colegios.slice(skip, endIndex);
-    const pagination = getPagination(url, page, limit, colegios.length);
+    let vacantesGrados;
+    vacantesGrados = await Grado.findAll({
+      attributes: ["id", "nombre_grado"],
+    });
+
+    const pagination = getPagination(url, page, limit, totalColegios);
     res.json({
-      count: totalColegios.length,
-      pages: Math.ceil(totalColegios.length / limit),
+      count: totalColegios,
+      pages: Math.ceil(totalColegios / limit),
       prev: pagination.prev,
       next: pagination.next,
       first: pagination.first,
       last: pagination.last,
-      colegios: colegiosPaginados,
+      colegios,
+      vacantesGrados,
     });
   } catch (err) {
     console.log(err);
@@ -139,8 +135,25 @@ router.get("/", async (req, res) => {
 //------- PEDIR UNO DE LOS COLEGIOS POR ID--------
 router.get("/:Colegio_id", async (req, res) => {
   const { Colegio_id } = req.params;
-
+  const tokenUser = req.user;
+  const fechaActual = moment().format("YYYY-MM-DD");
   try {
+    if (!tokenUser) {
+      const addVisualizacion = await Colegio.findByPk(Colegio_id);
+      addVisualizacion.visualizaciones =
+        Number(addVisualizacion.visualizaciones) + 1;
+      await addVisualizacion.save();
+    }
+    const [trafico, created] = await Trafico.findOrCreate({
+      where: { fecha: fechaActual, ColegioId: Colegio_id },
+      defaults: { visitas: 1 },
+    });
+
+    if (!created) {
+      trafico.visitas += 1;
+      await trafico.save();
+    }
+
     const cole = await Colegio.findAll({
       where: { id: [Colegio_id] },
       include: [
@@ -362,9 +375,6 @@ router.post("/filter", async (req, res) => {
           required: tipo.length !== 0 ? true : false,
           duplicating: tipo.length !== 0 ? false : true,
         },
-        {
-          model: Review,
-        },
       ],
       where: {
         isActive: true,
@@ -412,27 +422,6 @@ router.post("/filter", async (req, res) => {
     });
   }
 });
-
-//-----Cambiar estado activo de Colegio
-router.put("/activo/:id"), async (req,res) => {
-  try {
-    const { id } = req.params;
-
-    const colegio = await Colegio.findByPk(id);
-    if (!colegio) {
-      return next({
-        statusCode: 404,
-        message: 'El colegio ha modificar no existe',
-      });
-    }
-    colegio.isActive = true;
-    colegio.save();
-  } catch (error) {
-    res.status(500).send({
-      message: err.message,
-    });
-  }
-}
 
 //--------------------PUT  UN COLEGIO POR ID-------
 router.put("/:id", async (req, res) => {

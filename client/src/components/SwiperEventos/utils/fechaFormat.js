@@ -16,7 +16,7 @@ const meses = {
 export default function fechaFormat(fecha) {
   console.log(fecha);
   var expresionRegular = /-/;
-  let fechaArr = fecha.split(expresionRegular).reverse();
+  let fechaArr = fecha?.split(expresionRegular).reverse();
 
   console.log(fechaArr);
   const separarMes = fechaArr[1].split(/0/);
@@ -25,17 +25,8 @@ export default function fechaFormat(fecha) {
   const mes = meses[numeroMes];
 
   const fechaFormateada =
-    
-    fechaArr[0] +
-    " " +
-    "de" +
-    " " +
-    mes +
-    " " +
-    "del" +
-    " " +
-    fechaArr[2];
+    fechaArr[0] + " " + "de" + " " + mes + " " + "del" + " " + fechaArr[2];
   fechaFormateada.split("    ");
 
-  return fechaFormateada
+  return fechaFormateada;
 }

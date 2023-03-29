@@ -1,4 +1,4 @@
-const { Cita, Colegio, Grado, Plan_Pago } = require('../db');
+const { Cita, Colegio, Grado, Plan_Pago, User } = require('../db');
 const { Op } = require('sequelize');
 const moment = require('moment');
 const mailer = require('../utils/sendMails/mailer');
@@ -116,6 +116,34 @@ const getCitas = async (req, res, next) => {
   }
 };
 
+const getCitasUser = async (req, res, next) => {
+  const tokenUser = req.user;
+  try {
+    const user = await User.findOne({ where: { idAuth: tokenUser.id } });
+    if (!user) {
+      return next({
+        statusCode: 400,
+        message: 'El usuario no es un Colegio',
+      });
+    }
+    const include = { include: [{ model: Grado }, {model: Colegio, attributes: ['id', 'nombre_colegio', 'logo', 'direccion', 'telefono'],}] };
+    const CitasUsuario = await Cita.findAll({
+      where: {
+        email: user.email,
+        activo: true,
+      },
+      ...include,
+      order: [['fecha_cita', 'ASC']],
+    });
+
+    res.status(200).send({
+      CitasUsuario,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const getCitaById = async (req, res, next) => {
   const { idCita } = req.params;
   try {
@@ -180,7 +208,6 @@ const createCita = async (req, res, next) => {
     mailer.sendMailSolicitudCita(newCita, colegio);
     res.status(200).json(newCita);
   } catch (error) {
-    console.log(error);
     return next(error);
   }
 };
@@ -256,4 +283,5 @@ module.exports = {
   changeStatusCita,
   changeActivoCita,
   deleteCita,
+  getCitasUser
 };

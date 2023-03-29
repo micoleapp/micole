@@ -55,7 +55,7 @@ const getTipoAfiliacionById = async (req, res, next) => {
 };
 
 const createAfiliacion = async (req, res, next) => {
-  const { nombre_afiliacion, slug, logo, Afiliacion_tipo_Id } = req.body;
+  const { nombre_afiliacion, logo, Afiliacion_tipo_Id } = req.body;
   try {
     const ifExists = await Afiliacion.findOne({
       where: { nombre_afiliacion: nombre_afiliacion },
@@ -68,8 +68,8 @@ const createAfiliacion = async (req, res, next) => {
     }
     const newAfiliacion = await Afiliacion.create({
       nombre_afiliacion,
-      slug,
       logo,
+      slug:logo,
       Afiliacion_tipo_Id,
     });
     res.status(200).json(newAfiliacion);
@@ -80,7 +80,7 @@ const createAfiliacion = async (req, res, next) => {
 
 const updateAfiliacion = async (req, res, next) => {
   const { idAfiliacion } = req.params;
-  const { nombre_afiliacion, slug, logo, Afiliacion_tipo_Id } = req.body;
+  const { nombre_afiliacion, logo, Afiliacion_tipo_Id } = req.body;
   try {
     const afiliacion = await Afiliacion.findByPk(idAfiliacion);
     if (!afiliacion) {
@@ -91,10 +91,10 @@ const updateAfiliacion = async (req, res, next) => {
     }
     const updatedAfiliacion = await Afiliacion.update({
       nombre_afiliacion,
-      slug,
       logo,
+      slug:logo,
       Afiliacion_tipo_Id,
-    });
+    },{where:{id:idAfiliacion}});
     res.status(200).json(updatedAfiliacion);
   } catch (error) {
     return next(error);
@@ -147,14 +147,14 @@ const updateTipoAfiliacion = async (req, res, next) => {
 const deleteAfiliacionById = async (req, res, next) => {
   const { idAfiliacion } = req.params;
   try {
-    const Afiliacion = await Afiliacion.findByPk(idAfiliacion);
-    if (!Afiliacion) {
+    const deleteAfiliacion = await Afiliacion.findOne({where:{id:idAfiliacion}});
+    if (!deleteAfiliacion) {
       return next({
         statusCode: 404,
         message: 'El registro solicitado no existe',
       });
     }
-    await Afiliacion.destroy({ where: { id: idAfiliacion } });
+    await deleteAfiliacion.destroy();
     res.status(200).send('Registro eliminado correctamente');
   } catch (error) {
     return next(error);

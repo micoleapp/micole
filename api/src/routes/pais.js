@@ -21,21 +21,22 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const { nombre_pais } = req.body;
   try {
+    const ultimoPais = await Pais.findOne({
+      order: [["id", "DESC"]],
+    });
     const [pais, created] = await Pais.findOrCreate({
       where: {
+        id:Number(ultimoPais.id)+1,
         nombre_pais: nombre_pais,
       },
     });
     if (created) {
-      console.log("Pais creado exitosamente");
-      pais.nombre_pais = nombre_pais;
-      pais.save();
       res.status(200).json(pais);
     } else {
-      res.status(500).json([{ error: "Pais existente" }]);
+      res.status(500).json({ message: "Pais existente" });
     }
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({message: "Pais existente" });
   }
 });
 
@@ -60,7 +61,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const deletePais = awaiPais.findOne({ where: { id: id } });
+    const deletePais = await Pais.findOne({ where: { id: id } });
     await deletePais.destroy();
     res.status(200).send({ message: "País borrado" });
   } catch (err) {

@@ -88,7 +88,8 @@ const {
   Ventas,
   Metodos,
   Dificultades,
-  Evento
+  Evento,
+  Trafico
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -126,6 +127,14 @@ Distrito.hasMany(Colegio, {
 });
 Colegio.belongsTo(Distrito, {
   foreignKey: "DistritoId",
+});
+//------RELACIONES DE DIVISIÓN POLITICA------
+
+Pais.hasMany(Departamento, {
+  foreignKey: "PaisId",
+});
+Departamento.belongsTo(Pais, {
+  foreignKey: "PaisId",
 });
 
 Departamento.hasMany(Provincia, {
@@ -294,6 +303,13 @@ Colegio.hasMany(Evento, {
   foreignKey: "ColegioId",
 });
 Evento.belongsTo(Colegio, {
+  foreignKey: "ColegioId",
+});
+
+Colegio.hasMany(Trafico, {
+  foreignKey: "ColegioId",
+});
+Trafico.belongsTo(Colegio, {
   foreignKey: "ColegioId",
 });
 
