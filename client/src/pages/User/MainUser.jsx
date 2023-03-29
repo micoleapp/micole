@@ -11,6 +11,7 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { getAllSchools } from "../../redux/SchoolsActions";
 import { useDispatch } from "react-redux";
 import CitasUser from "./pegeCitas/CitasUser";
+import { getCitaUsuario } from "../../redux/CitasActions";
 
 export default function MainUser() {
   const [page, setPage] = React.useState(0);
@@ -18,6 +19,7 @@ export default function MainUser() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllSchools());
+    dispatch(getCitaUsuario())
   }, []);
 
   return (
