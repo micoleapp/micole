@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllPaises, getAllDepartaments } from "../../../redux/SchoolsActions";
+import { getAllPaises, getAllDepartaments,getAllProvincias,getAllDistrits } from "../../../redux/SchoolsActions";
 import Modal from "@mui/material/Modal";
 import { Box, FormControl, InputLabel, ListItemText, MenuItem, Select } from "@mui/material";
 const styleModal = {
@@ -17,22 +17,22 @@ const styleModal = {
   borderRadius: "10px",
   p: 4,
 };
-function Departamentos() {
+function Distritos() {
   const dispatch = useDispatch();
-  const [pais, setPais] = React.useState(null);
-  const [departamento, setDepartamento] = React.useState('');
-  const { paises, departaments } = useSelector((state) => state.schools);
+  const [provincia,setProvincia] = React.useState(null)
+  const [distrito, setDistrito] = React.useState("");
+  const { paises, departaments,provincias,distrits } = useSelector((state) => state.schools);
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
       axios
-        .post("/departamentos", { id_pais: pais, nombre_departamento: departamento })
+        .post("/distritos", { nombre_distrito:distrito, ProvinciaId: provincia })
         .then((res) => {
           Swal.fire({
             icon: "success",
-            title: "Departamento creado",
+            title: "Distrito creado",
           });
-          dispatch(getAllDepartaments());
+          dispatch(getAllDistrits());
         })
         .catch((err) => {
           Swal.fire({
@@ -45,22 +45,26 @@ function Departamentos() {
       console.log(error);
     }
   };
+
   useEffect(()=>{
     dispatch(getAllPaises())
     dispatch(getAllDepartaments())
+    dispatch(getAllProvincias());
+    dispatch(getAllDistrits());
+
   },[])
 
-  const handleEdit = (id,name,paisId,e) => {
+  const handleEdit = (id,name,depId,e) => {
     e.preventDefault()
     try {
       axios
-        .put(`/departamentos/${id}`, { nombre_departamento: name,id_pais:paisId })
+        .put(`/distritos/${id}`, { nombre_distrito: name,ProvinciaId:depId })
         .then((res) => {
           Swal.fire({
             icon: "success",
-            title: "Departamento editado",
+            title: "Distrito editado",
           });
-          dispatch(getAllDepartaments());
+          dispatch(getAllDistrits());
           handleCloseModal()
         })
         .catch((err) => {
@@ -79,13 +83,13 @@ function Departamentos() {
     e.preventDefault()
     try {
       axios
-        .delete(`/departamentos/${id}`)
+        .delete(`/distritos/${id}`)
         .then((res) => {
           Swal.fire({
             icon: "success",
-            title: "Pais eliminado",
+            title: "Distrito eliminado",
           });
-          dispatch(getAllDepartaments());
+          dispatch(getAllDistrits());
         })
         .catch((err) => {
           Swal.fire({
@@ -103,71 +107,73 @@ function Departamentos() {
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => {
     setOpenModal(false);
-    setEditDepartamento({})
+    setEditDistrito({})
   };
 
-  const [editDepartamento,setEditDepartamento] = useState({})
+  const [editDistrito,setEditDistrito] = useState({})
 
-  const handleEditPais = (id) => {
+  const handleEditDistrito = (id) => {
     handleOpenModal()
-    const newDepartamento = departaments.find(dep=>dep.id === id)
-    setEditDepartamento(newDepartamento)
+    const newDistrito = distrits.find(dep=>dep.id === id)
+    setEditDistrito(newDistrito)
   }
+
+  console.log(editDistrito)
 
   return (
     <div className="flex flex-col gap-3">
         <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-          <label htmlFor="pais" className="font-medium text-xl">Crear departamento</label>
+          <label htmlFor="pais" className="font-medium text-xl">Crear distrito</label>
           <div className="flex gap-5 w-full items-end">
-          <FormControl size="small" className="w-[220px]" variant="standard">
+          <FormControl size="small" className="w-[230px]" variant="standard">
             <InputLabel id="demo-simple-select-standard-label">
-              Selecciona un pais
+              Selecciona una provincia
             </InputLabel>
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-type-select-standard"
-              value={pais}
+              value={provincia}
               onChange={(e) => {
-                setPais(e.target.value);
+                setProvincia(e.target.value);
               }}
             >
-              {paises?.map((type, index) => (
+              {provincias?.map((type, index) => (
                 <MenuItem value={type.id} key={index}>
                   <ListItemText
-                    primary={type.nombre_pais}
+                    primary={type.nombre_provincia}
                   />
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
           <input
-            value={departamento}
-            onChange={(e) => setDepartamento(e.target.value)}
+            value={distrito}
+            onChange={(e) => setDistrito(e.target.value)}
             type="text"
             id="pais"
             name="pais"
-            placeholder="Nombre departamento..."
+            placeholder="Nombre distrito..."
             className="rounded-md shadow-md p-2 w-[250px] bg-slate-50  outline-none"
           />
           </div>
           <button
             type="submit"
-            disabled={pais === null || departamento === ''}
+            disabled={distrito === "" || provincia === null}
             className="p-2 flex font-medium mx-auto lg:mx-0 w-fit text-[#0061dd] rounded-md disabled:bg-black/20 disabled:text-black/40 bg-[#0061dd]/20 "
           >
             Guardar
           </button>
         </form>
         <div className="flex flex-col gap-3">
-          <h1 className="font-medium text-xl">Todos los departamentos</h1>
+          <h1 className="font-medium text-xl">Todos los distritos</h1>
           <div className="flex flex-col gap-3">
-            {departaments.map((dep) => (
+            {distrits.map((dep) => (
               <div key={dep.id} className="flex gap-4 items-center border p-2 w-fit rounded-md shadow-md">
                 <div className="flex flex-col w-[400px] ">
-                <h1 className="text-lg"> Nombre del departamento: {dep.nombre_departamento} </h1>
-                <h2 className="text-lg">Pais: {paises.find(el=>el.id===dep.PaisId).nombre_pais} </h2>
+                <h1 className="text-lg"> Nombre del distrito: {dep.nombre_distrito} </h1>
+                <h2 className="text-lg">Provincia: {provincias.find(el=>el.id===dep.ProvinciaId)?.nombre_provincia} </h2>
                 </div>
-                <button className="p-2 flex font-medium mx-auto lg:mx-0 w-fit text-[#0061dd] rounded-md bg-[#0061dd]/20 disabled:line-through" onClick={()=>handleEditPais(dep.id)}>Editar</button>
+                <button className="p-2 flex font-medium mx-auto lg:mx-0 w-fit text-[#0061dd] rounded-md bg-[#0061dd]/20 disabled:line-through" onClick={()=>handleEditDistrito(dep.id)}>Editar</button>
           
                 <button className="p-2 flex font-medium mx-auto lg:mx-0 w-fit text-[#0061dd] rounded-md bg-[#0061dd]/20 disabled:line-through" onClick={(e)=>handleDelete(e,dep.id)}>Eliminar</button>
                 
@@ -183,42 +189,42 @@ function Departamentos() {
       >
         <Box sx={styleModal}>
             <form className="flex flex-col justify-center items-center gap-5">
-                <label htmlFor="pais" className="font-medium text-xl">Editar departamento</label>
+                <label htmlFor="pais" className="font-medium text-xl">Editar distrito</label>
                 <FormControl size="small" className="w-[220px]" variant="standard">
             <InputLabel id="demo-simple-select-standard-label">
-              Selecciona un pais
+              Selecciona una provincia
             </InputLabel>
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-type-select-standard"
-              value={editDepartamento.PaisId}
+              value={editDistrito.ProvinciaId}
               onChange={(e) => {
-                setEditDepartamento({...editDepartamento,PaisId:e.target.value});
+                setEditDistrito({...editDistrito,ProvinciaId:e.target.value});
               }}
             >
-              {paises?.map((type, index) => (
+              {provincias?.map((type, index) => (
                 <MenuItem value={type.id} key={index}>
                   <ListItemText
-                    primary={type.nombre_pais}
+                    primary={type.nombre_provincia}
                   />
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
                 <input
-                    value={editDepartamento.nombre_departamento}
-                    onChange={(e) => setEditDepartamento({...editDepartamento,nombre_departamento:e.target.value})}
+                    value={editDistrito.nombre_distrito}
+                    onChange={(e) => setEditDistrito({...editDistrito,nombre_distrito:e.target.value})}
                     type="text"
                     id="pais"
                     name="pais"
-                    placeholder="Nombre departamento..."
+                    placeholder="Nombre distrito..."
                     className="p-2 rounded-md shadow-md bg-slate-50 w-fit outline-none"
                 />
                 <button
                     type="submit"
-                    disabled={editDepartamento.nombre_departamento === ""}
+                    disabled={editDistrito.nombre_distrito === ""}
                     className="p-2 flex font-medium mx-auto lg:mx-0 w-fit text-[#0061dd] rounded-md disabled:bg-black/20 disabled:text-black/40 bg-[#0061dd]/20 "
-                    onClick={(e)=>handleEdit(editDepartamento.id,editDepartamento.nombre_departamento,editDepartamento.PaisId,e)}
+                    onClick={(e)=>handleEdit(editDistrito.id,editDistrito.nombre_distrito,editDistrito.ProvinciaId,e)}
                 >
                     Guardar
                 </button>
@@ -229,4 +235,4 @@ function Departamentos() {
   );
 }
 
-export default Departamentos;
+export default Distritos;

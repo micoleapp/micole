@@ -5,10 +5,10 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import {
-  Ciudad,
+  Distritos,
   Departamentos,
   Paises,
-  Provincia,
+  Provincias,
 } from './index'
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -51,13 +51,13 @@ export default function PageUbicacion() {
   };
 
   return (
-    <Box sx={{ width: '100%', height:"100vh",padding:"30px"}}>
+    <Box sx={{ width: '100%', minHeight:"100vh",padding:"30px"}}>
       <Box>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Paises" {...a11yProps(0)} style={{textTransform:'capitalize',fontSize:"16px"}} />
           <Tab label="Departamentos" {...a11yProps(1)} style={{textTransform:'capitalize',fontSize:"16px"}}/>
           <Tab label="Provincias" {...a11yProps(2)} style={{textTransform:'capitalize',fontSize:"16px"}} />
-          <Tab label="Ciudad" {...a11yProps(3)}  style={{textTransform:'capitalize',fontSize:"16px"}}/>
+          <Tab label="Distritos" {...a11yProps(3)}  style={{textTransform:'capitalize',fontSize:"16px"}}/>
         </Tabs>
       </Box>
       <div className="border bg-white rounded-b-lg shadow-md">
@@ -68,10 +68,10 @@ export default function PageUbicacion() {
         <Departamentos></Departamentos>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Provincia></Provincia>
+        <Provincias></Provincias>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <Ciudad></Ciudad>
+        <Distritos></Distritos>
       </TabPanel>
       </div>
     </Box>

@@ -8,9 +8,7 @@ const { Departamento, Pais } = require("../db.js");
 router.get("/", async (req, res) => {
   try {
     let departamento;
-    departamento = await Departamento.findAll({
-      attributes: ["id", "nombre_departamento"],
-    });
+    departamento = await Departamento.findAll();
 
     res.json(departamento);
   } catch (err) {
