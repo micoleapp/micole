@@ -76,7 +76,7 @@ function App() {
 
           <Route path="/*" element={<Error />} />
           <Route path="*" element={<Error />} />
-          {user.rol === "Colegio" && (
+          {user?.rol === "Colegio" && (
             <Route
               exact
               path="/dashboardschool"
@@ -88,10 +88,10 @@ function App() {
             />
           )}
 
-          {user.rol === "Admin" && (
+          {user?.rol === "Admin" && (
             <Route path="/admin" element={<MainAdmin />} />
           )}
-          {user.rol === "Usuario" && (
+          {user?.rol === "Usuario" && (
             <Route path="/user" element={<MainUser />} />
           )}
         </Routes>
