@@ -3,7 +3,7 @@ import style from "./ModalRegister.module.css";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import FormControl from "@mui/material/FormControl";
-import { MenuItem, toggleButtonClasses } from "@mui/material";
+import { MenuItem, toggleButtonClasses, Typography } from "@mui/material";
 import Select from "@mui/material/Select";
 import ListItemText from "@mui/material/ListItemText";
 import { InputLabel } from "@mui/material";
@@ -13,8 +13,11 @@ import { BsEyeSlash } from "react-icons/bs";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../../redux/AuthSlice";
 
+import Logo from "../../assets/logoPayment.png";
+import FormInscripcion from "../FormInscripcion/FormInscripcion";
+import { register as registerUser } from "../../redux/AuthActions";
+import FormLogin from "../FormLogin/FormLogin";
 const style1 = {
   position: "absolute",
   top: "50%",
@@ -28,9 +31,12 @@ const style1 = {
 };
 
 export default function ModalRegistro({ open, setOpen }) {
+  const { isAuth, success } = useSelector((state) => state.auth);
   const handleClose = () => setOpen(false);
   const [Distrito, setDistrito] = useState(false);
   const [seePassword, setseePassword] = useState(false);
+  const [OpenRegistroColegio, setOpenRegistroColegio] = useState(false);
+  const [OpenRegistroPadre, setOpenRegistroPadre] = useState(false);
   const [OpenLogin, setOpenLogin] = useState(false);
   const { distrits } = useSelector((state) => state.schools);
   const dispatch = useDispatch();
@@ -39,10 +45,6 @@ export default function ModalRegistro({ open, setOpen }) {
     setseePassword(!seePassword);
   };
 
-  const handleValueDistrito = (event) => {
-    console.log(event.target.value);
-    setDistrito(event.target.value);
-  };
   const {
     register,
     handleSubmit,
@@ -55,25 +57,20 @@ export default function ModalRegistro({ open, setOpen }) {
       lastname: "",
       phone: "",
       password: "",
-      esColegio: false,
     },
     mode: "onChange",
   });
   const navigate = useNavigate();
-  //   const handlerLogin = () => {
-  //     handlerOpenLogin(true);
-  //     handlerOpenLogin(!OpenLogin)
-  //   };
+
   const OnSubmit = (user) => {
     const data = {
-      esColegio: false,
       apellidos: user.lastname,
       email: user.mail,
       nombre: user.name,
       password: user.password,
       telefono: user.phone,
     };
-
+    console.log(data);
     dispatch(registerUser(data));
   };
 
@@ -87,116 +84,166 @@ export default function ModalRegistro({ open, setOpen }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style1}>
-          {/* <FormRepuesto handleClose={handleClose} /> */}
-          <div className={style.h1_div}>
-            <h1>Completa tus datos</h1>
-          </div>
-
-          <form onSubmit={handleSubmit(OnSubmit)} className={style.formLayout}>
-            <div className={style.form}>
-              <div className={style.divInputs}>
-                <label className={style.label}>Nombre</label>
-                <input
-                  placeholder="Introduzca su nombre "
-                  {...register("name", {
-                    required: true,
-
-                    maxLength: 100,
-                  })}
-                  className="shadow-md"
-                />
-
-                {errors.name && (
-                  <p className={style.p}>Introduzca su nombre.</p>
-                )}
-     <label className={style.label}>Apellido</label>
-                <input
-                  placeholder="Introduzca su apellido "
-                  {...register("lastname", {
-                    required: true,
-                    maxLength: 100,
-                  })}
-                  className="shadow-md"
-                />
-
-                {errors.lastname?.type === "required" && (
-                  <p className={style.p}>Introduzca su apellido.</p>
-                )}
-                {errors.lastname?.type === "maxLength" && (
-                  <p className={style.p}>Demasiados caracteres.</p>
-                )}
-                <label className={style.label}>Email</label>
-                <input
-                  placeholder="Introduzca su correo electronico "
-                  {...register("mail", {
-                    required: true,
-
-                    maxLength: 100,
-                    pattern: /\S+@\S+\.\S+/,
-                  })}
-                  className="shadow-md"
-                />
-                {errors.mail?.type === "required" && (
-                  <p className={style.p}>Introduzca su mail.</p>
-                )}
-                {errors.mail?.type === "pattern" && (
-                  <p className={style.p}>El formato es examp@sds.com</p>
-                )}
-                {errors.mail?.type === "maxLength" && (
-                  <p className={style.p}>Demasiados caracteres.</p>
-                )}
+          {OpenRegistroPadre === false && OpenRegistroColegio === false && (
+            <>
+              <div className={style.img_div}>
+                <img src={Logo} />
               </div>
-              <div className={style.divInputs}>
-           
-                <label className={style.label}>Telefono</label>
-                <input
-                  type="number"
-                  placeholder="Introduzca numero de telefono"
-                  {...register("phone", { required: true })}
-                  className="shadow-md"
-                />
-                {errors.phone && (
-                  <p className={style.p}>Introduzca su telefono .</p>
-                )}
+              <div className={style.h1_div}></div>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "1vh" }}
+              >
+                <Typography>
+                <div
+                style={{ display: "flex", flexDirection: "column", gap: "0.50" }}
+              >
+                  <b style={{color:'#0061DF'}}>Inscribe tu colegio en nuestra plataforma</b>
+                  Únete a la mayor comunidad de colegios en el Perú
+              </div>
+                
+                </Typography>
+                <Button
+                  onClick={() => setOpenRegistroColegio(true)}
+                  variant="contained"
+                >
+                 Inscribe tu Colegio
+                </Button>
+                <Button
+                  onClick={() => setOpenRegistroPadre(true)}
+                  variant="contained"
+                >
+                  Registrarse como Familia
+                </Button>
+              </div>
+            </>
+          )}
 
-                <label className={style.label}>Contraseña</label>
-                <div className={style.DivPass}>
-                  {seePassword === true ? (
-                    <BsEye onClick={ToggleSeePass} className={style.Password} />
-                  ) : (
-                    <BsEyeSlash
-                      onClick={ToggleSeePass}
-                      className={style.Password}
+          {OpenRegistroPadre && (
+            <>
+              <div className={style.h1_div}>
+                <h1>Completa tus datos</h1>
+              </div>
+
+              <form
+                onSubmit={handleSubmit(OnSubmit)}
+                className={style.formLayout}
+              >
+                <div className={style.form}>
+                  <div className={style.divInputs}>
+                    <label className={style.label}>Nombre</label>
+                    <input
+                      placeholder="Introduzca su nombre "
+                      {...register("name", {
+                        required: true,
+
+                        maxLength: 100,
+                      })}
+                      className="shadow-md"
                     />
-                  )}
 
-                  <input
-                    placeholder="Contraseña"
-                    type={seePassword === true ? "text" : "password"}
-                    {...register("password", {
-                      required: true,
-                      maxLength: 100,
-                    })}
-                    className="shadow-md"
-                  />
+                    {errors.name && (
+                      <p className={style.p}>Introduzca su nombre.</p>
+                    )}
+                    <label className={style.label}>Apellido</label>
+                    <input
+                      placeholder="Introduzca su apellido "
+                      {...register("lastname", {
+                        required: true,
+                        maxLength: 100,
+                      })}
+                      className="shadow-md"
+                    />
+
+                    {errors.lastname?.type === "required" && (
+                      <p className={style.p}>Introduzca su apellido.</p>
+                    )}
+                    {errors.lastname?.type === "maxLength" && (
+                      <p className={style.p}>Demasiados caracteres.</p>
+                    )}
+                    <label className={style.label}>Email</label>
+                    <input
+                      placeholder="Introduzca su correo electronico "
+                      {...register("mail", {
+                        required: true,
+
+                        maxLength: 100,
+                        pattern: /\S+@\S+\.\S+/,
+                      })}
+                      className="shadow-md"
+                    />
+                    {errors.mail?.type === "required" && (
+                      <p className={style.p}>Introduzca su mail.</p>
+                    )}
+                    {errors.mail?.type === "pattern" && (
+                      <p className={style.p}>El formato es examp@sds.com</p>
+                    )}
+                    {errors.mail?.type === "maxLength" && (
+                      <p className={style.p}>Demasiados caracteres.</p>
+                    )}
+                  </div>
+                  <div className={style.divInputs}>
+                    <label className={style.label}>Telefono</label>
+                    <input
+                      type="number"
+                      placeholder="Introduzca numero de telefono"
+                      {...register("phone", { required: true })}
+                      className="shadow-md"
+                    />
+                    {errors.phone && (
+                      <p className={style.p}>Introduzca su telefono .</p>
+                    )}
+
+                    <label className={style.label}>Contraseña</label>
+                    <div className={style.DivPass}>
+                      {seePassword === true ? (
+                        <BsEye
+                          onClick={ToggleSeePass}
+                          className={style.Password}
+                        />
+                      ) : (
+                        <BsEyeSlash
+                          onClick={ToggleSeePass}
+                          className={style.Password}
+                        />
+                      )}
+
+                      <input
+                        placeholder="Contraseña"
+                        type={seePassword === true ? "text" : "password"}
+                        {...register("password", {
+                          required: true,
+                          maxLength: 100,
+                        })}
+                        className="shadow-md"
+                      />
+                    </div>
+                    {errors.password?.type === "required" && (
+                      <p className={style.p}>Campo requerido</p>
+                    )}
+                  </div>
                 </div>
-                {errors.password?.type === "required" && (
-                  <p className={style.p}>Campo requerido</p>
-                )}
-              </div>
-            </div>
-            <div className={style.divButton}>
-              <button type="submit">REGISTRARSE</button>
-              <div className={`${style.divButton}`}>
-                <p>Ya tienes cuenta ? </p>
-                <div>
-                  <p style={{ color: "blue", cursor: "pointer" }}>
-                    Inicia Sesión{" "}
-                  </p>
+                <div className={style.divButton}>
+                  <button type="submit">REGISTRARSE</button>
+                  <div className={`${style.divButton}`}>
+                    <p>Ya tienes cuenta ? </p>
+                    <div>
+                      <p style={{ color: "blue", cursor: "pointer" }}>
+                        Inicia Sesión{" "}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </form>
+              </form>
+            </>
+          )}
+          {OpenRegistroColegio && OpenLogin === false && (
+            <FormInscripcion handlerOpenLogin={setOpenLogin} />
+          )}
+          <div>
+            {OpenLogin === true && isAuth === false && (
+              <FormLogin setOpenLogin={setOpenLogin} OpenLogin={OpenLogin} />
+            )}
+          </div>
         </Box>
       </Modal>
     </>
