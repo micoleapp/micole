@@ -95,9 +95,9 @@ export default function ModalRegistro({ open, setOpen }) {
               >
                 <Typography>
                 <div
-                style={{ display: "flex", flexDirection: "column", gap: "1vh" }}
+                style={{ display: "flex", flexDirection: "column", gap: "0.50" }}
               >
-                  <b>Inscribe tu colegio en nuestra plataforma</b>
+                  <b style={{color:'#0061DF'}}>Inscribe tu colegio en nuestra plataforma</b>
                   Únete a la mayor comunidad de colegios en el Perú
               </div>
                 
@@ -106,7 +106,7 @@ export default function ModalRegistro({ open, setOpen }) {
                   onClick={() => setOpenRegistroColegio(true)}
                   variant="contained"
                 >
-                  Registrar tu Colegio
+                 Inscribe tu Colegio
                 </Button>
                 <Button
                   onClick={() => setOpenRegistroPadre(true)}

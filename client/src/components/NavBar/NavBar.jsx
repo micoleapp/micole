@@ -12,15 +12,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 import ModalRegistro from "../FormRegister/ModalRegister";
 function NavBar() {
   const dispatch = useDispatch();
-  const { isAuth, oneSchool } = useSelector((state) => state.auth);
+  const { isAuth, oneSchool, user } = useSelector((state) => state.auth);
   const [OpenLogin, setOpenLogin] = useState(false);
   const [BurguerMen, setBurguerMen] = useState(false);
   const [OpenCategory, setOpenCategory] = useState(false);
   const [OpenContact, setOpenContact] = useState(false);
-  const [openRegister, setOpenRegister] = useState(false)
-const handlerOpenRegister =()=>{
-  setOpenRegister(true)
-}
+  const [openRegister, setOpenRegister] = useState(false);
+  const handlerOpenRegister = () => {
+    setOpenRegister(true);
+  };
   const toggleBurguerMenu = () => {
     setBurguerMen(true);
   };
@@ -59,16 +59,12 @@ const handlerOpenRegister =()=>{
 
       <div className={style.container}>
         <div className={style.items}>
-        
-            
-            <Link
-              className={`${style.p} hover-underline-animation`}
-              to={"/enroll"}
-            >
-              Inscribe tu colegio
-            </Link>
-            
-          
+          <Link
+            className={`${style.p} hover-underline-animation`}
+            to={"/enroll"}
+          >
+            Inscribe tu colegio
+          </Link>
 
           <Link
             className={`${style.p} hover-underline-animation`}
@@ -99,32 +95,30 @@ const handlerOpenRegister =()=>{
               Iniciar sesion
             </button>
           )}
-          {/* {isAuth === true && oneSchool !== null ? (
-          <Link to={"/dashboardschool"}>
-          <button className={style.SesionButtom}>Ver Perfil</button>
-        </Link>
-          ) : (          <Link to={"/enroll"}>
-          <button className={style.SesionButtom}>Inscribe tu colegio</button>
-        </Link>)} */}
 
           {!isAuth ? (
             <>
-              {/* <Link to={"/enroll"}>
-              <button className={style.SesionButtom}>
-                Inscribe tu colegio
-              </button>
-            </Link> */}
-        
-              <button onClick={handlerOpenRegister}  className={style.SesionButtom}>
+              <button
+                onClick={handlerOpenRegister}
+                className={style.SesionButtom}
+              >
                 Registrarse
               </button>
-            
             </>
-          
-          ) : oneSchool !== null ? (
-            <Link to={"/dashboardschool"}>
+          ) : user.rol === "Admin" ? (
+            <Link to={"/admin"}>
               <button className={style.SesionButtom}>Ver Perfil</button>
             </Link>
+          ) : user.rol === "Usuario" ? (
+            <Link to={"/user"}>
+              <button className={style.SesionButtom}>Ver Perfil</button>
+            </Link>
+          ) : user.rol === "Colegio" ? (
+            oneSchool != null && (
+              <Link to={"/dashboardschool"}>
+                <button className={style.SesionButtom}>Ver Perfil</button>
+              </Link>
+            )
           ) : (
             <button
               className={`${style.SesionButtom} flex items-center justify-center gap-2`}
@@ -215,9 +209,7 @@ const handlerOpenRegister =()=>{
                   Inscribe tu colegio
                 </button>
               </Link>
-              <button className={style.SesionButtom}>
-                Registrarse
-              </button>
+              <button className={style.SesionButtom}>Registrarse</button>
             </>
           ) : oneSchool !== null ? (
             <Link to={"/dashboardschool"}>
@@ -233,7 +225,9 @@ const handlerOpenRegister =()=>{
           )}
         </div>
       </div>
-      {openRegister && <ModalRegistro open={openRegister} setOpen={setOpenRegister} />}
+      {openRegister && (
+        <ModalRegistro open={openRegister} setOpen={setOpenRegister} />
+      )}
     </div>
   );
 }

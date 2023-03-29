@@ -14,12 +14,14 @@ import PageAfiliaciones from "./PageAfiliaciones/PageAfiliaciones";
 import PageUbicacion from "./PageUbicacion/PageUbicacion";
 
 import { getAllSchools } from "../../redux/SchoolsActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import VacanteAdmin from "./PageVacantes/VacanteAdmin";
 import PanelControl from "./PanelControl/PanelControl";
 import ConfigAdmin from "./Config/ConfigAdmin";
 export default function MainAdmin() {
   const [page, setPage] = React.useState(0);
+
+  
   const [isOpen, setOpen] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {

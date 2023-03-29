@@ -76,18 +76,24 @@ function App() {
 
           <Route path="/*" element={<Error />} />
           <Route path="*" element={<Error />} />
+          {user.rol === "Colegio" && (
+            <Route
+              exact
+              path="/dashboardschool"
+              element={
+                <RequireAuth>
+                  <DashboardSchool />
+                </RequireAuth>
+              }
+            />
+          )}
 
-          <Route
-            exact
-            path="/dashboardschool"
-            element={
-              <RequireAuth>
-                <DashboardSchool />
-              </RequireAuth>
-            }
-          />
-          <Route path="/admin" element={<MainAdmin />} />
-          <Route path="/user" element={<MainUser />} />
+          {user.rol === "Admin" && (
+            <Route path="/admin" element={<MainAdmin />} />
+          )}
+          {user.rol === "Usuario" && (
+            <Route path="/user" element={<MainUser />} />
+          )}
         </Routes>
       )}
 
