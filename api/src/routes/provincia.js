@@ -7,12 +7,7 @@ router.get("/", async (req, res) => {
   let response = [];
   try {
     let provincia;
-    provincia = await Provincia.findAll({
-       attributes: [
-        "id",
-        "nombre_provincia",
-      ],
-    });
+    provincia = await Provincia.findAll();
 
     res.send(provincia);
   } catch (err) {

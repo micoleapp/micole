@@ -139,8 +139,8 @@ function Paises() {
           <h1 className="font-medium text-xl">Todos los paises</h1>
           <div className="flex flex-col gap-3">
             {paises.map((pais) => (
-              <div key={pais.id} className="flex gap-4 items-center">
-                <h1 className="text-xl">{pais.nombre_pais} </h1>
+              <div key={pais.id} className="flex gap-4 items-center border-2 w-fit p-2 rounded-md shadow-md">
+                <h1 className="text-xl min-w-[150px] ">{pais.nombre_pais} </h1>
                 <button className="p-2 flex font-medium mx-auto lg:mx-0 w-fit text-[#0061dd] rounded-md bg-[#0061dd]/20 disabled:line-through" onClick={()=>handleEditPais(pais.id)}>Editar</button>
           
                 <button className="p-2 flex font-medium mx-auto lg:mx-0 w-fit text-[#0061dd] rounded-md bg-[#0061dd]/20 disabled:line-through" onClick={(e)=>handleDelete(e,pais.id)}>Eliminar</button>
