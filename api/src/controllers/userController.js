@@ -3,7 +3,8 @@ const getPagination = require('../utils/getPagination');
 
 const getUsers = async (req, res, next) => {
   try {
-    const url = `${req.protocol}://${req.get('host')}${req.path}`;
+    const cleanedUrl = req.originalUrl.replace(/limit=\d+&page=\d+&?/, "");
+    const url = `${req.protocol}://${req.get("host")}${cleanedUrl}`;
     const limit = parseInt(req.query.limit, 10) || 10;
     const page = parseInt(req.query.page, 10) || 1;
     const skip = (page - 1) * limit;
