@@ -130,9 +130,9 @@ export default function MainUser() {
           </ul>
         </section>
         {/* Renderizado de componentes  */}
-        <section className="right w-full bg-[#f6f7f8] p-5 lg:px-31 lg:py-12">
+        <section className="right w-full bg-[#f6f7f8]  lg:px-31 lg:py-12">
           {page === 0 ? (
-            <div className="min-h-screen">
+            <div className="min-h-screen ">
             <CitasUser/>
             </div>
           ) : page === 1 ? (

@@ -16,8 +16,11 @@ export default function CitasUser() {
 
   return (
     <>
-      <div>
-        {allschools?.length > 0 && loading === false
+     <Typography>Listado de Citas</Typography>
+
+    <> 
+    <div style={{display:'flex', gap:'4vh', flexDirection:'column'}}>
+       {allschools?.length > 0 && loading === false
           ? allschools?.map((ele) => {
               let str = ele.direccion;
 
@@ -25,12 +28,17 @@ export default function CitasUser() {
               let str2 = str?.slice(0, 60);
               console.log(str2);
               return (
-                <>
-                  <div className={style.layout}>
+              
+                 <div className={style.layout}>
                     {/* foto mas info */}
-                    <div className={style.imgInfoDiv}>
+                    <div className={style.contenedor}>
+                       <div className={style.imgInfoDiv}>
                       <img
-                      style={{width:'15vh',height:'15vh', padding:'1vh'}}
+                        style={{
+                          width: "15vh",
+                          height: "15vh",
+                          padding: "1vh",
+                        }}
                         className="object-cover w-40 h-40"
                         src={ele.primera_imagen}
                       />
@@ -82,15 +90,90 @@ export default function CitasUser() {
                             <p>{ele.telefono}</p>
                           </div>
                         </Typography>
+                        
 
-                       
+                      
                       </div>
+                   
+                   
+                   
                     </div>
-                    <div style={{width:'100%', padding:'1vh'}}>
-                          <TimeLine />
+                  <div className={style.fechaHorarioDiv}>
+                    <div className={style.planFechaResponsive}>
+                          <Typography
+                            sx={{
+                              paddingLeft: "1vh",
+                              color: "#0D263B",
+                              fontWeight: "600",
+                              fontSize: "1.5vh",
+                            }}
+                          >
+                            <div className={style.divTypo}>
+                              <b style={{ color: "#0061DF" }}>Horarios / Fecha</b>
+                              <p>22 de agosto del 2023 8:00 AM</p>
+                            </div>
+                          </Typography>
                         </div>
+
+                        <div className={style.divThanos}>
+                          <p
+                            style={{
+                              color: "#0D263B",
+
+                              fontSize: "1.5vh",
+                            }}
+                          >
+                             <b style={{ color: "#0061DF" }}>Horarios / Fecha</b>
+                            {" "}
+                            <p>22 de agosto del 2023 8:00 AM</p>
+                          </p>
+                        </div>
+
+                        <div className={style.planFechaResponsive}>
+                          <Typography
+                            sx={{
+                              paddingLeft: "1vh",
+                              color: "#0D263B",
+                              fontWeight: "600",
+                              fontSize: "1.5vh",
+                            }}
+                          >
+                            <div className={style.divTypo}>
+                              <b style={{ color: "#0061DF" }}>Estado</b>
+                              <p>Aplicacion</p>
+                            </div>
+                          </Typography>
+                        </div>
+
+                        <div className={style.divThanos}>
+                          <p
+                            style={{
+                              color: "#0D263B",
+
+                              fontSize: "1.5vh",
+                            }}
+                          >
+                             <b style={{ color: "#0061DF" }}>Estado</b>
+                            {" "}
+                            <p>Aplicacion</p>
+                          </p>
+                        </div>
+
+
                   </div>
-                </>
+                    </div>
+                   
+                  
+                    
+
+
+                    <div style={{ width: "100%", paddingTop: "1vh" }}>
+                      <TimeLine />
+                    </div>
+                  </div>
+             
+                 
+              
               );
             })
           : allschools?.length > 0 && loading === true
@@ -132,8 +215,14 @@ export default function CitasUser() {
                 <rect width="100" height="100" />
               </ContentLoader>
             ))}
-      </div>
-      <Typography>Listado de Citas</Typography>
+    </div>
+    
+    </>
+       
+
+
+      
+     
     </>
   );
 }

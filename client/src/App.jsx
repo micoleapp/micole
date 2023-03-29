@@ -50,8 +50,11 @@ function App() {
     dispatch(getAllAfiliaciones());
     // dispatch(getAllSchools())
     dispatch(getUserByToken());
-    dispatch(getCita());
+   if (user?.rol === 'Colegio'){
+        dispatch(getCita());
     dispatch(getCitaAgendadas());
+   }
+
     dispatch(getAllMetodos());
     dispatch(getAllDificultades());
   }, []);

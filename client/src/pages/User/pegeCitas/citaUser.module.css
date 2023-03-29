@@ -1,11 +1,14 @@
-
+.divEspaciado{
+  padding: 1vh;
+}
 .layout{
-    width: 100%;
+    width: 90%;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: space-around;
-    padding: 1rem;
+    padding: 1vh;
+    box-shadow: 10px 10px 20px rgba(60, 139, 203, 0.19);
 }
 .itemDiv {
     width: 50%;
@@ -14,14 +17,14 @@
     align-items: center;
 }
 .divThanos{
-  width: 40%;
+  width: 30%;
   display: flex;
   align-items: center;
   justify-content: space-around;
 }
 .imgInfoDiv{
   
-      width: 100%;
+      width: 50%;
       display: flex;
       display: flex;
       align-items: center;
@@ -75,10 +78,31 @@
     }
   }
 
+
+.fechaHorarioDiv{
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+.contenedor{
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+
+}
+
 @media (max-width: 900px) {
     .layout{
         flex-direction: column;
-
+        width: 100%;
+    }
+    .imgInfoDiv{
+      flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    }
+    .fechaHorarioDiv{
+      flex-direction: column;
     }
     .itemDiv {
         justify-content: center;
@@ -92,13 +116,16 @@
     .divThanos{
       display: none;
     }
-    
+    .contenedor{
+      flex-direction: column;
+    }
 }
  
 @media (max-width: 500px) {
     .imgInfoDiv{
-        flex-direction: column;
-        justify-content: center;
+      flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
     }
     .itemDiv p{
         font-size: 1.6vh;
