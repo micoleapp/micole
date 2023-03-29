@@ -59,7 +59,7 @@ const handlerOpenRegister =()=>{
 
       <div className={style.container}>
         <div className={style.items}>
-          {isAuth && (
+        
             
             <Link
               className={`${style.p} hover-underline-animation`}
@@ -68,7 +68,7 @@ const handlerOpenRegister =()=>{
               Inscribe tu colegio
             </Link>
             
-          )}
+          
 
           <Link
             className={`${style.p} hover-underline-animation`}
@@ -109,11 +109,11 @@ const handlerOpenRegister =()=>{
 
           {!isAuth ? (
             <>
-              <Link to={"/enroll"}>
+              {/* <Link to={"/enroll"}>
               <button className={style.SesionButtom}>
                 Inscribe tu colegio
               </button>
-            </Link>
+            </Link> */}
         
               <button onClick={handlerOpenRegister}  className={style.SesionButtom}>
                 Registrarse
