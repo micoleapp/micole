@@ -1249,7 +1249,7 @@ function SchoolDetail() {
                     <input
                       name="nombre"
                       type="text"
-                      value={isAuth === true && user.nombre}
+                      value={isAuth === true ? user.nombre : ''}
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       onChange={(e) => {
@@ -1261,7 +1261,7 @@ function SchoolDetail() {
                       name="cel"
                       type="number"
                       pattern="[0-9]{8,15}"
-                      value={isAuth === true && user.telefono }
+                      value={isAuth === true ? user.telefono : ""}
                       required
                       title="Solo se permiten numeros y entre 8 y 10 caracteres"
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
@@ -1274,7 +1274,7 @@ function SchoolDetail() {
                   <input
                     name="email"
                     type="email"
-                    value={isAuth === true && user.email }
+                    value={isAuth === true ? user.email:'' }
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Correo"
                     onChange={(e) => {
