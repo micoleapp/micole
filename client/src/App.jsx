@@ -62,6 +62,8 @@ function App() {
   useEffect(() => {
     if (user) {
       dispatch(getSchoolDetail(user.id));
+    }if(user?.rol === "Colegio"){
+      dispatch(getCitaAgendadas(user.id));
     }
   }, [user]);
 
