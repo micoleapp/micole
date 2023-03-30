@@ -3,6 +3,7 @@ const mercadopago = require("mercadopago");
 const router = Router();
 const { Colegio, Ventas, Plan_Pago } = require("../db.js");
 const payController = require("../controllers/payController");
+const mailer = require('../utils/sendMails/mailer');
 
 router.get("/success", (req, res) => {
   res.send("Todo bien al 100");
@@ -84,6 +85,7 @@ router.post("/notification", async (req, res) => {
           await planVencido.save();
           // AQUI SE MANDA  EL CORREO DE QUE SE COMPRO EXITOSAMENTE <-----------------------
           // la informacion la optienes de colegio.nombre_colegio """colegio.nombre del plan"""
+          mailer.sendPaymentSuccess(colegio.nombre_colegio, colegio.PlanPagoId);
           res.status(200).send(merchantOrder);
         }
       } else if (merchantOrder.body.payments[0].status === "canceled") {
@@ -92,6 +94,7 @@ router.post("/notification", async (req, res) => {
         await ventas.save();
         // AQUI SE MANDA  EL CORREO DE QUE SE CANCELO LA COMPRA <-----------------------
         // la informacion la optienes de colegio.nombre_colegio """colegio.nombre del plan"""
+        mailer.sendPaymentCanceled(colegio.nombre_colegio, colegio.PlanPagoId);
         res.status(200).send(merchantOrder);
       }
 
