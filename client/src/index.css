@@ -96,3 +96,7 @@ input[type=number] { -moz-appearance:textfield; }
 .my-swal-container {
   z-index: 100000;
 }
+
+.addImage{
+  display: hidden !important;
+}

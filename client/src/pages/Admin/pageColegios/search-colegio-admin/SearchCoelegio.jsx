@@ -2,56 +2,202 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
-import SearchIcon from "@mui/icons-material/Search";
 
+import SearchIcon from "@mui/icons-material/Search";
 import style from "./searchColegio.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button, IconButton, Typography } from "@mui/material";
-
-import { useSelector } from "react-redux";
-export default function SearchCoelegio({ handlerInput, data , nroColegios }) {
+import TuneIcon from "@mui/icons-material/Tune";
+import { useDispatch, useSelector } from "react-redux";
+import { filterAdminState, getColegiosSearch } from "../../../../redux/SchoolsActions";
+import SelectCRM from "../../../../components/CardsDrgAndDrp/SelectsCRM/SelectsCRM";
+import axios from "axios";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+export default function SearchCoelegio({
+  handlerInput,
+  data,
+  nroColegios,
+  vacante,
+}) {
+  const { distrits } = useSelector((state) => state.schools);
   const [OptionSelected, setOptionSelected] = useState("");
+  const [OptionSelectedState, seOptionSelectedState] = useState("");
+  const [filterSelected, setFilterSelected] = useState({
+    state: "",
+    distrito: "",
+  });
 
+  let nombresColegio = data&& data?.map((x) => x.nombre_colegio);
+  let nameUnique = nombresColegio?.filter(
+    (x, i) => nombresColegio.indexOf(x) === i
+  );
+
+  const dispatch = useDispatch();
+  console.log(filterSelected);
+  const handleChangeState = (event) => {
+    dispatch(filterAdminState())
+    setFilterSelected({
+      ...filterSelected,
+      state: event.target.value,
+    });
+  };
+
+  const handleChangeDistrito = (event) => {
+    setFilterSelected({
+      ...filterSelected,
+      distrito: event.target.value,
+    });
+  };
   const SubmitSearch = (event) => {
     handlerInput(OptionSelected);
+    if (vacante === false) {
+      dispatch(getColegiosSearch(OptionSelected));
+    }
+    if (vacante === true) {
+      try {
+        axios
+          .get(`/colegios?&search=${OptionSelected}`)
+          .then((res) => {
+            handlerInput(res.data.colegios);
+          })
+          .catch((err) => console.log(err.message));
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
   };
-console.log(OptionSelected)
+  // filterAdminState
+  console.log(OptionSelectedState)
   return (
     <>
-    <div style={{display:'flex', gap:'1rem' ,alignItems:'center'}}>
-        <Typography
-        sx={{fontFamily:'Poppins', fontWeight:'600' , color:'#0061DF', fontSize:'1.4vh'}}
-        >
-              {  nroColegios && nroColegios} Colegios
-        </Typography>
-      
-           <Autocomplete
-        sx={{ width: "40vh" }}
-        size='small'
-        id="Tipo"
-        freeSolo
-        onChange={(e, v) => setOptionSelected(v)}
-        options={data?.map((option) => option.nombre_colegio)}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            onChange={({ target }) => setOptionSelected(target.value)}
-            label="Buscar Colegio"
-           
-          />
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          fontSize: "10px",
+          alignItems: "center",
+        }}
+      >
+        {vacante === false && (
+          <div className={style.FiltrosResponsive}>
+            <Typography
+              sx={{
+                fontFamily: "Poppins",
+                fontWeight: "600",
+                color: "#0061DF",
+                fontSize: "1.2vh",
+              }}
+            >
+              {nroColegios && nroColegios} Colegios
+            </Typography>
+          </div>
         )}
-      />
+
+        <Autocomplete
+          sx={{ width: "40vh", fontSize: "1vh" }}
+          size="small"
+          id="Tipo"
+          freeSolo
+          onChange={(e, v) => setOptionSelected(v)}
+          options={data && nameUnique?.map((option) => option)}
+          renderInput={(params) => (
+            <TextField
+              sx={{ fontSize: "1vh" }}
+              {...params}
+              onChange={({ target }) => setOptionSelected(target.value)}
+              label="Buscar Colegio"
+            />
+          )}
+        />
         <Button
-            size="small"
-            sx={{fontWeight:'600', height:'4vh'}}
+          sx={{ fontWeight: "600", height: "4.2vh" }}
+          variant="contained"
+          onClick={SubmitSearch}
+        >
+          <SearchIcon />
+        </Button>
+        <div className={style.btnFiltroResponsive}>
+          <Button
+            sx={{
+              fontWeight: "600",
+              height: "4.2vh",
+              backgroundColor: "#FFFF",
+              color: "#0D263B",
+            }}
             variant="contained"
             onClick={SubmitSearch}
           >
-            Buscar
+            <TuneIcon />
           </Button>
-    </div>
-   
+        </div>
+        {/* {vacante === false && (
+          <div className={style.FiltrosResponsive}>
+            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+              <InputLabel id="demo-select-small">Estado</InputLabel>
+
+              <Select
+                sx={{ border: "none", outline: "none" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                value={filterSelected.state}
+                label={"Estado"}
+                onChange={handleChangeState}
+              >
+                <MenuItem value={true}>Activo</MenuItem>
+                <MenuItem value={false}>Inactivo</MenuItem>
+           
+              </Select>
+            </FormControl>
+          </div>
+        )} */}
+        {vacante === true && (
+          <div className={style.FiltrosResponsive}>
+            {/*
+             <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+              <InputLabel id="demo-select-small">Año</InputLabel>
+
+              <Select
+                sx={{ border: "none", outline: "none" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                value={filterSelected.año}
+                label={"Año"}
+                onChange={handleChangeAño}
+              >
+                <MenuItem value={10}>2023</MenuItem>
+                <MenuItem value={20}>2024</MenuItem>
+                <MenuItem value={20}>2025</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+              <InputLabel id="demo-select-small">Distrito</InputLabel>
+
+              <Select
+                sx={{ border: "none", outline: "none" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                value={filterSelected.distrito}
+                label={"Distrito"}
+                onChange={handleChangeDistrito}
+              >
+                {distrits &&
+                  distrits.map((ele) => {
+                    return (
+                      <MenuItem value={ele.id}>{ele.nombre_distrito}</MenuItem>
+                    );
+                  })}
+
+                <MenuItem value={20}>2024</MenuItem>
+                <MenuItem value={20}>2025</MenuItem>
+              </Select>
+            </FormControl> */}
+          </div>
+        )}
+      </div>
     </>
   );
 }

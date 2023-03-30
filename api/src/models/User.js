@@ -49,7 +49,6 @@ module.exports = (sequelize) => {
       }, */
       telefono: {
         type: DataTypes.BIGINT,
-        unique: true,
         validate: {
           isInt: {
             args: true,

@@ -23,6 +23,7 @@ import {
   getPagination,
   getMetodos,
   getDificultades,
+  getNombreColegios,
 } from "./SchoolsSlice";
 
 export const getVacantes = (niveles) => (dispatch) => {
@@ -148,7 +149,7 @@ export const getAllSchools = () => (dispatch) => {
 };
 export const getAllSchoolsPage = (page) => (dispatch) => {
   dispatch(isLoading());
-console.log(page)
+  console.log(page);
   axios
     .get(`/colegios?limit=5&page=${page}`)
     .then((res) => {
@@ -159,10 +160,21 @@ console.log(page)
 };
 
 export const getAllSchoolsPageAdmin = (page) => (dispatch) => {
-
-console.log(page)
+  console.log(page);
   axios
     .get(`/colegios?limit=5&page=${page}`)
+    .then((res) => {
+      dispatch(getPagination(res.data));
+      dispatch(getSchools(res.data.colegios));
+    })
+    .catch((err) => dispatch(getError(err.message)));
+};
+
+export const getColegiosSearch = (Input) => (dispatch) => {
+  // "http://localhost:3001/colegios?limit=10&page=1&search="mateo""
+  console.log(Input);
+  axios
+    .get(`/colegios?&search=${Input}`)
     .then((res) => {
       dispatch(getPagination(res.data));
       dispatch(getSchools(res.data.colegios));
@@ -298,6 +310,37 @@ export const getAllDificultades = () => (dispatch) => {
       .get("/dificultades")
       .then((res) => dispatch(getDificultades(res.data)))
       .catch((err) => dispatch(getError(err.message)));
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getNombresColegios = () => (dispatch) => {
+  try {
+    axios
+
+      .get(`/colegios?limit=200`)
+      .then((res) => {
+        console.log(res.data);
+        dispatch(getNombreColegios(res.data));
+      })
+      .catch((err) => console.log(err.message));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const filterAdminState = (state, page) => (dispatch) => {
+  try {
+    axios
+
+      .get(`/colegios?limit=5&page=${page}&active=${state}`)
+      .then((res) => {
+        let data = [];
+        data.push(res.data);
+        console.log(data);
+        dispatch(getSchools(res.data.colegios));
+      })
+      .catch((err) => console.log(err.message));
   } catch (error) {
     console.log(error);
   }

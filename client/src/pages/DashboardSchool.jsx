@@ -944,6 +944,7 @@ function DashboardSchool() {
   const [seeNewPassword, setSeeNewPassword] = useState(false);
 
   useEffect(() => {
+    console.log(datosPrincipales.niveles)
     dispatch(getVacantes(datosPrincipales.niveles));
   }, [datosPrincipales.niveles]);
 
@@ -953,7 +954,7 @@ function DashboardSchool() {
   useEffect(() => {
     dispatch(getCitaAgendadas());
     dispatch(getCita());
-  }, []);
+  }, [citasAgendadas.CitasActivas?.length]);
   // citasAgendadas.CitasActivas?.length,success
   const [vacantesOffOne, setVacantesOffOne] = useState(true);
   const [vacantesOffTwo, setVacantesOffTwo] = useState(true);

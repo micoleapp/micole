@@ -26,12 +26,13 @@ import {
   getAllSchools,
   getCitaAgendadas,
   getAllDificultades,
-  getAllMetodos
+  getAllMetodos,
 } from "./redux/SchoolsActions";
 
 import RequireAuth from "./components/RequireAuth";
 import { getCita } from "./redux/CitasActions";
 import MainAdmin from "./pages/Admin/MainAdmin";
+import MainUser from "./pages/User/MainUser";
 
 function App() {
   const { error: errorSchool } = useSelector((state) => state.schools);
@@ -49,10 +50,10 @@ function App() {
     dispatch(getAllAfiliaciones());
     // dispatch(getAllSchools())
     dispatch(getUserByToken());
-    dispatch(getCita())
-    dispatch(getCitaAgendadas())
-    dispatch(getAllMetodos())
-    dispatch(getAllDificultades())
+    dispatch(getCita());
+    dispatch(getCitaAgendadas());
+    dispatch(getAllMetodos());
+    dispatch(getAllDificultades());
   }, []);
 
   useEffect(() => {
@@ -72,20 +73,27 @@ function App() {
           <Route exact path="/enroll" element={<EnrollSchool />} />
           <Route path="/listschool" element={<ListSchool />} />
           <Route path="/schooldetail/:id" er element={<SchoolDetail />} />
-       
+
           <Route path="/*" element={<Error />} />
-          <Route path="*" element={<Error />} />  
-          
-          <Route
-            exact
-            path="/dashboardschool"
-            element={
-              <RequireAuth>
-                <DashboardSchool />
-              </RequireAuth>
-            }
-          />
-  <Route path="/admin"  element={<MainAdmin />} />
+          <Route path="*" element={<Error />} />
+          {user?.rol === "Colegio" && (
+            <Route
+              exact
+              path="/dashboardschool"
+              element={
+                <RequireAuth>
+                  <DashboardSchool />
+                </RequireAuth>
+              }
+            />
+          )}
+
+          {user?.rol === "Admin" && (
+            <Route path="/admin" element={<MainAdmin />} />
+          )}
+          {user?.rol === "Usuario" && (
+            <Route path="/user" element={<MainUser />} />
+          )}
         </Routes>
       )}
 

@@ -37,6 +37,7 @@ router.post("/notification", async (req, res) => {
 
       if (ventas && ventas.status === "Pending") {
         if (merchantOrder.body.payments[0].status === "approved") {
+
           ventas.status = "Paid";
           ventas.mp_payment_id = paymentId;
           ventas.InicioPlan = merchantOrder.body.payments[0].date_approved;

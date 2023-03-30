@@ -61,7 +61,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const deletePais = awaiPais.findOne({ where: { id: id } });
+    const deletePais = await Pais.findOne({ where: { id: id } });
     await deletePais.destroy();
     res.status(200).send({ message: "País borrado" });
   } catch (err) {

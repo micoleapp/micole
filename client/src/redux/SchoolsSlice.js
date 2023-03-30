@@ -21,21 +21,22 @@ export const schoolsSlice = createSlice({
     grados: [],
     metodos: [],
     dificultades: [],
-    horarios:null,
+    horarios: null,
     vacantesGrados: [],
     citasAgendadas: [],
     error: "",
     loading: false,
     pagination: {},
-    success:false
+    success: false,
+    nameColegio: null,
   },
   reducers: {
-    getMetodos: (state,action) => {
+    getMetodos: (state, action) => {
       (state.metodos = action.payload),
         (state.loading = false),
         (state.error = "");
     },
-    getDificultades: (state,action) => {
+    getDificultades: (state, action) => {
       (state.dificultades = action.payload),
         (state.loading = false),
         (state.error = "");
@@ -44,8 +45,7 @@ export const schoolsSlice = createSlice({
       (state.pagination = action.payload),
         (state.loading = false),
         (state.error = "");
-    }
-    ,
+    },
     getVacantesGrados: (state, action) => {
       (state.vacantesGrados = action.payload),
         (state.loading = false),
@@ -112,14 +112,12 @@ export const schoolsSlice = createSlice({
         (state.error = "");
     },
     getSchools: (state, action) => {
-     
       (state.allschools = action.payload),
         (state.loading = false),
         (state.error = "");
     },
     getOneSchool: (state, action) => {
-      
-    const Colegioid =  localStorage.setItem('ColegioId', action.payload.id);
+      const Colegioid = localStorage.setItem("ColegioId", action.payload.id);
       (state.oneSchool = action.payload),
         (state.loading = false),
         (state.error = "");
@@ -138,6 +136,9 @@ export const schoolsSlice = createSlice({
       state.oneSchool = {};
       (state.loading = false), (state.error = "");
     },
+    getNombreColegios: (state, action) => {
+      state.nameColegio = action.payload.colegios;
+    },
     getError: (state, action) => {
       (state.error = action.payload), (state.loading = false);
     },
@@ -145,7 +146,7 @@ export const schoolsSlice = createSlice({
       state.loading = true;
     },
     setSuccess: (state) => {
-      state.success= true;
+      state.success = true;
     },
   },
 });
@@ -172,7 +173,8 @@ export const {
   getHorarios,
   getPagination,
   getMetodos,
-  getDificultades
+  getDificultades,
+  getNombreColegios,
 } = schoolsSlice.actions;
 
 export default schoolsSlice.reducer;

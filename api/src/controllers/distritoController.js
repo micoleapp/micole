@@ -54,7 +54,8 @@ const updateDistrito = async (req, res, next) => {
     const updatedDistrito = await Distrito.update({
       nombre_distrito,
       ProvinciaId
-    });
+    },
+    {where:{id}});
     res.status(200).json(updatedDistrito);
   } catch (error) {
     return next(error);

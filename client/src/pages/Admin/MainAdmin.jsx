@@ -6,15 +6,22 @@ import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import { GiHexagonalNut } from "react-icons/gi";
 import { AiOutlineLogout } from "react-icons/ai";
+import {FaMapMarkerAlt} from "react-icons/fa"
 import Hamburger from "hamburger-react";
 import PageColegio from "./pageColegios/PageColegio";
 import PageInfraestructura from "./PageInfraestructura/PageInfraestructura";
+import PageAfiliaciones from "./PageAfiliaciones/PageAfiliaciones";
+import PageUbicacion from "./PageUbicacion/PageUbicacion";
 
 import { getAllSchools } from "../../redux/SchoolsActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import VacanteAdmin from "./PageVacantes/VacanteAdmin";
 import PanelControl from "./PanelControl/PanelControl";
+import ConfigAdmin from "./Config/ConfigAdmin";
 export default function MainAdmin() {
   const [page, setPage] = React.useState(0);
+
+  
   const [isOpen, setOpen] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -22,7 +29,6 @@ export default function MainAdmin() {
    
   }, []);
 
-  // useEffect(() => {}, [allschools]);
   return (
     <>
    
@@ -155,7 +161,28 @@ export default function MainAdmin() {
             </span>
           </button>
 
-        
+          <button
+            className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+              page == 6 ? "bg-[#0061dd] text-white" : null
+            } `}
+            onClick={() => {
+              setOpen();
+              setPage(6);
+            }}
+          >
+            <FaMapMarkerAlt
+              className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                page == 6? "text-white" : null
+              }`}
+            />
+            <span
+              className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                page == 6 ? "text-white" : null
+              }`}
+            >
+              Ubicación
+            </span>
+          </button> 
 
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
@@ -179,6 +206,7 @@ export default function MainAdmin() {
               Configuración
             </span>
           </button>
+
           <button
             className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
             // onClick={() => dispatch(logout())}
@@ -202,7 +230,7 @@ export default function MainAdmin() {
           </div>
         ) : page === 2 ? (
           <div className="min-h-screen">
-            <h1>Vacantes</h1>
+           <VacanteAdmin/>
           </div>
         ) : page === 3 ? (
           <div className="min-h-screen">
@@ -210,16 +238,14 @@ export default function MainAdmin() {
           </div>
         ) : page === 4 ? (
           <div className="min-h-screen">
-            <h1>Afiliaciones</h1>
+            <PageAfiliaciones/>
           </div>
         ) : page === 5 ? (
           <div className="min-h-screen">
-            <h1>Configuracion</h1>
+          <ConfigAdmin/>
           </div>
         ) : page === 6 ? (
-          <div className="min-h-screen">
-            <h1>Cerrar sesion</h1>
-          </div>
+          <PageUbicacion/>
         ) : null}
       </section>
    
