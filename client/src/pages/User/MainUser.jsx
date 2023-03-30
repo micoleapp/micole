@@ -12,6 +12,7 @@ import { getAllSchools } from "../../redux/SchoolsActions";
 import { useDispatch } from "react-redux";
 import CitasUser from "./pegeCitas/CitasUser";
 import { getCitaUsuario } from "../../redux/CitasActions";
+import EventosUsuario from "./pageEventos/EventosUsuario";
 
 export default function MainUser() {
   const [page, setPage] = React.useState(0);
@@ -19,7 +20,7 @@ export default function MainUser() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllSchools());
-    dispatch(getCitaUsuario())
+    dispatch(getCitaUsuario());
   }, []);
 
   return (
@@ -135,11 +136,11 @@ export default function MainUser() {
         <section className="right w-full bg-[#f6f7f8]  lg:px-31 lg:py-12">
           {page === 0 ? (
             <div className="min-h-screen ">
-            <CitasUser/>
+              <CitasUser />
             </div>
           ) : page === 1 ? (
             <div className="min-h-screen">
-              <p>Eventos</p>
+              <EventosUsuario />
             </div>
           ) : page === 2 ? (
             <div className="min-h-screen">

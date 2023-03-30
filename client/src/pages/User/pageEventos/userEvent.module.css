@@ -1,0 +1,102 @@
+.layout{
+    display: flex;
+    gap: 3vh;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #00000013;
+  padding: 6px;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.25);
+  width: 25vh;
+  height: 25vh;
+  position: absolute;
+  top: 8%;
+left: 8%;
+  align-items: center;
+  justify-content: center;
+  gap:2rem;
+}
+.imgDiv{
+  /*    <div style={{ maxWidth: "10vh", maxHeight: "10vh" }}> */
+max-width: 8vh;
+max-height: 8vh;
+
+}
+
+.infoDiv{
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+}
+.title {
+  font-family: Poppins;
+  color: #184680;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.titleK{
+    font-family: Poppins;
+    color: #184680;
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+
+.descripcion {
+  font-family: Poppins;
+  font-weight: 400;
+  color: #4d4747;
+  font-size: 1.4vh;
+  text-align: center;
+  width: 100%;
+
+}
+
+.divDetalles{
+    display :flex;
+   flex-direction: column; 
+  /* padding: 1rem; */
+  gap: 1vh;
+   align-items: center;
+}
+.p {
+    color:#4D4747;
+    font-weight: 400;
+    font-size: 1.2vh;
+    
+}
+
+.pK{
+    color:#4D4747;
+    font-weight: 400;
+    font-size: 1.6vh;
+}
+
+.pTittle{
+    color:#156BAA;
+    font-weight: 700;
+    font-size: 0.80rem;
+
+}
+.pTittleK{
+    color:#156BAA;
+    font-weight: 700;
+    font-size: 1rem;
+
+}
+
+@media (max-width: 800px) {
+    .layout{
+        flex-direction: column;
+    }
+  .card {
+    gap:1rem;
+    top: 8%;
+    left:4%;
+  }
+  .imgDiv{
+    max-height: 10vh;
+  }
+}
