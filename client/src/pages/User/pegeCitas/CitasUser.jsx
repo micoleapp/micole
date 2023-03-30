@@ -43,66 +43,70 @@ export default function CitasUser() {
                   <div className={style.layout}>
                     {/* foto mas info */}
                     <div className={style.contenedor}>
-                      <div className={style.imgInfoDiv}>
-                        <img
-                          style={{
-                            width: "15vh",
-                            height: "15vh",
-                            padding: "1vh",
-                          }}
-                          className="object-cover w-40 h-40"
-                          src={ele.Colegio.logo}
-                        />
+                    
+                        <div className={style.imgInfoDiv}>
+                          <img
+                            style={{
+                              width: "15vh",
+                              height: "15vh",
+                              padding: "1vh",
+                            }}
+                            className="object-cover w-40 h-40"
+                            src={ele.Colegio?.logo != null ?ele.Colegio?.logo : ele.Colegio?.primera_imagen }
+                          />
 
-                        <div>
-                          <Typography
-                            sx={{
-                              paddingLeft: "1vh",
-                              color: "#0D263B",
-                              fontWeight: "600",
-                              fontSize: "2.2vh",
-                            }}
-                            id="modal-modal-title"
-                            variant="h6"
-                            component="h2"
-                          >
-                            {ele.Colegio.nombre_colegio}
-                          </Typography>
-                          <Typography
-                            sx={{
-                              paddingLeft: "1vh",
-                              color: "#0D263B",
-                              fontWeight: "600",
-                              fontSize: "1.5vh",
-                            }}
-                          >
-                            <div
-                              style={{
-                                display: "flex",
-                                gap: "1vh",
+                          <div>
+                            <Typography
+                              sx={{
+                                paddingLeft: "1vh",
+                                color: "#0D263B",
+                                fontWeight: "600",
+                                fontSize: "2.2vh",
+                              }}
+                              id="modal-modal-title"
+                              variant="h6"
+                              component="h2"
+                            >
+                              {ele.Colegio.nombre_colegio}
+                            </Typography>
+                            <Typography
+                              sx={{
+                                paddingLeft: "1vh",
+                                color: "#0D263B",
+                                fontWeight: "600",
+                                fontSize: "1.5vh",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  gap: "1vh",
+                                }}
+                              >
+                                <div className={style.divTypo}>
+                                  <b style={{ color: "#0061DF" }}>Dirección</b>
+                                  <p>{str2}</p>
+                                </div>
+                              </div>
+                            </Typography>
+                            <Typography
+                              sx={{
+                                paddingLeft: "1vh",
+                                color: "#0D263B",
+                                fontWeight: "600",
+                                fontSize: "1.5vh",
                               }}
                             >
                               <div className={style.divTypo}>
-                                <b style={{ color: "#0061DF" }}>Dirección</b>
-                                <p>{str2}</p>
+                                <b style={{ color: "#0061DF" }}>Teléfono</b>
+                                <p>{ele.Colegio.telefono}</p>
                               </div>
-                            </div>
-                          </Typography>
-                          <Typography
-                            sx={{
-                              paddingLeft: "1vh",
-                              color: "#0D263B",
-                              fontWeight: "600",
-                              fontSize: "1.5vh",
-                            }}
-                          >
-                            <div className={style.divTypo}>
-                              <b style={{ color: "#0061DF" }}>Teléfono</b>
-                              <p>{ele.Colegio.telefono}</p>
-                            </div>
-                          </Typography>
+                            </Typography>
+                          </div>
                         </div>
-                      </div>
+                   
+                     
+
                       <div className={style.fechaHorarioDiv}>
                         <div className={style.planFechaResponsive}>
                           <Typography
@@ -117,11 +121,10 @@ export default function CitasUser() {
                               <b style={{ color: "#0061DF" }}>
                                 Horarios / Fecha
                               </b>
-                              <div style={{display:'flex'}}>
-                                  <p>{es_AM_PM(ele.hora_cita)}</p>
-                              <p>{fechaFormat(ele.fecha_cita)}</p>
+                              <div style={{ display: "flex" }}>
+                                <p>{es_AM_PM(ele.hora_cita)}</p>
+                                <p>{fechaFormat(ele.fecha_cita)}</p>
                               </div>
-                            
                             </div>
                           </Typography>
                         </div>
