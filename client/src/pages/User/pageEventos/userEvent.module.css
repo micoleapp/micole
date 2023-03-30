@@ -88,6 +88,10 @@ max-height: 8vh;
 }
 
 @media (max-width: 800px) {
+    .descripcion {
+        text-align: left;
+        max-width: 40vh;
+    }
     .layout{
         flex-direction: column;
     }

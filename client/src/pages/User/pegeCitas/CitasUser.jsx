@@ -138,7 +138,8 @@ export default function CitasUser() {
                             }}
                           >
                             <b style={{ color: "#0061DF" }}>Horarios / Fecha</b>{" "}
-                            <p>22 de agosto del 2023 8:00 AM</p>
+                            <p>{fechaFormat(ele.fecha_cita)}</p>
+                            <p> {ele.hora_cita}{' '}{es_AM_PM(ele.hora_cita)}</p>
                           </p>
                         </div>
 
@@ -153,7 +154,7 @@ export default function CitasUser() {
                           >
                             <div className={style.divTypo}>
                               <b style={{ color: "#0061DF" }}>Estado</b>
-                              <p>Aplicacion</p>
+                              <p>{ele.estado}</p>
                             </div>
                           </Typography>
                         </div>
@@ -167,7 +168,7 @@ export default function CitasUser() {
                             }}
                           >
                             <b style={{ color: "#0061DF" }}>Estado</b>{" "}
-                            <p>Aplicacion</p>
+                            <p>{ele.estado}</p>
                           </p>
                         </div>
                       </div>
