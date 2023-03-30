@@ -37,7 +37,6 @@ router.post("/notification", async (req, res) => {
 
       if (ventas && ventas.status === "Pending") {
         if (merchantOrder.body.payments[0].status === "approved") {
-
           ventas.status = "Paid";
           ventas.mp_payment_id = paymentId;
           ventas.InicioPlan = merchantOrder.body.payments[0].date_approved;
@@ -82,13 +81,16 @@ router.post("/notification", async (req, res) => {
           await colegio.setPlan_Pago(plan);
           await ventas.save();
           await planVencido.save();
-
+          // AQUI SE MANDA  EL CORREO DE QUE SE COMPRO EXITOSAMENTE <-----------------------
+          // la informacion la optienes de colegio.nombre_colegio """colegio.nombre del plan"""
           res.status(200).send(merchantOrder);
         }
       } else if (merchantOrder.body.payments[0].status === "canceled") {
         ventas.status = "Canceled";
         ventas.mp_payment_id = paymentId;
         await ventas.save();
+        // AQUI SE MANDA  EL CORREO DE QUE SE CANCELO LA COMPRA <-----------------------
+        // la informacion la optienes de colegio.nombre_colegio """colegio.nombre del plan"""
         res.status(200).send(merchantOrder);
       }
 
