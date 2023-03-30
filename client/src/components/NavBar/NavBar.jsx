@@ -114,19 +114,21 @@ function NavBar() {
               <button className={style.SesionButtom}>Ver Perfil</button>
             </Link>
           ) : user.rol === "Colegio" ? (
-            oneSchool != null && (
-              <Link to={"/dashboardschool"}>
-                <button className={style.SesionButtom}>Ver Perfil</button>
-              </Link>
-            )
-          ) : (
-            <button
-              className={`${style.SesionButtom} flex items-center justify-center gap-2`}
-            >
-              Cargando perfil{" "}
-              <CircularProgress size="1rem" style={{ color: "#0061dd" }} />{" "}
-            </button>
-          )}
+            <>
+              {oneSchool != null ? (
+                <Link to={"/dashboardschool"}>
+                  <button className={style.SesionButtom}>Ver Perfil</button>
+                </Link>
+              ) : (
+                <button
+                  className={`${style.SesionButtom} flex items-center justify-center gap-2`}
+                >
+                  Cargando perfil{" "}
+                  <CircularProgress size="1rem" style={{ color: "#0061dd" }} />{" "}
+                </button>
+              )}
+            </>
+          ) : null}
         </div>
       </div>
       {OpenCategory && (

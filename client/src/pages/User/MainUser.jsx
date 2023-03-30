@@ -11,6 +11,7 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { getAllSchools } from "../../redux/SchoolsActions";
 import { useDispatch } from "react-redux";
 import CitasUser from "./pegeCitas/CitasUser";
+import { getCitaUsuario } from "../../redux/CitasActions";
 
 export default function MainUser() {
   const [page, setPage] = React.useState(0);
@@ -18,6 +19,7 @@ export default function MainUser() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllSchools());
+    dispatch(getCitaUsuario())
   }, []);
 
   return (
@@ -130,9 +132,9 @@ export default function MainUser() {
           </ul>
         </section>
         {/* Renderizado de componentes  */}
-        <section className="right w-full bg-[#f6f7f8] p-5 lg:px-31 lg:py-12">
+        <section className="right w-full bg-[#f6f7f8]  lg:px-31 lg:py-12">
           {page === 0 ? (
-            <div className="min-h-screen">
+            <div className="min-h-screen ">
             <CitasUser/>
             </div>
           ) : page === 1 ? (

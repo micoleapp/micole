@@ -1,4 +1,4 @@
-const { Cita, Colegio, Grado, Plan_Pago, User } = require('../db');
+const { Cita, Colegio, Grado, Plan_Pago, User, Auth } = require('../db');
 const { Op } = require('sequelize');
 const moment = require('moment');
 const mailer = require('../utils/sendMails/mailer');
@@ -97,8 +97,10 @@ const getCitas = async (req, res, next) => {
       CitasPermitidasMesActual = [];
     }
 
-    const CitasInactivas = CitasInactivasTotales.filter(cita => {
-      return !CitasPermitidasMesActual.some(permitida => permitida.id === cita.id);
+    const CitasInactivas = CitasInactivasTotales.filter((cita) => {
+      return !CitasPermitidasMesActual.some(
+        (permitida) => permitida.id === cita.id
+      );
     });
 
     res.status(200).send({
@@ -119,14 +121,22 @@ const getCitas = async (req, res, next) => {
 const getCitasUser = async (req, res, next) => {
   const tokenUser = req.user;
   try {
-    const user = await User.findOne({ where: { idAuth: tokenUser.id } });
+    const user = await Auth.findOne({ where: { id: tokenUser.id } });
     if (!user) {
       return next({
         statusCode: 400,
         message: 'El usuario no es un Colegio',
       });
     }
-    const include = { include: [{ model: Grado }, {model: Colegio, attributes: ['id', 'nombre_colegio', 'logo', 'direccion', 'telefono'],}] };
+    const include = {
+      include: [
+        { model: Grado },
+        {
+          model: Colegio,
+          attributes: ['id', 'nombre_colegio', 'logo', 'direccion', 'primera_imagen','telefono'],
+        },
+      ],
+    };
     const CitasUsuario = await Cita.findAll({
       where: {
         email: user.email,
@@ -136,9 +146,7 @@ const getCitasUser = async (req, res, next) => {
       order: [['fecha_cita', 'ASC']],
     });
 
-    res.status(200).send({
-      CitasUsuario,
-    });
+    res.status(200).send(CitasUsuario);
   } catch (error) {
     return next(error);
   }
@@ -283,5 +291,5 @@ module.exports = {
   changeStatusCita,
   changeActivoCita,
   deleteCita,
-  getCitasUser
+  getCitasUser,
 };

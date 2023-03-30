@@ -1,0 +1,14 @@
+.DesktopDiv{
+    display: flex;
+}
+.MobileDiv{
+    display: none;
+}
+@media (max-width: 900px) {
+    .DesktopDiv{
+        display: none;
+    }
+    .MobileDiv{
+        display: flex;
+    }
+}

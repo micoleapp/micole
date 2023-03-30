@@ -7,6 +7,7 @@ import {
   isLoading,
   getSuccess,
   cleanSuccess,
+  getCitasUsuario
 } from "./CitasSlice";
 import Swal from 'sweetalert2'
 export const getCita = () => (dispatch) => {
@@ -91,4 +92,21 @@ export const cleanSuccessState = () => (dispatch) => {
   } catch (err) {
     dispatch(getError(err.response.data.error));
   }
+};
+
+
+export const getCitaUsuario = () => (dispatch) => {
+  dispatch(isLoading());
+  const token = localStorage.getItem("token");
+  axios
+    .get(`/citas/users`, { headers: { Authorization: `Bearer ${token}` } })
+    .then((res) => dispatch(getCitasUsuario(res.data)))
+    .catch((err) => {
+      dispatch(getError(err.response.data.error));
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: err.response.data.error,
+      });
+    });
 };
