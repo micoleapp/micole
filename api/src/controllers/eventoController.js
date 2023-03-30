@@ -3,6 +3,21 @@ const moment = require('moment');
 
 const getEventosColegio = async (req, res, next) => {
   const tokenUser = req.user;
+  const { order } = req.query;
+  let orderBy = null;
+  if (order) {
+    switch (order) {
+      case "ASC":
+        orderBy = [["fecha_evento", "ASC"]];
+        break;
+      case "DESC":
+        orderBy = [["fecha_evento", "DESC"]];
+        break;
+      default:
+        orderBy = null;
+        break;
+    }
+  }
   try {
     const authInstance = await Auth.findByPk(tokenUser.id);
     if (!authInstance) {
@@ -23,6 +38,7 @@ const getEventosColegio = async (req, res, next) => {
         where: {
           ColegioId: colegio.id,
         },
+        order: orderBy || [["fecha_evento", "ASC"]],
       });
       res.status(200).send(eventos);
     }
@@ -34,12 +50,13 @@ const getEventosColegio = async (req, res, next) => {
           message: 'El usuario no existe.',
         });
       }
-      const eventos = await Evento.findAll({ 
-        include: [{ 
-          model: User, 
-          where: { id: user.id }, 
+      const eventos = await Evento.findAll({
+        include: [{
+          model: User,
+          where: { id: user.id },
           through: { attributes: [] }
-        }]
+        }],
+        order: orderBy || [["fecha_evento", "ASC"]],
       });
       res.status(200).json(eventos);
     }
