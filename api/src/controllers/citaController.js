@@ -1,7 +1,7 @@
-const { Cita, Colegio, Grado, Plan_Pago, User, Auth } = require('../db');
-const { Op } = require('sequelize');
-const moment = require('moment');
-const mailer = require('../utils/sendMails/mailer');
+const { Cita, Colegio, Grado, Plan_Pago, User, Auth } = require("../db");
+const { Op } = require("sequelize");
+const moment = require("moment");
+const mailer = require("../utils/sendMails/mailer");
 
 const getCitas = async (req, res, next) => {
   const tokenUser = req.user;
@@ -10,7 +10,7 @@ const getCitas = async (req, res, next) => {
     if (!user) {
       return next({
         statusCode: 400,
-        message: 'El usuario no es un Colegio',
+        message: "El usuario no es un Colegio",
       });
     }
     const fecha_actual = new Date();
@@ -29,7 +29,7 @@ const getCitas = async (req, res, next) => {
         activo: true,
       },
       ...include,
-      order: [['fecha_cita', 'ASC']],
+      order: [["fecha_cita", "ASC"]],
     });
 
     const CitasInactivasTotales = await Cita.findAll({
@@ -38,7 +38,7 @@ const getCitas = async (req, res, next) => {
         activo: false,
       },
       ...include,
-      order: [['fecha_cita', 'ASC']],
+      order: [["fecha_cita", "ASC"]],
     });
 
     const CitasActivasMesActual = await Cita.findAll({
@@ -53,7 +53,7 @@ const getCitas = async (req, res, next) => {
         },
       },
       ...include,
-      order: [['fecha_cita', 'ASC']],
+      order: [["fecha_cita", "ASC"]],
     });
 
     const CitasInactivasMesActual = await Cita.findAll({
@@ -68,7 +68,7 @@ const getCitas = async (req, res, next) => {
         },
       },
       ...include,
-      order: [['fecha_cita', 'ASC']],
+      order: [["fecha_cita", "ASC"]],
     });
 
     let cantidadCitasPermitidasMesActual = 0;
@@ -89,7 +89,7 @@ const getCitas = async (req, res, next) => {
         },
       },
       ...include,
-      order: [['fecha_cita', 'ASC']],
+      order: [["fecha_cita", "ASC"]],
       limit: cantidadCitasPermitidasMesActual,
     });
 
@@ -120,12 +120,27 @@ const getCitas = async (req, res, next) => {
 
 const getCitasUser = async (req, res, next) => {
   const tokenUser = req.user;
+  const { order } = req.query;
+  let orderBy = null;
+  if (order) {
+    switch (order) {
+      case "ASC":
+        orderBy = [["fecha_cita", "ASC"]];
+        break;
+      case "DESC":
+        orderBy = [["fecha_cita", "DESC"]];
+        break;
+      default:
+        orderBy = null;
+        break;
+    }
+  }
   try {
     const user = await Auth.findOne({ where: { id: tokenUser.id } });
     if (!user) {
       return next({
         statusCode: 400,
-        message: 'El usuario no es un Colegio',
+        message: "El usuario no es un Colegio",
       });
     }
     const include = {
@@ -133,7 +148,7 @@ const getCitasUser = async (req, res, next) => {
         { model: Grado },
         {
           model: Colegio,
-          attributes: ['id', 'nombre_colegio', 'logo', 'direccion', 'primera_imagen','telefono'],
+          attributes: ["id", "nombre_colegio", "logo", "direccion", "telefono"],
         },
       ],
     };
@@ -143,7 +158,7 @@ const getCitasUser = async (req, res, next) => {
         activo: true,
       },
       ...include,
-      order: [['fecha_cita', 'ASC']],
+      order: orderBy || [["fecha_cita", "ASC"]],
     });
 
     res.status(200).send(CitasUsuario);
@@ -168,7 +183,7 @@ const getCitaById = async (req, res, next) => {
     if (!cita) {
       return next({
         statusCode: 400,
-        message: 'El registro no existe.',
+        message: "El registro no existe.",
       });
     }
     res.status(200).send(cita);
@@ -190,14 +205,14 @@ const createCita = async (req, res, next) => {
     ColegioId,
   } = req.body;
   try {
-    const fechaCita = moment(date, ['DD/MM/YYYY', 'YYYY-MM-DD']);
+    const fechaCita = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD"]);
     const ifExists = await Cita.findOne({
       where: { email: correo, fecha_cita: fechaCita, ColegioId },
     });
     if (ifExists) {
       return next({
         statusCode: 400,
-        message: 'El email ya cuenta con una cita con este Colegio.',
+        message: "El email ya cuenta con una cita con este Colegio.",
       });
     }
     const gradoId = await Grado.findOne({ where: { nombre_grado: grado } });
@@ -229,7 +244,7 @@ const changeStatusCita = async (req, res, next) => {
     if (!cita) {
       return next({
         statusCode: 400,
-        message: 'El registro no existe.',
+        message: "El registro no existe.",
       });
     }
     await Cita.update(
@@ -238,7 +253,7 @@ const changeStatusCita = async (req, res, next) => {
       },
       { where: { id: idCita } }
     );
-    res.status(200).send('El estado de la cita se ha modificado.');
+    res.status(200).send("El estado de la cita se ha modificado.");
   } catch (error) {
     return next(error);
   }
@@ -252,7 +267,7 @@ const changeActivoCita = async (req, res, next) => {
     if (!cita) {
       return next({
         statusCode: 400,
-        message: 'El registro no existe.',
+        message: "El registro no existe.",
       });
     }
     await Cita.update(
@@ -261,7 +276,7 @@ const changeActivoCita = async (req, res, next) => {
       },
       { where: { id: idCita } }
     );
-    res.status(200).send('Se activo la Cita.');
+    res.status(200).send("Se activo la Cita.");
   } catch (error) {
     return next(error);
   }
@@ -274,11 +289,11 @@ const deleteCita = async (req, res, next) => {
     if (!cita) {
       return next({
         statusCode: 400,
-        message: 'El registro no existe.',
+        message: "El registro no existe.",
       });
     }
     await Cita.destroy({ where: { id: idCita } });
-    res.status(200).send('Se eliminó la Cita.');
+    res.status(200).send("Se eliminó la Cita.");
   } catch (error) {
     return next(error);
   }

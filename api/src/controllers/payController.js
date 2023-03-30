@@ -36,6 +36,7 @@ const payController = async (req, res) => {
       },
     ],
     external_reference: id_colegio,
+    additional_info: email,
     back_urls: {
       //definir las verdaderas aca
       success: " https://bc48-177-246-245-112.ngrok.io/payments/success",

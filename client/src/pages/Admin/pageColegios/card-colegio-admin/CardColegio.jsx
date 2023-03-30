@@ -9,7 +9,6 @@ import { getAllSchoolsPageAdmin } from "../../../../redux/SchoolsActions";
 
 import ContentLoader from "react-content-loader";
 import fechaFormat from "../../../../components/SwiperEventos/utils/fechaFormat";
-
 export default function CardColegio({ input, data, isLoading, page }) {
   const dispatch = useDispatch();
   const items = [1, 2, 3, 4, 5];
