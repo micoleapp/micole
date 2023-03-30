@@ -3,7 +3,7 @@ const mercadopago = require("mercadopago");
 const router = Router();
 const { Colegio, Ventas, Plan_Pago } = require("../db.js");
 const payController = require("../controllers/payController");
-const mailer = require('../utils/sendMails/mailer');
+const mailer = require("../utils/sendMails/mailer");
 
 router.get("/success", (req, res) => {
   res.send("Todo bien al 100");
@@ -38,7 +38,6 @@ router.post("/notification", async (req, res) => {
 
       if (ventas && ventas.status === "Pending") {
         if (merchantOrder.body.payments[0].status === "approved") {
-
           ventas.status = "Paid";
           ventas.mp_payment_id = paymentId;
           ventas.InicioPlan = merchantOrder.body.payments[0].date_approved;
@@ -46,7 +45,9 @@ router.post("/notification", async (req, res) => {
           ventas.PlanPagoId = merchantOrder.body.items[0].id;
 
           const plan = merchantOrder.body.items[0].id;
+          const planNombre = merchantOrder.body.items[0].title;
           const idColegio = merchantOrder.body.external_reference;
+          const email = merchantOrder.body.additional_info;
 
           planVencido = await Ventas.findOne({
             where: {
@@ -85,7 +86,12 @@ router.post("/notification", async (req, res) => {
           await planVencido.save();
           // AQUI SE MANDA  EL CORREO DE QUE SE COMPRO EXITOSAMENTE <-----------------------
           // la informacion la optienes de colegio.nombre_colegio """colegio.nombre del plan"""
-          mailer.sendPaymentSuccess(colegio.nombre_colegio, colegio.PlanPagoId);
+          // planNombre
+          mailer.sendPaymentSuccess(
+            email,
+            colegio.nombre_colegio,
+            colegio.PlanPagoId
+          );
           res.status(200).send(merchantOrder);
         }
       } else if (merchantOrder.body.payments[0].status === "canceled") {
@@ -94,7 +100,11 @@ router.post("/notification", async (req, res) => {
         await ventas.save();
         // AQUI SE MANDA  EL CORREO DE QUE SE CANCELO LA COMPRA <-----------------------
         // la informacion la optienes de colegio.nombre_colegio """colegio.nombre del plan"""
-        mailer.sendPaymentCanceled(colegio.nombre_colegio, colegio.PlanPagoId);
+        mailer.sendPaymentCanceled(
+          email,
+          colegio.nombre_colegio,
+          colegio.PlanPagoId
+        );
         res.status(200).send(merchantOrder);
       }
 
