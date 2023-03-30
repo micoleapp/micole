@@ -51,7 +51,7 @@ function App() {
     // dispatch(getAllSchools())
     dispatch(getUserByToken());
     dispatch(getCita());
-    dispatch(getCitaAgendadas());
+    // dispatch(getCitaAgendadas());
     dispatch(getAllMetodos());
     dispatch(getAllDificultades());
   }, []);
@@ -59,6 +59,8 @@ function App() {
   useEffect(() => {
     if (user) {
       dispatch(getSchoolDetail(user.id));
+    }if(user?.rol === "Colegio"){
+      dispatch(getCitaAgendadas(user.id));
     }
   }, [user]);
 
