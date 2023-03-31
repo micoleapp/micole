@@ -19,7 +19,7 @@ export default function CitasUser() {
   const items = [1, 2, 3, 4, 5];
   const [page, setPage] = React.useState(0);
   useEffect(() => {
-    const citasPaginadas = sliceIntoChunks(citasUsuario, 10);
+    const citasPaginadas = citasUsuario&& sliceIntoChunks(citasUsuario, 10);
 
     setCitasUser(citasPaginadas);
   }, []);
