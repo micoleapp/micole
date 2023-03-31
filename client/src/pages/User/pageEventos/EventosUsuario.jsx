@@ -39,7 +39,7 @@ export default function EventosUsuario() {
         .then((res) => {
           const eventosPaginados = sliceIntoChunks(res.data, 10);
           setData(eventosPaginados);
-          setProximoEvento([res.data[0]])
+          setProximoEvento([res.data[0]]);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -72,7 +72,7 @@ export default function EventosUsuario() {
         })
         .then((res) => {
           const eventosPaginados = sliceIntoChunks(res.data, 10);
-          setDataFiltrada( eventosPaginados);
+          setDataFiltrada(eventosPaginados);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -114,7 +114,7 @@ export default function EventosUsuario() {
               }}
             />
           </div>
-          {ProximoEvento&&
+          {ProximoEvento &&
             ProximoEvento?.map((ele) => {
               return (
                 <>
@@ -278,8 +278,8 @@ export default function EventosUsuario() {
         {orderSelected != null && dataFiltrada ? (
           dataFiltrada?.length > 0 ? (
             <>
-              {dataFiltrada  &&
-               dataFiltrada[page]?.map((ele) => {
+              {dataFiltrada &&
+                dataFiltrada[page]?.map((ele) => {
                   return (
                     <>
                       <div className={style.layout}>
@@ -491,11 +491,19 @@ export default function EventosUsuario() {
           </div>
         ) : null}
       </div>
-      <PaginationCitas
-        page={page}
-        setPage={setPage}
-        nroPaginas={dataFiltrada?.length}
-      />
+      {dataFiltrada?.length ? (
+        <PaginationCitas
+          page={page}
+          setPage={setPage}
+          nroPaginas={dataFiltrada?.length}
+        />
+      ) : (
+        <PaginationCitas
+          page={page}
+          setPage={setPage}
+          nroPaginas={data?.length}
+        />
+      )}
     </>
   );
 }
