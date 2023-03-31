@@ -52,7 +52,8 @@ export default function CitasUser() {
                               padding: "1vh",
                             }}
                             className="object-cover w-40 h-40"
-                            src={ele.Colegio?.logo != null ?ele.Colegio?.logo : ele.Colegio?.primera_imagen }
+                            src={ ele.Colegio?.primera_imagen!= null  ? ele.Colegio?.primera_imagen :ele.Colegio?.logo  }
+                            // src={ele.Colegio?.primera_imagen}
                           />
 
                           <div>
@@ -175,7 +176,7 @@ export default function CitasUser() {
                     </div>
 
                     <div style={{ width: "100%", paddingTop: "1vh" }}>
-                      <TimeLine />
+                      <TimeLine cita={ele} />
                     </div>
                   </div>
                 );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../../assets/logo1.png";
 import style from "./NavBar.module.css";
 import Categoria from "./Categoria/Categoria";
@@ -48,6 +48,11 @@ function NavBar() {
       behavior: "smooth",
     });
   }
+useEffect(() => {
+  
+
+  
+}, [user])
 
   const [isOpen, setOpen] = useState(false);
 

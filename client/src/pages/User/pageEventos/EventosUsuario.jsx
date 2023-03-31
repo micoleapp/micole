@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import NorthIcon from "@mui/icons-material/North";
+import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
 import SouthIcon from "@mui/icons-material/South";
 import {
   Box,
@@ -462,25 +463,28 @@ export default function EventosUsuario() {
             </ContentLoader>
           ))
         ) : (
-          items.map((item, key) => (
-            <ContentLoader
-              key={key}
-              speed={3}
-              width={"50%"}
-              height={"80%"}
-              viewBox="0 0 500 120"
-              backgroundColor="#dcdce2"
-              foregroundColor="#ecebeb"
-            >
-              <rect x="110" y="8" rx="3" ry="3" width="120" height="10" />
-              <rect x="110" y="25" rx="3" ry="3" width="100" height="6" />
-              <rect x="48" y="26" rx="3" ry="3" width="52" height="6" />
-              <rect x="110" y="56" rx="3" ry="3" width="310" height="6" />
-              <rect x="110" y="72" rx="3" ry="3" width="300" height="6" />
-              <rect x="110" y="88" rx="3" ry="3" width="178" height="6" />
-              <rect width="100" height="100" />
-            </ContentLoader>
-          ))
+          <div
+          // data-aos="zoom-up"
+          style={{
+            width: "80%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "row",
+            color: "#0C2B42",
+            gap: "10px",
+            padding: "20px",
+            minHeight: "100%",
+            boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+            fontWeight: "600",
+            backgroundColor: "#fff",
+          }}
+        >
+          <ContentPasteSearchOutlinedIcon
+            style={{ color: "#0061DF" }}
+          />
+          <h1>No hay eventos pendientes</h1>
+        </div>
         )}
       </div>
     </>
