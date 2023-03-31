@@ -21,6 +21,7 @@ import sliceIntoChunks from "../../../components/CardsCitas/Paginacion/utils/Sli
 import PaginationCitas from "../../../components/CardsCitas/Paginacion/PaginationCitas";
 export default function EventosUsuario() {
   const [data, setData] = useState([]);
+  const [ProximoEvento, setProximoEvento] = useState([]);
   const items = [1, 2, 3, 4, 5];
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = React.useState(0);
@@ -36,7 +37,9 @@ export default function EventosUsuario() {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setData(res.data);
+          const eventosPaginados = sliceIntoChunks(res.data, 10);
+          setData(eventosPaginados);
+          setProximoEvento([res.data[0]])
           setIsLoading(false);
         })
         .catch((err) => {
@@ -54,7 +57,7 @@ export default function EventosUsuario() {
       });
     }
   }, []);
-  console.log(dataFiltrada);
+  console.log(ProximoEvento);
 
   const handleChangeState = (event) => {
     let state = event.target.value;
@@ -90,7 +93,7 @@ export default function EventosUsuario() {
   return (
     <>
       {/* Proximo EVENTO */}
-      {data && data?.length > 0 ? (
+      {ProximoEvento && ProximoEvento?.length > 0 ? (
         <>
           <div style={{ padding: "1vh" }}>
             <Typography
@@ -111,8 +114,8 @@ export default function EventosUsuario() {
               }}
             />
           </div>
-          {data &&
-            data?.map((ele) => {
+          {ProximoEvento&&
+            ProximoEvento?.map((ele) => {
               return (
                 <>
                   <div className={style.layout}>
@@ -176,7 +179,7 @@ export default function EventosUsuario() {
               );
             })}
         </>
-      ) : data?.length === 0 && isLoading === true ? (
+      ) : ProximoEvento?.length === 0 && isLoading === true ? (
         items.map((item, key) => (
           <ContentLoader
             key={key}
@@ -196,7 +199,7 @@ export default function EventosUsuario() {
             <rect width="100" height="100" />
           </ContentLoader>
         ))
-      ) : data?.length === 0 && isLoading === false ? (
+      ) : ProximoEvento?.length === 0 && isLoading === false ? (
         <div
           // data-aos="zoom-up"
           style={{
@@ -275,8 +278,8 @@ export default function EventosUsuario() {
         {orderSelected != null && dataFiltrada ? (
           dataFiltrada?.length > 0 ? (
             <>
-              {data &&
-                data?.map((ele) => {
+              {dataFiltrada  &&
+               dataFiltrada[page]?.map((ele) => {
                   return (
                     <>
                       <div className={style.layout}>
@@ -385,7 +388,7 @@ export default function EventosUsuario() {
         ) : data?.length > 0 ? (
           <>
             {data &&
-              data?.map((ele) => {
+              data[page]?.map((ele) => {
                 return (
                   <>
                     <div className={style.layout}>
