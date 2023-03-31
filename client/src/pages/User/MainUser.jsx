@@ -19,7 +19,6 @@ export default function MainUser() {
   const [isOpen, setOpen] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllSchools());
     dispatch(getCitaUsuario());
   }, []);
 

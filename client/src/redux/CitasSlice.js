@@ -143,7 +143,8 @@ export const citasSlice = createSlice({
       state.loading = true;
     },
     getCitasUsuario: (state,action) => {
-      state.citasUsuario = action.payload;
+      state.citasUsuario = action.payload,
+      state.loading = false
     },
   },
 });
