@@ -17,10 +17,13 @@ import es_AM_PM from "../../../components/SwiperEventos/utils/horaFormat";
 import style from "./userEvent.module.css";
 import { Divider, Typography } from "@mui/material";
 import ContentLoader from "react-content-loader";
+import sliceIntoChunks from "../../../components/CardsCitas/Paginacion/utils/SliceCitas";
+import PaginationCitas from "../../../components/CardsCitas/Paginacion/PaginationCitas";
 export default function EventosUsuario() {
   const [data, setData] = useState([]);
   const items = [1, 2, 3, 4, 5];
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = React.useState(0);
   const [orderSelected, setOrderSelected] = useState(null);
   const [dataFiltrada, setDataFiltrada] = useState([]);
   useEffect(() => {
@@ -65,7 +68,8 @@ export default function EventosUsuario() {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setDataFiltrada(res.data);
+          const eventosPaginados = sliceIntoChunks(res.data, 10);
+          setDataFiltrada( eventosPaginados);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -484,6 +488,11 @@ export default function EventosUsuario() {
           </div>
         ) : null}
       </div>
+      <PaginationCitas
+        page={page}
+        setPage={setPage}
+        nroPaginas={dataFiltrada?.length}
+      />
     </>
   );
 }

@@ -42,8 +42,8 @@ export default function CitasUser() {
 
       <>
         <div style={{ display: "flex", gap: "4vh", flexDirection: "column" }}>
-          {citasUsuario && citasUser[page]?.length > 0 && loading === false ? (
-            citasUsuario &&
+          {citasUser && citasUser[page]?.length > 0 && loading === false ? (
+           citasUser &&
             citasUser[page]?.map((ele) => {
               let str = ele.Colegio?.direccion;
 
