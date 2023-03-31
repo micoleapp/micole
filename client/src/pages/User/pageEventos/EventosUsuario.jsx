@@ -22,14 +22,16 @@ export default function EventosUsuario() {
   const items = [1, 2, 3, 4, 5];
   const [isLoading, setIsLoading] = useState(false);
   const [orderSelected, setOrderSelected] = useState(null);
-  const [dataFiltrada, setDataFiltrada] = useState([])
+  const [dataFiltrada, setDataFiltrada] = useState([]);
   useEffect(() => {
     // evento proximo
     try {
       setIsLoading(true);
       const token = localStorage.getItem("token");
       axios
-        .get(`/eventos?order=ASC`, { headers: { Authorization: `Bearer ${token}` } })
+        .get(`/eventos?order=ASC`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then((res) => {
           setData(res.data);
           setIsLoading(false);
@@ -170,7 +172,7 @@ export default function EventosUsuario() {
               );
             })}
         </>
-      ) : data?.length > 0 && isLoading === true ? (
+      ) : data?.length === 0 && isLoading === true ? (
         items.map((item, key) => (
           <ContentLoader
             key={key}
@@ -190,27 +192,28 @@ export default function EventosUsuario() {
             <rect width="100" height="100" />
           </ContentLoader>
         ))
-      ) : (
-        items.map((item, key) => (
-          <ContentLoader
-            key={key}
-            speed={3}
-            width={"50%"}
-            height={"80%"}
-            viewBox="0 0 500 120"
-            backgroundColor="#dcdce2"
-            foregroundColor="#ecebeb"
-          >
-            <rect x="110" y="8" rx="3" ry="3" width="120" height="10" />
-            <rect x="110" y="25" rx="3" ry="3" width="100" height="6" />
-            <rect x="48" y="26" rx="3" ry="3" width="52" height="6" />
-            <rect x="110" y="56" rx="3" ry="3" width="310" height="6" />
-            <rect x="110" y="72" rx="3" ry="3" width="300" height="6" />
-            <rect x="110" y="88" rx="3" ry="3" width="178" height="6" />
-            <rect width="100" height="100" />
-          </ContentLoader>
-        ))
-      )}
+      ) : data?.length === 0 && isLoading === false ? (
+        <div
+          // data-aos="zoom-up"
+          style={{
+            width: "80%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "row",
+            color: "#0C2B42",
+            gap: "10px",
+            padding: "20px",
+            minHeight: "100%",
+            boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+            fontWeight: "600",
+            backgroundColor: "#fff",
+          }}
+        >
+          <ContentPasteSearchOutlinedIcon style={{ color: "#0061DF" }} />
+          <h1>No hay eventos pendientes</h1>
+        </div>
+      ) : null}
       {/* Siguientes EVENTOS */}
       <div className={style.layoutTitlteSigEventos}>
         <div className={style.titleSig}>
@@ -265,14 +268,117 @@ export default function EventosUsuario() {
         {/* CARD  FECHA */}
       </div>
       <div>
+        {orderSelected != null && dataFiltrada ? (
+          dataFiltrada?.length > 0 ? (
+            <>
+              {data &&
+                data?.map((ele) => {
+                  return (
+                    <>
+                      <div className={style.layout}>
+                        <div style={{ position: "relative" }}>
+                          <img
+                            style={{
+                              display: "flex",
+                              width: "20vh",
+                              height: "20vh",
+                            }}
+                            src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679362147/eesjwe0dwaabi37gzuj9.png"
+                            alt="Logo"
+                          />
+                          <div className={style.card2}>
+                            <div className={style.imgDiv}>
+                              <img
+                                style={{
+                                  display: "flex",
+                                  zIndex: "2",
+                                  width: "5vh",
+                                  height: "5vh",
+                                }}
+                                src={ele.imagen_evento}
+                                alt="Logo"
+                              />
+                            </div>
+                            <h1 className={style.title}>{ele.nombre_evento}</h1>
+                            <div style={{ display: "flex", gap: "2vh" }}></div>
+                          </div>
+                        </div>
+                        <div className={style.infoDiv}>
+                          <h1 className={style.titleK}>{ele.nombre_evento}</h1>
+                          <div style={{ display: "flex", gap: "1vh" }}>
+                            <p className={style.pK}>
+                              {fechaFormat(ele.fecha_evento)} -
+                            </p>
+                            <p className={style.pK}>
+                              {es_AM_PM(ele.hora_evento)}
+                            </p>
+                          </div>
 
+                          <div className={style.divDescripcion}>
+                            <p className={style.pTittleK}>Descripcion</p>
+                            <p className={style.descripcion}>
+                              {ele.descripcion}
+                            </p>
+                            <p className={style.descripcion}>
+                              {ele.descripcion}
+                            </p>
+                          </div>
 
-
-        {
-        
-        orderSelected !=null && dataFiltrada ?
-
-        dataFiltrada?.length > 0 ? (
+                          <div
+                            style={{
+                              display: "flex",
+                              width: "100%",
+                              justifyContent: "space-around",
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })}
+            </>
+          ) : dataFiltrada?.length > 0 && isLoading === true ? (
+            items.map((item, key) => (
+              <ContentLoader
+                key={key}
+                speed={3}
+                width={"50%"}
+                height={"80%"}
+                viewBox="0 0 500 120"
+                backgroundColor="#dcdce2"
+                foregroundColor="#ecebeb"
+              >
+                <rect x="110" y="8" rx="3" ry="3" width="120" height="10" />
+                <rect x="110" y="25" rx="3" ry="3" width="100" height="6" />
+                <rect x="48" y="26" rx="3" ry="3" width="52" height="6" />
+                <rect x="110" y="56" rx="3" ry="3" width="310" height="6" />
+                <rect x="110" y="72" rx="3" ry="3" width="300" height="6" />
+                <rect x="110" y="88" rx="3" ry="3" width="178" height="6" />
+                <rect width="100" height="100" />
+              </ContentLoader>
+            ))
+          ) : (
+            items.map((item, key) => (
+              <ContentLoader
+                key={key}
+                speed={3}
+                width={"50%"}
+                height={"80%"}
+                viewBox="0 0 500 120"
+                backgroundColor="#dcdce2"
+                foregroundColor="#ecebeb"
+              >
+                <rect x="110" y="8" rx="3" ry="3" width="120" height="10" />
+                <rect x="110" y="25" rx="3" ry="3" width="100" height="6" />
+                <rect x="48" y="26" rx="3" ry="3" width="52" height="6" />
+                <rect x="110" y="56" rx="3" ry="3" width="310" height="6" />
+                <rect x="110" y="72" rx="3" ry="3" width="300" height="6" />
+                <rect x="110" y="88" rx="3" ry="3" width="178" height="6" />
+                <rect width="100" height="100" />
+              </ContentLoader>
+            ))
+          )
+        ) : data?.length > 0 ? (
           <>
             {data &&
               data?.map((ele) => {
@@ -320,7 +426,6 @@ export default function EventosUsuario() {
                         <div className={style.divDescripcion}>
                           <p className={style.pTittleK}>Descripcion</p>
                           <p className={style.descripcion}>{ele.descripcion}</p>
-                          <p className={style.descripcion}>{ele.descripcion}</p>
                         </div>
 
                         <div
@@ -336,7 +441,7 @@ export default function EventosUsuario() {
                 );
               })}
           </>
-        ) : dataFiltrada?.length > 0 && isLoading === true ? (
+        ) : data?.length === 0 && isLoading === true ? (
           items.map((item, key) => (
             <ContentLoader
               key={key}
@@ -356,136 +461,28 @@ export default function EventosUsuario() {
               <rect width="100" height="100" />
             </ContentLoader>
           ))
-        ) : (
-          items.map((item, key) => (
-            <ContentLoader
-              key={key}
-              speed={3}
-              width={"50%"}
-              height={"80%"}
-              viewBox="0 0 500 120"
-              backgroundColor="#dcdce2"
-              foregroundColor="#ecebeb"
-            >
-              <rect x="110" y="8" rx="3" ry="3" width="120" height="10" />
-              <rect x="110" y="25" rx="3" ry="3" width="100" height="6" />
-              <rect x="48" y="26" rx="3" ry="3" width="52" height="6" />
-              <rect x="110" y="56" rx="3" ry="3" width="310" height="6" />
-              <rect x="110" y="72" rx="3" ry="3" width="300" height="6" />
-              <rect x="110" y="88" rx="3" ry="3" width="178" height="6" />
-              <rect width="100" height="100" />
-            </ContentLoader>
-          ))
-        )
-        :
-        
-         data?.length > 0 ? (
-          <>
-            {data &&
-              data?.map((ele) => {
-                return (
-                  <>
-                    <div className={style.layout}>
-                      <div style={{ position: "relative" }}>
-                        <img
-                          style={{
-                            display: "flex",
-                            width: "20vh",
-                            height: "20vh",
-                          }}
-                          src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679362147/eesjwe0dwaabi37gzuj9.png"
-                          alt="Logo"
-                        />
-                        <div className={style.card2}>
-                          <div className={style.imgDiv}>
-                            <img
-                              style={{
-                                display: "flex",
-                                zIndex: "2",
-                                width: "5vh",
-                                height: "5vh",
-                              }}
-                              src={ele.imagen_evento}
-                              alt="Logo"
-                            />
-                          </div>
-                          <h1 className={style.title}>{ele.nombre_evento}</h1>
-                          <div style={{ display: "flex", gap: "2vh" }}></div>
-                        </div>
-                      </div>
-                      <div className={style.infoDiv}>
-                        <h1 className={style.titleK}>{ele.nombre_evento}</h1>
-                        <div style={{ display: "flex", gap: "1vh" }}>
-                          <p className={style.pK}>
-                            {fechaFormat(ele.fecha_evento)} -
-                          </p>
-                          <p className={style.pK}>
-                            {es_AM_PM(ele.hora_evento)}
-                          </p>
-                        </div>
-
-                        <div className={style.divDescripcion}>
-                          <p className={style.pTittleK}>Descripcion</p>
-                          <p className={style.descripcion}>{ele.descripcion}</p>
-                        </div>
-
-                        <div
-                          style={{
-                            display: "flex",
-                            width: "100%",
-                            justifyContent: "space-around",
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-                  </>
-                );
-              })}
-          </>
-        ) : data?.length > 0 && isLoading === true ? (
-          items.map((item, key) => (
-            <ContentLoader
-              key={key}
-              speed={3}
-              width={"50%"}
-              height={"80%"}
-              viewBox="0 0 500 120"
-              backgroundColor="#dcdce2"
-              foregroundColor="#ecebeb"
-            >
-              <rect x="110" y="8" rx="3" ry="3" width="120" height="10" />
-              <rect x="110" y="25" rx="3" ry="3" width="100" height="6" />
-              <rect x="48" y="26" rx="3" ry="3" width="52" height="6" />
-              <rect x="110" y="56" rx="3" ry="3" width="310" height="6" />
-              <rect x="110" y="72" rx="3" ry="3" width="300" height="6" />
-              <rect x="110" y="88" rx="3" ry="3" width="178" height="6" />
-              <rect width="100" height="100" />
-            </ContentLoader>
-          ))
-        ) : (
+        ) : data?.length === 0 && isLoading === false ? (
           <div
-          // data-aos="zoom-up"
-          style={{
-            width: "80%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "row",
-            color: "#0C2B42",
-            gap: "10px",
-            padding: "20px",
-            minHeight: "100%",
-            boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
-            fontWeight: "600",
-            backgroundColor: "#fff",
-          }}
-        >
-          <ContentPasteSearchOutlinedIcon
-            style={{ color: "#0061DF" }}
-          />
-          <h1>No hay eventos pendientes</h1>
-        </div>
-        )}
+            // data-aos="zoom-up"
+            style={{
+              width: "80%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+              color: "#0C2B42",
+              gap: "10px",
+              padding: "20px",
+              minHeight: "100%",
+              boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+              fontWeight: "600",
+              backgroundColor: "#fff",
+            }}
+          >
+            <ContentPasteSearchOutlinedIcon style={{ color: "#0061DF" }} />
+            <h1>No hay eventos pendientes</h1>
+          </div>
+        ) : null}
       </div>
     </>
   );
