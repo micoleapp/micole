@@ -25,6 +25,7 @@ const dificultadesRouter = require("./dificultades");
 const eventoRouter = require("./eventoRoutes");
 const reportesRouter = require("./reportesRoutes");
 const vencidosRouter = require("./vencidos");
+const listaRouter = require("./listaDeEspera");
 
 const router = Router();
 
@@ -50,6 +51,7 @@ router.use("/informes", informeRouter);
 router.use("/eventos", eventoRouter);
 router.use("/reportes", reportesRouter);
 router.use("/vencidos", vencidosRouter);
+router.use("/lista", listaRouter);
 
 router.get("/", (req, res) =>
   res.json({ name: pkg.name, version: pkg.version })
