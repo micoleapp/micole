@@ -14,6 +14,7 @@ import CitasUser from "./pegeCitas/CitasUser";
 import { getCitaUsuario } from "../../redux/CitasActions";
 import EventosUsuario from "./pageEventos/EventosUsuario";
 import UserConfig from "./Config-usuario/UserConfig";
+import { logout } from "../../redux/AuthActions";
 
 export default function MainUser() {
   const [page, setPage] = React.useState(0);
@@ -112,10 +113,7 @@ export default function MainUser() {
               className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
                 page == 3 ? "bg-[#0061dd] text-white" : null
               } `}
-              onClick={() => {
-                setOpen();
-                setPage(3);
-              }}
+              onClick={() => dispatch(logout())}
             >
               <AiOutlineLogout
                 className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
