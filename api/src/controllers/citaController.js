@@ -120,6 +120,21 @@ const getCitas = async (req, res, next) => {
 
 const getCitasUser = async (req, res, next) => {
   const tokenUser = req.user;
+  const { order } = req.query;
+  let orderBy = null;
+  if (order) {
+    switch (order) {
+      case "ASC":
+        orderBy = [["fecha_cita", "ASC"]];
+        break;
+      case "DESC":
+        orderBy = [["fecha_cita", "DESC"]];
+        break;
+      default:
+        orderBy = null;
+        break;
+    }
+  }
   try {
     const user = await Auth.findOne({ where: { id: tokenUser.id } });
     if (!user) {
@@ -143,7 +158,7 @@ const getCitasUser = async (req, res, next) => {
         activo: true,
       },
       ...include,
-      order: [["fecha_cita", "ASC"]],
+      order: orderBy || [["fecha_cita", "ASC"]],
     });
 
     res.status(200).send(CitasUsuario);
