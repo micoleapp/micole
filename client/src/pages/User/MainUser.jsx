@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import CitasUser from "./pegeCitas/CitasUser";
 import { getCitaUsuario } from "../../redux/CitasActions";
 import EventosUsuario from "./pageEventos/EventosUsuario";
+import UserConfig from "./Config-usuario/UserConfig";
 
 export default function MainUser() {
   const [page, setPage] = React.useState(0);
@@ -143,7 +144,7 @@ export default function MainUser() {
             </div>
           ) : page === 2 ? (
             <div className="min-h-screen">
-              <p>Config</p>
+              <UserConfig/>
             </div>
           ) : page === 3 ? (
             <div className="min-h-screen">

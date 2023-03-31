@@ -243,7 +243,7 @@ export default function CitasUser() {
       <PaginationCitas
         page={page}
         setPage={setPage}
-        nroPaginas={citasUser.length}
+        nroPaginas={citasUser?.length}
       />
     </>
   );
