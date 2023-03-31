@@ -122,9 +122,10 @@ export default function CitasUser() {
                               <b style={{ color: "#0061DF" }}>
                                 Horarios / Fecha
                               </b>
-                              <div style={{ display: "flex" }}>
-                                <p>{es_AM_PM(ele.hora_cita)}</p>
-                                <p>{fechaFormat(ele.fecha_cita)}</p>
+                              <div style={{ display: "flex", gap:'1vh' }}>
+                              <p>{fechaFormat(ele.fecha_cita)}</p>
+                                <p>{ele.hora_cita}{' '}{es_AM_PM(ele.hora_cita)}</p>
+                              
                               </div>
                             </div>
                           </Typography>
