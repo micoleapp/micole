@@ -377,8 +377,8 @@ function SchoolDetail() {
         let data = {
           año: Number(ingresoParams),
           gradoId: Number(gradoParams),
-          usuarioId: user.id,
-          colegioId: oneSchool.id
+          usuarioId: user?.id,
+          colegioId: oneSchool?.id
         }
         axios.post('/lista',data).
         then(res=>{
@@ -389,10 +389,11 @@ function SchoolDetail() {
           });
         })
         .catch(err=>{
+          console.log(err)
           Swal.fire({
             icon: "error",
             title: "Algo salio mal",
-            text: "Debes llenar todos los datos para continuar",
+            text: err.response.data.message,
           });
         })
       } catch (error) {
@@ -1151,21 +1152,51 @@ function SchoolDetail() {
                 >
                   <div className="flex w-full gap-5 justify-between">
                     {isAuth ?                     <input
-                      name="nombre"
+                      name="nombreLista"
                       type="text"
-                      value={user.nombre_responsable}
+                      value={user.nombre}
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       required
                     /> :                     <input
-                      name="nombre"
+                      name="nombreLista"
                       type="text"
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       required
                     />}
-                    {isAuth ?                     <input
-                      name="cel"
+                                        {isAuth ?                     <input
+                      name="apellidoLista"
+                      type="text"
+                      value={user.apellidos}
+                      required
+                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    /> :                     <input
+                    name="apellidoLista"
+                    type="text"
+                    required
+                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    placeholder="Apellidos"
+                  />}
+
+                  </div>
+                  <div className="flex w-full gap-5 justify-between">
+                  {isAuth ?                   <input
+                    name="emailLista"
+                    type="email"
+                    value={user.email}
+                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    placeholder="Correo"
+                    required
+                  /> :                   <input
+                  name="emailLista"
+                  type="email"
+                  className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                  placeholder="Correo"
+                  required
+                /> }
+                                    {isAuth ?                     <input
+                      name="celLista"
                       type="number"
                       pattern="[0-9]{8,15}"
                       value={user.telefono}
@@ -1174,7 +1205,7 @@ function SchoolDetail() {
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Celular"
                     /> :                     <input
-                    name="cel"
+                    name="celLista"
                     type="number"
                     pattern="[0-9]{8,15}"
                     required
@@ -1182,26 +1213,10 @@ function SchoolDetail() {
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Celular"
                   />}
-
                   </div>
-                  {isAuth ?                   <input
-                    name="email"
-                    type="email"
-                    value={user.email}
-                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                    placeholder="Correo"
-                    required
-                  /> :                   <input
-                  name="email"
-                  type="email"
-                  className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                  placeholder="Correo"
-                  required
-                /> }
 
                   <button
                     type="submit"
-                    value="Virtual"
                     className="border mt-5 mx-auto px-10 py-2 rounded-md shadow-lg bg-[#0061dd] text-white duration-300 cursor-pointer"
                   >
                     SOLICITAR

@@ -62,22 +62,32 @@ router.get("/colegio/:id", async (req, res) => {
 
 //------- POST EN LA LISTA--------
 router.post("/", async (req, res) => {
-  const { año, colegioId, usuarioId, gradoId } = req.body;
-  console.log(req.body)
   try {
+    const { año, colegioId, usuarioId, gradoId } = req.body;
+    const validacion = await Colegio.findOne({
+      where: { id: usuarioId },
+    });
+    if (validacion) {
+        return res.status(501).json({
+        message: "Un Colegio no puede inscribirse en lista de Espera",
+      });
+    }
     const [lista, created] = await ListaDeEspera.findOrCreate({
       where: {
         año,
+        ColegioId: colegioId,
+        UserId: usuarioId,
+        GradoId: gradoId,
       },
     });
-    await lista.setUser(usuarioId);
-    await lista.setGrado(gradoId);
-    await lista.setColegio(colegioId);
     if (created) {
+      await lista.setUser(usuarioId);
+      await lista.setGrado(gradoId);
+      await lista.setColegio(colegioId);
       res.status(200).json(lista);
     } else {
       res.status(501).json({
-        message: "ya te encuentras en la lista de espera de este Colegio",
+        message: "Ya te encuentras en la lista de espera de este Colegio",
       });
     }
   } catch (err) {
