@@ -63,6 +63,7 @@ router.get("/colegio/:id", async (req, res) => {
 //------- POST EN LA LISTA--------
 router.post("/", async (req, res) => {
   const { año, colegioId, usuarioId, gradoId } = req.body;
+  console.log(req.body)
   try {
     const [lista, created] = await ListaDeEspera.findOrCreate({
       where: {

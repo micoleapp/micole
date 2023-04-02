@@ -101,10 +101,14 @@ export const getAllPaises = () => (dispatch) => {
 
 export const getAllCategories = () => (dispatch) => {
   dispatch(isLoading());
-  axios
-    .get("/categorias")
-    .then((res) => dispatch(getCategories(res.data)))
-    .catch((err) => dispatch(getError(err.message)));
+  try {
+    axios
+      .get("/categorias")
+      .then((res) => dispatch(getCategories(res.data)))
+      .catch((err) => dispatch(getError(err.message)));
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const getAllInfraestructura = () => (dispatch) => {

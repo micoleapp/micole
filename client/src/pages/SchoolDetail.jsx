@@ -122,7 +122,7 @@ function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool, grados, horarios } = useSelector((state) => state.schools);
   const { user, isAuth } = useSelector((state) => state.auth);
-  console.log(oneSchool);
+  console.log(user);
 
   const location = useLocation();
   console.log();
@@ -361,6 +361,45 @@ function SchoolDetail() {
       setLng(JSON.parse(oneSchool?.ubicacion)?.lng);
     }
   }, [oneSchool]);
+
+  
+  const handleSubmitLista = (e) => {
+    e.preventDefault()
+    if(!isAuth){
+      Swal.fire({
+        icon: "info",
+        title: "Inicia Sesion",
+        text: "Debes iniciar sesion o registrarte para sacar una cita",
+      })
+      return
+    } else {
+      try {
+        let data = {
+          año: Number(ingresoParams),
+          gradoId: Number(gradoParams),
+          usuarioId: user.id,
+          colegioId: oneSchool.id
+        }
+        axios.post('/lista',data).
+        then(res=>{
+          Swal.fire({
+            icon: "success",
+            title: "Lista creada exitosamente!",
+            text: "Lista Agendada",
+          });
+        })
+        .catch(err=>{
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: "Debes llenar todos los datos para continuar",
+          });
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
 
   return (
     <div className="bg-[#f6f7f8]">
@@ -1106,6 +1145,74 @@ function SchoolDetail() {
                 <h2 className="font-semibold text-xl">
                   Solicitar lista de espera
                 </h2>
+                <form
+                  onSubmit={handleSubmitLista}
+                  className="w-full flex flex-col gap-7"
+                >
+                  <div className="flex w-full gap-5 justify-between">
+                    {isAuth ?                     <input
+                      name="nombre"
+                      type="text"
+                      value={user.nombre_responsable}
+                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                      placeholder="Nombre"
+                      required
+                    /> :                     <input
+                      name="nombre"
+                      type="text"
+                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                      placeholder="Nombre"
+                      required
+                    />}
+                    {isAuth ?                     <input
+                      name="cel"
+                      type="number"
+                      pattern="[0-9]{8,15}"
+                      value={user.telefono}
+                      required
+                      title="Solo se permiten numeros y entre 8 y 10 caracteres"
+                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                      placeholder="Celular"
+                    /> :                     <input
+                    name="cel"
+                    type="number"
+                    pattern="[0-9]{8,15}"
+                    required
+                    title="Solo se permiten numeros y entre 8 y 10 caracteres"
+                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    placeholder="Celular"
+                  />}
+
+                  </div>
+                  {isAuth ?                   <input
+                    name="email"
+                    type="email"
+                    value={user.email}
+                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    placeholder="Correo"
+                    required
+                  /> :                   <input
+                  name="email"
+                  type="email"
+                  className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                  placeholder="Correo"
+                  required
+                /> }
+
+                  <button
+                    type="submit"
+                    value="Virtual"
+                    className="border mt-5 mx-auto px-10 py-2 rounded-md shadow-lg bg-[#0061dd] text-white duration-300 cursor-pointer"
+                  >
+                    SOLICITAR
+                  </button>
+                </form>
+                <p className="text-sm p-10">
+                  Al enviar estás aceptando los{" "}
+                  <Link className="text-[#0061dd] hover:underline">
+                    Términos y Condiciones de Uso y la Política de Privacidad
+                  </Link>
+                </p>
               </div>
             ) : (
               <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
@@ -1249,7 +1356,7 @@ function SchoolDetail() {
                     <input
                       name="nombre"
                       type="text"
-                      value={isAuth === true ? user.nombre : ''}
+                      value={isAuth === true ? user.nombre_responsable : ''}
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       onChange={(e) => {
