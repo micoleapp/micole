@@ -238,7 +238,6 @@ const createCita = async (req, res, next) => {
 const changeStatusCita = async (req, res, next) => {
   const { idCita } = req.params;
   const { estado } = req.body;
-
   try {
     const cita = await Cita.findByPk(idCita);
     if (!cita) {
@@ -253,7 +252,22 @@ const changeStatusCita = async (req, res, next) => {
       },
       { where: { id: idCita } }
     );
-    res.status(200).send("El estado de la cita se ha modificado.");
+    const colegio = await Colegio.findByPk(cita.ColegioId, {
+      include: {
+        model: Auth,
+        attributes: ['email']
+      }
+    });
+    const mailerFunctions = {
+      Aplicacion: mailer.sendMailAplicacionCita,
+      Entrevista: mailer.sendMailEntrevistaCita,
+      VOfrecida: mailer.sendMailVOfrecida,
+      VAceptada: mailer.sendMailVAceptada,
+    };
+    if (estado in mailerFunctions) {
+      mailerFunctions[estado](newCita, colegio);
+    }
+    res.status(200).send(colegio);
   } catch (error) {
     return next(error);
   }
