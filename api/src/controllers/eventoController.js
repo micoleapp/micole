@@ -7,11 +7,11 @@ const getEventosColegio = async (req, res, next) => {
   let orderBy = null;
   if (order) {
     switch (order) {
-      case "ASC":
-        orderBy = [["fecha_evento", "ASC"]];
+      case 'ASC':
+        orderBy = [['fecha_evento', 'ASC']];
         break;
-      case "DESC":
-        orderBy = [["fecha_evento", "DESC"]];
+      case 'DESC':
+        orderBy = [['fecha_evento', 'DESC']];
         break;
       default:
         orderBy = null;
@@ -26,8 +26,10 @@ const getEventosColegio = async (req, res, next) => {
         message: 'El usuario no tiene permisos para crear un evento.',
       });
     }
-    if(authInstance.rol === 'Colegio') {
-      const colegio = await Colegio.findOne({ where: { idAuth: authInstance.id } });
+    if (authInstance.rol === 'Colegio') {
+      const colegio = await Colegio.findOne({
+        where: { idAuth: authInstance.id },
+      });
       if (!colegio) {
         return next({
           statusCode: 400,
@@ -38,11 +40,10 @@ const getEventosColegio = async (req, res, next) => {
         where: {
           ColegioId: colegio.id,
         },
-        order: orderBy || [["fecha_evento", "ASC"]],
+        order: orderBy || [['fecha_evento', 'ASC']],
       });
       res.status(200).send(eventos);
-    }
-    else{
+    } else {
       const user = await User.findOne({ where: { idAuth: authInstance.id } });
       if (!user) {
         return next({
@@ -51,12 +52,19 @@ const getEventosColegio = async (req, res, next) => {
         });
       }
       const eventos = await Evento.findAll({
-        include: [{
-          model: User,
-          where: { id: user.id },
-          through: { attributes: [] }
-        }],
-        order: orderBy || [["fecha_evento", "ASC"]],
+        include: [
+          {
+            model: User,
+            where: { id: user.id },
+            attributes: [],
+            through: { attributes: [] },
+          },
+          {
+            model: Colegio,
+            attributes: ['nombre_colegio', 'direccion'],
+          },
+        ],
+        order: orderBy || [['fecha_evento', 'ASC']],
       });
       res.status(200).json(eventos);
     }
