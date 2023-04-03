@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import VacanteAdmin from "./PageVacantes/VacanteAdmin";
 import PanelControl from "./PanelControl/PanelControl";
 import ConfigAdmin from "./Config/ConfigAdmin";
+import { logout } from "../../redux/AuthActions";
 export default function MainAdmin() {
   const [page, setPage] = React.useState(0);
 
@@ -28,7 +29,6 @@ export default function MainAdmin() {
     dispatch(getAllSchools());
    
   }, []);
-
 
   return (
     <>
@@ -210,7 +210,7 @@ export default function MainAdmin() {
 
           <button
             className="flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white"
-            // onClick={() => dispatch(logout())}
+            onClick={() => dispatch(logout())}
           >
             <AiOutlineLogout className="text-xl text-[#0061dd] group-focus:text-white group-hover:text-white" />
             <span className="text-sm text-black/80 group-focus:text-white group-hover:text-white">

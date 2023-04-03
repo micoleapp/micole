@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
           },
           len: {
             args: [3, 60],
-            msg: "El apellido debe tener entre 3 y 60 letras",
+            msg: "El nombre debe tener entre 3 y 60 letras",
           },
         },
       },

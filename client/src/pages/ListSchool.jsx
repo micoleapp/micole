@@ -148,10 +148,10 @@ function ListSchool() {
     distritParams !== "false" ? [Number(distritParams)] : []
   );
   const [gradoName, setGradoName] = React.useState(
-    gradoParams !== "false" ? [Number(gradoParams)] : []
+    gradoParams !== "false" ? Number(gradoParams) : []
   );
   const [ingresoName, setIngresoName] = React.useState(
-    ingresoParams !== "false" ? [Number(ingresoParams)] : []
+    ingresoParams !== "false" ? Number(ingresoParams) : []
   );
   const [order, setOrder] = React.useState([]);
   const [categorias, setCategorias] = React.useState([]);
@@ -281,7 +281,7 @@ function ListSchool() {
   };
 
   console.log(ingresoName)
-
+  console.log(gradoName)
   return (
     <div
       className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "
@@ -995,7 +995,7 @@ function ListSchool() {
                                   0
                                   ?   <button onClick={() => goToDetails(school.id,true)} className="bg-[#dcffe2] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#3cff7d] font-semibold">
                                 Lista de espera
-                              </button> : null}
+                              </button> :   null}
 
 
                           </div>

@@ -24,7 +24,7 @@ export default function Miplan() {
   console.log(oneSchool);
   // Plan_Pago: nombre_plan_pago
   //user.id-----
-  const ID = "13b57af0-d887-4bb5-ba41-f5d3f38c650b";
+  const ID = user.id;
   useEffect(() => {
     axios
       .get(`/ventas?id=${ID}`)

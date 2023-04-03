@@ -101,10 +101,14 @@ export const getAllPaises = () => (dispatch) => {
 
 export const getAllCategories = () => (dispatch) => {
   dispatch(isLoading());
-  axios
-    .get("/categorias")
-    .then((res) => dispatch(getCategories(res.data)))
-    .catch((err) => dispatch(getError(err.message)));
+  try {
+    axios
+      .get("/categorias")
+      .then((res) => dispatch(getCategories(res.data)))
+      .catch((err) => dispatch(getError(err.message)));
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const getAllInfraestructura = () => (dispatch) => {
@@ -318,12 +322,12 @@ export const getNombresColegios = () => (dispatch) => {
   try {
     axios
 
-    .get(`/colegios?limit=200`)
-    .then((res) => {
-      console.log(res.data)
-      dispatch(getNombreColegios(res.data));
-    })
-    .catch((err) => console.log(err.message));
+      .get(`/colegios?limit=200`)
+      .then((res) => {
+        console.log(res.data);
+        dispatch(getNombreColegios(res.data));
+      })
+      .catch((err) => console.log(err.message));
   } catch (error) {
     console.log(error);
   }
@@ -333,14 +337,14 @@ export const filterAdminState = (state, page) => (dispatch) => {
   try {
     axios
 
-    .get(`/colegios?limit=5&page=${page}&active=${state}`)
-    .then((res) => {
-      let data =[]
-      data.push(res.data)
-      console.log(data)
-      dispatch(getSchools(res.data.colegios));
-    })
-    .catch((err) => console.log(err.message));
+      .get(`/colegios?limit=5&page=${page}&active=${state}`)
+      .then((res) => {
+        let data = [];
+        data.push(res.data);
+        console.log(data);
+        dispatch(getSchools(res.data.colegios));
+      })
+      .catch((err) => console.log(err.message));
   } catch (error) {
     console.log(error);
   }

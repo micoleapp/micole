@@ -1202,4 +1202,4 @@ export default function CardCitas({ data, filtros }) {
       <div className={style.layout}></div>
     </>
   );
-}
+};

@@ -1,23 +1,92 @@
-const { Evento, Colegio } = require('../db');
+const { Evento, Colegio, User, Auth } = require('../db');
 const moment = require('moment');
 
 const getEventosColegio = async (req, res, next) => {
   const tokenUser = req.user;
+  const { order } = req.query;
+  let orderBy = null;
+  if (order) {
+    switch (order) {
+      case 'ASC':
+        orderBy = [['fecha_evento', 'ASC']];
+        break;
+      case 'DESC':
+        orderBy = [['fecha_evento', 'DESC']];
+        break;
+      default:
+        orderBy = null;
+        break;
+    }
+  }
   try {
-    const user = await Colegio.findOne({ where: { idAuth: tokenUser.id } });
-    if (!user) {
+    const authInstance = await Auth.findByPk(tokenUser.id);
+    if (!authInstance) {
       return next({
         statusCode: 400,
         message: 'El usuario no tiene permisos para crear un evento.',
       });
     }
-    const eventos = await Evento.findAll({
-      where: {
-        ColegioId: user.id,
-      },
-    });
+    if (authInstance.rol === 'Colegio') {
+      const colegio = await Colegio.findOne({
+        where: { idAuth: authInstance.id },
+      });
+      if (!colegio) {
+        return next({
+          statusCode: 400,
+          message: 'El usuario no existe.',
+        });
+      }
+      const eventos = await Evento.findAll({
+        where: {
+          ColegioId: colegio.id,
+        },
+        order: orderBy || [['fecha_evento', 'ASC']],
+      });
+      res.status(200).send(eventos);
+    } else {
+      const user = await User.findOne({ where: { idAuth: authInstance.id } });
+      if (!user) {
+        return next({
+          statusCode: 400,
+          message: 'El usuario no existe.',
+        });
+      }
+      const eventos = await Evento.findAll({
+        include: [
+          {
+            model: User,
+            where: { id: user.id },
+            attributes: [],
+            through: { attributes: [] },
+          },
+          {
+            model: Colegio,
+            attributes: ['nombre_colegio', 'direccion'],
+          },
+        ],
+        order: orderBy || [['fecha_evento', 'ASC']],
+      });
+      res.status(200).json(eventos);
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
 
-    res.status(200).send(eventos);
+const registrationEvent = async (req, res, next) => {
+  const { idEvento, idUser } = req.body;
+  try {
+    const user = await User.findByPk(idUser);
+    if (!user) {
+      throw new Error('No se encontró al usuario con ese correo electrónico');
+    }
+
+    const evento = await Evento.findByPk(idEvento);
+    if (!evento) {
+      throw new Error('No se encontró el evento con ese ID');
+    }
+    await evento.addUser(user);
+    res.status(201).json({ message: 'Inscripción exitosa' });
   } catch (error) {
     return next(error);
   }
@@ -135,4 +204,5 @@ module.exports = {
   createEvento,
   deleteEvento,
   updateEvento,
+  registrationEvent,
 };
