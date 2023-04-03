@@ -9,50 +9,40 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      nombre: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          is: {
-            args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-            msg: 'El nombre solo puede contener letras, acentos, tildes y espacios',
-          },
-          len: {
-            args: [3, 60],
-            msg: 'El nombre debe tener entre 3 y 60 letras',
-          },
-        },
-      },
-      apellidos: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          is: {
-            args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-            msg: 'El apellido solo puede contener letras, acentos, tildes y espacios',
-          },
-          len: {
-            args: [6, 60],
-            msg: 'El apellido debe tener entre 6 y 60 letras',
-          },
-        },
-      },
-/*       dni: {
+      nombre_responsable: {
         type: DataTypes.STRING,
         allowNull: true,
         validate: {
+          is: {
+            args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+            msg: 'El campo nombre_responsable solo puede contener letras, acentos, tildes y espacios',
+          },
           len: {
-            args: [8, 8],
-            msg: 'El DNI debe tener 8 caracteres',
+            args: [3, 60],
+            msg: 'El campo nombre_responsable debe tener entre 3 y 60 letras',
           },
         },
-      }, */
+      },
+      apellidos_responsable: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          is: {
+            args: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+            msg: 'El campo apellidos_responsable solo puede contener letras, acentos, tildes y espacios',
+          },
+          len: {
+            args: [6, 60],
+            msg: 'El campo apellidos_responsable debe tener entre 6 y 60 letras',
+          },
+        },
+      },
       telefono: {
         type: DataTypes.BIGINT,
         validate: {
           isInt: {
             args: true,
-            msg: 'El número telefónico solo debe contener números',
+            msg: 'El campo número telefónico solo debe contener números',
           },
         },
       },
