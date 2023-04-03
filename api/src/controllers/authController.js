@@ -157,8 +157,8 @@ const signUp = async (req, res, next) => {
       await colegioValidation.validate();
     } else {
       const userValidation = User.build({
-        nombre_responsable,
-        apellidos_responsable,
+        nombre_responsable: nombre,
+        apellidos_responsable: apellidos,
         telefono,
       });
       await userValidation.validate();
@@ -218,6 +218,7 @@ const signUp = async (req, res, next) => {
     //mailer.sendMailSignUp(sanitizedUser, "User"); //Enviamos el mail de Confirmación de Registro para el Usuario Normal
     return res.status(201).send(sanitizedUser);
   } catch (error) {
+    console.log(error);
     return next(error);
   }
 };
