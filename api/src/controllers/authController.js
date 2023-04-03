@@ -157,8 +157,8 @@ const signUp = async (req, res, next) => {
       await colegioValidation.validate();
     } else {
       const userValidation = User.build({
-        nombre_responsable,
-        apellidos_responsable,
+        nombre_responsable: nombre,
+        apellidos_responsable: apellidos,
         telefono,
       });
       await userValidation.validate();
@@ -249,13 +249,13 @@ const putAuth = async (req, res, next) => {
 
     if (authInstance.rol === 'Colegio') {
       const colegio = await Colegio.findOne({
-        where: { AuthId: authInstance.id },
+        where: { idAuth: authInstance.id },
       });
       colegio.telefono = telefono;
       await colegio.save();
       sanitizedAuth.nombre = colegio.nombre_colegio;
     } else {
-      const user = await User.findOne({ where: { AuthId: authInstance.id } });
+      const user = await User.findOne({ where: { idAuth: authInstance.id } });
       user.telefono = telefono;
       await user.save();
       sanitizedAuth.nombre = user.nombre_responsable;
