@@ -162,7 +162,7 @@ function SchoolDetail() {
   useEffect(() => {
     dispatch(getAllGrados());
     dispatch(getSchoolDetail(id));
-    dispatch(getHorariosSchool());
+    dispatch(getHorariosSchool(id));
     return () => {
       dispatch(clannDetailid());
     };
