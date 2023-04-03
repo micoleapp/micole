@@ -94,19 +94,24 @@ export default function ModalRegistro({ open, setOpen }) {
                 style={{ display: "flex", flexDirection: "column", gap: "1vh" }}
               >
                 <Typography>
-                <div
-                style={{ display: "flex", flexDirection: "column", gap: "0.50" }}
-              >
-                  <b style={{color:'#0061DF'}}>Inscribe tu colegio en nuestra plataforma</b>
-                  Únete a la mayor comunidad de colegios en el Perú
-              </div>
-                
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.50",
+                    }}
+                  >
+                    <b style={{ color: "#0061DF" }}>
+                      Inscribe tu colegio en nuestra plataforma
+                    </b>
+                    Únete a la mayor comunidad de colegios en el Perú
+                  </div>
                 </Typography>
                 <Button
                   onClick={() => setOpenRegistroColegio(true)}
                   variant="contained"
                 >
-                 Inscribe tu Colegio
+                  Inscribe tu Colegio
                 </Button>
                 <Button
                   onClick={() => setOpenRegistroPadre(true)}
@@ -120,14 +125,13 @@ export default function ModalRegistro({ open, setOpen }) {
 
           {OpenRegistroPadre && (
             <>
-              <div className={style.h1_div}>
-                <h1>Completa tus datos</h1>
-              </div>
-
               <form
                 onSubmit={handleSubmit(OnSubmit)}
                 className={style.formLayout}
               >
+                <div className={style.h1_div}>
+                  <h1>Completa tus datos</h1>
+                </div>
                 <div className={style.form}>
                   <div className={style.divInputs}>
                     <label className={style.label}>Nombre</label>
@@ -227,7 +231,13 @@ export default function ModalRegistro({ open, setOpen }) {
                   <div className={`${style.divButton}`}>
                     <p>Ya tienes cuenta ? </p>
                     <div>
-                      <p style={{ color: "blue", cursor: "pointer" }}>
+                      <p
+                        onClick={() => {
+                          setOpenLogin(true);
+                          setOpenRegistroColegio(false);
+                        }}
+                        style={{ color: "blue", cursor: "pointer" }}
+                      >
                         Inicia Sesión{" "}
                       </p>
                     </div>
