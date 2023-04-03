@@ -279,12 +279,10 @@ export const getCitaAgendadas = () => (dispatch) => {
       });
 };
 
-export const getHorariosSchool = () => (dispatch) => {
+export const getHorariosSchool = (id) => (dispatch) => {
   dispatch(isLoading());
-  const idColegio = localStorage.getItem("ColegioId");
-  console.log(idColegio);
   axios
-    .get(`/horarios/${idColegio}`)
+    .get(`/horarios/${id}`)
     .then((res) => dispatch(getHorarios(res.data)))
     .catch((err) => {
       Swal.fire({
