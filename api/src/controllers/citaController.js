@@ -306,8 +306,13 @@ const deleteCita = async (req, res, next) => {
         message: "El registro no existe.",
       });
     }
-    await Cita.destroy({ where: { id: idCita } });
-    res.status(200).send("Se eliminó la Cita.");
+    await Cita.update(
+      {
+        estado: cita.estado === "VAceptada" ? "Finalizado" : "Cancelado",
+      },
+      { where: { id: idCita } }
+    );
+    res.status(200).send("Se modificó la Cita.");
   } catch (error) {
     return next(error);
   }
