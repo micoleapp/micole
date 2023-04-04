@@ -212,7 +212,7 @@ function SchoolDetail() {
     ].join(":"),
 
     modo: modo ? "Presencial" : "Virtual",
-    nombre:isAuth? user.nombre  : "",
+    nombre:isAuth? user.nombre_responsable  :'',
     celular: isAuth? user.telefono:"",
     correo: isAuth? user.email :'',
     añoIngreso: ingresoParams,
@@ -1158,7 +1158,7 @@ function SchoolDetail() {
                     {isAuth ?                     <input
                       name="nombreLista"
                       type="text"
-                      value={user.nombre}
+                      value={user.nombre_responsable}
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       required
@@ -1375,7 +1375,7 @@ function SchoolDetail() {
                     <input
                       name="nombre"
                       type="text"
-                      value={isAuth === true ? user.nombre : ''}
+                      value={isAuth === true ? user.nombre_responsable  : ''}
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       onChange={(e) => {
