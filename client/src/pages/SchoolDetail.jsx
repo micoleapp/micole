@@ -234,6 +234,7 @@ function SchoolDetail() {
       return;
     }
     if (isAuth) {
+
       console.log(cita)
      
       dispatch(postCita(cita));
@@ -1374,7 +1375,7 @@ function SchoolDetail() {
                     <input
                       name="nombre"
                       type="text"
-                      value={isAuth === true ? user.nombre_responsable : ''}
+                      value={isAuth === true ? user.nombre : ''}
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       onChange={(e) => {
