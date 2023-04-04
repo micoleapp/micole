@@ -55,6 +55,7 @@ const getVacantesColegio = async (req, res, next) => {
 const createVacante = async (req, res, next) => {
   const { data } = req.body;
   const tokenUser = req.user;
+  // data -> idColegio
   try {
     const authColegio = await Colegio.findOne({
       where: { idAuth: tokenUser.id },
