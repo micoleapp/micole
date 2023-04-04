@@ -9,9 +9,13 @@ export const authSlice = createSlice({
     oneSchool: null,
     success: null,
     error: "",
-    loading: false
+    loading: false,
+    vacantes: [],
   },
   reducers : {
+    getVacantes: (state,action) => {
+      state.vacantes = action.payload
+    },
     getSchool: (state,action) => {
       state.oneSchool = action.payload,
       state.loading = false,
@@ -64,6 +68,6 @@ export const authSlice = createSlice({
   }
 })
 
-export const {getSchool,getUser,registerUser,loginUser,logoutUser,getError,isLoading,updateUser} = authSlice.actions
+export const {getSchool,getUser,registerUser,loginUser,logoutUser,getError,isLoading,updateUser,getVacantes} = authSlice.actions
 
 export default authSlice.reducer
