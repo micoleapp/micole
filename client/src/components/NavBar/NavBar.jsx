@@ -10,7 +10,9 @@ import { logout } from "../../redux/AuthActions";
 import { Squash as Hamburger } from "hamburger-react";
 import CircularProgress from "@mui/material/CircularProgress";
 import ModalRegistro from "../FormRegister/ModalRegister";
+import {useNavigate} from 'react-router-dom'
 function NavBar() {
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const { isAuth, oneSchool, user } = useSelector((state) => state.auth);
   const [OpenLogin, setOpenLogin] = useState(false);
@@ -92,7 +94,10 @@ useEffect(() => {
 
         <div className={style.buttonContainer}>
           {isAuth === true ? (
-            <button onClick={handlerLogout} className={style.SesionButtom}>
+            <button onClick={()=>{
+              navigate('/')
+              handlerLogout()
+              }} className={style.SesionButtom}>
               Cerrar Sesion
             </button>
           ) : (
@@ -193,6 +198,7 @@ useEffect(() => {
               onClick={() => {
                 setOpen(!isOpen);
                 handlerLogout();
+                navigate('/')
               }}
               className={style.SesionButtom}
             >

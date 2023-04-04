@@ -266,17 +266,22 @@ export const postCita = (cita) => (dispatch) => {
 export const getCitaAgendadas = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
-  token &&
-    axios
-      .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
-      .then((res) => dispatch(getCitasAgendado(res.data)))
-      .catch((err) => {
-        Swal.fire({
-          icon: "error",
-          title: "Algo salio mal",
-          text: err.response.data.error,
+  try {
+    token &&
+      axios
+        .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
+        .then((res) => dispatch(getCitasAgendado(res.data)))
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: err.response.data.error,
+          });
         });
-      });
+    
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const getHorariosSchool = (id) => (dispatch) => {

@@ -43,7 +43,7 @@ import { steps } from "../MockupInfo/Pasos";
 import {
   getVacantes,
   postHorariosVacantes,
-  getCitaAgendadas,
+  getCitaAgendadas
 } from "../redux/SchoolsActions";
 import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsWindowDock } from "react-icons/bs";
@@ -52,7 +52,7 @@ import { RiImageAddLine } from "react-icons/ri";
 import { GiHexagonalNut } from "react-icons/gi";
 import { BsCalendarCheck } from "react-icons/bs";
 import { useEffect } from "react";
-import { logout, getSchoolDetail } from "../redux/AuthActions";
+import { logout, getSchoolDetail , setVacantesRedux} from "../redux/AuthActions";
 import { useState } from "react";
 import { useRef } from "react";
 import axios from "axios";
@@ -1117,6 +1117,12 @@ function DashboardSchool() {
       image: editEventoNew.imagen_evento,
     });
   };
+
+  useEffect(()=>{
+    if(activeStep === 3){
+      dispatch(setVacantesRedux(id))
+    }
+  },[activeStep])
 
   return (
     <div className="flex lg:flex-row flex-col">

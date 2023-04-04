@@ -292,7 +292,7 @@ function ListSchool() {
       <h1 className="text-center mt-2 text-2xl font-semibold drop-shadow-md">
         Encuentra el colegio ideal
       </h1>
-      <div className="flex flex-col lg:flex-row p-5 gap-10 m-5 ">
+      <div className="flex flex-col lg:flex-row p-5 gap-10 ">
         <section
           className={`lg:w-1/4 w-full flex flex-col gap-5 rounded-md relative duration-300 lg:h-min bg-white shadow-lg p-10 transition-all`}
         >
@@ -699,7 +699,7 @@ function ListSchool() {
             </button>
           </div>
         </section>
-        <section className="lg:w-3/4 w-full lg:pl-10 lg:pr-10 lg:pb-10 p-0 flex flex-col gap-5">
+        <section className="lg:w-3/4 w-full lg:pr-10 lg:pb-10 p-0 flex flex-col gap-5">
           <div className="flex items-center justify-between drop-shadow-md">
             <small>
               Mostrando{" "}
@@ -744,14 +744,14 @@ function ListSchool() {
                   return (
                     <div
                       key={school.id}
-                      className={`flex border rounded-md shadow-md h-auto bg-white items-center gap-2 flex-col md:flex-row`}
+                      className={`flex border rounded-md shadow-md bg-white gap-2 flex-col md:flex-row`}
                     >
                       {" "}
                       <div className="relative">
                         <img
                           src={school.primera_imagen}
                           alt={school.title}
-                          className="w-[400px] h-auto lg:h-[220px] object-cover"
+                          className="h-full w-[400px] object-cover"
                         />
                         {/* <span className="absolute bg-[#0061dd] text-white p-1 px-2 rounded-md top-3 left-3">
                           DESTACADO
@@ -837,7 +837,7 @@ function ListSchool() {
                           </span>
                         </div>
                       </div>
-                      <div className="w-full p-5  flex flex-col justify-between gap-5 drop-shadow-md">
+                      <div className="w-full p-5  flex flex-col justify-between gap-5">
                         <div className="flex justify-between gap-4 xl:gap-0 flex-col xl:flex-row">
                           <div className="flex flex-col gap-4 w-full">
                             <div className="flex flex-col w-fit gap-2">
@@ -873,7 +873,7 @@ function ListSchool() {
                               ))}
                             </div> */}
 
-                            <div className="grid grid-cols-2 grid-rows-3 w-full gap-y-2">
+                            <div className="grid grid-cols-2 grid-rows-3 w-max gap-x-2 gap-y-2">
                               {school.Vacantes.length > 0 && (
                                 <small className="text-gray-400 flex gap-1 items-center">
                                   {" "}
@@ -911,7 +911,7 @@ function ListSchool() {
                                   }
                                 </small>
                               )}
-                              {school?.Categoria.length < 4 ? (
+                              {school?.Categoria.length < 2 ? (
                                 <small className="text-gray-400 flex gap-1 items-center">
                                   <span className="text-xl text-gray-400">
                                     <ImAttachment></ImAttachment>
@@ -925,10 +925,10 @@ function ListSchool() {
                                   <span className="text-xl text-gray-400">
                                     <ImAttachment></ImAttachment>
                                   </span>
-                                  {school?.Categoria?.slice(0, 3)
+                                  {school?.Categoria?.slice(0, 1)
                                     .map((cat) => cat.nombre_categoria)
                                     .join(", ")}
-                                  ... +{school?.Categoria?.slice(3).length}{" "}
+                                  ... +{school?.Categoria?.slice(1).length}{" "}
                                 </small>
                               )}
                               {school.Vacantes.length > 0 && (
@@ -948,7 +948,7 @@ function ListSchool() {
                               )}
                             </div>
                           </div>
-                          <div className="flex flex-col gap-2 justify-between">
+                          <div className="flex flex-col gap-2 w-full items-end justify-between">
                             <h1>
                               {school.Provincium.nombre_provincia},{" "}
                               {school.Distrito.nombre_distrito}{" "}

@@ -27,6 +27,31 @@ const getVacantes = async (req, res, next) => {
   }
 };
 
+const getVacantesColegio = async (req, res, next) => {
+  const { idColegio } = req.params;
+  try {
+    const vacantes = await Vacante.findAll({
+      include: [
+        {
+          model: Colegio,
+          attributes: ['nombre_colegio'],
+        },
+        {
+          model: Grado,
+          attributes: ['nombre_grado'],
+        },
+      ],
+      where: {
+        ColegioId: idColegio,
+      },
+    });
+
+    res.status(200).send(vacantes);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const createVacante = async (req, res, next) => {
   const { data } = req.body;
   const tokenUser = req.user;
@@ -123,4 +148,5 @@ module.exports = {
   createVacante,
   getVacanteById,
   deleteVacanteById,
+  getVacantesColegio
 };

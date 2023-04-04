@@ -6,11 +6,22 @@ import {
   getError,
   isLoading,
   updateUser,
-  getSchool
+  getSchool,
+  getVacantes
 } from "./AuthSlice";
 import axios from "axios";
 import Swal from 'sweetalert2'
 
+export const setVacantesRedux = (id) => (dispatch) => {
+  try {
+    axios.get(`/vacantes/colegio/${id}`).then((res)=>{
+      dispatch(getVacantes(res.data))
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+ 
 export const getUserByToken = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
