@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 export default function ConfigAdmin() {
   const { user } = useSelector((state) => state.auth);
+  const idUser = user?.id
   const [seePassword, setSeePassword] = useState(false);
   const [seeNewPassword, setSeeNewPassword] = useState(false);
   const [filterSelected, setFilterSelected] = useState();
@@ -44,7 +45,7 @@ export default function ConfigAdmin() {
       Swal.fire("warning", "Las nuevas contraseñas no coinciden", "error");
       return;
     }
-    if (password) {
+    if (!user?.password ) {
       Swal.fire(
         "Error",
         "Ingrese su contraseña para modificar algun campo",
@@ -61,7 +62,7 @@ export default function ConfigAdmin() {
     };
     try {
       axios
-        .put(`/auth/${id}`, data)
+        .put(`/auth/${ idUser}`, data)
         .then((res) => {
           Swal.fire("Exito", "Datos actualizados", "success");
         })
