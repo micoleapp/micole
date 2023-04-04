@@ -157,13 +157,8 @@ const signUp = async (req, res, next) => {
       await colegioValidation.validate();
     } else {
       const userValidation = User.build({
-<<<<<<< HEAD
         nombre_responsable:nombre,
         apellidos_responsable:apellidos,
-=======
-        nombre_responsable: nombre,
-        apellidos_responsable: apellidos,
->>>>>>> e4bf06f904ed67020f2ecdbc5072431cbd6869f7
         telefono,
       });
       await userValidation.validate();
