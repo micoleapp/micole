@@ -1118,6 +1118,12 @@ function DashboardSchool() {
     });
   };
 
+  useEffect(()=>{
+    if(activeStep === 3){
+      dispatch(setVacantes(id))
+    }
+  },[activeStep])
+
   return (
     <div className="flex lg:flex-row flex-col">
       <section

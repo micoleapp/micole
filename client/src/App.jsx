@@ -50,21 +50,22 @@ function App() {
     dispatch(getAllAfiliaciones());
     // dispatch(getAllSchools())
     dispatch(getUserByToken());
-   if (user?.rol === 'Colegio'){
-        dispatch(getCita());
-    dispatch(getCitaAgendadas());
-   }
+  //  if (user?.rol === 'Colegio'){
+  //       dispatch(getCita());
+  //   dispatch(getCitaAgendadas());
+  //  }
 
     dispatch(getAllMetodos());
     dispatch(getAllDificultades());
   }, []);
 
   useEffect(() => {
-    if (user) {
+    if (user?.rol  === 'Colegio') {
       dispatch(getSchoolDetail(user.id));
-    }if(user?.rol === "Colegio"){
-      dispatch(getCitaAgendadas(user.id));
     }
+    // if(user?.rol === "Colegio"){
+    //   dispatch(getCitaAgendadas(user.id));
+    // }
   }, [user]);
 
   return (

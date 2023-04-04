@@ -138,21 +138,21 @@ router.get("/:Colegio_id", async (req, res) => {
   const tokenUser = req.user;
   const fechaActual = moment().format("YYYY-MM-DD");
   try {
-    if (!tokenUser) {
-      const addVisualizacion = await Colegio.findByPk(Colegio_id);
-      addVisualizacion.visualizaciones =
-        Number(addVisualizacion.visualizaciones) + 1;
-      await addVisualizacion.save();
-    }
-    const [trafico, created] = await Trafico.findOrCreate({
-      where: { fecha: fechaActual, ColegioId: Colegio_id },
-      defaults: { visitas: 1 },
-    });
+    // if (!tokenUser) {
+    //   const addVisualizacion = await Colegio.findByPk(Colegio_id);
+    //   addVisualizacion.visualizaciones =
+    //     Number(addVisualizacion.visualizaciones) + 1;
+    //   await addVisualizacion.save();
+    // }
+    // const [trafico, created] = await Trafico.findOrCreate({
+    //   where: { fecha: fechaActual, ColegioId: Colegio_id },
+    //   defaults: { visitas: 1 },
+    // });
 
-    if (!created) {
-      trafico.visitas += 1;
-      await trafico.save();
-    }
+    // if (!created) {
+    //   trafico.visitas += 1;
+    //   await trafico.save();
+    // }  
 
     const cole = await Colegio.findAll({
       where: { id: [Colegio_id] },
@@ -161,10 +161,10 @@ router.get("/:Colegio_id", async (req, res) => {
           model: Nivel,
           attributes: ["nombre_nivel", "id"],
         },
-        {
-          model: Vacante,
-          include: [{ model: Grado, attributes: ["nombre_grado"] }],
-        },
+        // {
+        //   model: Vacante,
+        //   include: [{ model: Grado, attributes: ["nombre_grado"] }],
+        // },
         {
           model: Idioma,
           attributes: ["nombre_idioma", "id"],
