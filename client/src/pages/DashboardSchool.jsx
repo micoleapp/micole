@@ -183,7 +183,7 @@ function DashboardSchool() {
       Swal.fire("warning", "Las nuevas contraseñas no coinciden", "error");
       return;
     }
-    if (!user.password ) {
+    if (!user.password) {
       Swal.fire(
         "Error",
         "Ingrese su contraseña para modificar algun campo",
