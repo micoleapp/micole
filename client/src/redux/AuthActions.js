@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import Swal from 'sweetalert2'
 
-export const setVacantes = (id) => (dispatch) => {
+export const setVacantesRedux = (id) => (dispatch) => {
   try {
     axios.get(`/vacantes/colegio/${id}`).then((res)=>{
       dispatch(getVacantes(res.data))

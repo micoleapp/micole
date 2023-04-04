@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 export default function GridVacantes({ año, setVacantesOff }) {
   const { vacantesGrados } = useSelector((state) => state.schools);
-  const { token, oneSchool } = useSelector((state) => state.auth);
+  const { token, oneSchool, vacantes } = useSelector((state) => state.auth);
 
   const [datos, setDatos] = React.useState({ año });
 
@@ -88,7 +88,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     name="capacidad"
                     onChange={handleChange}
                     className="border-b-2 text-center w-[100px] border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
-                    defaultValue={oneSchool?.Vacantes?.filter(
+                    defaultValue={vacantes?.filter(
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.capacidad)}
                     placeholder="Ingrese nro"
@@ -99,7 +99,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                   <input
                     id={vac.GradoId}
                     name="alumnos"
-                    defaultValue={oneSchool?.Vacantes?.filter(
+                    defaultValue={vacantes?.filter(
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.alumnos_matriculados)}
                     onChange={handleChange}
@@ -116,18 +116,18 @@ export default function GridVacantes({ año, setVacantesOff }) {
                       datos[vac.GradoId]
                         ? datos[vac.GradoId]["capacidad"] -
                           datos[vac.GradoId]["alumnos"]
-                        : oneSchool?.Vacantes?.filter(
+                        : vacantes?.filter(
                             (el) => el.GradoId === vac.GradoId && el.año === año
                           ).map((el) => el.capacidad) -
-                          oneSchool?.Vacantes?.filter(
+                          vacantes?.filter(
                             (el) => el.GradoId === vac.GradoId && el.año === año
                           ).map((el) => el.alumnos_matriculados)
                     }
                     defaultValue={
-                      oneSchool?.Vacantes?.filter(
+                      vacantes?.filter(
                         (el) => el.GradoId === vac.GradoId && el.año === año
                       ).map((el) => el.capacidad) -
-                      oneSchool?.Vacantes?.filter(
+                      vacantes?.filter(
                         (el) => el.GradoId === vac.GradoId && el.año === año
                       ).map((el) => el.alumnos_matriculados)
                     }
@@ -142,7 +142,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                   <input
                     id={vac.GradoId}
                     name="cuota_ingreso"
-                    defaultValue={oneSchool?.Vacantes?.filter(
+                    defaultValue={vacantes?.filter(
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.cuota_ingreso)}
                     onChange={handleChange}
@@ -157,7 +157,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                   </span>
                   <input
                     id={vac.GradoId}
-                    defaultValue={oneSchool?.Vacantes?.filter(
+                    defaultValue={vacantes?.filter(
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.matricula)}
                     name="matricula"
@@ -173,7 +173,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                   </span>
                   <input
                     id={vac.GradoId}
-                    defaultValue={oneSchool?.Vacantes?.filter(
+                    defaultValue={vacantes?.filter(
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.cuota_pension)}
                     name="cuota_pension"
