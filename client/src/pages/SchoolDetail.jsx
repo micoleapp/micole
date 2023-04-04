@@ -159,6 +159,9 @@ function SchoolDetail() {
   const [image, setImage] = useState(null);
 
   const dispatch = useDispatch();
+
+///1
+
   useEffect(() => {
     dispatch(getAllGrados());
     dispatch(getSchoolDetail(id));
@@ -274,7 +277,7 @@ function SchoolDetail() {
     email: "",
     comentario: "",
   });
-
+//2
   useEffect(() => {
     setComentario({
       ...comentario,
