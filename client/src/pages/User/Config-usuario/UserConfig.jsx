@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 export default function UserConfig() {
   const { user } = useSelector((state) => state.auth);
   const [seePassword, setSeePassword] = useState(false);
+  const idUser = user?.id
   const [seeNewPassword, setSeeNewPassword] = useState(false);
   const [filterSelected, setFilterSelected] = useState();
   const handleChangeState = (event) => {
@@ -44,7 +45,7 @@ export default function UserConfig() {
       Swal.fire("warning", "Las nuevas contraseñas no coinciden", "error");
       return;
     }
-    if (password) {
+    if (!user.password ) {
       Swal.fire(
         "Error",
         "Ingrese su contraseña para modificar algun campo",
@@ -59,9 +60,12 @@ export default function UserConfig() {
       password: user.password,
       newPassword: user.newPassword,
     };
+
+  
+     
     try {
       axios
-        .put(`/auth/${id}`, data)
+        .put(`/auth/${idUser}`, data)
         .then((res) => {
           Swal.fire("Exito", "Datos actualizados", "success");
         })
@@ -75,8 +79,8 @@ export default function UserConfig() {
     } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "Algo salio mal",
-        text: error.response,
+        title: "Algo salio maaaaaaaaaaal",
+        text: error.message,
       });
     }
   };

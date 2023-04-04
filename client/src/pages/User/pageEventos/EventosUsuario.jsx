@@ -37,9 +37,12 @@ export default function EventosUsuario() {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          const eventosPaginados = sliceIntoChunks(res.data, 10);
-          setData(eventosPaginados);
-          setProximoEvento([res.data[0]]);
+          if (res.data.length > 0) {
+            setProximoEvento([res.data[0]]);
+            const eventosPaginados = sliceIntoChunks(res.data, 10);
+            setData(eventosPaginados);
+            setIsLoading(false);
+          }
           setIsLoading(false);
         })
         .catch((err) => {
@@ -114,7 +117,7 @@ export default function EventosUsuario() {
               }}
             />
           </div>
-          {ProximoEvento &&
+          {ProximoEvento?.length > 0 &&
             ProximoEvento?.map((ele) => {
               return (
                 <>
@@ -200,27 +203,48 @@ export default function EventosUsuario() {
           </ContentLoader>
         ))
       ) : ProximoEvento?.length === 0 && isLoading === false ? (
-        <div
-          // data-aos="zoom-up"
-          style={{
-            width: "80%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "row",
-            color: "#0C2B42",
-            gap: "10px",
-            padding: "20px",
-            minHeight: "100%",
-            boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
-            fontWeight: "600",
-            backgroundColor: "#fff",
-          }}
-        >
-          <ContentPasteSearchOutlinedIcon style={{ color: "#0061DF" }} />
-          <h1>No hay eventos pendientes</h1>
-        </div>
+        <>
+          <Typography
+            variant="h6"
+            sx={{
+              color: "#0D263B",
+              fontFamily: "Poppins",
+              fontWeight: "700",
+            }}
+          >
+            Próximo Evento
+          </Typography>
+        
+          <Divider
+              sx={{
+                color: "blue",
+                border: "1px solid #0061DF",
+                width: "20vh",
+              }}
+            />
+          <div
+            // data-aos="zoom-up"
+            style={{
+              width: "80%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+              color: "#0C2B42",
+              gap: "10px",
+              padding: "20px",
+              minHeight: "100%",
+              boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+              fontWeight: "600",
+              backgroundColor: "#fff",
+            }}
+          >
+            <ContentPasteSearchOutlinedIcon style={{ color: "#0061DF" }} />
+            <h1>No hay eventos pendientes</h1>
+          </div>
+        </>
       ) : null}
+
       {/* Siguientes EVENTOS */}
       <div className={style.layoutTitlteSigEventos}>
         <div className={style.titleSig}>

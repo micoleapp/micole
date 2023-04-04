@@ -137,7 +137,7 @@ export default function MainUser() {
               <CitasUser />
             </div>
           ) : page === 1 ? (
-            <div className="min-h-screen">
+            <div className="min-h-screen flex    flex-col m-12 w-full ">
               <EventosUsuario />
             </div>
           ) : page === 2 ? (
