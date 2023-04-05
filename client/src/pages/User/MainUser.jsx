@@ -9,7 +9,7 @@ import Hamburger from "hamburger-react";
 
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { getAllSchools } from "../../redux/SchoolsActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CitasUser from "./pegeCitas/CitasUser";
 import { getCitaUsuario } from "../../redux/CitasActions";
 import EventosUsuario from "./pageEventos/EventosUsuario";
@@ -19,6 +19,8 @@ import { logout } from "../../redux/AuthActions";
 export default function MainUser() {
   const [page, setPage] = React.useState(0);
   const [isOpen, setOpen] = useState(false);
+  const { citasUsuario, loading } = useSelector((state) => state.citas);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCitaUsuario());
@@ -134,7 +136,7 @@ export default function MainUser() {
         <section className="right w-full bg-[#EEEE]  lg:px-31 lg:py-12">
           {page === 0 ? (
             <div className="min-h-screen ">
-              <CitasUser />
+              <CitasUser data={citasUsuario&&citasUsuario}/>
             </div>
           ) : page === 1 ? (
             <div className="min-h-screen flex    flex-col ">
