@@ -28,6 +28,7 @@ export default function InscripcionEvento({
       axios
         .post(`/eventos/registration`, { idEvento, idUser })
         .then((res) => {
+          handleClose();
           Swal.fire({
             icon: "success",
             title: "Inscripcion Exitosa",
@@ -42,7 +43,7 @@ export default function InscripcionEvento({
           });
         });
     } else {
-      handleClose()
+      handleClose();
       Swal.fire({
         icon: "info",
         title: "Inicia Sesion",
@@ -50,7 +51,7 @@ export default function InscripcionEvento({
 
         confirmButtonAriaLabel: "Iniciar Sesion",
       });
- 
+
       return;
     }
   };
@@ -105,7 +106,7 @@ export default function InscripcionEvento({
                   id="outlined-search"
                   label="Nombre"
                   type="text"
-                  value={user?.nombre}
+                  value={user?.nombre_responsable}
                   // onChange={({ target }) => setData({ ...data, nombre: target.value })}
                 />
                 <TextField
@@ -145,7 +146,6 @@ export default function InscripcionEvento({
             </FormControl>
           </>
         )}
-    
       </div>
     </>
   );
