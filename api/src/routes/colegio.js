@@ -261,6 +261,7 @@ router.post("/filter", async (req, res) => {
     order,
     metodos,
     dificultades,
+    search
   } = req.body;
   console.log(req.body);
   let orderBy = null;
@@ -378,6 +379,7 @@ router.post("/filter", async (req, res) => {
       ],
       where: {
         isActive: true,
+        ...(search && { nombre_colegio: { [Op.iLike]: `%${search}%` } }),
         ...(distrits.length !== 0 && {
           [Op.or]: distrits.map((distrito) => ({ DistritoId: distrito })),
         }),
