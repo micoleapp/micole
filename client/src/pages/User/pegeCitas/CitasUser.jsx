@@ -196,7 +196,7 @@ export default function CitasUser() {
                 </div>
               );
             })
-          ) : citasUsuario && citasUser?.length === 0 && loading === true ? (
+          ) : citasUser && citasUser?.length === 0 && loading === true ? (
             items.map((item, key) => (
               <ContentLoader
                 key={key}

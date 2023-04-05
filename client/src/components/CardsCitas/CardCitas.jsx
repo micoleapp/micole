@@ -71,8 +71,8 @@ export default function CardCitas({ data, filtros }) {
   useEffect(() => {
     const allCitas = [];
 
-    // dispatch(getCitaAgendadas());
-    // dispatch(getCita());
+    dispatch(getCitaAgendadas());
+    dispatch(getCita());
 
     let resultadoActivas = sliceIntoChunks(data.CitasActivasMesActual, 10);
     setActivas(resultadoActivas);
