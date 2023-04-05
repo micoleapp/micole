@@ -27,6 +27,7 @@ import {
   getCitaAgendadas,
   getAllDificultades,
   getAllMetodos,
+  setPrecios
 } from "./redux/SchoolsActions";
 
 import RequireAuth from "./components/RequireAuth";
@@ -48,6 +49,7 @@ function App() {
     dispatch(getAllPaises());
     dispatch(getAllNiveles());
     dispatch(getAllAfiliaciones());
+    dispatch(setPrecios())
     // dispatch(getAllSchools())
     dispatch(getUserByToken());
   //  if (user?.rol === 'Colegio'){

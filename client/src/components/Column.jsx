@@ -4,7 +4,7 @@ import { Draggable } from "react-beautiful-dnd";
 import { Droppable } from "react-beautiful-dnd";
 import Chip from "@mui/material/Chip";
 import { useDispatch, useSelector } from "react-redux";
-
+const yearNow = new Date().getFullYear();
 import ModalCita from "./Tabs/ModalCita/ModalCita";
 
 const Column = ({ column, tasksArr }) => {
@@ -21,7 +21,9 @@ const Column = ({ column, tasksArr }) => {
   const handleClose = () => setOpen(false);
 
   // useEffect(() => {}, [success]);
-
+  const añoActual = yearNow;
+  const añoSig = yearNow + 1;
+  const añoDsdelSig = yearNow + 2;
   return (
     <>
       <div className="rounded-md bg-white shadow-md border max-w-xs h-min w-full flex flex-col">
@@ -89,10 +91,26 @@ const Column = ({ column, tasksArr }) => {
                         {grados &&
                           grados.map((ele) => {
                             if (ele.id === task.grado) {
-                              return <Chip label={ele.nombre_grado} />;
+                              return <Chip label={ele.nombre_grado}  />;
                             }
                           })}
-                        <Chip label={task.añoIngreso} />
+                        {task.añoIngreso === añoActual.toString() ? (
+                          <Chip
+                            label={task.añoIngreso}
+                            small
+                            sx={{  backgroundColor: "#F44428",color:'#ffff',fontWeight:'600',width:'50%', height:'50%',fontFamily:'Poppins' }}
+                          />
+                        ) : task.añoIngreso === añoSig.toString() ? (
+                          <Chip
+                            label={task.añoIngreso}
+                            sx={{  backgroundColor: "#FBBC04",color:'#ffff',fontWeight:'600',width:'50%', height:'50%',fontFamily:'Poppins' }}
+                          />
+                        ) : (
+                          <Chip
+                            label={task.añoIngreso}
+                            sx={{ backgroundColor: "#48C740",color:'#ffff',fontWeight:'600',width:'50%', height:'50%',fontFamily:'Poppins' }}
+                          />
+                        )}
                       </div>
                     </div>
                   )}

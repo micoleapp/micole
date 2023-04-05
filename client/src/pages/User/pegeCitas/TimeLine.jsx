@@ -12,82 +12,13 @@ import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import style from "./timeline.module.css";
-// const QontoConnector = styled(StepConnector)(({ theme }) => ({
-//   [`&.${stepConnectorClasses.alternativeLabel}`]: {
-//     top: 10,
-//     left: "calc(-50% + 16px)",
-//     right: "calc(50% + 16px)",
-//   },
-//   [`&.${stepConnectorClasses.active}`]: {
-//     [`& .${stepConnectorClasses.line}`]: {
-//       borderColor: "#784af4",
-//     },
-//   },
-//   [`&.${stepConnectorClasses.completed}`]: {
-//     [`& .${stepConnectorClasses.line}`]: {
-//       borderColor: "#784af4",
-//     },
-//   },
-//   [`& .${stepConnectorClasses.line}`]: {
-//     borderColor:
-//       theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
-//     borderTopWidth: 3,
-//     borderRadius: 1,
-//   },
-// }));
 
-const QontoStepIconRoot = styled("div")(({ theme, ownerState }) => ({
-  color: theme.palette.mode === "dark" ? theme.palette.grey[700] : "#eaeaf0",
-  display: "flex",
-  height: 22,
-  alignItems: "center",
-  ...(ownerState.active && {
-    color: "#784af4",
-  }),
-  "& .QontoStepIcon-completedIcon": {
-    color: "#784af4",
-    zIndex: 1,
-    fontSize: 18,
-  },
-  "& .QontoStepIcon-circle": {
-    width: 8,
-    height: 8,
-    borderRadius: "50%",
-    backgroundColor: "currentColor",
-  },
-}));
 
-function QontoStepIcon(props) {
-  const { active, completed, className } = props;
 
-  return (
-    <QontoStepIconRoot ownerState={{ active }} className={className}>
-      {completed ? (
-        <Check className="QontoStepIcon-completedIcon" />
-      ) : (
-        <div className="QontoStepIcon-circle" />
-      )}
-    </QontoStepIconRoot>
-  );
-}
-
-QontoStepIcon.propTypes = {
-  /**
-   * Whether this step is active.
-   * @default false
-   */
-  active: PropTypes.bool,
-  className: PropTypes.string,
-  /**
-   * Mark the step as completed. Is passed to child components.
-   * @default false
-   */
-  completed: PropTypes.bool,
-};
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
-    top: 22,
+    top: 15,
   },
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
@@ -100,7 +31,7 @@ const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
     },
   },
   [`& .${stepConnectorClasses.line}`]: {
-    height: 3,
+    height: 2.5,
     // width: 3,
     border: 0,
     backgroundColor:
@@ -132,8 +63,8 @@ const ColorlibStepIconRootMobile = styled("div")(({ theme, ownerState }) => ({
   backgroundColor: "#0061DF",
   zIndex: 1,
   color: "#fff",
-  width: "4vh",
-  height: "4vh",
+  width: "6vh",
+  height: "6vh",
   display: "flex",
   borderRadius: "50%",
   justifyContent: "center",
@@ -170,7 +101,7 @@ function ColorlibStepIcon(props) {
 }
 function ColorlibStepIconMobile(props) {
   const { active, completed, className } = props;
-
+console.log(props)
   const icons = {
     1: 1,
     2: 2,
@@ -258,34 +189,34 @@ export default function CustomizedSteppers({ cita }) {
             {steps.map((label, index) => (
               <Step sx={{ width: "100%" }} key={label}>
                 <StepLabel
-                  optional={
-                    index === stepActive ? (
-                      <Typography
-                        variant="subtitle2"
-                        sx={{
-                          color: "#0061DF",
+                  // optional={
+                  //   index === stepActive ? (
+                  //     <Typography
+                  //       variant="subtitle2"
+                  //       sx={{
+                  //         color: "#0061DF",
 
-                          display: "flex",
-                          gap: "1vh",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "1vh",
-                            width: "100%",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          {estadosNombres[stepActive]}
+                  //         display: "flex",
+                  //         gap: "1vh",
+                  //       }}
+                  //     >
+                  //       <div
+                  //         style={{
+                  //           display: "flex",
+                  //           gap: "1vh",
+                  //           width: "100%",
+                  //           justifyContent: "center",
+                  //           alignItems: "center",
+                  //         }}
+                  //       >
+                  //         {estadosNombres[stepActive]}
 
-                          <CheckBoxIcon sx={{ width: "2vh" }} />
-                        </div>
-                      </Typography>
-                    ) : null
-                  }
-                  StepIconComponent={ColorlibStepIcon}
+                  //         <CheckBoxIcon sx={{ width: "2vh" }} />
+                  //       </div>
+                  //     </Typography>
+                  //   ) : null
+                  // }
+                  // StepIconComponent={ColorlibStepIcon}
                 >
                   {label}
                 </StepLabel>
@@ -302,24 +233,25 @@ export default function CustomizedSteppers({ cita }) {
             connector={<ColorlibConnector />}
           >
             {stepsMobile.map((label, index) => (
-              <Step sx={{ width: "7vh", fontSize: "10px" }} key={label}>
+              <Step  key={label}>
                 <StepLabel
-                  optional={
-                    index === stepActive ? (
-                      <Typography
-                        variant="subtitle2"
-                        sx={{
-                          color: "#0061DF",
-                          fontSize: "1.2vh",
-                        }}
-                      >
-                        <p>{estadosNombres[stepActive]}</p>
+                  // optional={
+                  //   index === stepActive ? (
+                  //     <Typography
+                  //       variant="subtitle2"
+                  //       sx={{
+                  //         color: "#0061DF",
+                  //         fontSize: "1.2vh",
+                  //       }}
+                  //     >
+                  //       <p>{estadosNombres[stepActive]}</p>
 
-                        <CheckBoxIcon sx={{ width: "2vh" }} />
-                      </Typography>
-                    ) : null
-                  }
-                  StepIconComponent={ColorlibStepIconMobile}
+                  //       <CheckBoxIcon sx={{ width: "2vh" }} />
+                  //     </Typography>
+                  //   ) : null
+                  // }
+                  // StepIconComponent={ColorlibStepIconMobile}
+              
                 >
                   <p style={{ fontSize: "1.2vh" }}>{label}</p>
                 </StepLabel>

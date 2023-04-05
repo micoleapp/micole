@@ -1172,7 +1172,7 @@ function SchoolDetail() {
                                         {isAuth ?                     <input
                       name="apellidoLista"
                       type="text"
-                      value={user.apellidos}
+                      value={user.apellidos_responsable}
                       required
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     /> :                     <input

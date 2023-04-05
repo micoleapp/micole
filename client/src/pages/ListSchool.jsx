@@ -126,6 +126,18 @@ function valuetext2(value) {
 
 const minDistance = 100;
 function ListSchool() {
+  const dispatch = useDispatch();
+  const {
+    filtersSchools: allschools,
+    loading,
+    distrits,
+    grados,
+    categories,
+    pagination,
+    dificultades,
+    metodos,
+    precios
+  } = useSelector((state) => state.schools);
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -163,7 +175,7 @@ function ListSchool() {
 
   const [type, setType] = React.useState("");
   const [page, setPage] = React.useState(1);
-  const [value1, setValue1] = React.useState([0, 4000]);
+  const [value1, setValue1] = React.useState(precios[0]);
   const [rating, setRating] = React.useState(null);
 
   const handleChange1 = (event, newValue, activeThumb) => {
@@ -178,7 +190,7 @@ function ListSchool() {
     }
   };
 
-  const [value2, setValue2] = React.useState([0, 4000]);
+  const [value2, setValue2] = React.useState(precios[1]);
 
   const handleChange2 = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -196,17 +208,7 @@ function ListSchool() {
     setType(event.target.value);
   };
 
-  const dispatch = useDispatch();
-  const {
-    filtersSchools: allschools,
-    loading,
-    distrits,
-    grados,
-    categories,
-    pagination,
-    dificultades,
-    metodos,
-  } = useSelector((state) => state.schools);
+
   /*   useEffect(() => {
     console.log(data);
   }, [order]); */
@@ -237,8 +239,9 @@ function ListSchool() {
     order: order,
     dificultades: dificultadesArray,
     metodos: metodosArray,
+    search: "",
   };
-  console.log(data);
+
   const handleSubmitData = (e) => {
     e.preventDefault();
     setPage(1);
@@ -280,8 +283,14 @@ function ListSchool() {
     setPage(value);
   };
 
-  console.log(ingresoName)
-  console.log(gradoName)
+  const [searchTerm, setSerchTerm] = useState("")
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+    let newData = {...data, search:searchTerm}
+    setPage(1);
+    dispatch(getFilterListSchool(newData, page));
+  }
   return (
     <div
       className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "
@@ -734,6 +743,19 @@ function ListSchool() {
                 ))}
               </Select>
             </FormControl>
+          </div>
+          <div className="bg-white w-fit flex px-2 py-1 rounded-md border">
+            <form
+            onSubmit={(e)=>handleSearch(e)}
+            >
+            <input value={searchTerm} onChange={(e)=>setSerchTerm(e.target.value)} type="text" name="search" id="search" className="outline-none w-[400px]" onKeyDown={(e) => {if (e.key === "Enter") {handleSearch(e);}}}/>
+            <label htmlFor="search" className="text-[#0061dd] cursor-pointer">
+              <button type="submit">
+              <FontAwesomeIcon icon={faSearch} className="hover:scale-125 duration-200"/>
+              </button>
+            </label>
+
+            </form>
           </div>
           {allschools?.length === 0 && (
             <h1>No hay colegios que coincidan con esos filtros</h1>
