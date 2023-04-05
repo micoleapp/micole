@@ -17,7 +17,9 @@ export default function GridVacantesAdmin({ año, setVacantesOff, oneSchool }) {
 
   console.log(vacantesGrados);
   console.log(oneSchool);
-  const [datos, setDatos] = React.useState({ año });
+  const [datos, setDatos] = React.useState({ 
+    año, 
+    idColegio: oneSchool?.id });
 
   const handleChange = (e) => {
     setDatos({
