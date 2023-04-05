@@ -98,7 +98,7 @@ export default function EventosUsuario() {
       {/* Proximo EVENTO */}
       {ProximoEvento && ProximoEvento?.length > 0 ? (
         <>
-          <div style={{ padding: "1vh" }}>
+          <div style={{ padding: "1vh", maxWidth:'80%' }}>
             <Typography
               variant="h6"
               sx={{
@@ -165,7 +165,7 @@ export default function EventosUsuario() {
                       </div>
 
                       <div className={style.divDescripcion}>
-                        <p className={style.pTittleK}>Descripcion</p>
+                        <p className={style.pTittleK}>Descripción</p>
                         <p className={style.descripcion}>{ele.descripcion}</p>
                       </div>
 
@@ -298,7 +298,7 @@ export default function EventosUsuario() {
 
         {/* CARD  FECHA */}
       </div>
-      <div>
+      <div style={{  maxWidth:'80%'}}>
         {orderSelected != null && dataFiltrada ? (
           dataFiltrada?.length > 0 ? (
             <>
@@ -346,7 +346,7 @@ export default function EventosUsuario() {
                           </div>
 
                           <div className={style.divDescripcion}>
-                            <p className={style.pTittleK}>Descripcion</p>
+                            <p className={style.pTittleK}>Descripción</p>
                             <p className={style.descripcion}>
                               {ele.descripcion}
                             </p>
@@ -455,7 +455,7 @@ export default function EventosUsuario() {
                         </div>
 
                         <div className={style.divDescripcion}>
-                          <p className={style.pTittleK}>Descripcion</p>
+                          <p className={style.pTittleK}>Descripción</p>
                           <p className={style.descripcion}>{ele.descripcion}</p>
                         </div>
 
