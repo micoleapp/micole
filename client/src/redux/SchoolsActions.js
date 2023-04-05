@@ -24,7 +24,16 @@ import {
   getMetodos,
   getDificultades,
   getNombreColegios,
+  getPrecios
 } from "./SchoolsSlice";
+
+export const setPrecios = () => (dispatch) => {
+  try {
+    axios.get('/precios').then(res=>dispatch(getPrecios(res.data))).catch(err=>console.log(err))
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 export const getVacantes = (niveles) => (dispatch) => {
   dispatch(isLoading());

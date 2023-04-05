@@ -61,20 +61,21 @@ function Footer() {
           >
             <li className="flex items-center gap-3">
               <FontAwesomeIcon icon={faLocationDot} />
-              Líma, Perú
+              Av. Costanera 2438
             </li>
             <li className="flex items-center gap-3">
               <FontAwesomeIcon icon={faPhone} />
-              123 456 7890
+              981 784 174
             </li>
             <li className="flex items-center gap-3">
               <FontAwesomeIcon icon={faEnvelope} />
-              support@houzing.com
+              informes@micole.com.pe
             </li>
             <li className="flex gap-2">
               <a
-                href="#"
+                href="https://www.facebook.com/Micole.peru"
                 className="w-8 h-8 items-center justify-center flex rounded-md hover:bg-white/20"
+                target="_blank"
               >
                 <FontAwesomeIcon color="white" icon={faFacebookF} />
               </a>
@@ -91,7 +92,9 @@ function Footer() {
                 <FontAwesomeIcon icon={faInstagram} />
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/company/91744571"
+                target="_blank"
+
                 className="w-8 h-8 items-center justify-center flex rounded-md hover:bg-white/20"
               >
                 <FontAwesomeIcon icon={faLinkedinIn} />
@@ -139,7 +142,7 @@ function Footer() {
             className="font-bold text-xl z-50 flex items-center gap-2 cursor-pointer sm:cursor-default"
             onClick={() => setToggleMenuMenu(!toggleMenuMenu)}
           >
-            Menu
+            Menú
             <FontAwesomeIcon
               className="block sm:hidden"
               icon={toggleMenuMenu ? faChevronUp : faChevronDown}
