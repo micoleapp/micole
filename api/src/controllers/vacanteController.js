@@ -55,6 +55,7 @@ const getVacantesColegio = async (req, res, next) => {
 const createVacante = async (req, res, next) => {
   const { data } = req.body;
   const tokenUser = req.user;
+  // data -> idColegio
   try {
     let colegio;
     if (tokenUser.rol === 'Admin') {
@@ -165,5 +166,5 @@ module.exports = {
   createVacante,
   getVacanteById,
   deleteVacanteById,
-  getVacantesColegio,
+  getVacantesColegio
 };
