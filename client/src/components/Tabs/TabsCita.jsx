@@ -15,16 +15,20 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCita } from "../../redux/CitasActions";
 import ModalDeleteCita from "./ModalCita/ModalDeleteCita";
-
+import fechaFormat from "../SwiperEventos/utils/fechaFormat";
+import es_AM_PM from "../SwiperEventos/utils/horaFormat";
+import Swal from "sweetalert2";
 export default function NavTabs({ task, handleCloseModal }) {
   const { grados } = useSelector((state) => state.schools);
   const [value, setValue] = useState("1");
   const [OpenDelete, setOpenDelete] = useState(false);
   const [CitaID, setCitaID] = useState("");
   const dispatch = useDispatch();
-console.log(OpenDelete)
+  console.log(OpenDelete);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  
   };
 
   return (
@@ -39,13 +43,18 @@ console.log(OpenDelete)
         </Box>
         <TabPanel value="1">
           <div
-            style={{ display: "flex", flexDirection: "column", gap: "15px" }}
+            style={{
+              display: "flex",
+              minHeight: "22vh",
+              flexDirection: "column",
+              gap: "15px",
+            }}
           >
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ display: "flex", gap: "1vh" }}>
               <EventIcon style={{ color: "grey" }} />
-              <p> Dia {task.date}</p>
+              <p> {fechaFormat(task.date)}</p>
             </div>
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ display: "flex", gap: "1vh" }}>
               {task.modo === "Virtual" && (
                 <LaptopWindowsIcon style={{ color: "grey" }} />
               )}
@@ -54,11 +63,15 @@ console.log(OpenDelete)
               )}
               <p> Modalidad {task.modo}</p>
             </div>
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ display: "flex", gap: "1vh" }}>
               <AccessTimeIcon style={{ color: "grey" }} />
-              <p> Hora {task.time}</p>
+              <p>
+                {" "}
+                Hora {task.time}
+                {""} {es_AM_PM(task.time)}
+              </p>
             </div>
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ display: "flex", gap: "1vh" }}>
               {grados &&
                 grados.map((ele) => {
                   if (ele.id === task.grado) {
@@ -98,12 +111,12 @@ console.log(OpenDelete)
         </TabPanel>
 
         <TabPanel value="3">
-          <div style={{ minHeight: "200px" }}>
-            <div style={{ display: "flex", gap: "20px" }}>
+          <div style={{ minHeight: "22vh" }}>
+            <div style={{ display: "flex", gap: "1vh" }}>
               <MailOutlineIcon style={{ color: "grey" }} />
               <p>{task.correo}</p>
             </div>
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ display: "flex", gap: "1vh" }}>
               <PhoneIcon style={{ color: "grey" }} n />
               <p> {task.celular}</p>
             </div>
