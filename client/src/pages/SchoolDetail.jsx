@@ -1451,7 +1451,7 @@ function SchoolDetail() {
 
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Galeria</h2>
-              {oneSchool.hasOwnProperty("galeria_fotos") && (
+              {oneSchool.hasOwnProperty("galeria_fotos") && oneSchool.galeria_fotos !== null && JSON.parse(oneSchool.galeria_fotos).length > 0 && (
                 <QuiltedImageList
                   firstImage={oneSchool.primera_imagen}
                   gallery={JSON.parse(oneSchool.galeria_fotos)}
