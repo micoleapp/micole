@@ -13,13 +13,16 @@ import es_AM_PM from "../../../components/SwiperEventos/utils/horaFormat";
 import sliceIntoChunks from "../../../components/CardsCitas/Paginacion/utils/SliceCitas";
 import PaginationCitas from "../../../components/CardsCitas/Paginacion/PaginationCitas";
 import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
-export default function CitasUser() {
+import { getCitaUsuario } from "../../../redux/CitasActions";
+export default function CitasUser({data}) {
   const [citasUser, setCitasUser] = useState([]);
   const { citasUsuario, loading } = useSelector((state) => state.citas);
   const items = [1, 2, 3, 4, 5];
+ const  dispatch= useDispatch()
   const [page, setPage] = React.useState(0);
   useEffect(() => {
-    const citasPaginadas = citasUsuario&& sliceIntoChunks(citasUsuario, 10);
+   
+    const citasPaginadas = sliceIntoChunks(citasUsuario&&citasUsuario, 10);
 
     setCitasUser(citasPaginadas);
   }, []);
@@ -35,13 +38,14 @@ export default function CitasUser() {
           fontSize: "2.4vh",
           fontWeight: "700",
           padding: "1vh",
+          paddingLeft:'5vh'
         }}
       >
         Listado de Citas
       </Typography>
 
       <>
-        <div style={{ display: "flex", gap: "4vh", flexDirection: "column" }}>
+        <div className={style.divLayout}> 
           {citasUser && citasUser[page]?.length > 0 && loading === false ? (
            citasUser &&
             citasUser[page]?.map((ele) => {
@@ -196,7 +200,7 @@ export default function CitasUser() {
                 </div>
               );
             })
-          ) : citasUsuario && citasUser?.length === 0 && loading === true ? (
+          ) : citasUser && citasUser?.length === 0 && loading === true ? (
             items.map((item, key) => (
               <ContentLoader
                 key={key}
@@ -216,7 +220,7 @@ export default function CitasUser() {
                 <rect width="100" height="100" />
               </ContentLoader>
             ))
-          ) : citasUsuario && citasUser?.length === 0 && loading === false ? (
+          ) : citasUser  && citasUser?.length === 0 && loading === false ? (
             <div
               // data-aos="zoom-up"
               style={{
