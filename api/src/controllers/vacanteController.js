@@ -57,38 +57,55 @@ const createVacante = async (req, res, next) => {
   const tokenUser = req.user;
   // data -> idColegio
   try {
-    const authColegio = await Colegio.findOne({
-      where: { idAuth: tokenUser.id },
-    });
-    const año = data.año;
-    delete data.año;
-    for (const [gradoId, valores] of Object.entries(data)) {
-      const vacante = await Vacante.findOne({
+    let colegio;
+    if (tokenUser.rol === 'Admin') {
+      colegio = await Colegio.findByPk(data.idColegio);
+
+      if (!colegio) {
+        return next({
+          statusCode: 404,
+          message: 'No se encontró el colegio especificado',
+        });
+      }
+    } else {
+      colegio = await Colegio.findOne({
+        where: { idAuth: tokenUser.id },
+      });
+    }
+
+    const year = data.year;
+    delete data.year;
+
+    const entries = Object.entries(data);
+
+    for (const [gradeId, values] of entries) {
+      const vacancy = await Vacante.findOne({
         where: {
-          ColegioId: authColegio.id,
-          GradoId: gradoId,
-          año: año
+          ColegioId: colegio.id,
+          GradoId: gradeId,
+          year: year,
         },
       });
-      if (vacante) {
-        await vacante.update({
-          alumnos_matriculados: valores.alumnos,
-          matricula: valores.matricula,
-          cuota_pension: valores.cuota_pension,
-          cuota_ingreso: valores.cuota_ingreso,
-          capacidad: valores.capacidad,
-          año: año,
+
+      if (vacancy) {
+        await vacancy.update({
+          alumnos_matriculados: values.students,
+          matricula: values.enrollmentFee,
+          cuota_pension: values.tuitionFee,
+          cuota_ingreso: values.admissionFee,
+          capacidad: values.capacity,
+          year: year,
         });
       } else {
         await Vacante.create({
-          alumnos_matriculados: valores.alumnos,
-          matricula: valores.matricula,
-          cuota_pension: valores.cuota_pension,
-          cuota_ingreso: valores.cuota_ingreso,
-          capacidad: valores.capacidad,
-          año: año,
-          ColegioId: authColegio.id,
-          GradoId: gradoId,
+          alumnos_matriculados: values.students,
+          matricula: values.enrollmentFee,
+          cuota_pension: values.tuitionFee,
+          cuota_ingreso: values.admissionFee,
+          capacidad: values.capacity,
+          year: year,
+          ColegioId: colegio.id,
+          GradoId: gradeId,
         });
       }
     }
