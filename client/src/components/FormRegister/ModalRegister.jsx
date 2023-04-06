@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import style from "./ModalRegister.module.css";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormControl from "@mui/material/FormControl";
 import { MenuItem, toggleButtonClasses, Typography } from "@mui/material";
 import Select from "@mui/material/Select";
@@ -132,10 +132,15 @@ export default function ModalRegistro({ open, setOpen }) {
                     </Typography>
                     <Button
                       sx={{fontWeight:'600', fontFamily:'Poppins'}}
-                      onClick={() => setOpenRegistroColegio(true)}
+                    
                       variant="contained"
-                    >
-                      Inscribe tu Colegio
+                    > <Link
+                    // className={`${style.p} hover-underline-animation`}
+                    to={"/enroll"}
+                  >
+                     Inscribe tu Colegio
+                  </Link>
+                     
                     </Button>
                        <Typography>
                       <div
