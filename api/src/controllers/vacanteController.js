@@ -96,14 +96,14 @@ const createVacante = async (req, res, next) => {
         });
       } else {
         await Vacante.create({
-          alumnos_matriculados: valores.alumnos,
-          matricula: valores.matricula,
-          cuota_pension: valores.cuota_pension,
-          cuota_ingreso: valores.cuota_ingreso,
-          capacidad: valores.capacidad,
-          año: año,
-          ColegioId: authColegio.id,
-          GradoId: gradoId,
+          alumnos_matriculados: values.students,
+          matricula: values.enrollmentFee,
+          cuota_pension: values.tuitionFee,
+          cuota_ingreso: values.admissionFee,
+          capacidad: values.capacity,
+          year: year,
+          ColegioId: colegio.id,
+          GradoId: gradeId,
         });
       }
     }
