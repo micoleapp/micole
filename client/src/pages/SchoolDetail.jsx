@@ -1158,7 +1158,7 @@ function SchoolDetail() {
                     {isAuth ?                     <input
                       name="nombreLista"
                       type="text"
-                      value={user.nombre_responsable}
+                      value={user?.nombre_responsable}
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       required
@@ -1172,7 +1172,7 @@ function SchoolDetail() {
                                         {isAuth ?                     <input
                       name="apellidoLista"
                       type="text"
-                      value={user.apellidos_responsable}
+                      value={user?.apellidos_responsable}
                       required
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     /> :                     <input
@@ -1188,7 +1188,7 @@ function SchoolDetail() {
                   {isAuth ?                   <input
                     name="emailLista"
                     type="email"
-                    value={user.email}
+                    value={user?.email}
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Correo"
                     required
@@ -1203,7 +1203,7 @@ function SchoolDetail() {
                       name="celLista"
                       type="number"
                       pattern="[0-9]{8,15}"
-                      value={user.telefono}
+                      value={user?.telefono}
                       required
                       title="Solo se permiten numeros y entre 8 y 10 caracteres"
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
