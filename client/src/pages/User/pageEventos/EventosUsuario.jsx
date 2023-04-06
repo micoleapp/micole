@@ -277,12 +277,13 @@ export default function EventosUsuario() {
             <InputLabel id="demo-select-small">Fecha</InputLabel>
 
             <Select
-              sx={{ border: "none", outline: "none" }}
+              sx={{ border: "none", outline: "none"  , fontSize:'2vh'}}
               labelId="demo-select-small"
               id="demo-select-small"
               // value={orderSelected}
               label={"Fecha"}
               onChange={handleChangeState}
+
             >
               <MenuItem value="ASC">
                 {" "}
