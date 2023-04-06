@@ -73,28 +73,26 @@ const createVacante = async (req, res, next) => {
       });
     }
 
-    const year = data.year;
-    delete data.year;
+    const año = data.año;
+    delete data.año;
 
-    const entries = Object.entries(data);
-
-    for (const [gradeId, values] of entries) {
-      const vacancy = await Vacante.findOne({
+    for (const [gradoId, valores] of Object.entries(data)) {
+      const vacante = await Vacante.findOne({
         where: {
           ColegioId: colegio.id,
-          GradoId: gradeId,
-          year: year,
+          GradoId: gradoId,
+          año: año,
         },
       });
 
-      if (vacancy) {
-        await vacancy.update({
-          alumnos_matriculados: values.students,
-          matricula: values.enrollmentFee,
-          cuota_pension: values.tuitionFee,
-          cuota_ingreso: values.admissionFee,
-          capacidad: values.capacity,
-          year: year,
+      if (vacante) {
+        await vacante.update({
+          alumnos_matriculados: valores.alumnos,
+          matricula: valores.matricula,
+          cuota_pension: valores.cuota_pension,
+          cuota_ingreso: valores.cuota_ingreso,
+          capacidad: valores.capacidad,
+          año: año,
         });
       } else {
         await Vacante.create({

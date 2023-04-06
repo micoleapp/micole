@@ -94,7 +94,6 @@ function Footer() {
               <a
                 href="https://www.linkedin.com/company/91744571"
                 target="_blank"
-
                 className="w-8 h-8 items-center justify-center flex rounded-md hover:bg-white/20"
               >
                 <FontAwesomeIcon icon={faLinkedinIn} />

@@ -51,6 +51,7 @@ import { HiChevronLeft } from "react-icons/hi";
 import SwiperEventos from "../components/SwiperEventos/SwiperEventos";
 import es_AM_PM from "../components/SwiperEventos/utils/horaFormat";
 import ModalLogin from "../components/ModalLogin/ModalLogin";
+import { setVacantesRedux } from "../redux/AuthActions";
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
     <div className="w-full px-4">
@@ -121,7 +122,7 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
 function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool, grados, horarios } = useSelector((state) => state.schools);
-  const { user, isAuth } = useSelector((state) => state.auth);
+  const { user, isAuth ,vacantes} = useSelector((state) => state.auth);
   console.log(user);
 
   const location = useLocation();
@@ -149,10 +150,20 @@ function SchoolDetail() {
     }
   };
 
-  const currentVacante = oneSchool?.Vacantes?.filter(
-    (vac) =>
-      vac.GradoId === Number(gradoParams) && vac.año === Number(ingresoParams)
-  );
+  const [currentVacante,setCurrentVacante] = useState([])
+
+  useEffect(()=>{
+    dispatch(setVacantesRedux(id))
+  },[])
+  useEffect(() => {
+    if(vacantes.length > 0){
+      setCurrentVacante(vacantes?.filter(
+        (vac) =>
+          vac.GradoId === Number(gradoParams) && vac.año === Number(ingresoParams)
+      ))
+    }
+  }, [vacantes])
+  
 
   console.log(currentVacante);
 
@@ -523,13 +534,13 @@ function SchoolDetail() {
             {currentVacante && (
               <div className="flex flex-col w-full items-center lg:items-end">
                 <small>
-                  Cuota de ingreso: S/ {currentVacante[0].cuota_ingreso}{" "}
+                  Cuota de ingreso: S/ {currentVacante.length > 0 && currentVacante[0].cuota_ingreso}{" "}
                 </small>
                 <small>
-                  Cuota de pensión: S/ {currentVacante[0].cuota_pension}
+                  Cuota de pensión: S/ {currentVacante.length > 0 && currentVacante[0].cuota_pension}
                 </small>
                 <small>
-                  Cuota de matricula: S/ {currentVacante[0].matricula}
+                  Cuota de matricula: S/ {currentVacante.length > 0 && currentVacante[0].matricula}
                 </small>
               </div>
             )}

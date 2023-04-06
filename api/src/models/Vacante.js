@@ -25,7 +25,7 @@ module.exports = (sequelize) => {
         },
       },
       matricula: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.DECIMAL(10, 0),
         validate: {
           notEmpty: {
             msg: 'El campo matricula no puede estar vacío',
@@ -40,7 +40,7 @@ module.exports = (sequelize) => {
         },
       },
       cuota_pension: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.DECIMAL(10, 0),
         validate: {
           notEmpty: {
             msg: 'El campo cuota_pension no puede estar vacío',
@@ -55,7 +55,7 @@ module.exports = (sequelize) => {
         },
       },
       cuota_ingreso: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.DECIMAL(10, 0),
         validate: {
           notEmpty: {
             msg: 'El campo cuota_ingreso no puede estar vacío',
