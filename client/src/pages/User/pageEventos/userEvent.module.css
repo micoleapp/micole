@@ -1,3 +1,7 @@
+.containerSigEvento {
+  max-width: 80%;
+}
+
 .layout {
   display: flex;
   gap: 3vh;
@@ -20,15 +24,15 @@
   left: 8%;
   align-items: center;
   justify-content: center;
-  /* gap: 2rem; */
+  gap: 1vh;
 }
 
-.card2{
+.card2 {
   display: flex;
   flex-direction: column;
   background: #ffffff;
   border: 1px solid #00000013;
-  padding: 6px;
+  padding: 2vh;
   box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.25);
   width: 16vh;
   height: 16vh;
@@ -55,7 +59,7 @@
   font-family: Poppins;
   color: #184680;
   font-weight: 700;
-  font-size: 2vh;
+  font-size: 1.6vh;
 }
 .titleK {
   font-family: Poppins;
@@ -69,7 +73,7 @@
   font-weight: 400;
   color: #4d4747;
   font-size: 1.4vh;
-  text-align: center;
+  /* text-align: center; */
   width: 100%;
 }
 
@@ -95,7 +99,7 @@
 .pTittle {
   color: #156baa;
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 1.2vh;
 }
 .pTittleK {
   color: #156baa;
@@ -109,7 +113,7 @@
   flex-direction: row;
   align-items: center;
   padding-top: 10vh;
- 
+
   justify-content: flex-start;
 }
 .titleSig {
@@ -120,9 +124,22 @@
   justify-content: flex-start;
 }
 .pSig {
+  font-size: 1.4vh;
   padding-bottom: 1vh;
 }
 @media (max-width: 800px) {
+  .card {
+    gap: 1vh;
+  }
+  .containerSigEvento {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .descripcion {
+    text-align: center;
+  }
   .infoDiv {
     align-items: center;
   }

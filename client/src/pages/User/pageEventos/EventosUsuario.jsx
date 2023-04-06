@@ -129,7 +129,7 @@ export default function EventosUsuario() {
                           width: "30vh",
                           height: "30vh",
                         }}
-                        src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679362147/eesjwe0dwaabi37gzuj9.png"
+                        src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"
                         alt="Logo"
                       />
                       <div className={style.card}>
@@ -298,7 +298,7 @@ export default function EventosUsuario() {
 
         {/* CARD  FECHA */}
       </div>
-      <div style={{  maxWidth:'80%'}}>
+      <div className={style.containerSigEvento}>
         {orderSelected != null && dataFiltrada ? (
           dataFiltrada?.length > 0 ? (
             <>
@@ -314,7 +314,7 @@ export default function EventosUsuario() {
                               width: "20vh",
                               height: "20vh",
                             }}
-                            src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679362147/eesjwe0dwaabi37gzuj9.png"
+                            src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"
                             alt="Logo"
                           />
                           <div className={style.card2}>
@@ -423,7 +423,7 @@ export default function EventosUsuario() {
                             width: "20vh",
                             height: "20vh",
                           }}
-                          src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679362147/eesjwe0dwaabi37gzuj9.png"
+                          src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"
                           alt="Logo"
                         />
                         <div className={style.card2}>
