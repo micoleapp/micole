@@ -51,6 +51,7 @@ import { HiChevronLeft } from "react-icons/hi";
 import SwiperEventos from "../components/SwiperEventos/SwiperEventos";
 import es_AM_PM from "../components/SwiperEventos/utils/horaFormat";
 import ModalLogin from "../components/ModalLogin/ModalLogin";
+import { setVacantesRedux } from "../redux/AuthActions";
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
     <div className="w-full px-4">
@@ -121,7 +122,7 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
 function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool, grados, horarios } = useSelector((state) => state.schools);
-  const { user, isAuth } = useSelector((state) => state.auth);
+  const { user, isAuth ,vacantes} = useSelector((state) => state.auth);
   console.log(user);
 
   const location = useLocation();
@@ -149,10 +150,20 @@ function SchoolDetail() {
     }
   };
 
-  const currentVacante = oneSchool?.Vacantes?.filter(
-    (vac) =>
-      vac.GradoId === Number(gradoParams) && vac.año === Number(ingresoParams)
-  );
+  const [currentVacante,setCurrentVacante] = useState([])
+
+  useEffect(()=>{
+    dispatch(setVacantesRedux(id))
+  },[])
+  useEffect(() => {
+    if(vacantes.length > 0){
+      setCurrentVacante(vacantes?.filter(
+        (vac) =>
+          vac.GradoId === Number(gradoParams) && vac.año === Number(ingresoParams)
+      ))
+    }
+  }, [vacantes])
+  
 
   console.log(currentVacante);
 
@@ -523,13 +534,13 @@ function SchoolDetail() {
             {currentVacante && (
               <div className="flex flex-col w-full items-center lg:items-end">
                 <small>
-                  Cuota de ingreso: S/ {currentVacante[0].cuota_ingreso}{" "}
+                  Cuota de ingreso: S/ {currentVacante.length > 0 && currentVacante[0].cuota_ingreso}{" "}
                 </small>
                 <small>
-                  Cuota de pensión: S/ {currentVacante[0].cuota_pension}
+                  Cuota de pensión: S/ {currentVacante.length > 0 && currentVacante[0].cuota_pension}
                 </small>
                 <small>
-                  Cuota de matricula: S/ {currentVacante[0].matricula}
+                  Cuota de matricula: S/ {currentVacante.length > 0 && currentVacante[0].matricula}
                 </small>
               </div>
             )}
@@ -1375,7 +1386,7 @@ function SchoolDetail() {
                     <input
                       name="nombre"
                       type="text"
-                      value={isAuth === true ? user.nombre_responsable  : ''}
+                      value={ user?.nombre_responsable }
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       onChange={(e) => {
@@ -1387,7 +1398,7 @@ function SchoolDetail() {
                       name="cel"
                       type="number"
                       pattern="[0-9]{8,15}"
-                      value={isAuth === true ? user.telefono : ""}
+                      value={ user?.telefono}
                       required
                       title="Solo se permiten numeros y entre 8 y 10 caracteres"
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
@@ -1400,7 +1411,7 @@ function SchoolDetail() {
                   <input
                     name="email"
                     type="email"
-                    value={isAuth === true ? user.email:'' }
+                    value={user?.email}
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Correo"
                     onChange={(e) => {

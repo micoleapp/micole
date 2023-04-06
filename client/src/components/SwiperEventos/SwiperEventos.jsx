@@ -13,8 +13,9 @@ import "swiper/css/effect-fade";
 import "swiper/css/parallax";
 import TextEvento from "./TextEvento";
 export default function SwiperEventos({ data }) {
-  let logoColegio = data.logo;
-  console.log(logoColegio);
+  let logoColegio = data?.logo ? data?.logo : data?.primera_imagen;
+  let publiColegio = data.Eventos.map((e) => e.imagen_evento);
+  console.log(publiColegio);
   return (
     <div style={{ width: "60vh" }}>
       <Swiper
@@ -41,24 +42,31 @@ export default function SwiperEventos({ data }) {
           return (
             <>
               <SwiperSlide className={style.swiper_slide}>
-                <img
-                  style={{ width: "50vh", height: "60vh" }}
-                  src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679362147/eesjwe0dwaabi37gzuj9.png"
-                  alt=""
-                />
+                {publiColegio.length > 0 ? (
+                  <img src={event.imagen_evento} />
+                ) : (
+                  <>
+                    <img
+                      style={{ width: "50vh", height: "60vh" }}
+                      src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"
+                      alt=""
+                    />
 
-                <div className={style.content}>
-                  <TextEvento
-                    nombreEvento={event.nombre_evento}
-                    description={event.descripcion}
-                    tipoEvento={event.tipo_evento}
-                    fechaEvento={event.fecha_evento}
-                    horaEvento={event.hora_evento}
-                    capacidadEvento={event.capacidad}
-                    logo={logoColegio}
-                    idEvento={event.id}
-                  />
-                </div>
+                    <div className={style.content}>
+                      <TextEvento
+                        plantilla ={publiColegio.length > 0 ? false : true}
+                        nombreEvento={event.nombre_evento}
+                        description={event.descripcion}
+                        tipoEvento={event.tipo_evento}
+                        fechaEvento={event.fecha_evento}
+                        horaEvento={event.hora_evento}
+                        capacidadEvento={event.capacidad}
+                        logo={logoColegio}
+                        idEvento={event.id}
+                      />
+                    </div>
+                  </>
+                )}
               </SwiperSlide>
             </>
           );

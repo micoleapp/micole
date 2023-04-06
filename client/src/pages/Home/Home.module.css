@@ -118,14 +118,14 @@
   justify-content: center;
   flex-direction: column;
   text-align: center;
-  height: 30vh;
+  height: 50vh;
   width: 100%;
-  background-image:url("../../assets/decoracion.png");
+  /* background-image:url("../../assets/decoracion.png"); */
 
   background-color: #0061DF ;
  
  
-  gap: 8px;
+  gap: 4vh;
 }
 .preFooter h1 {
   font-family: Poppins;

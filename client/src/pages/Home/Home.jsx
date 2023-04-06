@@ -80,7 +80,7 @@ function Home() {
         <div className={style.preFooter}>
           <h1>Inscribe tu colegio en nuestra plataforma</h1>
           <p>Únete a la mayor comunidad de colegios en el Perú</p>
-          <Link to={"/enroll"} state={{register: true}} className="p-2 bg-white text-[#0061dd] px-4 rounded-md">
+          <Link to={"/enroll"}  className="p-2 bg-white text-[#0061dd] px-4 rounded-md">
             Registrar
           </Link>
         </div>
