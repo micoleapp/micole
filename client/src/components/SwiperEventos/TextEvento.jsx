@@ -13,57 +13,67 @@ export default function TextEvento({
   idEvento,
   capacidadEvento,
   logo,
+  plantilla,
 }) {
   const [open, setOpen] = useState(false);
   const fecha = fechaFormat(fechaEvento);
   const hora = es_AM_PM(horaEvento);
-  console.log(hora);
-  console.log(fecha);
+
   const handleOpen = () => setOpen(true);
   return (
-    <div className={style.card}>
-      <div className={style.imgDiv}>
-        <img style={{ display: "flex" }} src={logo} alt="Logo" />
-      </div>
+    <>
+      {plantilla ? (
+        <div className={style.card}>
+          <div className={style.imgDiv}>
+            <img style={{ display: "flex" }} src={logo} alt="Logo" />
+          </div>
 
-      {nombreEvento && <h1 className={style.title}>{nombreEvento}</h1>}
-      {description && <p className={style.descripcion}>{description}</p>}
-      <div
-        style={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "space-around",
-        }}
-      >
-        <div className={style.divDetalles}>
-          <p className={style.pTittle}>Horario</p>
-          {fechaEvento && <p className={style.p}>{hora}</p>}
-        </div>
-        <div className={style.divDetalles}>
-          <p className={style.pTittle}>Fecha</p>
-          {fechaEvento && <p className={style.p}>{fecha}</p>}
-        </div>
-        <div className={style.divDetalles}>
-          <p className={style.pTittle}>Capacidad</p>
-          {fechaEvento && <p className={style.p}>{capacidadEvento}</p>}
-        </div>
-      </div>
+          {nombreEvento && <h1 className={style.title}>{nombreEvento}</h1>}
+          {description && <p className={style.descripcion}>{description}</p>}
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "space-around",
+            }}
+          >
+            <div className={style.divDetalles}>
+              <p className={style.pTittle}>Horario</p>
+              {fechaEvento && <p className={style.p}>{hora}</p>}
+            </div>
+            <div className={style.divDetalles}>
+              <p className={style.pTittle}>Fecha</p>
+              {fechaEvento && <p className={style.p}>{fecha}</p>}
+            </div>
+            <div className={style.divDetalles}>
+              <p className={style.pTittle}>Capacidad</p>
+              {fechaEvento && <p className={style.p}>{capacidadEvento}</p>}
+            </div>
+          </div>
 
-      <div>
-        <Button onClick={handleOpen} variant="contained">
-          Inscribirme
-        </Button>
-      </div>
-      {open && (
-        <InscripcionModal
-          open={open}
-          idEvento={idEvento}
-          fechaEvento={fecha}
-          horaEvento={hora}
-          nombreEvento={nombreEvento}
-          setOpen={setOpen}
-        />
+          <div>
+            <Button onClick={handleOpen} variant="contained">
+              Inscribirme
+            </Button>
+          </div>
+          {open && (
+            <InscripcionModal
+              open={open}
+              idEvento={idEvento}
+              fechaEvento={fecha}
+              horaEvento={hora}
+              nombreEvento={nombreEvento}
+              setOpen={setOpen}
+            />
+          )}
+        </div>
+      ) : (
+        <div style={{position:'absolute'}}>
+          <Button onClick={handleOpen} variant="contained">
+            Inscribirme
+          </Button>
+        </div>
       )}
-    </div>
+    </>
   );
 }
