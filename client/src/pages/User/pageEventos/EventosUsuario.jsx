@@ -98,7 +98,7 @@ export default function EventosUsuario() {
       {/* Proximo EVENTO */}
       {ProximoEvento && ProximoEvento?.length > 0 ? (
         <>
-          <div style={{ padding: "1vh", maxWidth:'80%' }}>
+          <div style={{ padding: "1vh",paddingLeft:'2vh', maxWidth:'80%' }}>
             <Typography
               variant="h6"
               sx={{
@@ -129,10 +129,10 @@ export default function EventosUsuario() {
                           width: "30vh",
                           height: "30vh",
                         }}
-                        src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"
+                        src={ ele.imagen_evento?ele.imagen_evento : "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"}
                         alt="Logo"
                       />
-                      <div className={style.card}>
+                    {  !ele.imagen_evento&&<div className={style.card}>
                         <div className={style.imgDiv}>
                           <img
                             style={{ display: "flex", zIndex: "2" }}
@@ -153,7 +153,7 @@ export default function EventosUsuario() {
                             <p className={style.p}>{ele.capacidad}</p>
                           </div>
                         </div>
-                      </div>
+                      </div>}
                     </div>
                     <div className={style.infoDiv}>
                       <h1 className={style.titleK}>{ele.nombre_evento}</h1>
@@ -314,10 +314,10 @@ export default function EventosUsuario() {
                               width: "20vh",
                               height: "20vh",
                             }}
-                            src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"
+                            src={ ele.imagen_evento?ele.imagen_evento : "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"}
                             alt="Logo"
                           />
-                          <div className={style.card2}>
+                        {!ele.imagen_evento&&  <div className={style.card2}>
                             <div className={style.imgDiv}>
                               <img
                                 style={{
@@ -332,7 +332,7 @@ export default function EventosUsuario() {
                             </div>
                             <h1 className={style.title}>{ele.nombre_evento}</h1>
                             <div style={{ display: "flex", gap: "2vh" }}></div>
-                          </div>
+                          </div>}
                         </div>
                         <div className={style.infoDiv}>
                           <h1 className={style.titleK}>{ele.nombre_evento}</h1>
@@ -423,10 +423,10 @@ export default function EventosUsuario() {
                             width: "20vh",
                             height: "20vh",
                           }}
-                          src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"
+                          src={ ele.imagen_evento?ele.imagen_evento : "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"}
                           alt="Logo"
                         />
-                        <div className={style.card2}>
+                       {  !ele.imagen_evento&&<div className={style.card2}>
                           <div className={style.imgDiv}>
                             <img
                               style={{
@@ -441,7 +441,7 @@ export default function EventosUsuario() {
                           </div>
                           <h1 className={style.title}>{ele.nombre_evento}</h1>
                           <div style={{ display: "flex", gap: "2vh" }}></div>
-                        </div>
+                        </div>}
                       </div>
                       <div className={style.infoDiv}>
                         <h1 className={style.titleK}>{ele.nombre_evento}</h1>
