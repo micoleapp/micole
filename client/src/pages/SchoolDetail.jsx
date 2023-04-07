@@ -384,7 +384,7 @@ function SchoolDetail() {
       Swal.fire({
         icon: "info",
         title: "Inicia Sesion",
-        text: "Debes iniciar sesion o registrarte para sacar una cita",
+        text: "Debes iniciar sesion o registrarte para inscribirte a una lista",
       })
       return
     } else {
@@ -432,12 +432,12 @@ function SchoolDetail() {
       >
         <div className="header drop-shadow-md">
           <h1 className="text-2xl  font-semibold">
-            {oneSchool.nombre_escuela}
+            {oneSchool.nombre_colegio}
           </h1>
           <div>
             <div className="flex justify-between flex-col gap-5 lg:flex-row mt-2 lg:mt-0">
               <div className="flex gap-5 lg:items-center justify-center flex-col lg:flex-row text-black/70">
-                <h2 className="text-center">{oneSchool.direccion} </h2>
+                <h2 className="text-center lg:text-start">{oneSchool.direccion} </h2>
                 <div className="flex gap-5 lg:flex-row flex-col justify-center w-full items-center">
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
                     {currentVacante &&
@@ -1159,7 +1159,7 @@ function SchoolDetail() {
             {listaParams === "true" ? (
               <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
                 <h2 className="font-semibold text-xl">
-                  Solicitar lista de espera
+                  Lista de espera
                 </h2>
                 <form
                   onSubmit={handleSubmitLista}
@@ -1234,7 +1234,7 @@ function SchoolDetail() {
                     type="submit"
                     className="border mt-5 mx-auto px-10 py-2 rounded-md shadow-lg bg-[#0061dd] text-white duration-300 cursor-pointer"
                   >
-                    SOLICITAR
+                    INSCRIBIRME
                   </button>
                 </form>
                 <p className="text-sm p-10">

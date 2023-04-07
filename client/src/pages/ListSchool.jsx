@@ -1016,7 +1016,7 @@ function ListSchool() {
                                   )[0]?.alumnos_matriculados ==
                                   0
                                   ?   <button onClick={() => goToDetails(school.id,true)} className="bg-[#dcffe2] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#3cff7d] font-semibold">
-                                Lista de espera
+                                VER DETALLE
                               </button> :   null}
 
 
