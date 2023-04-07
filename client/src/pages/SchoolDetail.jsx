@@ -430,7 +430,7 @@ function SchoolDetail() {
         data-aos="fade-up"
         data-aos-duration="1000"
       >
-        <div className="header drop-shadow-md">
+        <div className="header">
           <h1 className="text-2xl  font-semibold">
             {oneSchool.nombre_colegio}
           </h1>
@@ -495,7 +495,7 @@ function SchoolDetail() {
                   <img
                     src={cat.logo_categoria}
                     alt="logo_categoria"
-                    className="w-4 object-cover invert-[40%] drop-shadow-md"
+                    className="w-4 object-cover invert-[40%]"
                   />
                   <span className="text-sm text-gray-400">
                     {cat.nombre_categoria}{" "}

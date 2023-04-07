@@ -19,26 +19,26 @@ export default function GridVacantes({ año, setVacantesOff }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setVacantesOff(false);
-    // try {
-    //   axios
-    //     .post(
-    //       `/vacantes`,
-    //       { data: datos },
-    //       { headers: { Authorization: `Bearer ${token}` } }
-    //     )
-    //     .then((res) => {
-    //       Swal.fire("Success", "Formulario enviado correctamente", "success");
-    //     })
-    //     .catch((err) => {
-    //       Swal.fire({
-    //         icon: "error",
-    //         title: "Algo salio mal",
-    //         text: err.response.data.error,
-    //       });
-    //     });
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      axios
+        .post(
+          `/vacantes`,
+          { data: datos },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then((res) => {
+          Swal.fire("Success", "Formulario enviado correctamente", "success");
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: err.response.data.error,
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   console.log(datos);
