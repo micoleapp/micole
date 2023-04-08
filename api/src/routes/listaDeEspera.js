@@ -68,7 +68,7 @@ router.post("/", async (req, res) => {
       where: { id: usuarioId },
     });
     if (validacion) {
-      res.status(501).json({
+        return res.status(501).json({
         message: "Un Colegio no puede inscribirse en lista de Espera",
       });
     }

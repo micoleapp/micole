@@ -1,7 +1,8 @@
-const { Cita, Colegio, Grado, Plan_Pago, User, Auth } = require("../db");
-const { Op } = require("sequelize");
-const moment = require("moment");
-const mailer = require("../utils/sendMails/mailer");
+const { Cita, Colegio, Grado, Plan_Pago, User, Auth } = require('../db');
+const { Op } = require('sequelize');
+const moment = require('moment');
+const mailer = require('../utils/sendMails/mailer');
+const getPagination = require('../utils/getPagination');
 
 const getCitas = async (req, res, next) => {
   const tokenUser = req.user;
@@ -120,21 +121,6 @@ const getCitas = async (req, res, next) => {
 
 const getCitasUser = async (req, res, next) => {
   const tokenUser = req.user;
-  const { order } = req.query;
-  let orderBy = null;
-  if (order) {
-    switch (order) {
-      case "ASC":
-        orderBy = [["fecha_cita", "ASC"]];
-        break;
-      case "DESC":
-        orderBy = [["fecha_cita", "DESC"]];
-        break;
-      default:
-        orderBy = null;
-        break;
-    }
-  }
   try {
     const user = await Auth.findOne({ where: { id: tokenUser.id } });
     if (!user) {
@@ -143,25 +129,19 @@ const getCitasUser = async (req, res, next) => {
         message: "El usuario no es un Colegio",
       });
     }
-    const include = {
-      include: [
-        { model: Grado },
-        {
-          model: Colegio,
-          attributes: ["id", "nombre_colegio", "logo", "direccion", "telefono"],
-        },
-      ],
-    };
+    const include = { include: [{ model: Grado }, {model: Colegio, attributes: ['id', 'nombre_colegio', 'logo', 'direccion', 'telefono'],}] };
     const CitasUsuario = await Cita.findAll({
       where: {
         email: user.email,
         activo: true,
       },
       ...include,
-      order: orderBy || [["fecha_cita", "ASC"]],
+      order: [['fecha_cita', 'ASC']],
     });
 
-    res.status(200).send(CitasUsuario);
+    res.status(200).send({
+      CitasUsuario,
+    });
   } catch (error) {
     return next(error);
   }
@@ -238,7 +218,6 @@ const createCita = async (req, res, next) => {
 const changeStatusCita = async (req, res, next) => {
   const { idCita } = req.params;
   const { estado } = req.body;
-
   try {
     const cita = await Cita.findByPk(idCita);
     if (!cita) {
@@ -253,7 +232,7 @@ const changeStatusCita = async (req, res, next) => {
       },
       { where: { id: idCita } }
     );
-    res.status(200).send("El estado de la cita se ha modificado.");
+    res.status(200).send('El estado de la cita se ha modificado.');
   } catch (error) {
     return next(error);
   }
@@ -293,7 +272,7 @@ const deleteCita = async (req, res, next) => {
       });
     }
     await Cita.destroy({ where: { id: idCita } });
-    res.status(200).send("Se eliminó la Cita.");
+    res.status(200).send('Se eliminó la Cita.');
   } catch (error) {
     return next(error);
   }

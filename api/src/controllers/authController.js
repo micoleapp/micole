@@ -16,9 +16,8 @@ const getResponse = (from, auth, data) => {
     : {
         id: data.id,
         email: auth.email,
-        nombre: data.nombre,
-        apellidos: data.apellidos,
-        dni: data.dni,
+        nombre_responsable: data.nombre_responsable,
+        apellidos_responsable: data.apellidos_responsable,
         telefono: data.telefono,
         rol: auth.rol,
       };
@@ -137,7 +136,6 @@ const signUp = async (req, res, next) => {
     nombre,
     apellidos,
     nombre_colegio,
-    dni,
     ruc,
     telefono,
     DistritoId,
@@ -159,8 +157,8 @@ const signUp = async (req, res, next) => {
       await colegioValidation.validate();
     } else {
       const userValidation = User.build({
-        nombre,
-        apellidos,
+        nombre_responsable: nombre,
+        apellidos_responsable: apellidos,
         telefono,
       });
       await userValidation.validate();
@@ -204,10 +202,16 @@ const signUp = async (req, res, next) => {
       //mailer.sendMailSignUp(sanitizedSchool, "Colegio"); //Enviamos el mail de Confirmación de Registro para el Usuario Colegio
       return res.status(201).send(sanitizedSchool);
     }
-    const newUser = await User.create({ nombre, apellidos, telefono, idAuth });
+    const newUser = await User.create({
+      nombre_responsable: nombre,
+      apellidos_responsable: apellidos,
+      telefono,
+      idAuth,
+    });
     const sanitizedUser = {
       email: newAuth.email,
-      nombre: `${newUser.nombre} ${newUser.apellidos}`,
+      nombre_responsable: newUser.nombre_responsable,
+      apellidos_responsable: newUser.apellidos_responsable,
       rol: newAuth.rol,
       avatar: newUser.avatar,
     };
@@ -245,16 +249,16 @@ const putAuth = async (req, res, next) => {
 
     if (authInstance.rol === 'Colegio') {
       const colegio = await Colegio.findOne({
-        where: { AuthId: authInstance.id },
+        where: { idAuth: authInstance.id },
       });
       colegio.telefono = telefono;
       await colegio.save();
       sanitizedAuth.nombre = colegio.nombre_colegio;
     } else {
-      const user = await User.findOne({ where: { AuthId: authInstance.id } });
+      const user = await User.findOne({ where: { idAuth: authInstance.id } });
       user.telefono = telefono;
       await user.save();
-      sanitizedAuth.nombre = user.nombre;
+      sanitizedAuth.nombre = user.nombre_responsable;
     }
     if (newEmail) {
       authInstance.email = newEmail;

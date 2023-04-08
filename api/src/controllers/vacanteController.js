@@ -27,23 +27,63 @@ const getVacantes = async (req, res, next) => {
   }
 };
 
+const getVacantesColegio = async (req, res, next) => {
+  const { idColegio } = req.params;
+  try {
+    const vacantes = await Vacante.findAll({
+      include: [
+        {
+          model: Colegio,
+          attributes: ['nombre_colegio'],
+        },
+        {
+          model: Grado,
+          attributes: ['nombre_grado'],
+        },
+      ],
+      where: {
+        ColegioId: idColegio,
+      },
+    });
+
+    res.status(200).send(vacantes);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const createVacante = async (req, res, next) => {
   const { data } = req.body;
   const tokenUser = req.user;
   try {
-    const authColegio = await Colegio.findOne({
-      where: { idAuth: tokenUser.id },
-    });
+    let colegio;
+    if (tokenUser.rol === 'Admin') {
+      colegio = await Colegio.findByPk(data.idColegio);
+
+      if (!colegio) {
+        return next({
+          statusCode: 404,
+          message: 'No se encontró el colegio especificado',
+        });
+      }
+    } else {
+      colegio = await Colegio.findOne({
+        where: { idAuth: tokenUser.id },
+      });
+    }
+
     const año = data.año;
     delete data.año;
+
     for (const [gradoId, valores] of Object.entries(data)) {
       const vacante = await Vacante.findOne({
         where: {
-          ColegioId: authColegio.id,
+          ColegioId: colegio.id,
           GradoId: gradoId,
-          año: año
+          año: año,
         },
       });
+
       if (vacante) {
         await vacante.update({
           alumnos_matriculados: valores.alumnos,
@@ -123,4 +163,5 @@ module.exports = {
   createVacante,
   getVacanteById,
   deleteVacanteById,
+  getVacantesColegio,
 };

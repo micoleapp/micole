@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../../assets/logo1.png";
 import style from "./NavBar.module.css";
 import Categoria from "./Categoria/Categoria";
@@ -48,6 +48,11 @@ function NavBar() {
       behavior: "smooth",
     });
   }
+useEffect(() => {
+  
+
+  
+}, [user])
 
   const [isOpen, setOpen] = useState(false);
 
@@ -114,19 +119,21 @@ function NavBar() {
               <button className={style.SesionButtom}>Ver Perfil</button>
             </Link>
           ) : user.rol === "Colegio" ? (
-            oneSchool != null && (
-              <Link to={"/dashboardschool"}>
-                <button className={style.SesionButtom}>Ver Perfil</button>
-              </Link>
-            )
-          ) : (
-            <button
-              className={`${style.SesionButtom} flex items-center justify-center gap-2`}
-            >
-              Cargando perfil{" "}
-              <CircularProgress size="1rem" style={{ color: "#0061dd" }} />{" "}
-            </button>
-          )}
+            <>
+              {oneSchool != null ? (
+                <Link to={"/dashboardschool"}>
+                  <button className={style.SesionButtom}>Ver Perfil</button>
+                </Link>
+              ) : (
+                <button
+                  className={`${style.SesionButtom} flex items-center justify-center gap-2`}
+                >
+                  Cargando perfil{" "}
+                  <CircularProgress size="1rem" style={{ color: "#0061dd" }} />{" "}
+                </button>
+              )}
+            </>
+          ) : null}
         </div>
       </div>
       {OpenCategory && (

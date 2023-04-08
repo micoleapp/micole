@@ -101,10 +101,14 @@ export const getAllPaises = () => (dispatch) => {
 
 export const getAllCategories = () => (dispatch) => {
   dispatch(isLoading());
-  axios
-    .get("/categorias")
-    .then((res) => dispatch(getCategories(res.data)))
-    .catch((err) => dispatch(getError(err.message)));
+  try {
+    axios
+      .get("/categorias")
+      .then((res) => dispatch(getCategories(res.data)))
+      .catch((err) => dispatch(getError(err.message)));
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const getAllInfraestructura = () => (dispatch) => {
@@ -275,12 +279,10 @@ export const getCitaAgendadas = () => (dispatch) => {
       });
 };
 
-export const getHorariosSchool = () => (dispatch) => {
+export const getHorariosSchool = (id) => (dispatch) => {
   dispatch(isLoading());
-  const idColegio = localStorage.getItem("ColegioId");
-  console.log(idColegio);
   axios
-    .get(`/horarios/${idColegio}`)
+    .get(`/horarios/${id}`)
     .then((res) => dispatch(getHorarios(res.data)))
     .catch((err) => {
       Swal.fire({

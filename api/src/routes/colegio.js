@@ -138,13 +138,13 @@ router.get("/:Colegio_id", async (req, res) => {
   const tokenUser = req.user;
   const fechaActual = moment().format("YYYY-MM-DD");
   try {
-    if (!tokenUser) {
+/*     if (!tokenUser) {
       const addVisualizacion = await Colegio.findByPk(Colegio_id);
       addVisualizacion.visualizaciones =
         Number(addVisualizacion.visualizaciones) + 1;
       await addVisualizacion.save();
-    }
-    const [trafico, created] = await Trafico.findOrCreate({
+    } */
+    /* const [trafico, created] = await Trafico.findOrCreate({
       where: { fecha: fechaActual, ColegioId: Colegio_id },
       defaults: { visitas: 1 },
     });
@@ -152,7 +152,7 @@ router.get("/:Colegio_id", async (req, res) => {
     if (!created) {
       trafico.visitas += 1;
       await trafico.save();
-    }
+    } */
 
     const cole = await Colegio.findAll({
       where: { id: [Colegio_id] },
@@ -161,10 +161,10 @@ router.get("/:Colegio_id", async (req, res) => {
           model: Nivel,
           attributes: ["nombre_nivel", "id"],
         },
-        {
+/*         {
           model: Vacante,
           include: [{ model: Grado, attributes: ["nombre_grado"] }],
-        },
+        }, */
         {
           model: Idioma,
           attributes: ["nombre_idioma", "id"],
@@ -261,6 +261,7 @@ router.post("/filter", async (req, res) => {
     order,
     metodos,
     dificultades,
+    search
   } = req.body;
   console.log(req.body);
   let orderBy = null;
@@ -378,6 +379,7 @@ router.post("/filter", async (req, res) => {
       ],
       where: {
         isActive: true,
+        ...(search && { nombre_colegio: { [Op.iLike]: `%${search}%` } }),
         ...(distrits.length !== 0 && {
           [Op.or]: distrits.map((distrito) => ({ DistritoId: distrito })),
         }),

@@ -5,6 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllPaises, getAllDepartaments,getAllProvincias,getAllDistrits } from "../../../redux/SchoolsActions";
 import Modal from "@mui/material/Modal";
 import { Box, FormControl, InputLabel, ListItemText, MenuItem, Select } from "@mui/material";
+import { AiOutlineSearch } from "react-icons/ai";
+import Pagination from "@mui/material/Pagination";
+
 const styleModal = {
   position: "absolute",
   top: "50%",
@@ -118,7 +121,41 @@ function Distritos() {
     setEditDistrito(newDistrito)
   }
 
-  console.log(editDistrito)
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 5;
+  const handleChangePage = (event, value) => {
+    setPage(value);
+  };
+  const [searchTerm, setSearchTerm] = useState("");
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+  const filterElements = (elements, searchTerm) => {
+    return elements.filter((element) =>
+      element.nombre_distrito
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+    );
+  };
+  const getElementsForPage = (
+    elements,
+    page,
+    itemsPerPage,
+    searchTerm,
+    provincia
+  ) => {
+    let filteredElements = filterElements(elements, searchTerm);
+    if (provincia) {
+      filteredElements = filteredElements.filter(
+        (element) => element.ProvinciaId === provincia
+      );
+    }
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return filteredElements.slice(start, end);
+  };
+
+  const [filterProvincia,setFilterProvincia] = useState("")
 
   return (
     <div className="flex flex-col gap-3">
@@ -153,7 +190,7 @@ function Distritos() {
             id="pais"
             name="pais"
             placeholder="Nombre distrito..."
-            className="rounded-md shadow-md p-2 w-[250px] bg-slate-50  outline-none"
+            className="rounded-md shadow-md p-2 w-[250px] bg-slate-100  outline-none"
           />
           </div>
           <button
@@ -165,9 +202,58 @@ function Distritos() {
           </button>
         </form>
         <div className="flex flex-col gap-3">
-          <h1 className="font-medium text-xl">Todos los distritos</h1>
+          <h1 className="font-medium text-xl">Distritos</h1>
+          <div className="flex justify-between flex-col lg:flex-row items-center">
+          <div className="flex items-center shadow-md bg-slate-100 w-fit rounded-md h-min">
+            <input
+              id="search"
+              name="search"
+              type="text"
+              placeholder="Buscar distrito.."
+              class="p-2 outline-none rounded-md bg-slate-100 lg:w-[300px]"
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+            <label htmlFor="search">
+              <AiOutlineSearch className="text-xl mr-3  cursor-pointer" />
+            </label>
+          </div>
+          <FormControl
+            variant="standard"
+            style={{ width: "200px", height: "70px" }}
+            size="small"
+          >
+            <InputLabel id="demo-simple-select-standard-label">
+              Filtrar por provincia
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-standard-label"
+              id="demo-type-select-standard"
+              value={filterProvincia}
+              onClick={() => setPage(1)}
+              onChange={(e) => setFilterProvincia(e.target.value)}
+            >
+              <MenuItem value="" key="all">
+                <ListItemText primary="Todas" />
+              </MenuItem>
+              {provincias.map((type, index) => (
+                <MenuItem value={type.id} key={index}>
+                  <ListItemText
+                    primary={type.nombre_provincia}
+                  />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
           <div className="flex flex-col gap-3">
-            {distrits.map((dep) => (
+            {getElementsForPage(
+            distrits,
+            page,
+            itemsPerPage,
+            searchTerm,
+            filterProvincia
+          )?.map((dep) => (
               <div key={dep.id} className="flex gap-4 items-center border p-2 w-fit rounded-md shadow-md">
                 <div className="flex flex-col w-[400px] ">
                 <h1 className="text-lg"> Nombre del distrito: {dep.nombre_distrito} </h1>
@@ -179,6 +265,15 @@ function Distritos() {
                 
               </div>
             ))}
+                      <Pagination
+            count={Math.ceil(
+              filterElements(distrits, searchTerm).filter((element) =>
+              filterProvincia ? element.ProvinciaId === filterProvincia : true
+              ).length / itemsPerPage
+            )}
+            page={page}
+            onChange={handleChangePage}
+          />
         </div>
         </div>
         <Modal

@@ -6,6 +6,10 @@ const confirmationSignUpTemplate = require("./Auth/confirmationSignUpTemplate");
 const informeMailUser = require("./Informes/informeMailUser");
 const informeMailAdmin = require("./Informes/informeMailAdmin");
 const solicitudCita = require("./Citas/User/solicitudCita");
+const aplicacionCita = require("./Citas/User/aplicacionCita");
+const entrevistaDirector = require("./Citas/User/entrevistaDirector");
+const vacanteOfrecida = require("./Citas/User/vacanteOfrecida");
+const vacanteAceptada = require("./Citas/User/vacanteAceptada");
 const sendPaymentSuccessEmail = require("./Ventas/VentaExitosa");
 const sendPaymentCanceledEmail = require("./Ventas/VentaCancelada");
 
@@ -77,32 +81,6 @@ const sendMailSolicitudCita = async(user, colegio) => {
   return;
 };
 
-const PlanNombre = ["Free","Básico", "Estandar", "Premium"];
-
-const sendPaymentSuccess = async(email, colegio, plan) => {
-  const transporter = createTransport();
-  await transporter.sendMail({
-    from: '"MiCole App" <micole.test.app@gmail.com>',
-    to: `${email}`,
-    subject: `MiCole - suscripción al plan ${PlanNombre[plan-1]} realizado con éxito`,
-    html: sendPaymentSuccessEmail(colegio, plan, actualDate)
-  });
-  return;
-};
-
-const sendPaymentCanceled = async(email, colegio, plan) => {
-  const transporter = createTransport();
-  await transporter.sendMail({
-    from: '"MiCole App" <micole.test.app@gmail.com>',
-    to: `${email}`,
-    subject: `MiCole - suscripción al plan ${PlanNombre[plan-1]} ha sido rechazada`,
-    html: sendPaymentCanceledEmail(colegio, plan, actualDate)
-  });
-  return;
-};
-
 exports.sendMailSignUp = (user , type) => sendMailSignUp(user , type);
 exports.sendMailInforme = (user) => sendMailInforme(user);
 exports.sendMailSolicitudCita = (user, colegio) => sendMailSolicitudCita(user, colegio);
-exports.sendPaymentSuccess = (colegio, plan) => sendPaymentSuccess(colegio, plan);
-exports.sendPaymentCanceled = (colegio, plan) => sendPaymentCanceled(colegio, plan);

@@ -31,7 +31,7 @@ import {
   faHouseMedicalFlag,
   faCameraRotate,
 } from "@fortawesome/free-solid-svg-icons";
-import {BsPinAngle} from 'react-icons/bs'
+import { BsPinAngle } from "react-icons/bs";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Maps from "../components/Maps";
@@ -50,6 +50,7 @@ import { HiChevronDown } from "react-icons/hi";
 import { HiChevronLeft } from "react-icons/hi";
 import SwiperEventos from "../components/SwiperEventos/SwiperEventos";
 import es_AM_PM from "../components/SwiperEventos/utils/horaFormat";
+import ModalLogin from "../components/ModalLogin/ModalLogin";
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
     <div className="w-full px-4">
@@ -120,7 +121,8 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
 function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool, grados, horarios } = useSelector((state) => state.schools);
-  console.log(oneSchool)
+  const { user, isAuth } = useSelector((state) => state.auth);
+  console.log(user);
 
   const location = useLocation();
   console.log();
@@ -132,11 +134,9 @@ function SchoolDetail() {
     params.get("ingreso")
   );
 
-  const [listaParams, setListaParams] = React.useState(
-    params.get("lista")
-  );
+  const [listaParams, setListaParams] = React.useState(params.get("lista"));
 
-  console.log(listaParams)
+  console.log(listaParams);
 
   const nombre_grado = grados?.find(
     (grado) => grado.id == gradoParams
@@ -162,7 +162,7 @@ function SchoolDetail() {
   useEffect(() => {
     dispatch(getAllGrados());
     dispatch(getSchoolDetail(id));
-    dispatch(getHorariosSchool());
+    dispatch(getHorariosSchool(id));
     return () => {
       dispatch(clannDetailid());
     };
@@ -196,7 +196,7 @@ function SchoolDetail() {
     });
   };
   const [modo, setModo] = React.useState(true);
-
+  const [openLogin, setOpenLogin] = useState(false);
   const [cita, setCita] = React.useState({
     date: [
       stringyDate(dayjs(new Date()).$D).toString(),
@@ -207,10 +207,11 @@ function SchoolDetail() {
       stringyDate(dayjs(new Date()).$H).toString(),
       stringyDate(dayjs(new Date()).$m).toString(),
     ].join(":"),
+
     modo: modo ? "Presencial" : "Virtual",
-    nombre: "",
-    celular: "",
-    correo: "",
+    nombre:isAuth? user.nombre  : "",
+    celular: isAuth? user.telefono:"",
+    correo: isAuth? user.email :'',
     añoIngreso: ingresoParams,
     grado: nombre_grado,
   });
@@ -229,13 +230,27 @@ function SchoolDetail() {
       });
       return;
     }
-    dispatch(postCita(cita));
+    if (isAuth) {
+      console.log(cita)
+     
+      dispatch(postCita(cita));
+    } else {
+      Swal.fire({
+        icon: "info",
+        title: "Inicia Sesion",
+        text: "Debes iniciar sesion o registrarte para sacar una cita",
+
+        confirmButtonAriaLabel: "Iniciar Sesion",
+      });
+      setOpenLogin(true);
+      return;
+    }
+
     // Swal.fire({
     //   icon: "success",
     //   title: "Cita realizada exitosamente!",
     //   text: "Cita Agendada",
     // });
- 
   };
 
   const handleModo = () => {
@@ -346,6 +361,46 @@ function SchoolDetail() {
       setLng(JSON.parse(oneSchool?.ubicacion)?.lng);
     }
   }, [oneSchool]);
+
+  
+  const handleSubmitLista = (e) => {
+    e.preventDefault()
+    if(!isAuth){
+      Swal.fire({
+        icon: "info",
+        title: "Inicia Sesion",
+        text: "Debes iniciar sesion o registrarte para sacar una cita",
+      })
+      return
+    } else {
+      try {
+        let data = {
+          año: Number(ingresoParams),
+          gradoId: Number(gradoParams),
+          usuarioId: user?.id,
+          colegioId: oneSchool?.id
+        }
+        axios.post('/lista',data).
+        then(res=>{
+          Swal.fire({
+            icon: "success",
+            title: "Lista creada exitosamente!",
+            text: "Lista Agendada",
+          });
+        })
+        .catch(err=>{
+          console.log(err)
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: err.response.data.message,
+          });
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
 
   return (
     <div className="bg-[#f6f7f8]">
@@ -590,26 +645,34 @@ function SchoolDetail() {
               </div>
               {oneSchool?.Metodos?.length > 0 && (
                 <>
-                                <h2 className="font-semibold text-lg">
-                Metodos de aprendizaje
-              </h2>
-              <div className="flex flex-wrap gap-5">
-              {oneSchool?.Metodos?.map(metodo=>(
-                <p className="flex gap-2 items-center text-sm"> <BsPinAngle className="text-[#0061dd]"/> {metodo.nombre_metodo} </p>
-              ))}
-              </div>
+                  <h2 className="font-semibold text-lg">
+                    Metodos de aprendizaje
+                  </h2>
+                  <div className="flex flex-wrap gap-5">
+                    {oneSchool?.Metodos?.map((metodo) => (
+                      <p className="flex gap-2 items-center text-sm">
+                        {" "}
+                        <BsPinAngle className="text-[#0061dd]" />{" "}
+                        {metodo.nombre_metodo}{" "}
+                      </p>
+                    ))}
+                  </div>
                 </>
               )}
-                            {oneSchool?.Dificultades?.length > 0 && (
+              {oneSchool?.Dificultades?.length > 0 && (
                 <>
-                                <h2 className="font-semibold text-lg">
-                Metodos de aprendizaje
-              </h2>
-              <div className="flex flex-wrap gap-5">
-              {oneSchool?.Dificultades?.map(dif=>(
-                <p className="flex gap-2 items-center text-sm"> <BsPinAngle className="text-[#0061dd]"/> {dif.nombre_dificultad} </p>
-              ))}
-              </div>
+                  <h2 className="font-semibold text-lg">
+                    Metodos de aprendizaje
+                  </h2>
+                  <div className="flex flex-wrap gap-5">
+                    {oneSchool?.Dificultades?.map((dif) => (
+                      <p className="flex gap-2 items-center text-sm">
+                        {" "}
+                        <BsPinAngle className="text-[#0061dd]" />{" "}
+                        {dif.nombre_dificultad}{" "}
+                      </p>
+                    ))}
+                  </div>
                 </>
               )}
             </div>
@@ -1078,177 +1141,309 @@ function SchoolDetail() {
             </div> */}
           </section>
           <section className="right mt-5  flex flex-col gap-8 w-full">
-            {listaParams === 'true' ? 
+            {listaParams === "true" ? (
               <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
-                <h2 className="font-semibold text-xl">Solicitar lista de espera</h2>
-              </div>
-             :           <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
-              <h2 className="font-semibold text-xl">Solicitar una visita</h2>
-              <div
-                onClick={toggleHorarios}
-                style={{ display: "flex", gap: "10px", alignItems: "center" }}
-              >
-                {Horarios && (
-                  <>
-                    <p>Ver la disponibilidad horaria de este colegio </p>
-                    <HiChevronDown
-                      data-aos-duration="400"
-                      data-aos="flip-down"
-                    />
-                  </>
-                )}
-                {Horarios === false && (
-                  <>
-                    <p>Ver la disponibilidad horaria de este colegio </p>
-                    <HiChevronLeft
-                      data-aos-duration="400"
-                      data-aos="flip-left"
-                    />
-                  </>
-                )}
-              </div>
-              {Horarios && (
-                <>
-                  <div className={style.Layout}>
-                    {horarios&&
-                     horarios?.map((ele) => {
-                        console.log(ele.horarios[0].hasta);
-                        return (
-                          <>
-                            <div
-                              // si vacantes estan agotadas deberia aparecer todo en gris
-                              data-aos="zoom-in-up"
-                        
-                              className={style.cardTable}
-                            >
-                            <Card  sx={{display: "flex", gap: "10px", flexDirection:'column', alignItems:'center', padding:'10px'}}>
-                              {/* <div className={style.cardTable}> */}
-                                {/* <div className={style.itemTable}> */}
-                                  <p style={{ fontSize: "14px", color:'#515151', fontWeight:'700' }}>{ele.dia}</p>
-                                  <div style={{ display: "flex", gap: "10px",fontSize: "12px" ,flexDirection:'column'}}>
-                                    <p>{ es_AM_PM(ele.horarios[0].desde)} </p>
-                                 
-                                    <p>{ ele.horarios[0].hasta +' '+  es_AM_PM(ele.horarios[0].hasta)} </p>
-                                  </div>
-                                {/* </div> */}
-                              {/* </div> */}
-                            </Card>
-                            </div>
-                          </>
-                        );
-                      })}
-                  </div>
-                </>
-              )}
-
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <div className="flex w-full justify-between flex-col gap-4 lg:flex-row">
-                  <MobileDatePicker
-                    label="Elejir fecha"
-                    inputFormat="DD/MM/YYYY"
-                    value={date}
-                    shouldDisableDate={disableWeekends}
-                    onChange={handleChangeDate}
-                    renderInput={(params) => <TextField {...params} />}
-                    disablePast
-                  />
-                  <div className="flex flex-col gap-2">
-                    <MobileTimePicker
-                      label="Elejir hora"
-                      value={time}
-                      onChange={handleChangeTime}
-                      renderInput={(params) => <TextField {...params} />}
-                      ampm={false}
-                      minutesStep={15}
-                      minTime={dayjs("2014-08-18T08:00:00")}
-                      maxTime={dayjs("2014-08-18T17:00:00")}
-                    />
-                    <small className="text-black/50">
-                      08:00 - 17:00 / Intervalo 15 min
-                    </small>
-                  </div>
-                </div>
-              </LocalizationProvider>
-              <form
-                onSubmit={handleSubmit}
-                className="w-full flex flex-col gap-7"
-              >
-                <div className="flex gap-5">
-                  <input
-                    type="button"
-                    value={"Presencial"}
-                    className={`border w-[120px] ${
-                      modo ? "bg-[#0061dd] text-white" : "cursor-pointer"
-                    } py-2 rounded-md shadow-lg duration-300`}
-                    onClick={handleModo}
-                    disabled={modo}
-                  />
-                  <input
-                    type="button"
-                    value={"Virtual"}
-                    className={`border w-[120px] py-2 rounded-md shadow-lg ${
-                      !modo ? "bg-[#0061dd] text-white" : "cursor-pointer"
-                    } duration-300`}
-                    onClick={handleModo}
-                    disabled={!modo}
-                  />
-                </div>
-                <div className="flex w-full gap-5 justify-between">
-                  <input
-                    name="nombre"
+                <h2 className="font-semibold text-xl">
+                  Solicitar lista de espera
+                </h2>
+                <form
+                  onSubmit={handleSubmitLista}
+                  className="w-full flex flex-col gap-7"
+                >
+                  <div className="flex w-full gap-5 justify-between">
+                    {isAuth ?                     <input
+                      name="nombreLista"
+                      type="text"
+                      value={user.nombre}
+                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                      placeholder="Nombre"
+                      required
+                    /> :                     <input
+                      name="nombreLista"
+                      type="text"
+                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                      placeholder="Nombre"
+                      required
+                    />}
+                                        {isAuth ?                     <input
+                      name="apellidoLista"
+                      type="text"
+                      value={user.apellidos}
+                      required
+                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    /> :                     <input
+                    name="apellidoLista"
                     type="text"
-                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                    placeholder="Nombre"
-                    onChange={(e) => {
-                      setCita({ ...cita, nombre: e.target.value });
-                    }}
                     required
-                  />
-                  <input
-                    name="cel"
+                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    placeholder="Apellidos"
+                  />}
+
+                  </div>
+                  <div className="flex w-full gap-5 justify-between">
+                  {isAuth ?                   <input
+                    name="emailLista"
+                    type="email"
+                    value={user.email}
+                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    placeholder="Correo"
+                    required
+                  /> :                   <input
+                  name="emailLista"
+                  type="email"
+                  className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                  placeholder="Correo"
+                  required
+                /> }
+                                    {isAuth ?                     <input
+                      name="celLista"
+                      type="number"
+                      pattern="[0-9]{8,15}"
+                      value={user.telefono}
+                      required
+                      title="Solo se permiten numeros y entre 8 y 10 caracteres"
+                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                      placeholder="Celular"
+                    /> :                     <input
+                    name="celLista"
                     type="number"
                     pattern="[0-9]{8,15}"
                     required
                     title="Solo se permiten numeros y entre 8 y 10 caracteres"
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Celular"
-                    onChange={(e) => {
-                      setCita({ ...cita, celular: Number(e.target.value) });
-                    }}
-                  />
-                </div>
-                <input
-                  name="email"
-                  type="email"
-                  className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                  placeholder="Correo"
-                  onChange={(e) => {
-                    setCita({ ...cita, correo: e.target.value });
-                  }}
-                  required
-                />
-                <button
-                  type="submit"
-                  value="Virtual"
-                  className="border mt-5 mx-auto px-10 py-2 rounded-md shadow-lg bg-[#0061dd] text-white duration-300 cursor-pointer"
+                  />}
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="border mt-5 mx-auto px-10 py-2 rounded-md shadow-lg bg-[#0061dd] text-white duration-300 cursor-pointer"
+                  >
+                    SOLICITAR
+                  </button>
+                </form>
+                <p className="text-sm p-10">
+                  Al enviar estás aceptando los{" "}
+                  <Link className="text-[#0061dd] hover:underline">
+                    Términos y Condiciones de Uso y la Política de Privacidad
+                  </Link>
+                </p>
+              </div>
+            ) : (
+              <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
+                <h2 className="font-semibold text-xl">Solicitar una visita</h2>
+                <div
+                  onClick={toggleHorarios}
+                  style={{ display: "flex", gap: "10px", alignItems: "center" }}
                 >
-                  SOLICITAR VISITA
-                </button>
-              </form>
-              <p className="text-sm p-10">
-                Al enviar estás aceptando los{" "}
-                <Link className="text-[#0061dd] hover:underline">
-                  Términos y Condiciones de Uso y la Política de Privacidad
-                </Link>
-              </p>
-            </div> }
-            {oneSchool?.Eventos?.length > 0 &&             <div style={{width:'100%', display:'flex', justifyContent:'center',alignItems:'center',flexDirection:'column', gap:'10px'}}>
-          <div style={{width:'100%', display:'flex', justifyContent:'flex-start'}}>
-              <h2 className="font-semibold text-xl" >Eventos</h2>
-          </div>
-     
-            <SwiperEventos data={oneSchool}/>
-          </div >}
+                  {Horarios && (
+                    <>
+                      <p>Ver la disponibilidad horaria de este colegio </p>
+                      <HiChevronDown
+                        data-aos-duration="400"
+                        data-aos="flip-down"
+                      />
+                    </>
+                  )}
+                  {Horarios === false && (
+                    <>
+                      <p>Ver la disponibilidad horaria de este colegio </p>
+                      <HiChevronLeft
+                        data-aos-duration="400"
+                        data-aos="flip-left"
+                      />
+                    </>
+                  )}
+                </div>
+                {Horarios && (
+                  <>
+                    <div className={style.Layout}>
+                      {horarios &&
+                        horarios?.map((ele) => {
+                          console.log(ele.horarios[0].hasta);
+                          return (
+                            <>
+                              <div
+                                // si vacantes estan agotadas deberia aparecer todo en gris
+                                data-aos="zoom-in-up"
+                                className={style.cardTable}
+                              >
+                                <Card
+                                  sx={{
+                                    display: "flex",
+                                    gap: "10px",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    padding: "10px",
+                                  }}
+                                >
+                                  {/* <div className={style.cardTable}> */}
+                                  {/* <div className={style.itemTable}> */}
+                                  <p
+                                    style={{
+                                      fontSize: "14px",
+                                      color: "#515151",
+                                      fontWeight: "700",
+                                    }}
+                                  >
+                                    {ele.dia}
+                                  </p>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      gap: "10px",
+                                      fontSize: "12px",
+                                      flexDirection: "column",
+                                    }}
+                                  >
+                                    <p>{es_AM_PM(ele.horarios[0].desde)} </p>
+
+                                    <p>
+                                      {ele.horarios[0].hasta +
+                                        " " +
+                                        es_AM_PM(ele.horarios[0].hasta)}{" "}
+                                    </p>
+                                  </div>
+                                  {/* </div> */}
+                                  {/* </div> */}
+                                </Card>
+                              </div>
+                            </>
+                          );
+                        })}
+                    </div>
+                  </>
+                )}
+
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <div className="flex w-full justify-between flex-col gap-4 lg:flex-row">
+                    <MobileDatePicker
+                      label="Elejir fecha"
+                      inputFormat="DD/MM/YYYY"
+                      value={date}
+                      shouldDisableDate={disableWeekends}
+                      onChange={handleChangeDate}
+                      renderInput={(params) => <TextField {...params} />}
+                      disablePast
+                    />
+                    <div className="flex flex-col gap-2">
+                      <MobileTimePicker
+                        label="Elejir hora"
+                        value={time}
+                        onChange={handleChangeTime}
+                        renderInput={(params) => <TextField {...params} />}
+                        ampm={false}
+                        minutesStep={15}
+                        minTime={dayjs("2014-08-18T08:00:00")}
+                        maxTime={dayjs("2014-08-18T17:00:00")}
+                      />
+                      <small className="text-black/50">
+                        08:00 - 17:00 / Intervalo 15 min
+                      </small>
+                    </div>
+                  </div>
+                </LocalizationProvider>
+                <form
+                  onSubmit={handleSubmit}
+                  className="w-full flex flex-col gap-7"
+                >
+                  <div className="flex gap-5">
+                    <input
+                      type="button"
+                      value={"Presencial"}
+                      className={`border w-[120px] ${
+                        modo ? "bg-[#0061dd] text-white" : "cursor-pointer"
+                      } py-2 rounded-md shadow-lg duration-300`}
+                      onClick={handleModo}
+                      disabled={modo}
+                    />
+                    <input
+                      type="button"
+                      value={"Virtual"}
+                      className={`border w-[120px] py-2 rounded-md shadow-lg ${
+                        !modo ? "bg-[#0061dd] text-white" : "cursor-pointer"
+                      } duration-300`}
+                      onClick={handleModo}
+                      disabled={!modo}
+                    />
+                  </div>
+                  <div className="flex w-full gap-5 justify-between">
+                    <input
+                      name="nombre"
+                      type="text"
+                      value={isAuth === true ? user.nombre_responsable : ''}
+                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                      placeholder="Nombre"
+                      onChange={(e) => {
+                        setCita({ ...cita, nombre: e.target.value });
+                      }}
+                      required
+                    />
+                    <input
+                      name="cel"
+                      type="number"
+                      pattern="[0-9]{8,15}"
+                      value={isAuth === true ? user.telefono : ""}
+                      required
+                      title="Solo se permiten numeros y entre 8 y 10 caracteres"
+                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                      placeholder="Celular"
+                      onChange={(e) => {
+                        setCita({ ...cita, celular: Number(e.target.value) });
+                      }}
+                    />
+                  </div>
+                  <input
+                    name="email"
+                    type="email"
+                    value={isAuth === true ? user.email:'' }
+                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    placeholder="Correo"
+                    onChange={(e) => {
+                      setCita({ ...cita, correo: e.target.value });
+                    }}
+                    required
+                  />
+                  <button
+                    type="submit"
+                    value="Virtual"
+                    className="border mt-5 mx-auto px-10 py-2 rounded-md shadow-lg bg-[#0061dd] text-white duration-300 cursor-pointer"
+                  >
+                    SOLICITAR VISITA
+                  </button>
+                </form>
+                <p className="text-sm p-10">
+                  Al enviar estás aceptando los{" "}
+                  <Link className="text-[#0061dd] hover:underline">
+                    Términos y Condiciones de Uso y la Política de Privacidad
+                  </Link>
+                </p>
+              </div>
+            )}
+            {oneSchool?.Eventos?.length > 0 && (
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  gap: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <h2 className="font-semibold text-xl">Eventos</h2>
+                </div>
+
+                <SwiperEventos data={oneSchool} />
+              </div>
+            )}
 
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Galeria</h2>
@@ -1289,7 +1484,7 @@ function SchoolDetail() {
                 </video>
               </div>
             )}
-           
+
             <form
               className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full"
               onSubmit={comentarioSubmit}
@@ -1437,11 +1632,10 @@ function SchoolDetail() {
                 Enviar reseña
               </button>
             </form>
-           
           </section>
-          
         </main>
       </div>
+      {openLogin && <ModalLogin handlerClose={setOpenLogin} />}
     </div>
   );
 }
