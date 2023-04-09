@@ -145,7 +145,7 @@ const [openMFiltros, setOpenMFiltros] = useState(false)
         >
           <SearchIcon />
         </Button>
-        <div className={style.btnFiltroResponsive}>
+       {vacante === false && <div className={style.btnFiltroResponsive}>
           <Button
             sx={{
               fontWeight: "600",
@@ -158,7 +158,7 @@ const [openMFiltros, setOpenMFiltros] = useState(false)
           >
             <TuneIcon />
           </Button>
-        </div>
+        </div>}
 
    
       </div>
