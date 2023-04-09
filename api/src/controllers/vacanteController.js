@@ -75,10 +75,37 @@ const createVacante = async (req, res, next) => {
     const año = data.año;
     delete data.año;
     delete data.idColegio;
-    console.log(data);
-
 
     for (const [gradoId, valores] of Object.entries(data)) {
+      const grado = await Grado.findByPk(gradoId);
+      if (
+        !valores.alumnos &&
+        !valores.capacidad &&
+        !valores.cuota_ingreso &&
+        !valores.cuota_pension &&
+        !valores.matricula
+      ) {
+        await Vacante.destroy({
+          where: {
+            ColegioId: colegio.id,
+            GradoId: gradoId,
+            año: año,
+          },
+        });
+        continue;
+      }
+      if (
+        !valores.alumnos ||
+        !valores.capacidad ||
+        !valores.cuota_ingreso ||
+        !valores.cuota_pension ||
+        !valores.matricula
+      ) {
+        return next({
+          statusCode: 400,
+          message: `Faltan datos para el grado ${grado.dataValues.nombre_grado}`,
+        });
+      }
       const vacante = await Vacante.findOne({
         where: {
           ColegioId: colegio.id,
@@ -166,5 +193,5 @@ module.exports = {
   createVacante,
   getVacanteById,
   deleteVacanteById,
-  getVacantesColegio
+  getVacantesColegio,
 };
