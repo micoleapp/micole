@@ -261,7 +261,7 @@ function ListSchool() {
       });
       return;
     } else {
-      navigate(`/schooldetail/${id}?grado=${gradoName}&ingreso=${ingresoName}&lista=${lista}`);
+      window.open(`/#/schooldetail/${id}?grado=${gradoName}&ingreso=${ingresoName}&lista=${lista}`,"_blank");
     }
   };
 
@@ -746,6 +746,7 @@ function ListSchool() {
           </div>
           <div className="bg-white w-fit flex px-2 py-1 rounded-md border">
             <form
+            className="flex"
             onSubmit={(e)=>handleSearch(e)}
             >
             <input value={searchTerm} onChange={(e)=>setSerchTerm(e.target.value)} type="text" name="search" id="search" className="outline-none w-[400px]" onKeyDown={(e) => {if (e.key === "Enter") {handleSearch(e);}}}/>
@@ -1000,7 +1001,7 @@ function ListSchool() {
                                 0
                                 ?                             <button
                                 onClick={() => goToDetails(school.id,false)}
-                                className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md disabled:bg-slate-500/20 disabled:text-white disabled:line-through p-2 text-[#0061dd] w-max text-center font-semibold"
+                                className="bg-[#edf4fe] hover:scale-110 w-full duration-200 cursor-pointer rounded-sm shadow-md disabled:bg-slate-500/20 disabled:text-white disabled:line-through p-2 text-[#0061dd] text-center font-semibold"
                               >
                                 VER DETALLE
                               </button>
@@ -1015,8 +1016,8 @@ function ListSchool() {
                                       vac.año === ingresoName
                                   )[0]?.alumnos_matriculados ==
                                   0
-                                  ?   <button onClick={() => goToDetails(school.id,true)} className="bg-[#dcffe2] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#3cff7d] font-semibold">
-                                Lista de espera
+                                  ?   <button onClick={() => goToDetails(school.id,true)} className="bg-[#dcffe2] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#3cff7d] font-semibold w-full">
+                                VER DETALLE
                               </button> :   null}
 
 

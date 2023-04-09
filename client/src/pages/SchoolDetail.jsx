@@ -384,7 +384,7 @@ function SchoolDetail() {
       Swal.fire({
         icon: "info",
         title: "Inicia Sesion",
-        text: "Debes iniciar sesion o registrarte para sacar una cita",
+        text: "Debes iniciar sesion o registrarte para inscribirte a una lista",
       })
       return
     } else {
@@ -430,14 +430,14 @@ function SchoolDetail() {
         data-aos="fade-up"
         data-aos-duration="1000"
       >
-        <div className="header drop-shadow-md">
+        <div className="header">
           <h1 className="text-2xl  font-semibold">
-            {oneSchool.nombre_escuela}
+            {oneSchool.nombre_colegio}
           </h1>
           <div>
             <div className="flex justify-between flex-col gap-5 lg:flex-row mt-2 lg:mt-0">
               <div className="flex gap-5 lg:items-center justify-center flex-col lg:flex-row text-black/70">
-                <h2 className="text-center">{oneSchool.direccion} </h2>
+                <h2 className="text-center lg:text-start">{oneSchool.direccion} </h2>
                 <div className="flex gap-5 lg:flex-row flex-col justify-center w-full items-center">
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
                     {currentVacante &&
@@ -495,7 +495,7 @@ function SchoolDetail() {
                   <img
                     src={cat.logo_categoria}
                     alt="logo_categoria"
-                    className="w-4 object-cover invert-[40%] drop-shadow-md"
+                    className="w-4 object-cover invert-[40%]"
                   />
                   <span className="text-sm text-gray-400">
                     {cat.nombre_categoria}{" "}
@@ -1159,7 +1159,7 @@ function SchoolDetail() {
             {listaParams === "true" ? (
               <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
                 <h2 className="font-semibold text-xl">
-                  Solicitar lista de espera
+                  Lista de espera
                 </h2>
                 <form
                   onSubmit={handleSubmitLista}
@@ -1169,7 +1169,7 @@ function SchoolDetail() {
                     {isAuth ?                     <input
                       name="nombreLista"
                       type="text"
-                      value={user.nombre_responsable}
+                      value={user?.nombre_responsable}
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       required
@@ -1183,7 +1183,7 @@ function SchoolDetail() {
                                         {isAuth ?                     <input
                       name="apellidoLista"
                       type="text"
-                      value={user.apellidos_responsable}
+                      value={user?.apellidos_responsable}
                       required
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     /> :                     <input
@@ -1199,7 +1199,7 @@ function SchoolDetail() {
                   {isAuth ?                   <input
                     name="emailLista"
                     type="email"
-                    value={user.email}
+                    value={user?.email}
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Correo"
                     required
@@ -1214,7 +1214,7 @@ function SchoolDetail() {
                       name="celLista"
                       type="number"
                       pattern="[0-9]{8,15}"
-                      value={user.telefono}
+                      value={user?.telefono}
                       required
                       title="Solo se permiten numeros y entre 8 y 10 caracteres"
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
@@ -1234,7 +1234,7 @@ function SchoolDetail() {
                     type="submit"
                     className="border mt-5 mx-auto px-10 py-2 rounded-md shadow-lg bg-[#0061dd] text-white duration-300 cursor-pointer"
                   >
-                    SOLICITAR
+                    INSCRIBIRME
                   </button>
                 </form>
                 <p className="text-sm p-10">
