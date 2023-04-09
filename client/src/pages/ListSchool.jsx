@@ -746,6 +746,7 @@ function ListSchool() {
           </div>
           <div className="bg-white w-fit flex px-2 py-1 rounded-md border">
             <form
+            className="flex"
             onSubmit={(e)=>handleSearch(e)}
             >
             <input value={searchTerm} onChange={(e)=>setSerchTerm(e.target.value)} type="text" name="search" id="search" className="outline-none w-[400px]" onKeyDown={(e) => {if (e.key === "Enter") {handleSearch(e);}}}/>
