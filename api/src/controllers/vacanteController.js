@@ -77,6 +77,7 @@ const createVacante = async (req, res, next) => {
     delete data.idColegio;
     console.log(data);
 
+
     for (const [gradoId, valores] of Object.entries(data)) {
       const vacante = await Vacante.findOne({
         where: {
@@ -102,7 +103,7 @@ const createVacante = async (req, res, next) => {
           cuota_pension: valores.cuota_pension,
           cuota_ingreso: valores.cuota_ingreso,
           capacidad: valores.capacidad,
-          year: año,
+          año: año,
           ColegioId: colegio.id,
           GradoId: gradoId,
         });
