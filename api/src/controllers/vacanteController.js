@@ -55,7 +55,6 @@ const getVacantesColegio = async (req, res, next) => {
 const createVacante = async (req, res, next) => {
   const { data } = req.body;
   const tokenUser = req.user;
-  // data -> idColegio
   try {
     let colegio;
     if (tokenUser.rol === 'Admin') {
@@ -75,6 +74,8 @@ const createVacante = async (req, res, next) => {
 
     const año = data.año;
     delete data.año;
+    delete data.idColegio;
+    console.log(data);
 
     for (const [gradoId, valores] of Object.entries(data)) {
       const vacante = await Vacante.findOne({
@@ -96,14 +97,14 @@ const createVacante = async (req, res, next) => {
         });
       } else {
         await Vacante.create({
-          alumnos_matriculados: values.students,
-          matricula: values.enrollmentFee,
-          cuota_pension: values.tuitionFee,
-          cuota_ingreso: values.admissionFee,
-          capacidad: values.capacity,
-          year: year,
+          alumnos_matriculados: valores.alumnos,
+          matricula: valores.matricula,
+          cuota_pension: valores.cuota_pension,
+          cuota_ingreso: valores.cuota_ingreso,
+          capacidad: valores.capacidad,
+          year: año,
           ColegioId: colegio.id,
-          GradoId: gradeId,
+          GradoId: gradoId,
         });
       }
     }
