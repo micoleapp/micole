@@ -10,6 +10,7 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 flex-direction: row;
+width: 90%;
 padding: 10px;
 box-shadow:0px 4px 40px rgba(31, 95, 175, 0.15) ;
 }
@@ -32,7 +33,7 @@ box-shadow:0px 4px 40px rgba(31, 95, 175, 0.15) ;
     flex-direction: column;
     gap: 10px;
     align-items: center;
-    width: 100%;
+    width: 70%;
     height: 100%;
 }
 .divBtn{
@@ -44,12 +45,15 @@ box-shadow:0px 4px 40px rgba(31, 95, 175, 0.15) ;
     height: 100%;
 }
 .ItemTitle  {
+    font-size: 1.8vh;
     font-family: Poppins;
     font-weight: 600;
     color:#0D263B ;
 }
 
-
+.divItem p {
+    font-size: 1.4vh;
+}
 
 @media (max-width: 800px) {
     .divCard{

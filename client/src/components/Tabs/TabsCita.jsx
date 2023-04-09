@@ -67,7 +67,7 @@ export default function NavTabs({ task, handleCloseModal }) {
               <AccessTimeIcon style={{ color: "grey" }} />
               <p>
                 {" "}
-                Hora {task.time}
+                Hora 
                 {""} {es_AM_PM(task.time)}
               </p>
             </div>

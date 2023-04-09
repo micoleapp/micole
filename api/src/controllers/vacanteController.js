@@ -55,7 +55,6 @@ const getVacantesColegio = async (req, res, next) => {
 const createVacante = async (req, res, next) => {
   const { data } = req.body;
   const tokenUser = req.user;
-  // data -> idColegio
   try {
     let colegio;
     if (tokenUser.rol === 'Admin') {
@@ -75,8 +74,38 @@ const createVacante = async (req, res, next) => {
 
     const año = data.año;
     delete data.año;
+    delete data.idColegio;
 
     for (const [gradoId, valores] of Object.entries(data)) {
+      const grado = await Grado.findByPk(gradoId);
+      if (
+        !valores.alumnos &&
+        !valores.capacidad &&
+        !valores.cuota_ingreso &&
+        !valores.cuota_pension &&
+        !valores.matricula
+      ) {
+        await Vacante.destroy({
+          where: {
+            ColegioId: colegio.id,
+            GradoId: gradoId,
+            año: año,
+          },
+        });
+        continue;
+      }
+      if (
+        !valores.alumnos ||
+        !valores.capacidad ||
+        !valores.cuota_ingreso ||
+        !valores.cuota_pension ||
+        !valores.matricula
+      ) {
+        return next({
+          statusCode: 400,
+          message: `Faltan datos para el grado ${grado.dataValues.nombre_grado}`,
+        });
+      }
       const vacante = await Vacante.findOne({
         where: {
           ColegioId: colegio.id,
@@ -96,14 +125,14 @@ const createVacante = async (req, res, next) => {
         });
       } else {
         await Vacante.create({
-          alumnos_matriculados: values.students,
-          matricula: values.enrollmentFee,
-          cuota_pension: values.tuitionFee,
-          cuota_ingreso: values.admissionFee,
-          capacidad: values.capacity,
-          year: year,
+          alumnos_matriculados: valores.alumnos,
+          matricula: valores.matricula,
+          cuota_pension: valores.cuota_pension,
+          cuota_ingreso: valores.cuota_ingreso,
+          capacidad: valores.capacidad,
+          año: año,
           ColegioId: colegio.id,
-          GradoId: gradeId,
+          GradoId: gradoId,
         });
       }
     }
@@ -164,5 +193,5 @@ module.exports = {
   createVacante,
   getVacanteById,
   deleteVacanteById,
-  getVacantesColegio
+  getVacantesColegio,
 };

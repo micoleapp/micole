@@ -1,20 +1,27 @@
 import axios from "axios";
 import * as React from "react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import { MdDeleteForever } from "react-icons/md";
+import { setVacantesRedux } from "../redux/AuthActions";
 
 export default function GridVacantes({ año, setVacantesOff }) {
   const { vacantesGrados } = useSelector((state) => state.schools);
   const { token, oneSchool, vacantes } = useSelector((state) => state.auth);
-
+  const dispatch = useDispatch();
   const [datos, setDatos] = React.useState({ año });
-
+  const [defaultVacantes,setDefaultVacantes] = React.useState([])
   const handleChange = (e) => {
     setDatos({
       ...datos,
       [e.target.id]: { ...datos[e.target.id], [e.target.name]: e.target.value },
     });
   };
+
+  React.useEffect(() => {
+    setDefaultVacantes(vacantes)
+  }, [vacantes])
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,7 +35,9 @@ export default function GridVacantes({ año, setVacantesOff }) {
         )
         .then((res) => {
           Swal.fire("Success", "Formulario enviado correctamente", "success");
-        })
+          dispatch(setVacantesRedux(oneSchool.id))
+        }
+        )
         .catch((err) => {
           Swal.fire({
             icon: "error",
@@ -41,7 +50,16 @@ export default function GridVacantes({ año, setVacantesOff }) {
     }
   };
 
-  console.log(datos);
+/*
+{ 2: { capacidad: '', alumnos: '', cuota_ingreso: '', matricula: '', cuota_pension: '' }, 'año': 2023 }
+*/
+
+  const handleDelete = (vac) => {
+    setDefaultVacantes(defaultVacantes.filter(el => el.id !== vac.id))
+    setDatos({...datos,
+      [vac.GradoId]: {capacidad: "", alumnos: "", cuota_ingreso: "", matricula: "", cuota_pension: ""}
+    })
+  }
 
   return (
     <>
@@ -70,6 +88,9 @@ export default function GridVacantes({ año, setVacantesOff }) {
               <th scope="col" className="text-center">
                 Pension
               </th>
+              <th scope="col" className="text-center">
+                Borrar
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -88,7 +109,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     name="capacidad"
                     onChange={handleChange}
                     className="border-b-2 text-center w-[100px] border-l border-r p-2 outline-none rounded-md shadow-white/40 shadow-sm"
-                    defaultValue={vacantes?.filter(
+                    defaultValue={defaultVacantes?.filter(
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.capacidad)}
                     placeholder="Ingrese nro"
@@ -99,7 +120,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                   <input
                     id={vac.GradoId}
                     name="alumnos"
-                    defaultValue={vacantes?.filter(
+                    defaultValue={defaultVacantes?.filter(
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.alumnos_matriculados)}
                     onChange={handleChange}
@@ -116,18 +137,18 @@ export default function GridVacantes({ año, setVacantesOff }) {
                       datos[vac.GradoId]
                         ? datos[vac.GradoId]["capacidad"] -
                           datos[vac.GradoId]["alumnos"]
-                        : vacantes?.filter(
+                        : defaultVacantes?.filter(
                             (el) => el.GradoId === vac.GradoId && el.año === año
                           ).map((el) => el.capacidad) -
-                          vacantes?.filter(
+                          defaultVacantes?.filter(
                             (el) => el.GradoId === vac.GradoId && el.año === año
                           ).map((el) => el.alumnos_matriculados)
                     }
                     defaultValue={
-                      vacantes?.filter(
+                      defaultVacantes?.filter(
                         (el) => el.GradoId === vac.GradoId && el.año === año
                       ).map((el) => el.capacidad) -
-                      vacantes?.filter(
+                      defaultVacantes?.filter(
                         (el) => el.GradoId === vac.GradoId && el.año === año
                       ).map((el) => el.alumnos_matriculados)
                     }
@@ -142,7 +163,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                   <input
                     id={vac.GradoId}
                     name="cuota_ingreso"
-                    defaultValue={vacantes?.filter(
+                    defaultValue={defaultVacantes?.filter(
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.cuota_ingreso)}
                     onChange={handleChange}
@@ -157,7 +178,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                   </span>
                   <input
                     id={vac.GradoId}
-                    defaultValue={vacantes?.filter(
+                    defaultValue={defaultVacantes?.filter(
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.matricula)}
                     name="matricula"
@@ -173,7 +194,7 @@ export default function GridVacantes({ año, setVacantesOff }) {
                   </span>
                   <input
                     id={vac.GradoId}
-                    defaultValue={vacantes?.filter(
+                    defaultValue={defaultVacantes?.filter(
                       (el) => el.GradoId === vac.GradoId && el.año === año
                     ).map((el) => el.cuota_pension)}
                     name="cuota_pension"
@@ -182,6 +203,17 @@ export default function GridVacantes({ año, setVacantesOff }) {
                     placeholder="..."
                     type="number"
                   />{" "}
+                </td>
+                <td className="relative px-5">
+                  {defaultVacantes?.filter(
+                    (el) => el.GradoId === vac.GradoId && el.año === año
+                  ).length > 0 ? (
+                    <MdDeleteForever
+                    onClick={() => handleDelete(defaultVacantes.find(el=>el.GradoId===vac.GradoId && el.año === año ))}
+                    className="text-[#0061dd] text-4xl cursor-pointer"
+                  />
+                    ) : null }
+
                 </td>
               </tr>
             ))}
