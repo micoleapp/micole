@@ -68,12 +68,25 @@ export default function TextEvento({
           )}
         </div>
       ) : (
-        <div style={{position:'absolute'}}>
-          <Button onClick={handleOpen} variant="contained">
+        <div className={style.cardPubli }>
+            <Button onClick={handleOpen}   variant="contained">
             Inscribirme
           </Button>
         </div>
-      )}
+        
+      
+      )
+      }
+          {open && (
+            <InscripcionModal
+              open={open}
+              idEvento={idEvento}
+              fechaEvento={fecha}
+              horaEvento={hora}
+              nombreEvento={nombreEvento}
+              setOpen={setOpen}
+            />
+          )}
     </>
   );
 }

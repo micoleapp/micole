@@ -43,10 +43,27 @@ export default function SwiperEventos({ data }) {
             <>
               <SwiperSlide className={style.swiper_slide}>
                 {publiColegio.length > 0 ? (
-                  <img src={event.imagen_evento} />
+                  <>
+                    <img src={event.imagen_evento} />
+                  <div className={style.content}>
+                  <TextEvento
+                    plantilla ={publiColegio.length > 0 ? false : true}
+                    nombreEvento={event.nombre_evento}
+                    description={event.descripcion}
+                    tipoEvento={event.tipo_evento}
+                    fechaEvento={event.fecha_evento}
+                    horaEvento={event.hora_evento}
+                    capacidadEvento={event.capacidad}
+                    logo={logoColegio}
+                    idEvento={event.id}
+                  />
+                </div>
+                  </>
+                
                 ) : (
                   <>
                     <img
+
                       style={{ width: "50vh", height: "60vh" }}
                       src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"
                       alt=""
