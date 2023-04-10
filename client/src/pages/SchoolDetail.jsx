@@ -1261,7 +1261,7 @@ function SchoolDetail() {
                               <>
                                 <div
                                   // si vacantes estan agotadas deberia aparecer todo en gris
-                                  data-aos="zoom-in-up"
+                     
                                   className={style.cardTable}
                                 >
                                   <Card
@@ -1311,10 +1311,10 @@ function SchoolDetail() {
                               <>
                                 <div
                                   // si vacantes estan agotadas deberia aparecer todo en gris
-                                  data-aos="zoom-in-up"
+                         
                                   className={style.cardTable}
                                 >
-                                  <Card
+                                  {/* <Card
                                     sx={{
                                       display: "flex",
                                       gap: "10px",
@@ -1342,7 +1342,7 @@ function SchoolDetail() {
                                     >
                                       No disponible
                                     </div>
-                                  </Card>
+                                  </Card> */}
                                 </div>
                               </>
                             );
