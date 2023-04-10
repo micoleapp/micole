@@ -1,8 +1,57 @@
 import { Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import style from "./List.module.css";
-
+import NorthIcon from "@mui/icons-material/North";
+import SouthIcon from "@mui/icons-material/South";
+import Swal from "sweetalert2";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Pagination,
+  Select,
+} from "@mui/material";
+import sliceIntoChunks from "../../components/CardsCitas/Paginacion/utils/SliceCitas";
+import axios from "axios";
 export default function ListadeEspera() {
+  const [orderSelected, setOrderSelected] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [dataFiltrada, setDataFiltrada] = useState([]);
+  const handleChangeState = (event) => {
+    let state = event.target.value;
+    setOrderSelected(state);
+  
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem("token");
+      const ColegioId = localStorage.getItem('ColegioId')
+      // ?order=${state}
+      axios
+        .get(`/listaDeEspera/colegio/${ColegioId}`)
+        .then((res) => {
+          setDataFiltrada(res.data);
+          // const eventosPaginados = sliceIntoChunks(res.data, 10);
+          // setDataFiltrada(eventosPaginados);
+          // setIsLoading(false);
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: err.response.data.error,
+          });
+        });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: err.message,
+      });
+    }
+  };
+
+  console.log(dataFiltrada)
   return (
     <>
       <div>
@@ -10,6 +59,35 @@ export default function ListadeEspera() {
           Lista de Espera
         </Typography>
       </div>
+     
+      <FormControl
+            variant="standard"
+            sx={{ m: 1, minWidth: 100 }}
+            size="small"
+          >
+            <InputLabel id="demo-select-small">Fecha</InputLabel>
+
+            <Select
+              sx={{ border: "none", outline: "none"  , fontSize:'2vh'}}
+              labelId="demo-select-small"
+              id="demo-select-small"
+              // value={orderSelected}
+              label={"Fecha"}
+              onChange={handleChangeState}
+
+            >
+              <MenuItem value="ASC">
+                {" "}
+                Fecha <NorthIcon sx={{ width: "2vh" }} />{" "}
+              </MenuItem>
+              <MenuItem value="DESC">
+                {" "}
+                Fecha <SouthIcon sx={{ width: "2vh" }} />{" "}
+              </MenuItem>
+            </Select>
+          </FormControl>
+     
+     
       <div className={style.container}>
         <div
           style={{
