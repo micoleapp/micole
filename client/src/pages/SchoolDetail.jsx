@@ -75,55 +75,13 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
   );
 }
 
-// const ArrHorariosMockQuevaALBack = [
-//   { Lunes: ["08:30", "13:00", true] },
-//   { Martes: ["10:30", "13:00", true] },
-//   { Miercoles: ["09:30", "13:00", true] },
-//   { Jueves: ["07:30", "13:00", false] },
-//   { Viernes: ["11:30", "13:00", false] },
-// ];
-// const ArrHorariosMockFormateado = [
-//   {
-//     dia: "Lunes",
-//     horarios: { desde: "08:30", hasta: "13:00" },
-//     disponibilidad: false,
-//     vacantesDispo: 2,
-//     vacantes: "20",
-//   },
-//   {
-//     dia: "Martes",
-//     horarios: { desde: "10:30", hasta: "13:00" },
-//     disponibilidad: true,
-//     vacantesDispo: 3,
-//     vacantes: "5",
-//   },
-//   {
-//     dia: "Miercoles",
-//     horarios: { desde: "09:30", hasta: "13:00" },
-//     disponibilidad: true,
-//     vacantesDispo: 1,
-//     vacantes: "3",
-//   },
-//   {
-//     dia: "Jueves",
-//     horarios: { desde: "11:30", hasta: "13:00" },
-//     disponibilidad: false,
-//     vacantesDispo: 0,
-//     vacantes: "6",
-//   },
-//   {
-//     dia: "Viernes",
-//     horarios: { desde: "08:30", hasta: "13:00" },
-//     disponibilidad: false,
-//     vacantesDispo: 0,
-//     vacantes: "10",
-//   },
-// ];
 function SchoolDetail() {
   const { id } = useParams();
-  const { oneSchool, grados, horarios } = useSelector((state) => state.schools);
-  const { user, isAuth ,vacantes} = useSelector((state) => state.auth);
-  console.log(user);
+  const { oneSchool, grados, horariosColegio } = useSelector(
+    (state) => state.schools
+  );
+  const { user, isAuth, vacantes } = useSelector((state) => state.auth);
+  console.log(horariosColegio);
 
   const location = useLocation();
   console.log();
@@ -150,20 +108,22 @@ function SchoolDetail() {
     }
   };
 
-  const [currentVacante,setCurrentVacante] = useState([])
+  const [currentVacante, setCurrentVacante] = useState([]);
 
-  useEffect(()=>{
-    dispatch(setVacantesRedux(id))
-  },[])
   useEffect(() => {
-    if(vacantes.length > 0){
-      setCurrentVacante(vacantes?.filter(
-        (vac) =>
-          vac.GradoId === Number(gradoParams) && vac.año === Number(ingresoParams)
-      ))
+    dispatch(setVacantesRedux(id));
+  }, []);
+  useEffect(() => {
+    if (vacantes.length > 0) {
+      setCurrentVacante(
+        vacantes?.filter(
+          (vac) =>
+            vac.GradoId === Number(gradoParams) &&
+            vac.año === Number(ingresoParams)
+        )
+      );
     }
-  }, [vacantes])
-  
+  }, [vacantes]);
 
   console.log(currentVacante);
 
@@ -171,7 +131,7 @@ function SchoolDetail() {
 
   const dispatch = useDispatch();
 
-///1
+  ///1
 
   useEffect(() => {
     dispatch(getAllGrados());
@@ -223,9 +183,9 @@ function SchoolDetail() {
     ].join(":"),
 
     modo: modo ? "Presencial" : "Virtual",
-    nombre:isAuth? user.nombre_responsable  :'',
-    celular: isAuth? user.telefono:"",
-    correo: isAuth? user.email :'',
+    nombre: isAuth ? user.nombre_responsable : "",
+    celular: isAuth ? user.telefono : "",
+    correo: isAuth ? user.email : "",
     añoIngreso: ingresoParams,
     grado: nombre_grado,
   });
@@ -245,9 +205,8 @@ function SchoolDetail() {
       return;
     }
     if (isAuth) {
+      console.log(cita);
 
-      console.log(cita)
-     
       dispatch(postCita(cita));
     } else {
       Swal.fire({
@@ -289,7 +248,7 @@ function SchoolDetail() {
     email: "",
     comentario: "",
   });
-//2
+  //2
   useEffect(() => {
     setComentario({
       ...comentario,
@@ -377,45 +336,45 @@ function SchoolDetail() {
     }
   }, [oneSchool]);
 
-  
   const handleSubmitLista = (e) => {
-    e.preventDefault()
-    if(!isAuth){
+    e.preventDefault();
+    if (!isAuth) {
       Swal.fire({
         icon: "info",
         title: "Inicia Sesion",
         text: "Debes iniciar sesion o registrarte para inscribirte a una lista",
-      })
-      return
+      });
+      return;
     } else {
       try {
         let data = {
           año: Number(ingresoParams),
           gradoId: Number(gradoParams),
           usuarioId: user?.id,
-          colegioId: oneSchool?.id
-        }
-        axios.post('/lista',data).
-        then(res=>{
-          Swal.fire({
-            icon: "success",
-            title: "Lista creada exitosamente!",
-            text: "Lista Agendada",
+          colegioId: oneSchool?.id,
+        };
+        axios
+          .post("/lista", data)
+          .then((res) => {
+            Swal.fire({
+              icon: "success",
+              title: "Lista creada exitosamente!",
+              text: "Lista Agendada",
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            Swal.fire({
+              icon: "error",
+              title: "Algo salio mal",
+              text: err.response.data.message,
+            });
           });
-        })
-        .catch(err=>{
-          console.log(err)
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
-            text: err.response.data.message,
-          });
-        })
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
-  }
+  };
 
   return (
     <div className="bg-[#f6f7f8]">
@@ -437,7 +396,9 @@ function SchoolDetail() {
           <div>
             <div className="flex justify-between flex-col gap-5 lg:flex-row mt-2 lg:mt-0">
               <div className="flex gap-5 lg:items-center justify-center flex-col lg:flex-row text-black/70">
-                <h2 className="text-center lg:text-start">{oneSchool.direccion} </h2>
+                <h2 className="text-center lg:text-start">
+                  {oneSchool.direccion}{" "}
+                </h2>
                 <div className="flex gap-5 lg:flex-row flex-col justify-center w-full items-center">
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
                     {currentVacante &&
@@ -534,13 +495,16 @@ function SchoolDetail() {
             {currentVacante && (
               <div className="flex flex-col w-full items-center lg:items-end">
                 <small>
-                  Cuota de ingreso: S/ {currentVacante.length > 0 && currentVacante[0].cuota_ingreso}{" "}
+                  Cuota de ingreso: S/{" "}
+                  {currentVacante.length > 0 && currentVacante[0].cuota_ingreso}{" "}
                 </small>
                 <small>
-                  Cuota de pensión: S/ {currentVacante.length > 0 && currentVacante[0].cuota_pension}
+                  Cuota de pensión: S/{" "}
+                  {currentVacante.length > 0 && currentVacante[0].cuota_pension}
                 </small>
                 <small>
-                  Cuota de matricula: S/ {currentVacante.length > 0 && currentVacante[0].matricula}
+                  Cuota de matricula: S/{" "}
+                  {currentVacante.length > 0 && currentVacante[0].matricula}
                 </small>
               </div>
             )}
@@ -1158,76 +1122,89 @@ function SchoolDetail() {
           <section className="right mt-5  flex flex-col gap-8 w-full">
             {listaParams === "true" ? (
               <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
-                <h2 className="font-semibold text-xl">
-                  Lista de espera
-                </h2>
+                <h2 className="font-semibold text-xl">Lista de espera</h2>
                 <form
                   onSubmit={handleSubmitLista}
                   className="w-full flex flex-col gap-7"
                 >
                   <div className="flex w-full gap-5 justify-between">
-                    {isAuth ?                     <input
-                      name="nombreLista"
-                      type="text"
-                      value={user?.nombre_responsable}
-                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                      placeholder="Nombre"
-                      required
-                    /> :                     <input
-                      name="nombreLista"
-                      type="text"
-                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                      placeholder="Nombre"
-                      required
-                    />}
-                                        {isAuth ?                     <input
-                      name="apellidoLista"
-                      type="text"
-                      value={user?.apellidos_responsable}
-                      required
-                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                    /> :                     <input
-                    name="apellidoLista"
-                    type="text"
-                    required
-                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                    placeholder="Apellidos"
-                  />}
-
+                    {isAuth ? (
+                      <input
+                        name="nombreLista"
+                        type="text"
+                        value={user?.nombre_responsable}
+                        className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                        placeholder="Nombre"
+                        required
+                      />
+                    ) : (
+                      <input
+                        name="nombreLista"
+                        type="text"
+                        className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                        placeholder="Nombre"
+                        required
+                      />
+                    )}
+                    {isAuth ? (
+                      <input
+                        name="apellidoLista"
+                        type="text"
+                        value={user?.apellidos_responsable}
+                        required
+                        className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                      />
+                    ) : (
+                      <input
+                        name="apellidoLista"
+                        type="text"
+                        required
+                        className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                        placeholder="Apellidos"
+                      />
+                    )}
                   </div>
                   <div className="flex w-full gap-5 justify-between">
-                  {isAuth ?                   <input
-                    name="emailLista"
-                    type="email"
-                    value={user?.email}
-                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                    placeholder="Correo"
-                    required
-                  /> :                   <input
-                  name="emailLista"
-                  type="email"
-                  className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                  placeholder="Correo"
-                  required
-                /> }
-                                    {isAuth ?                     <input
-                      name="celLista"
-                      type="number"
-                      pattern="[0-9]{8,15}"
-                      value={user?.telefono}
-                      required
-                      title="Solo se permiten numeros y entre 8 y 10 caracteres"
-                      className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                      placeholder="Celular"
-                    /> :                     <input
-                    name="celLista"
-                    type="number"
-                    pattern="[0-9]{8,15}"
-                    required
-                    title="Solo se permiten numeros y entre 8 y 10 caracteres"
-                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                    placeholder="Celular"
-                  />}
+                    {isAuth ? (
+                      <input
+                        name="emailLista"
+                        type="email"
+                        value={user?.email}
+                        className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                        placeholder="Correo"
+                        required
+                      />
+                    ) : (
+                      <input
+                        name="emailLista"
+                        type="email"
+                        className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                        placeholder="Correo"
+                        required
+                      />
+                    )}
+                    {isAuth ? (
+                      <input
+                        name="celLista"
+                        type="number"
+                        pattern="[0-9]{8,15}"
+                        value={user?.telefono}
+                        required
+                        title="Solo se permiten numeros y entre 8 y 10 caracteres"
+                        className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                        placeholder="Celular"
+                      />
+                    ) : (
+                      <input
+                        name="celLista"
+                        type="number"
+                        pattern="[0-9]{8,15}"
+                        required
+                        title="Solo se permiten numeros y entre 8 y 10 caracteres"
+                        className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                        placeholder="Celular"
+                      />
+                    )}
                   </div>
 
                   <button
@@ -1273,58 +1250,103 @@ function SchoolDetail() {
                 {Horarios && (
                   <>
                     <div className={style.Layout}>
-                      {horarios &&
-                        horarios?.map((ele) => {
-                          console.log(ele.horarios[0].hasta);
-                          return (
-                            <>
-                              <div
-                                // si vacantes estan agotadas deberia aparecer todo en gris
-                                data-aos="zoom-in-up"
-                                className={style.cardTable}
-                              >
-                                <Card
-                                  sx={{
-                                    display: "flex",
-                                    gap: "10px",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    padding: "10px",
-                                  }}
+                      {horariosColegio &&
+                        horariosColegio?.map((ele) => {
+                          console.log(ele.horarios[0]);
+                          if (
+                            ele.horarios[0]?.desde != undefined &&
+                            ele.horarios[0]?.hasta != undefined
+                          ) {
+                            return (
+                              <>
+                                <div
+                                  // si vacantes estan agotadas deberia aparecer todo en gris
+                                  data-aos="zoom-in-up"
+                                  className={style.cardTable}
                                 >
-                                  {/* <div className={style.cardTable}> */}
-                                  {/* <div className={style.itemTable}> */}
-                                  <p
-                                    style={{
-                                      fontSize: "14px",
-                                      color: "#515151",
-                                      fontWeight: "700",
-                                    }}
-                                  >
-                                    {ele.dia}
-                                  </p>
-                                  <div
-                                    style={{
+                                  <Card
+                                    sx={{
                                       display: "flex",
                                       gap: "10px",
-                                      fontSize: "12px",
                                       flexDirection: "column",
+                                      alignItems: "center",
+                                      padding: "10px",
                                     }}
                                   >
-                                    <p>{es_AM_PM(ele.horarios[0].desde)} </p>
-
-                                    <p>
-                                      {ele.horarios[0].hasta +
-                                        " " +
-                                        es_AM_PM(ele.horarios[0].hasta)}{" "}
+                                    <p
+                                      style={{
+                                        fontSize: "14px",
+                                        color: "#515151",
+                                        fontWeight: "700",
+                                      }}
+                                    >
+                                      {ele.dia}
                                     </p>
-                                  </div>
-                                  {/* </div> */}
-                                  {/* </div> */}
-                                </Card>
-                              </div>
-                            </>
-                          );
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        gap: "10px",
+                                        fontSize: "12px",
+                                        flexDirection: "column",
+                                      }}
+                                    >
+                                      <p>
+                                        {ele.horarios[0]?.desde +
+                                          " " +
+                                          es_AM_PM(ele.horarios[0]?.desde)}{" "}
+                                      </p>
+
+                                      <p>
+                                        {ele.horarios[0]?.hasta +
+                                          " " +
+                                          es_AM_PM(ele.horarios[0]?.hasta)}{" "}
+                                      </p>
+                                    </div>
+                                  </Card>
+                                </div>
+                              </>
+                            );
+                          } else {
+                            return (
+                              <>
+                                <div
+                                  // si vacantes estan agotadas deberia aparecer todo en gris
+                                  data-aos="zoom-in-up"
+                                  className={style.cardTable}
+                                >
+                                  <Card
+                                    sx={{
+                                      display: "flex",
+                                      gap: "10px",
+                                      flexDirection: "column",
+                                      alignItems: "center",
+                                      padding: "10px",
+                                    }}
+                                  >
+                                    <p
+                                      style={{
+                                        fontSize: "14px",
+                                        color: "#515151",
+                                        fontWeight: "700",
+                                      }}
+                                    >
+                                      {ele.dia}
+                                    </p>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        gap: "10px",
+                                        fontSize: "12px",
+                                        flexDirection: "column",
+                                      }}
+                                    >
+                                      No disponible
+                                    </div>
+                                  </Card>
+                                </div>
+                              </>
+                            );
+                          }
                         })}
                     </div>
                   </>
@@ -1386,7 +1408,7 @@ function SchoolDetail() {
                     <input
                       name="nombre"
                       type="text"
-                      value={ user?.nombre_responsable }
+                      value={user?.nombre_responsable}
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       onChange={(e) => {
@@ -1398,7 +1420,7 @@ function SchoolDetail() {
                       name="cel"
                       type="number"
                       pattern="[0-9]{8,15}"
-                      value={ user?.telefono}
+                      value={user?.telefono}
                       required
                       title="Solo se permiten numeros y entre 8 y 10 caracteres"
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
@@ -1462,13 +1484,15 @@ function SchoolDetail() {
 
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Galeria</h2>
-              {oneSchool.hasOwnProperty("galeria_fotos") && oneSchool.galeria_fotos !== null && JSON.parse(oneSchool.galeria_fotos).length > 0 && (
-                <QuiltedImageList
-                  firstImage={oneSchool.primera_imagen}
-                  gallery={JSON.parse(oneSchool.galeria_fotos)}
-                  setImage={setImage}
-                />
-              )}
+              {oneSchool.hasOwnProperty("galeria_fotos") &&
+                oneSchool.galeria_fotos !== null &&
+                JSON.parse(oneSchool.galeria_fotos).length > 0 && (
+                  <QuiltedImageList
+                    firstImage={oneSchool.primera_imagen}
+                    gallery={JSON.parse(oneSchool.galeria_fotos)}
+                    setImage={setImage}
+                  />
+                )}
               <div
                 className={`fixed top-0 left-0 z-50 bg-black/90 w-full h-full ${
                   image ? "block" : "hidden"
