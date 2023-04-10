@@ -157,7 +157,7 @@ useEffect(() => {
         <ModalLogin handlerClose={setOpenLogin} OpenLogin={OpenLogin} />
       )}
       <div
-        className={`bg-[#0061dd] w-[100vw] absolute top-16 z-[500] ${
+        className={`bg-[#0061dd] w-[100vw] absolute top-16 z-[30] ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-all duration-300 md:hidden rounded-b-md`}
       >
