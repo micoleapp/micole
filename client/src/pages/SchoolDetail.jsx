@@ -160,6 +160,7 @@ function SchoolDetail() {
     });
   };
   const handleChangeTime = (newValue) => {
+
     setTime(dayjs(newValue));
     setCita({
       ...cita,
@@ -171,6 +172,7 @@ function SchoolDetail() {
   };
   const [modo, setModo] = React.useState(true);
   const [openLogin, setOpenLogin] = useState(false);
+  const gradosCita=nombre_grado
   const [cita, setCita] = React.useState({
     date: [
       stringyDate(dayjs(new Date()).$D).toString(),
@@ -187,7 +189,7 @@ function SchoolDetail() {
     celular: isAuth ? user.telefono : "",
     correo: isAuth ? user.email : "",
     añoIngreso: ingresoParams,
-    grado: nombre_grado,
+    grado:  gradosCita,
   });
 
   const handleSubmit = (e) => {
@@ -206,7 +208,8 @@ function SchoolDetail() {
     }
     if (isAuth) {
       console.log(cita);
-
+      console.log(gradosCita);
+      
       dispatch(postCita(cita));
     } else {
       Swal.fire({
