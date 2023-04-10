@@ -193,49 +193,52 @@ useEffect(() => {
           >
             Contáctanos
           </p>
+
           {isAuth === true ? (
-            <button
-              onClick={() => {
-                setOpen(!isOpen);
-                handlerLogout();
-                navigate('/')
-              }}
-              className={style.SesionButtom}
-            >
+            <button onClick={()=>{
+              navigate('/')
+              handlerLogout()
+              }} className={style.SesionButtom}>
               Cerrar Sesion
             </button>
           ) : (
-            <button
-              onClick={() => {
-                setOpen(!isOpen);
-                handlerLogin();
-              }}
-              className={style.SesionButtom}
-            >
+            <button onClick={handlerLogin} className={style.SesionButtom}>
               Iniciar sesion
             </button>
           )}
           {!isAuth ? (
             <>
-              <Link to={"/enroll"}>
-                <button className={style.SesionButtom}>
-                  Inscribe tu colegio
-                </button>
-              </Link>
-              <button className={style.SesionButtom}>Registrarse</button>
+              <button
+                onClick={handlerOpenRegister}
+                className={style.SesionButtom}
+              >
+                Registrarse
+              </button>
             </>
-          ) : oneSchool !== null ? (
-            <Link to={"/dashboardschool"}>
+          ) : user.rol === "Admin" ? (
+            <Link to={"/admin"}>
               <button className={style.SesionButtom}>Ver Perfil</button>
             </Link>
-          ) : (
-            <button
-              className={`${style.SesionButtom} flex items-center justify-center gap-2`}
-            >
-              Cargando perfil{" "}
-              <CircularProgress size="1rem" style={{ color: "#0061dd" }} />{" "}
-            </button>
-          )}
+          ) : user.rol === "Usuario" ? (
+            <Link to={"/user"}>
+              <button className={style.SesionButtom}>Ver Perfil</button>
+            </Link>
+          ) : user.rol === "Colegio" ? (
+            <>
+              {oneSchool != null ? (
+                <Link to={"/dashboardschool"}>
+                  <button className={style.SesionButtom}>Ver Perfil</button>
+                </Link>
+              ) : (
+                <button
+                  className={`${style.SesionButtom} flex items-center justify-center gap-2`}
+                >
+                  Cargando perfil{" "}
+                  <CircularProgress size="1rem" style={{ color: "#0061dd" }} />{" "}
+                </button>
+              )}
+            </>
+          ) : null}
         </div>
       </div>
       {openRegister && (
