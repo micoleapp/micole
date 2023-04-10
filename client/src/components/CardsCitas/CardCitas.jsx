@@ -718,7 +718,7 @@ export default function CardCitas({ data, filtros }) {
           </>
         )}
 
-        {/*PLAN PREMIUM*/}
+        {/*PLAN */}
         {filtros === "SinConfirmar" &&
           oneSchool.Plan_Pago.nombre_plan_pago === "Premium" && (
             <>

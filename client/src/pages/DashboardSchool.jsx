@@ -76,7 +76,7 @@ import SelectCitasAg from "../components/CardsCitas/SelectCitasAgendadas/SelectC
 import { getCita } from "../redux/CitasActions";
 import Miplan from "../components/Miplan/Miplan";
 import Modal from "@mui/material/Modal";
-import ListadeEspera from "./Admin/ListaEspera/ListadeEspera";
+import ListadeEspera from "./ListaEspera/ListadeEspera";
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 const styleModal = {
   position: "absolute",
