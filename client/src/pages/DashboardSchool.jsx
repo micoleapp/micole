@@ -76,7 +76,8 @@ import SelectCitasAg from "../components/CardsCitas/SelectCitasAgendadas/SelectC
 import { getCita } from "../redux/CitasActions";
 import Miplan from "../components/Miplan/Miplan";
 import Modal from "@mui/material/Modal";
-
+import ListadeEspera from "./Admin/ListaEspera/ListadeEspera";
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 const styleModal = {
   position: "absolute",
   top: "50%",
@@ -1273,6 +1274,30 @@ function DashboardSchool() {
               Mi plan
             </span>
           </button>
+
+
+          <button
+              className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+                page == 7 ? "bg-[#0061dd] text-white" : null
+              } `}
+              onClick={() => {
+                setOpen();
+                setPage(7);
+              }}
+            >
+              <FormatListBulletedIcon
+                className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                  page == 7 ? "text-white" : null
+                }`}
+              />
+              <span
+                className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                  page == 7 ? "text-white" : null
+                }`}
+              >
+                Lista de Espera
+              </span>
+            </button>
 
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
@@ -3693,7 +3718,12 @@ function DashboardSchool() {
               </Box>
             </Modal>
           </div>
-        ) : null}
+        ) :  page === 7 ? (
+          <div className=" min-h-screen">
+             <ListadeEspera/>
+          </div>
+         
+        ):null}
       </section>
     </div>
   );
