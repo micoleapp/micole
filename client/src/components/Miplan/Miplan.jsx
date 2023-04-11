@@ -119,7 +119,6 @@ export default function Miplan() {
           //         alignItems: "center",
           //       }}
           //     >
-
           //       <Typography
           //         sx={{
           //           fontSize: "1.3rem",
@@ -180,7 +179,11 @@ export default function Miplan() {
 
               {/* </Card> */}
             </div>
+
+            {/* </Card> */}
           </div>
+        </div>
+
         )}
         {/* // Historial */}
         {planPago?.length > 0 && (
@@ -278,6 +281,7 @@ export default function Miplan() {
               <h1 style={{ fontSize: "1.6vh" }}>No hay historial disponible</h1>
             </div>
           </>
+
         )}
         {OpenRegister && (
           <ModalInscripcion

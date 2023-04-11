@@ -65,8 +65,6 @@ export default function GridVacantes({ año, setVacantesOff }) {
     }
   };
 
-  
-
 /*
 { 2: { capacidad: '', alumnos: '', cuota_ingreso: '', matricula: '', cuota_pension: '' }, 'año': 2023 }
 */
