@@ -18,7 +18,11 @@ router.get("/", async (req, res) => {
         },
         {
           model: User,
-          attributes: ["nombre", "apellidos"],
+          attributes: ["nombre_responsable", "apellidos_responsable","telefono"],
+        },
+        {
+          model:Auth,
+          attributes: ["email"],
         },
       ],
       attributes: ["id", "año"],
