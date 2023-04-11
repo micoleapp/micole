@@ -25,6 +25,7 @@ export default function InscripcionEvento({
   const onSubmit = () => {
     if (isAuth) {
       const idUser = user.id;
+      handleClose();
       axios
         .post(`/eventos/registration`, { idEvento, idUser })
         .then((res) => {
@@ -34,6 +35,7 @@ export default function InscripcionEvento({
             title: "Inscripcion Exitosa",
             text: "",
           });
+
         })
         .catch((err) => {
           Swal.fire({
