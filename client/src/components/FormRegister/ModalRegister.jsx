@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import style from "./ModalRegister.module.css";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormControl from "@mui/material/FormControl";
 import { MenuItem, toggleButtonClasses, Typography } from "@mui/material";
 import Select from "@mui/material/Select";
@@ -18,6 +18,7 @@ import Logo from "../../assets/logoPayment.png";
 import FormInscripcion from "../FormInscripcion/FormInscripcion";
 import { register as registerUser } from "../../redux/AuthActions";
 import FormLogin from "../FormLogin/FormLogin";
+import ModalLogin from "../ModalLogin/ModalLogin";
 const style1 = {
   position: "absolute",
   top: "50%",
@@ -26,7 +27,7 @@ const style1 = {
   //   maxWidth: 400,
   bgcolor: "background.paper",
   boxShadow: " 0px 1px 5px rgba(0, 0, 0, 0.40)",
-  p: 4,
+  p: 2,
   borderRadius: "10px",
 };
 
@@ -43,6 +44,12 @@ export default function ModalRegistro({ open, setOpen }) {
 
   const ToggleSeePass = () => {
     setseePassword(!seePassword);
+  };
+  const handlerOpenLogin = () => {
+    setOpenLogin(true);
+    // setOpen(false)
+    setOpenRegistroColegio(false);
+    setOpenRegistroPadre(false);
   };
 
   const {
@@ -72,6 +79,7 @@ export default function ModalRegistro({ open, setOpen }) {
     };
     console.log(data);
     dispatch(registerUser(data));
+    handleClose();
   };
 
   return (
@@ -84,50 +92,102 @@ export default function ModalRegistro({ open, setOpen }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style1}>
-          {OpenRegistroPadre === false && OpenRegistroColegio === false && (
-            <>
-              <div className={style.img_div}>
-                <img src={Logo} />
-              </div>
-              <div className={style.h1_div}></div>
-              <div
-                style={{ display: "flex", flexDirection: "column", gap: "1vh" }}
-              >
-                <Typography>
-                <div
-                style={{ display: "flex", flexDirection: "column", gap: "0.50" }}
-              >
-                  <b style={{color:'#0061DF'}}>Inscribe tu colegio en nuestra plataforma</b>
-                  Únete a la mayor comunidad de colegios en el Perú
-              </div>
-                
-                </Typography>
-                <Button
-                  onClick={() => setOpenRegistroColegio(true)}
-                  variant="contained"
-                >
-                 Inscribe tu Colegio
-                </Button>
-                <Button
-                  onClick={() => setOpenRegistroPadre(true)}
-                  variant="contained"
-                >
-                  Registrarse como Familia
-                </Button>
-              </div>
-            </>
-          )}
+          {OpenRegistroPadre === false &&
+            OpenLogin === false &&
+            OpenRegistroColegio === false && (
+              <>
+                <div style={{ display:'flex'  , gap:'2vh',padding:'1vh', flexDirection:'column'}}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img style={{ width: "30vh" }} src={Logo} />
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2vh",
+                    }}
+                  >
+                    <Typography>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          fontSize:'1.8vh',
+                          gap: "0.50",
+                        }}
+                      >
+                        <b style={{ color: "#0061DF" }}>
+                          Inscribe tu colegio en nuestra plataforma
+                        </b>
+                        Únete a la mayor comunidad de colegios en el Perú
+                      </div>
+                    </Typography>
+                    <Button
+                      sx={{fontWeight:'600', fontFamily:'Poppins'}}
+                    
+                      variant="contained"
+                    > <Link
+                    // className={`${style.p} hover-underline-animation`}
+                    to={"/enroll"}
+                  >
+                     Inscribe tu Colegio
+                  </Link>
+                     
+                    </Button>
+                       <Typography>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          fontSize:'1.8vh',
+                          gap: "0.50",
+                        }}
+                      >
+                        <b style={{ color: "#0061DF" }}>
+                         Encuentra el colegio ideal
+                        </b>
+                        Únete a la mayor comunidad de colegios en el Perú
+                      </div>
+                    </Typography>
+                    <Button
+                      onClick={() => setOpenRegistroPadre(true)}
+                      variant="contained"
+                      sx={{fontWeight:'600', fontFamily:'Poppins'}}
+                    >
+                      Registrarse como Familia
+                    </Button>
+                  </div>
+                </div>
+              </>
+            )}
 
           {OpenRegistroPadre && (
             <>
-              <div className={style.h1_div}>
-                <h1>Completa tus datos</h1>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <img style={{ width: "30vh" }} src={Logo} />
               </div>
-
               <form
                 onSubmit={handleSubmit(OnSubmit)}
                 className={style.formLayout}
               >
+                <div className={style.h1_div}>
+                  <h1>Completa tus datos</h1>
+                </div>
                 <div className={style.form}>
                   <div className={style.divInputs}>
                     <label className={style.label}>Nombre</label>
@@ -227,7 +287,10 @@ export default function ModalRegistro({ open, setOpen }) {
                   <div className={`${style.divButton}`}>
                     <p>Ya tienes cuenta ? </p>
                     <div>
-                      <p style={{ color: "blue", cursor: "pointer" }}>
+                      <p
+                        onClick={handlerOpenLogin}
+                        style={{ color: "blue", cursor: "pointer" }}
+                      >
                         Inicia Sesión{" "}
                       </p>
                     </div>
@@ -240,9 +303,11 @@ export default function ModalRegistro({ open, setOpen }) {
             <FormInscripcion handlerOpenLogin={setOpenLogin} />
           )}
           <div>
-            {OpenLogin === true && isAuth === false && (
-              <FormLogin setOpenLogin={setOpenLogin} OpenLogin={OpenLogin} />
-            )}
+            {OpenLogin === true &&
+              OpenRegistroPadre === false &&
+              isAuth === false && (
+                <FormLogin setOpenLogin={setOpenLogin} OpenLogin={OpenLogin} />
+              )}
           </div>
         </Box>
       </Modal>

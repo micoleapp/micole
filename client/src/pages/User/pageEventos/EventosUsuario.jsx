@@ -37,9 +37,12 @@ export default function EventosUsuario() {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          const eventosPaginados = sliceIntoChunks(res.data, 10);
-          setData(eventosPaginados);
-          setProximoEvento([res.data[0]]);
+          if (res.data.length > 0) {
+            setProximoEvento([res.data[0]]);
+            const eventosPaginados = sliceIntoChunks(res.data, 10);
+            setData(eventosPaginados);
+            setIsLoading(false);
+          }
           setIsLoading(false);
         })
         .catch((err) => {
@@ -95,7 +98,7 @@ export default function EventosUsuario() {
       {/* Proximo EVENTO */}
       {ProximoEvento && ProximoEvento?.length > 0 ? (
         <>
-          <div style={{ padding: "1vh" }}>
+          <div style={{ padding: "1vh",paddingLeft:'2vh', maxWidth:'80%' }}>
             <Typography
               variant="h6"
               sx={{
@@ -114,7 +117,7 @@ export default function EventosUsuario() {
               }}
             />
           </div>
-          {ProximoEvento &&
+          {ProximoEvento?.length > 0 &&
             ProximoEvento?.map((ele) => {
               return (
                 <>
@@ -126,10 +129,10 @@ export default function EventosUsuario() {
                           width: "30vh",
                           height: "30vh",
                         }}
-                        src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679362147/eesjwe0dwaabi37gzuj9.png"
+                        src={ ele.imagen_evento?ele.imagen_evento : "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"}
                         alt="Logo"
                       />
-                      <div className={style.card}>
+                    {  !ele.imagen_evento&&<div className={style.card}>
                         <div className={style.imgDiv}>
                           <img
                             style={{ display: "flex", zIndex: "2" }}
@@ -150,7 +153,7 @@ export default function EventosUsuario() {
                             <p className={style.p}>{ele.capacidad}</p>
                           </div>
                         </div>
-                      </div>
+                      </div>}
                     </div>
                     <div className={style.infoDiv}>
                       <h1 className={style.titleK}>{ele.nombre_evento}</h1>
@@ -162,7 +165,7 @@ export default function EventosUsuario() {
                       </div>
 
                       <div className={style.divDescripcion}>
-                        <p className={style.pTittleK}>Descripcion</p>
+                        <p className={style.pTittleK}>Descripción</p>
                         <p className={style.descripcion}>{ele.descripcion}</p>
                       </div>
 
@@ -200,27 +203,48 @@ export default function EventosUsuario() {
           </ContentLoader>
         ))
       ) : ProximoEvento?.length === 0 && isLoading === false ? (
-        <div
-          // data-aos="zoom-up"
-          style={{
-            width: "80%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "row",
-            color: "#0C2B42",
-            gap: "10px",
-            padding: "20px",
-            minHeight: "100%",
-            boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
-            fontWeight: "600",
-            backgroundColor: "#fff",
-          }}
-        >
-          <ContentPasteSearchOutlinedIcon style={{ color: "#0061DF" }} />
-          <h1>No hay eventos pendientes</h1>
-        </div>
+        <>
+          <Typography
+            variant="h6"
+            sx={{
+              color: "#0D263B",
+              fontFamily: "Poppins",
+              fontWeight: "700",
+            }}
+          >
+            Próximo Evento
+          </Typography>
+        
+          <Divider
+              sx={{
+                color: "blue",
+                border: "1px solid #0061DF",
+                width: "20vh",
+              }}
+            />
+          <div
+            // data-aos="zoom-up"
+            style={{
+              width: "80%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+              color: "#0C2B42",
+              gap: "10px",
+              padding: "20px",
+              minHeight: "100%",
+              boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+              fontWeight: "600",
+              backgroundColor: "#fff",
+            }}
+          >
+            <ContentPasteSearchOutlinedIcon style={{ color: "#0061DF" }} />
+            <h1>No hay eventos pendientes</h1>
+          </div>
+        </>
       ) : null}
+
       {/* Siguientes EVENTOS */}
       <div className={style.layoutTitlteSigEventos}>
         <div className={style.titleSig}>
@@ -253,12 +277,13 @@ export default function EventosUsuario() {
             <InputLabel id="demo-select-small">Fecha</InputLabel>
 
             <Select
-              sx={{ border: "none", outline: "none" }}
+              sx={{ border: "none", outline: "none"  , fontSize:'2vh'}}
               labelId="demo-select-small"
               id="demo-select-small"
               // value={orderSelected}
               label={"Fecha"}
               onChange={handleChangeState}
+
             >
               <MenuItem value="ASC">
                 {" "}
@@ -274,7 +299,7 @@ export default function EventosUsuario() {
 
         {/* CARD  FECHA */}
       </div>
-      <div>
+      <div className={style.containerSigEvento}>
         {orderSelected != null && dataFiltrada ? (
           dataFiltrada?.length > 0 ? (
             <>
@@ -290,10 +315,10 @@ export default function EventosUsuario() {
                               width: "20vh",
                               height: "20vh",
                             }}
-                            src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679362147/eesjwe0dwaabi37gzuj9.png"
+                            src={ ele.imagen_evento?ele.imagen_evento : "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"}
                             alt="Logo"
                           />
-                          <div className={style.card2}>
+                        {!ele.imagen_evento&&  <div className={style.card2}>
                             <div className={style.imgDiv}>
                               <img
                                 style={{
@@ -308,7 +333,7 @@ export default function EventosUsuario() {
                             </div>
                             <h1 className={style.title}>{ele.nombre_evento}</h1>
                             <div style={{ display: "flex", gap: "2vh" }}></div>
-                          </div>
+                          </div>}
                         </div>
                         <div className={style.infoDiv}>
                           <h1 className={style.titleK}>{ele.nombre_evento}</h1>
@@ -322,7 +347,7 @@ export default function EventosUsuario() {
                           </div>
 
                           <div className={style.divDescripcion}>
-                            <p className={style.pTittleK}>Descripcion</p>
+                            <p className={style.pTittleK}>Descripción</p>
                             <p className={style.descripcion}>
                               {ele.descripcion}
                             </p>
@@ -399,10 +424,10 @@ export default function EventosUsuario() {
                             width: "20vh",
                             height: "20vh",
                           }}
-                          src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1679362147/eesjwe0dwaabi37gzuj9.png"
+                          src={ ele.imagen_evento?ele.imagen_evento : "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"}
                           alt="Logo"
                         />
-                        <div className={style.card2}>
+                       {  !ele.imagen_evento&&<div className={style.card2}>
                           <div className={style.imgDiv}>
                             <img
                               style={{
@@ -417,7 +442,7 @@ export default function EventosUsuario() {
                           </div>
                           <h1 className={style.title}>{ele.nombre_evento}</h1>
                           <div style={{ display: "flex", gap: "2vh" }}></div>
-                        </div>
+                        </div>}
                       </div>
                       <div className={style.infoDiv}>
                         <h1 className={style.titleK}>{ele.nombre_evento}</h1>
@@ -431,7 +456,7 @@ export default function EventosUsuario() {
                         </div>
 
                         <div className={style.divDescripcion}>
-                          <p className={style.pTittleK}>Descripcion</p>
+                          <p className={style.pTittleK}>Descripción</p>
                           <p className={style.descripcion}>{ele.descripcion}</p>
                         </div>
 

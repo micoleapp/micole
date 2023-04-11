@@ -51,6 +51,7 @@ import { HiChevronLeft } from "react-icons/hi";
 import SwiperEventos from "../components/SwiperEventos/SwiperEventos";
 import es_AM_PM from "../components/SwiperEventos/utils/horaFormat";
 import ModalLogin from "../components/ModalLogin/ModalLogin";
+import { setVacantesRedux } from "../redux/AuthActions";
 function QuiltedImageList({ firstImage, gallery, setImage }) {
   return (
     <div className="w-full px-4">
@@ -121,7 +122,7 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
 function SchoolDetail() {
   const { id } = useParams();
   const { oneSchool, grados, horarios } = useSelector((state) => state.schools);
-  const { user, isAuth } = useSelector((state) => state.auth);
+  const { user, isAuth ,vacantes} = useSelector((state) => state.auth);
   console.log(user);
 
   const location = useLocation();
@@ -149,16 +150,29 @@ function SchoolDetail() {
     }
   };
 
-  const currentVacante = oneSchool?.Vacantes?.filter(
-    (vac) =>
-      vac.GradoId === Number(gradoParams) && vac.año === Number(ingresoParams)
-  );
+  const [currentVacante,setCurrentVacante] = useState([])
+
+  useEffect(()=>{
+    dispatch(setVacantesRedux(id))
+  },[])
+  useEffect(() => {
+    if(vacantes.length > 0){
+      setCurrentVacante(vacantes?.filter(
+        (vac) =>
+          vac.GradoId === Number(gradoParams) && vac.año === Number(ingresoParams)
+      ))
+    }
+  }, [vacantes])
+  
 
   console.log(currentVacante);
 
   const [image, setImage] = useState(null);
 
   const dispatch = useDispatch();
+
+///1
+
   useEffect(() => {
     dispatch(getAllGrados());
     dispatch(getSchoolDetail(id));
@@ -209,7 +223,7 @@ function SchoolDetail() {
     ].join(":"),
 
     modo: modo ? "Presencial" : "Virtual",
-    nombre:isAuth? user.nombre  : "",
+    nombre:isAuth? user.nombre_responsable  :'',
     celular: isAuth? user.telefono:"",
     correo: isAuth? user.email :'',
     añoIngreso: ingresoParams,
@@ -231,6 +245,7 @@ function SchoolDetail() {
       return;
     }
     if (isAuth) {
+
       console.log(cita)
      
       dispatch(postCita(cita));
@@ -274,7 +289,7 @@ function SchoolDetail() {
     email: "",
     comentario: "",
   });
-
+//2
   useEffect(() => {
     setComentario({
       ...comentario,
@@ -369,7 +384,7 @@ function SchoolDetail() {
       Swal.fire({
         icon: "info",
         title: "Inicia Sesion",
-        text: "Debes iniciar sesion o registrarte para sacar una cita",
+        text: "Debes iniciar sesion o registrarte para inscribirte a una lista",
       })
       return
     } else {
@@ -415,14 +430,14 @@ function SchoolDetail() {
         data-aos="fade-up"
         data-aos-duration="1000"
       >
-        <div className="header drop-shadow-md">
+        <div className="header">
           <h1 className="text-2xl  font-semibold">
-            {oneSchool.nombre_escuela}
+            {oneSchool.nombre_colegio}
           </h1>
           <div>
             <div className="flex justify-between flex-col gap-5 lg:flex-row mt-2 lg:mt-0">
               <div className="flex gap-5 lg:items-center justify-center flex-col lg:flex-row text-black/70">
-                <h2 className="text-center">{oneSchool.direccion} </h2>
+                <h2 className="text-center lg:text-start">{oneSchool.direccion} </h2>
                 <div className="flex gap-5 lg:flex-row flex-col justify-center w-full items-center">
                   <span className="bg-black/80 min-w-fit py-1 px-2 rounded-sm text-white text-sm flex items-center">
                     {currentVacante &&
@@ -480,7 +495,7 @@ function SchoolDetail() {
                   <img
                     src={cat.logo_categoria}
                     alt="logo_categoria"
-                    className="w-4 object-cover invert-[40%] drop-shadow-md"
+                    className="w-4 object-cover invert-[40%]"
                   />
                   <span className="text-sm text-gray-400">
                     {cat.nombre_categoria}{" "}
@@ -519,13 +534,13 @@ function SchoolDetail() {
             {currentVacante && (
               <div className="flex flex-col w-full items-center lg:items-end">
                 <small>
-                  Cuota de ingreso: S/ {currentVacante[0].cuota_ingreso}{" "}
+                  Cuota de ingreso: S/ {currentVacante.length > 0 && currentVacante[0].cuota_ingreso}{" "}
                 </small>
                 <small>
-                  Cuota de pensión: S/ {currentVacante[0].cuota_pension}
+                  Cuota de pensión: S/ {currentVacante.length > 0 && currentVacante[0].cuota_pension}
                 </small>
                 <small>
-                  Cuota de matricula: S/ {currentVacante[0].matricula}
+                  Cuota de matricula: S/ {currentVacante.length > 0 && currentVacante[0].matricula}
                 </small>
               </div>
             )}
@@ -1144,7 +1159,7 @@ function SchoolDetail() {
             {listaParams === "true" ? (
               <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
                 <h2 className="font-semibold text-xl">
-                  Solicitar lista de espera
+                  Lista de espera
                 </h2>
                 <form
                   onSubmit={handleSubmitLista}
@@ -1154,7 +1169,7 @@ function SchoolDetail() {
                     {isAuth ?                     <input
                       name="nombreLista"
                       type="text"
-                      value={user.nombre}
+                      value={user?.nombre_responsable}
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       required
@@ -1168,7 +1183,7 @@ function SchoolDetail() {
                                         {isAuth ?                     <input
                       name="apellidoLista"
                       type="text"
-                      value={user.apellidos}
+                      value={user?.apellidos_responsable}
                       required
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     /> :                     <input
@@ -1184,7 +1199,7 @@ function SchoolDetail() {
                   {isAuth ?                   <input
                     name="emailLista"
                     type="email"
-                    value={user.email}
+                    value={user?.email}
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Correo"
                     required
@@ -1199,7 +1214,7 @@ function SchoolDetail() {
                       name="celLista"
                       type="number"
                       pattern="[0-9]{8,15}"
-                      value={user.telefono}
+                      value={user?.telefono}
                       required
                       title="Solo se permiten numeros y entre 8 y 10 caracteres"
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
@@ -1219,7 +1234,7 @@ function SchoolDetail() {
                     type="submit"
                     className="border mt-5 mx-auto px-10 py-2 rounded-md shadow-lg bg-[#0061dd] text-white duration-300 cursor-pointer"
                   >
-                    SOLICITAR
+                    INSCRIBIRME
                   </button>
                 </form>
                 <p className="text-sm p-10">
@@ -1371,7 +1386,7 @@ function SchoolDetail() {
                     <input
                       name="nombre"
                       type="text"
-                      value={isAuth === true ? user.nombre_responsable : ''}
+                      value={ user?.nombre_responsable }
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       onChange={(e) => {
@@ -1383,7 +1398,7 @@ function SchoolDetail() {
                       name="cel"
                       type="number"
                       pattern="[0-9]{8,15}"
-                      value={isAuth === true ? user.telefono : ""}
+                      value={ user?.telefono}
                       required
                       title="Solo se permiten numeros y entre 8 y 10 caracteres"
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
@@ -1396,7 +1411,7 @@ function SchoolDetail() {
                   <input
                     name="email"
                     type="email"
-                    value={isAuth === true ? user.email:'' }
+                    value={user?.email}
                     className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                     placeholder="Correo"
                     onChange={(e) => {
@@ -1447,7 +1462,7 @@ function SchoolDetail() {
 
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
               <h2 className="font-semibold text-xl">Galeria</h2>
-              {oneSchool.hasOwnProperty("galeria_fotos") && (
+              {oneSchool.hasOwnProperty("galeria_fotos") && oneSchool.galeria_fotos !== null && JSON.parse(oneSchool.galeria_fotos).length > 0 && (
                 <QuiltedImageList
                   firstImage={oneSchool.primera_imagen}
                   gallery={JSON.parse(oneSchool.galeria_fotos)}

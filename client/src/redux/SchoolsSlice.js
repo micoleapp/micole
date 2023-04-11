@@ -29,8 +29,14 @@ export const schoolsSlice = createSlice({
     pagination: {},
     success: false,
     nameColegio: null,
+    precios: []
   },
   reducers: {
+    getPrecios: (state, action) => {
+      (state.precios = action.payload),
+        (state.loading = false),
+        (state.error = "");
+    },
     getMetodos: (state, action) => {
       (state.metodos = action.payload),
         (state.loading = false),
@@ -175,6 +181,7 @@ export const {
   getMetodos,
   getDificultades,
   getNombreColegios,
+  getPrecios
 } = schoolsSlice.actions;
 
 export default schoolsSlice.reducer;

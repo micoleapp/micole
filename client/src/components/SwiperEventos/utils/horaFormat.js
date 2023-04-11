@@ -7,19 +7,19 @@ export default function es_AM_PM(hora) {
     
   
     if (horas > 12) {
-      return "PM";
+      return   "PM";
     }
  
     else if (horas === 12 && minutos === 0 && segundos === 0) {
-      return "PM";
+      return   "PM";
     }
 
     else if (horas === 0) {
-      return "AM";
+      return  "AM";
     }
  
     else {
-      return hora +"  " + "AM";
+      return "AM";
     }
   }
   

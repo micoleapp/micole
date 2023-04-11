@@ -1,8 +1,10 @@
+import style from "./pageColegio.module.css";
 import {
   Box,
   FormControl,
   InputLabel,
   MenuItem,
+  Modal,
   Pagination,
   Select,
 } from "@mui/material";
@@ -18,10 +20,30 @@ import axios from "axios";
 import CardColegio from "./card-colegio-admin/CardColegio";
 import SearchCoelegio from "./search-colegio-admin/SearchCoelegio";
 import { getNombreColegios } from "../../../redux/SchoolsSlice";
+
+// style del model de filtros
+
+const styles = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  display:'flex',
+  alignItems:'center',
+  transform: "translate(-50%, -50%)",
+  justifyContent:'center',
+  // width: 400,
+  bgcolor: "background.paper",
+  boxShadow: " 0px 1px 5px rgba(0, 0, 0, 0.40)",
+  p: 4,
+  borderRadius: "10px",
+};
+
+
 export default function PageColegio() {
   const dispatch = useDispatch();
   const [page, setPage] = React.useState(1);
   const [data, setData] = React.useState();
+  const [openMFiltros, setOpenMFiltros] = useState(false);
   const [OptionSelectedState, seOptionSelectedState] = useState("");
   const [filterSelected, setFilterSelected] = useState({
     state: "",
@@ -53,6 +75,8 @@ export default function PageColegio() {
     });
   };
 
+  const handleClose = () => setOpenMFiltros(false);
+
   // "http://localhost:3001/colegios?limit=10&page=1&search="mateo""
   return (
     <>
@@ -63,22 +87,25 @@ export default function PageColegio() {
             nroColegios={nameColegio?.length}
             data={nameColegio && nameColegio}
             vacante={false}
+            modalFiltro={setOpenMFiltros}
           />
-          <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
-            <InputLabel id="demo-select-small">Estado</InputLabel>
+          <div className={style.filtroEstado}>
+            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+              <InputLabel id="demo-select-small">Estado</InputLabel>
 
-            <Select
-              sx={{ border: "none", outline: "none" }}
-              labelId="demo-select-small"
-              id="demo-select-small"
-              value={filterSelected.state}
-              label={"Estado"}
-              onChange={handleChangeState}
-            >
-              <MenuItem value={true}>Activo</MenuItem>
-              <MenuItem value={false}>Inactivo</MenuItem>
-            </Select>
-          </FormControl>
+              <Select
+                sx={{ border: "none", outline: "none" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                value={filterSelected.state}
+                label={"Estado"}
+                onChange={handleChangeState}
+              >
+                <MenuItem value={true}>Activo</MenuItem>
+                <MenuItem value={false}>Inactivo</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
         </div>
 
         <CardColegio
@@ -101,6 +128,34 @@ export default function PageColegio() {
           color="primary"
         />
       </Box>
+      {openMFiltros && (
+        <div>
+          <Modal
+            open={openMFiltros}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={styles}>
+              <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+                <InputLabel id="demo-select-small">Estado</InputLabel>
+
+                <Select
+                  sx={{ border: "none", outline: "none" }}
+                  labelId="demo-select-small"
+                  id="demo-select-small"
+                  value={filterSelected.state}
+                  label={"Estado"}
+                  onChange={handleChangeState}
+                >
+                  <MenuItem value={true}>Activo</MenuItem>
+                  <MenuItem value={false}>Inactivo</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </Modal>
+        </div>
+      )}
     </>
   );
 }

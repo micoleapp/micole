@@ -10,7 +10,10 @@ import { useEffect, useState } from "react";
 import { Button, IconButton, Typography } from "@mui/material";
 import TuneIcon from "@mui/icons-material/Tune";
 import { useDispatch, useSelector } from "react-redux";
-import { filterAdminState, getColegiosSearch } from "../../../../redux/SchoolsActions";
+import {
+  filterAdminState,
+  getColegiosSearch,
+} from "../../../../redux/SchoolsActions";
 import SelectCRM from "../../../../components/CardsDrgAndDrp/SelectsCRM/SelectsCRM";
 import axios from "axios";
 import InputLabel from "@mui/material/InputLabel";
@@ -22,6 +25,7 @@ export default function SearchCoelegio({
   data,
   nroColegios,
   vacante,
+  modalFiltro
 }) {
   const { distrits } = useSelector((state) => state.schools);
   const [OptionSelected, setOptionSelected] = useState("");
@@ -30,8 +34,8 @@ export default function SearchCoelegio({
     state: "",
     distrito: "",
   });
-
-  let nombresColegio = data&& data?.map((x) => x.nombre_colegio);
+const [openMFiltros, setOpenMFiltros] = useState(false)
+  let nombresColegio = data && data?.map((x) => x.nombre_colegio);
   let nameUnique = nombresColegio?.filter(
     (x, i) => nombresColegio.indexOf(x) === i
   );
@@ -39,7 +43,7 @@ export default function SearchCoelegio({
   const dispatch = useDispatch();
   console.log(filterSelected);
   const handleChangeState = (event) => {
-    dispatch(filterAdminState())
+    dispatch(filterAdminState());
     setFilterSelected({
       ...filterSelected,
       state: event.target.value,
@@ -71,7 +75,7 @@ export default function SearchCoelegio({
     }
   };
   // filterAdminState
-  console.log(OptionSelectedState)
+  console.log(OptionSelectedState);
   return (
     <>
       <div
@@ -97,22 +101,43 @@ export default function SearchCoelegio({
           </div>
         )}
 
-        <Autocomplete
-          sx={{ width: "40vh", fontSize: "1vh" }}
-          size="small"
-          id="Tipo"
-          freeSolo
-          onChange={(e, v) => setOptionSelected(v)}
-          options={data && nameUnique?.map((option) => option)}
-          renderInput={(params) => (
-            <TextField
-              sx={{ fontSize: "1vh" }}
-              {...params}
-              onChange={({ target }) => setOptionSelected(target.value)}
-              label="Buscar Colegio"
-            />
-          )}
-        />
+        <div className={style.divDesktop}>
+          <Autocomplete
+            sx={{ width: "40vh", fontSize: "1vh" }}
+            size="small"
+            id="Tipo"
+            freeSolo
+            onChange={(e, v) => setOptionSelected(v)}
+            options={data && nameUnique?.map((option) => option)}
+            renderInput={(params) => (
+              <TextField
+                sx={{ fontSize: "1vh" }}
+                {...params}
+                onChange={({ target }) => setOptionSelected(target.value)}
+                label="Buscar Colegio"
+              />
+            )}
+          />
+        </div>
+        <div className={style.divMobile}>
+          <Autocomplete
+            sx={{ width: "20vh", fontSize: "1vh" }}
+            size="small"
+            id="Tipo"
+            freeSolo
+            onChange={(e, v) => setOptionSelected(v)}
+            options={data && nameUnique?.map((option) => option)}
+            renderInput={(params) => (
+              <TextField
+                sx={{ fontSize: "1vh" }}
+                {...params}
+                onChange={({ target }) => setOptionSelected(target.value)}
+                label="Buscar Colegio"
+              />
+            )}
+          />
+        </div>
+
         <Button
           sx={{ fontWeight: "600", height: "4.2vh" }}
           variant="contained"
@@ -120,7 +145,7 @@ export default function SearchCoelegio({
         >
           <SearchIcon />
         </Button>
-        <div className={style.btnFiltroResponsive}>
+       {vacante === false && <div className={style.btnFiltroResponsive}>
           <Button
             sx={{
               fontWeight: "600",
@@ -129,74 +154,13 @@ export default function SearchCoelegio({
               color: "#0D263B",
             }}
             variant="contained"
-            onClick={SubmitSearch}
+            onClick={()=>   modalFiltro(true)}
           >
             <TuneIcon />
           </Button>
-        </div>
-        {/* {vacante === false && (
-          <div className={style.FiltrosResponsive}>
-            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
-              <InputLabel id="demo-select-small">Estado</InputLabel>
+        </div>}
 
-              <Select
-                sx={{ border: "none", outline: "none" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                value={filterSelected.state}
-                label={"Estado"}
-                onChange={handleChangeState}
-              >
-                <MenuItem value={true}>Activo</MenuItem>
-                <MenuItem value={false}>Inactivo</MenuItem>
-           
-              </Select>
-            </FormControl>
-          </div>
-        )} */}
-        {vacante === true && (
-          <div className={style.FiltrosResponsive}>
-            {/*
-             <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
-              <InputLabel id="demo-select-small">Año</InputLabel>
-
-              <Select
-                sx={{ border: "none", outline: "none" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                value={filterSelected.año}
-                label={"Año"}
-                onChange={handleChangeAño}
-              >
-                <MenuItem value={10}>2023</MenuItem>
-                <MenuItem value={20}>2024</MenuItem>
-                <MenuItem value={20}>2025</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
-              <InputLabel id="demo-select-small">Distrito</InputLabel>
-
-              <Select
-                sx={{ border: "none", outline: "none" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                value={filterSelected.distrito}
-                label={"Distrito"}
-                onChange={handleChangeDistrito}
-              >
-                {distrits &&
-                  distrits.map((ele) => {
-                    return (
-                      <MenuItem value={ele.id}>{ele.nombre_distrito}</MenuItem>
-                    );
-                  })}
-
-                <MenuItem value={20}>2024</MenuItem>
-                <MenuItem value={20}>2025</MenuItem>
-              </Select>
-            </FormControl> */}
-          </div>
-        )}
+   
       </div>
     </>
   );

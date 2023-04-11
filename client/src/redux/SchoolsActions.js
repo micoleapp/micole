@@ -24,7 +24,16 @@ import {
   getMetodos,
   getDificultades,
   getNombreColegios,
+  getPrecios
 } from "./SchoolsSlice";
+
+export const setPrecios = () => (dispatch) => {
+  try {
+    axios.get('/precios').then(res=>dispatch(getPrecios(res.data))).catch(err=>console.log(err))
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 export const getVacantes = (niveles) => (dispatch) => {
   dispatch(isLoading());
@@ -266,17 +275,22 @@ export const postCita = (cita) => (dispatch) => {
 export const getCitaAgendadas = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
-  token &&
-    axios
-      .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
-      .then((res) => dispatch(getCitasAgendado(res.data)))
-      .catch((err) => {
-        Swal.fire({
-          icon: "error",
-          title: "Algo salio mal",
-          text: err.response.data.error,
+  try {
+    token &&
+      axios
+        .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
+        .then((res) => dispatch(getCitasAgendado(res.data)))
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: err.response.data.error,
+          });
         });
-      });
+    
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const getHorariosSchool = (id) => (dispatch) => {

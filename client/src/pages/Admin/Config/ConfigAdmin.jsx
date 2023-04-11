@@ -2,12 +2,7 @@ import React, { useState } from "react";
 import { BsEyeSlash } from "react-icons/bs";
 import { BsEye } from "react-icons/bs";
 import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Pagination,
-  Select,
+
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -16,6 +11,7 @@ import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 export default function ConfigAdmin() {
   const { user } = useSelector((state) => state.auth);
+  const idUser = user?.id
   const [seePassword, setSeePassword] = useState(false);
   const [seeNewPassword, setSeeNewPassword] = useState(false);
   const [filterSelected, setFilterSelected] = useState();
@@ -44,7 +40,7 @@ export default function ConfigAdmin() {
       Swal.fire("warning", "Las nuevas contraseñas no coinciden", "error");
       return;
     }
-    if (password) {
+    if (!user?.password ) {
       Swal.fire(
         "Error",
         "Ingrese su contraseña para modificar algun campo",
@@ -61,7 +57,7 @@ export default function ConfigAdmin() {
     };
     try {
       axios
-        .put(`/auth/${id}`, data)
+        .put(`/auth/${ idUser}`, data)
         .then((res) => {
           Swal.fire("Exito", "Datos actualizados", "success");
         })
@@ -123,20 +119,7 @@ export default function ConfigAdmin() {
             Telefono actual
           </Typography>
           <div className="flex flex-row w-4/5">
-            <FormControl sx={{ m: 1, minWidth: 50 }} size="small">
-              <InputLabel id="demo-select-small"></InputLabel>
-
-              <Select
-                sx={{ border: "none", outline: "none" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                value={filterSelected}
-                label={"Estado"}
-                onChange={handleChangeState}
-              >
-                <MenuItem value={true}>+ 51</MenuItem>
-              </Select>
-            </FormControl>
+           
             <input
               {...register("telefono", {
                 required: true,
@@ -149,38 +132,7 @@ export default function ConfigAdmin() {
             />
           </div>
         </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="telefono" className="text-base font-medium">
-            Nuevo Telefono
-          </label>
-
-          <div className="flex flex-row w-4/5">
-            <FormControl sx={{ m: 1, minWidth: 50 }} size="small">
-              <InputLabel id="demo-select-small"></InputLabel>
-
-              <Select
-                sx={{ border: "none", outline: "none" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                value={filterSelected}
-                label={"Estado"}
-                onChange={handleChangeState}
-              >
-                <MenuItem value={true}>+ 51</MenuItem>
-              </Select>
-            </FormControl>
-            <input
-              {...register("telefono", {
-                required: true,
-              })}
-              type="number"
-              name="telefono"
-              id="telefono"
-              className="p-3 rounded-md border-2 w-full lg:w-1/2 outline-none"
-              placeholder="Ingresa el telefono"
-            />
-          </div>
-        </div>
+     
         <div className="flex flex-col gap-2">
           <label htmlFor="password" className="text-base font-medium">
             Contraseña actual

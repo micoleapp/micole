@@ -194,7 +194,7 @@ mercado pago
   }
 
   return (
-    <>
+    <div>
       {" "}
       <div className={style.h1_div}>
         <img src={Logo} />
@@ -368,7 +368,7 @@ mercado pago
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

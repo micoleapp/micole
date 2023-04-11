@@ -81,6 +81,82 @@ const sendMailSolicitudCita = async(user, colegio) => {
   return;
 };
 
+const sendMailAplicacionCita = async(user, colegio) => {
+  const transporter = createTransport();
+  await transporter.sendMail({
+    from: '"MiCole App" <micole.test.app@gmail.com>',
+    to: `${user.email}`,
+    subject: `¡Felicitaciones! Has pasado a la etapa de Aplicación del colegio ${colegio.nombre_colegio}`,
+    html: aplicacionCita(user, colegio, actualDate)
+  });
+  return;
+};
+
+const sendMailEntrevistaCita = async(user, colegio) => {
+  const transporter = createTransport();
+  await transporter.sendMail({
+    from: '"MiCole App" <micole.test.app@gmail.com>',
+    to: `${user.email}`,
+    subject: `¡Felicitaciones! Has pasado a la etapa de Entrevista con el Director del colegio ${colegio.nombre_colegio}`,
+    html: entrevistaDirector(user, colegio, actualDate)
+  });
+  return;
+};
+
+const sendMailVOfrecida = async(user, colegio) => {
+  const transporter = createTransport();
+  await transporter.sendMail({
+    from: '"MiCole App" <micole.test.app@gmail.com>',
+    to: `${user.email}`,
+    subject: `¡Felicitaciones! Has pasado a la etapa de Vacante Ofrecida del colegio ${colegio.nombre_colegio}`,
+    html: vacanteOfrecida(user, colegio, actualDate)
+  });
+  return;
+};
+
+const sendMailVAceptada = async(user, colegio) => {
+  const transporter = createTransport();
+  await transporter.sendMail({
+    from: '"MiCole App" <micole.test.app@gmail.com>',
+    to: `${user.email}`,
+    subject: `¡Felicitaciones! Has sido aceptado en el colegio ${colegio.nombre_colegio}`,
+    html: vacanteAceptada(user, colegio, actualDate)
+  });
+  return;
+};
+
+/* Mails Ventas */
+const PlanNombre = ["Free","Básico", "Estandar", "Premium"];
+
+const sendPaymentSuccess = async(email, colegio, plan) => {
+  const transporter = createTransport();
+  await transporter.sendMail({
+    from: '"MiCole App" <micole.test.app@gmail.com>',
+    to: `${email}`,
+    subject: `MiCole - suscripción al plan ${PlanNombre[plan-1]} realizado con éxito`,
+    html: sendPaymentSuccessEmail(colegio, plan, actualDate)
+  });
+  return;
+};
+
+const sendPaymentCanceled = async(email, colegio, plan) => {
+  const transporter = createTransport();
+  await transporter.sendMail({
+    from: '"MiCole App" <micole.test.app@gmail.com>',
+    to: `${email}`,
+    subject: `MiCole - suscripción al plan ${PlanNombre[plan-1]} ha sido rechazada`,
+    html: sendPaymentCanceledEmail(colegio, plan, actualDate)
+  });
+  return;
+};
+
 exports.sendMailSignUp = (user , type) => sendMailSignUp(user , type);
 exports.sendMailInforme = (user) => sendMailInforme(user);
 exports.sendMailSolicitudCita = (user, colegio) => sendMailSolicitudCita(user, colegio);
+exports.sendMailCitaRealizada = (user, colegio) => sendMailCitaRealizada(user, colegio);
+exports.sendMailAplicacionCita = (user, colegio) => sendMailAplicacionCita(user, colegio);
+exports.sendMailEntrevistaCita = (user, colegio) => sendMailEntrevistaCita(user, colegio);
+exports.sendMailVOfrecida = (user, colegio) => sendMailVOfrecida(user, colegio);
+exports.sendMailVAceptada = (user, colegio) => sendMailVAceptada(user, colegio);
+exports.sendPaymentSuccess = (colegio, plan) => sendPaymentSuccess(colegio, plan);
+exports.sendPaymentCanceled = (colegio, plan) => sendPaymentCanceled(colegio, plan);

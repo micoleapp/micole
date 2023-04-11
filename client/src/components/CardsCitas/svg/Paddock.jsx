@@ -4,8 +4,8 @@ export default function Paddock() {
     return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="67"
-          height="84"
+          width="70"
+          height="70"
           fill="none"
           viewBox="0 0 67 84"
         >
