@@ -19,6 +19,7 @@ import VacanteAdmin from "./PageVacantes/VacanteAdmin";
 import PanelControl from "./PanelControl/PanelControl";
 import ConfigAdmin from "./Config/ConfigAdmin";
 import { logout } from "../../redux/AuthActions";
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 export default function MainAdmin() {
   const [page, setPage] = React.useState(0);
 
@@ -184,6 +185,8 @@ export default function MainAdmin() {
               Ubicación
             </span>
           </button> 
+
+      
 
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${

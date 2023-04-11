@@ -1,0 +1,129 @@
+.layout {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content:flex-start;
+  align-items: flex-start;
+}
+.container {
+  display: flex;
+  width: 80%;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 2vh;
+  box-shadow: 2px 2px 1px rgba(34, 34, 34, 0.081);
+  background-color: #fff;
+
+  padding: 1vh;
+}
+
+.divInfo {
+  display: flex;
+
+  width: 100%;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.divDatos {
+  display: flex;
+  gap: 2vh;
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.itemDiv {
+  display: flex;
+  gap: 5px;
+}
+
+.itemDiv p {
+  font-size: 1.5vh;
+}
+
+.divNombreGrado {
+  display: flex;
+  gap: 5px;
+  flex-direction: row;
+}
+.promoPlan {
+  position: relative;
+  bottom: -8%;
+  background-color: #fff;
+  z-index: 20;
+}
+
+.loader {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: transparent;
+  border-radius: 50%;
+}
+
+.loader {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: transparent;
+  width: 36px;
+  height: 36px;
+}
+
+.loader {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: transparent;
+  width: 36px;
+  height: 36px;
+  animation: spin89345 1s linear infinite;
+}
+
+@keyframes spin89345 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.divFiltro {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: row;
+  color: rgb(12, 43, 66);
+  gap: 1vh;
+  background-color: transparent;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
+
+@media (max-width: 800px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .divDatos {
+    flex-direction: column;
+    gap: 1vh;
+  }
+  .divNombreGrado {
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+  }
+  .divFiltro {
+    width: 100%;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+  }
+  .layout {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}

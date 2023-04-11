@@ -21,7 +21,7 @@ export const schoolsSlice = createSlice({
     grados: [],
     metodos: [],
     dificultades: [],
-    horarios: null,
+    horariosColegio: null,
     vacantesGrados: [],
     citasAgendadas: [],
     error: "",
@@ -134,7 +134,7 @@ export const schoolsSlice = createSlice({
         (state.error = "");
     },
     getHorarios: (state, action) => {
-      (state.horarios = action.payload),
+      (state.horariosColegio = action.payload),
         (state.loading = false),
         (state.error = "");
     },

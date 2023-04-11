@@ -1,6 +1,6 @@
 export default function es_AM_PM(hora) {
  
-    let tiempo = hora.split(":");
+    let tiempo = hora?.split(":");
     let horas = parseInt(tiempo[0]);
     let minutos = parseInt(tiempo[1]);
     let segundos = parseInt(tiempo[2]);
