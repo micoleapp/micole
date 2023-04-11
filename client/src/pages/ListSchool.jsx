@@ -28,6 +28,7 @@ import {
   getAllDistrits,
   getFilterHome,
   getFilterListSchool,
+  setPrecios,
 } from "../redux/SchoolsActions";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -139,7 +140,9 @@ function ListSchool() {
     precios
   } = useSelector((state) => state.schools);
   const navigate = useNavigate();
-
+  useEffect(() => {
+    dispatch(setPrecios())
+  }, []); 
   const location = useLocation();
 
   const params = new URLSearchParams(location.search);
@@ -175,8 +178,8 @@ function ListSchool() {
 
   const [type, setType] = React.useState("");
   const [page, setPage] = React.useState(1);
-  const [value1, setValue1] = React.useState(precios[0]);
   const [rating, setRating] = React.useState(null);
+  const [value1, setValue1] = React.useState(precios.length > 0 ? precios[0] : 0);
 
   const handleChange1 = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -190,8 +193,8 @@ function ListSchool() {
     }
   };
 
-  const [value2, setValue2] = React.useState(precios[1]);
-
+  
+  const [value2, setValue2] = React.useState(precios.length > 0 ? precios[1] : 5000);
   const handleChange2 = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
       return;
@@ -209,9 +212,7 @@ function ListSchool() {
   };
 
 
-  /*   useEffect(() => {
-    console.log(data);
-  }, [order]); */
+
   const [dificultadesArray, setDificultadesArray] = useState([]);
   const [metodosArray, setMetodosArray] = useState([]);
 
@@ -402,8 +403,9 @@ function ListSchool() {
                 <FormGroup>
                   {categories &&
                     categories.length > 0 &&
-                    categories?.map((cat) => (
+                    categories?.map((cat,index) => (
                       <FormControlLabel
+                      key={index}
                         control={
                           <Checkbox
                             checked={
@@ -749,7 +751,7 @@ function ListSchool() {
             className="flex"
             onSubmit={(e)=>handleSearch(e)}
             >
-            <input value={searchTerm} onChange={(e)=>setSerchTerm(e.target.value)} type="text" name="search" id="search" className="outline-none w-[400px]" onKeyDown={(e) => {if (e.key === "Enter") {handleSearch(e);}}}/>
+            <input value={searchTerm} placeholder="Buscar por nombre.." onChange={(e)=>setSerchTerm(e.target.value)} type="text" name="search" id="search" className="outline-none w-[300px] lg:w-[400px]" onKeyDown={(e) => {if (e.key === "Enter") {handleSearch(e);}}}/>
             <label htmlFor="search" className="text-[#0061dd] cursor-pointer">
               <button type="submit">
               <FontAwesomeIcon icon={faSearch} className="hover:scale-125 duration-200"/>
