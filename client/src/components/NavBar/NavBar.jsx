@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../../assets/logo1.png";
 import style from "./NavBar.module.css";
 import Categoria from "./Categoria/Categoria";
@@ -10,7 +10,9 @@ import { logout } from "../../redux/AuthActions";
 import { Squash as Hamburger } from "hamburger-react";
 import CircularProgress from "@mui/material/CircularProgress";
 import ModalRegistro from "../FormRegister/ModalRegister";
+import {useNavigate} from 'react-router-dom'
 function NavBar() {
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const { isAuth, oneSchool, user } = useSelector((state) => state.auth);
   const [OpenLogin, setOpenLogin] = useState(false);
@@ -48,6 +50,11 @@ function NavBar() {
       behavior: "smooth",
     });
   }
+useEffect(() => {
+  
+
+  
+}, [user])
 
   const [isOpen, setOpen] = useState(false);
 
@@ -87,7 +94,10 @@ function NavBar() {
 
         <div className={style.buttonContainer}>
           {isAuth === true ? (
-            <button onClick={handlerLogout} className={style.SesionButtom}>
+            <button onClick={()=>{
+              navigate('/')
+              handlerLogout()
+              }} className={style.SesionButtom}>
               Cerrar Sesion
             </button>
           ) : (
@@ -114,19 +124,21 @@ function NavBar() {
               <button className={style.SesionButtom}>Ver Perfil</button>
             </Link>
           ) : user.rol === "Colegio" ? (
-            oneSchool != null && (
-              <Link to={"/dashboardschool"}>
-                <button className={style.SesionButtom}>Ver Perfil</button>
-              </Link>
-            )
-          ) : (
-            <button
-              className={`${style.SesionButtom} flex items-center justify-center gap-2`}
-            >
-              Cargando perfil{" "}
-              <CircularProgress size="1rem" style={{ color: "#0061dd" }} />{" "}
-            </button>
-          )}
+            <>
+              {oneSchool != null ? (
+                <Link to={"/dashboardschool"}>
+                  <button className={style.SesionButtom}>Ver Perfil</button>
+                </Link>
+              ) : (
+                <button
+                  className={`${style.SesionButtom} flex items-center justify-center gap-2`}
+                >
+                  Cargando perfil{" "}
+                  <CircularProgress size="1rem" style={{ color: "#0061dd" }} />{" "}
+                </button>
+              )}
+            </>
+          ) : null}
         </div>
       </div>
       {OpenCategory && (
@@ -186,6 +198,7 @@ function NavBar() {
               onClick={() => {
                 setOpen(!isOpen);
                 handlerLogout();
+                navigate('/')
               }}
               className={style.SesionButtom}
             >

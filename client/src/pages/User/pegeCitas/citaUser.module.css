@@ -1,0 +1,142 @@
+.divLayout {
+  display: flex;
+  gap: 4vh;
+  flex-direction: column;
+  padding-left: 3vh;
+}
+
+.divEspaciado {
+  padding: 1vh;
+}
+.layout {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 1vh;
+  box-shadow: 10px 10px 20px rgba(60, 139, 203, 0.19);
+}
+.itemDiv {
+  width: 50%;
+  display: flex;
+
+  align-items: center;
+}
+.divThanos {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.imgInfoDiv {
+  width: 50%;
+  display: flex;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 1rem;
+}
+.divTypo {
+  max-width: 30vh;
+  display: flex;
+  gap: 1vh;
+}
+.itemDiv p {
+  padding: 1vh;
+}
+.planFechaResponsive {
+  display: none;
+}
+.loader {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: transparent;
+  border-radius: 50%;
+}
+
+.loader {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: transparent;
+  width: 36px;
+  height: 36px;
+}
+
+.loader {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: transparent;
+  width: 36px;
+  height: 36px;
+  animation: spin89345 1s linear infinite;
+}
+
+@keyframes spin89345 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.fechaHorarioDiv {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+.contenedor {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+}
+
+@media (max-width: 900px) {
+  .divLayout {
+    padding-left: 0vh;
+  }
+  .layout {
+    flex-direction: column;
+    width: 100%;
+  }
+  .imgInfoDiv {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  .fechaHorarioDiv {
+    flex-direction: column;
+  }
+  .itemDiv {
+    justify-content: center;
+  }
+  .planFechaResponsive {
+    display: flex;
+    /* width: 28%; */
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .divThanos {
+    display: none;
+  }
+  .contenedor {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 500px) {
+  .divLayout {
+    padding-left: 0vh;
+  }
+  .imgInfoDiv {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  .itemDiv p {
+    font-size: 1.6vh;
+    padding: 1vh;
+  }
+  .divTypo {
+    flex-direction: column;
+  }
+}

@@ -126,6 +126,18 @@ function valuetext2(value) {
 
 const minDistance = 100;
 function ListSchool() {
+  const dispatch = useDispatch();
+  const {
+    filtersSchools: allschools,
+    loading,
+    distrits,
+    grados,
+    categories,
+    pagination,
+    dificultades,
+    metodos,
+    precios
+  } = useSelector((state) => state.schools);
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -148,10 +160,10 @@ function ListSchool() {
     distritParams !== "false" ? [Number(distritParams)] : []
   );
   const [gradoName, setGradoName] = React.useState(
-    gradoParams !== "false" ? [Number(gradoParams)] : []
+    gradoParams !== "false" ? Number(gradoParams) : []
   );
   const [ingresoName, setIngresoName] = React.useState(
-    ingresoParams !== "false" ? [Number(ingresoParams)] : []
+    ingresoParams !== "false" ? Number(ingresoParams) : []
   );
   const [order, setOrder] = React.useState([]);
   const [categorias, setCategorias] = React.useState([]);
@@ -163,7 +175,7 @@ function ListSchool() {
 
   const [type, setType] = React.useState("");
   const [page, setPage] = React.useState(1);
-  const [value1, setValue1] = React.useState([0, 4000]);
+  const [value1, setValue1] = React.useState(precios[0]);
   const [rating, setRating] = React.useState(null);
 
   const handleChange1 = (event, newValue, activeThumb) => {
@@ -178,7 +190,7 @@ function ListSchool() {
     }
   };
 
-  const [value2, setValue2] = React.useState([0, 4000]);
+  const [value2, setValue2] = React.useState(precios[1]);
 
   const handleChange2 = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -196,17 +208,7 @@ function ListSchool() {
     setType(event.target.value);
   };
 
-  const dispatch = useDispatch();
-  const {
-    filtersSchools: allschools,
-    loading,
-    distrits,
-    grados,
-    categories,
-    pagination,
-    dificultades,
-    metodos,
-  } = useSelector((state) => state.schools);
+
   /*   useEffect(() => {
     console.log(data);
   }, [order]); */
@@ -237,8 +239,9 @@ function ListSchool() {
     order: order,
     dificultades: dificultadesArray,
     metodos: metodosArray,
+    search: "",
   };
-  console.log(data);
+
   const handleSubmitData = (e) => {
     e.preventDefault();
     setPage(1);
@@ -258,7 +261,7 @@ function ListSchool() {
       });
       return;
     } else {
-      navigate(`/schooldetail/${id}?grado=${gradoName}&ingreso=${ingresoName}&lista=${lista}`);
+      window.open(`/#/schooldetail/${id}?grado=${gradoName}&ingreso=${ingresoName}&lista=${lista}`,"_blank");
     }
   };
 
@@ -280,8 +283,14 @@ function ListSchool() {
     setPage(value);
   };
 
-  console.log(ingresoName)
+  const [searchTerm, setSerchTerm] = useState("")
 
+  const handleSearch = (e) => {
+    e.preventDefault()
+    let newData = {...data, search:searchTerm}
+    setPage(1);
+    dispatch(getFilterListSchool(newData, page));
+  }
   return (
     <div
       className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "
@@ -292,7 +301,7 @@ function ListSchool() {
       <h1 className="text-center mt-2 text-2xl font-semibold drop-shadow-md">
         Encuentra el colegio ideal
       </h1>
-      <div className="flex flex-col lg:flex-row p-5 gap-10 m-5 ">
+      <div className="flex flex-col lg:flex-row p-5 gap-10 ">
         <section
           className={`lg:w-1/4 w-full flex flex-col gap-5 rounded-md relative duration-300 lg:h-min bg-white shadow-lg p-10 transition-all`}
         >
@@ -699,7 +708,7 @@ function ListSchool() {
             </button>
           </div>
         </section>
-        <section className="lg:w-3/4 w-full lg:pl-10 lg:pr-10 lg:pb-10 p-0 flex flex-col gap-5">
+        <section className="lg:w-3/4 w-full lg:pr-10 lg:pb-10 p-0 flex flex-col gap-5">
           <div className="flex items-center justify-between drop-shadow-md">
             <small>
               Mostrando{" "}
@@ -735,6 +744,19 @@ function ListSchool() {
               </Select>
             </FormControl>
           </div>
+          <div className="bg-white w-fit flex px-2 py-1 rounded-md border">
+            <form
+            onSubmit={(e)=>handleSearch(e)}
+            >
+            <input value={searchTerm} onChange={(e)=>setSerchTerm(e.target.value)} type="text" name="search" id="search" className="outline-none w-[400px]" onKeyDown={(e) => {if (e.key === "Enter") {handleSearch(e);}}}/>
+            <label htmlFor="search" className="text-[#0061dd] cursor-pointer">
+              <button type="submit">
+              <FontAwesomeIcon icon={faSearch} className="hover:scale-125 duration-200"/>
+              </button>
+            </label>
+
+            </form>
+          </div>
           {allschools?.length === 0 && (
             <h1>No hay colegios que coincidan con esos filtros</h1>
           )}
@@ -744,14 +766,14 @@ function ListSchool() {
                   return (
                     <div
                       key={school.id}
-                      className={`flex border rounded-md shadow-md h-auto bg-white items-center gap-2 flex-col md:flex-row`}
+                      className={`flex border rounded-md shadow-md bg-white gap-2 flex-col md:flex-row`}
                     >
                       {" "}
                       <div className="relative">
                         <img
                           src={school.primera_imagen}
                           alt={school.title}
-                          className="w-[400px] h-auto lg:h-[220px] object-cover"
+                          className="h-full w-[400px] object-cover"
                         />
                         {/* <span className="absolute bg-[#0061dd] text-white p-1 px-2 rounded-md top-3 left-3">
                           DESTACADO
@@ -837,7 +859,7 @@ function ListSchool() {
                           </span>
                         </div>
                       </div>
-                      <div className="w-full p-5  flex flex-col justify-between gap-5 drop-shadow-md">
+                      <div className="w-full p-5  flex flex-col justify-between gap-5">
                         <div className="flex justify-between gap-4 xl:gap-0 flex-col xl:flex-row">
                           <div className="flex flex-col gap-4 w-full">
                             <div className="flex flex-col w-fit gap-2">
@@ -873,7 +895,7 @@ function ListSchool() {
                               ))}
                             </div> */}
 
-                            <div className="grid grid-cols-2 grid-rows-3 w-full gap-y-2">
+                            <div className="grid grid-cols-2 grid-rows-3 w-max gap-x-2 gap-y-2">
                               {school.Vacantes.length > 0 && (
                                 <small className="text-gray-400 flex gap-1 items-center">
                                   {" "}
@@ -911,7 +933,7 @@ function ListSchool() {
                                   }
                                 </small>
                               )}
-                              {school?.Categoria.length < 4 ? (
+                              {school?.Categoria.length < 2 ? (
                                 <small className="text-gray-400 flex gap-1 items-center">
                                   <span className="text-xl text-gray-400">
                                     <ImAttachment></ImAttachment>
@@ -925,10 +947,10 @@ function ListSchool() {
                                   <span className="text-xl text-gray-400">
                                     <ImAttachment></ImAttachment>
                                   </span>
-                                  {school?.Categoria?.slice(0, 3)
+                                  {school?.Categoria?.slice(0, 1)
                                     .map((cat) => cat.nombre_categoria)
                                     .join(", ")}
-                                  ... +{school?.Categoria?.slice(3).length}{" "}
+                                  ... +{school?.Categoria?.slice(1).length}{" "}
                                 </small>
                               )}
                               {school.Vacantes.length > 0 && (
@@ -948,7 +970,7 @@ function ListSchool() {
                               )}
                             </div>
                           </div>
-                          <div className="flex flex-col gap-2 justify-between">
+                          <div className="flex flex-col gap-2 w-full items-end justify-between">
                             <h1>
                               {school.Provincium.nombre_provincia},{" "}
                               {school.Distrito.nombre_distrito}{" "}
@@ -978,7 +1000,7 @@ function ListSchool() {
                                 0
                                 ?                             <button
                                 onClick={() => goToDetails(school.id,false)}
-                                className="bg-[#edf4fe] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md disabled:bg-slate-500/20 disabled:text-white disabled:line-through p-2 text-[#0061dd] w-max text-center font-semibold"
+                                className="bg-[#edf4fe] hover:scale-110 w-full duration-200 cursor-pointer rounded-sm shadow-md disabled:bg-slate-500/20 disabled:text-white disabled:line-through p-2 text-[#0061dd] text-center font-semibold"
                               >
                                 VER DETALLE
                               </button>
@@ -993,9 +1015,9 @@ function ListSchool() {
                                       vac.año === ingresoName
                                   )[0]?.alumnos_matriculados ==
                                   0
-                                  ?   <button onClick={() => goToDetails(school.id,true)} className="bg-[#dcffe2] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#3cff7d] font-semibold">
-                                Lista de espera
-                              </button> : null}
+                                  ?   <button onClick={() => goToDetails(school.id,true)} className="bg-[#dcffe2] hover:scale-110 duration-200 cursor-pointer rounded-sm shadow-md p-2 text-[#3cff7d] font-semibold w-full">
+                                VER DETALLE
+                              </button> :   null}
 
 
                           </div>

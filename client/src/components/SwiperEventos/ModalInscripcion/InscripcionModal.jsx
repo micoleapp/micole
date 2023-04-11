@@ -40,6 +40,7 @@ export default function InscripcionModal({
             horaEvento={horaEvento}
             idEvento={idEvento}
             nombreEvento={nombreEvento}
+            handleClose={handleClose}
           />
         </Box>
       </Modal>

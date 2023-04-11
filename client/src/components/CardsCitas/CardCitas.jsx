@@ -17,6 +17,8 @@ import PaginationCitas from "./Paginacion/PaginationCitas";
 import axios from "axios";
 import Paddock from "./svg/Paddock";
 import { getCitaAgendadas } from "../../redux/SchoolsActions";
+import fechaFormat from "../SwiperEventos/utils/fechaFormat";
+import es_AM_PM from "../SwiperEventos/utils/horaFormat";
 // import sliceIntoChunks from "../"
 
 export default function CardCitas({ data, filtros }) {
@@ -69,8 +71,8 @@ export default function CardCitas({ data, filtros }) {
   useEffect(() => {
     const allCitas = [];
 
-    // dispatch(getCitaAgendadas());
-    // dispatch(getCita());
+    dispatch(getCitaAgendadas());
+    dispatch(getCita());
 
     let resultadoActivas = sliceIntoChunks(data.CitasActivasMesActual, 10);
     setActivas(resultadoActivas);
@@ -115,7 +117,7 @@ export default function CardCitas({ data, filtros }) {
   };
 
   function BtnPutCitas({ id }) {
-    console.log( id);
+    console.log(id);
     const [Toggle, setToggle] = useState(false);
     const [loading, setLoading] = useState(false);
     const toggleBtn = () => {
@@ -232,7 +234,12 @@ export default function CardCitas({ data, filtros }) {
                                 })}
                             </div>
 
-                            <div className={style.itemDiv}>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column-reverse",
+                              }}
+                            >
                               <div className={style.itemDiv}>
                                 <AccessTimeIcon
                                   style={{
@@ -241,7 +248,11 @@ export default function CardCitas({ data, filtros }) {
                                     color: "grey",
                                   }}
                                 />
-                                <p>{cita.hora_cita}</p>
+                                <p>
+                                  {" "}
+                                  {cita.hora_cita} {""}
+                                  {es_AM_PM(cita.hora_cita)}
+                                </p>
                               </div>{" "}
                               <div className={style.itemDiv}>
                                 <EventIcon
@@ -251,7 +262,7 @@ export default function CardCitas({ data, filtros }) {
                                     color: "grey",
                                   }}
                                 />{" "}
-                                <p>{cita.fecha_cita}</p>
+                                <p>{fechaFormat(cita.fecha_cita)}</p>
                               </div>
                             </div>
                           </div>
@@ -421,7 +432,12 @@ export default function CardCitas({ data, filtros }) {
                                   })}
                               </div>
 
-                              <div className={style.itemDiv}>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column-reverse",
+                                }}
+                              >
                                 <div className={style.itemDiv}>
                                   <AccessTimeIcon
                                     style={{
@@ -430,7 +446,11 @@ export default function CardCitas({ data, filtros }) {
                                       color: "grey",
                                     }}
                                   />
-                                  <p>{cita.hora_cita}</p>
+                                  <p>
+                                    {" "}
+                                    {cita.hora_cita} {""}
+                                    {es_AM_PM(cita.hora_cita)}
+                                  </p>
                                 </div>{" "}
                                 <div className={style.itemDiv}>
                                   <EventIcon
@@ -440,7 +460,7 @@ export default function CardCitas({ data, filtros }) {
                                       color: "grey",
                                     }}
                                   />{" "}
-                                  <p>{cita.fecha_cita}</p>
+                                  <p>{fechaFormat(cita.fecha_cita)}</p>
                                 </div>
                               </div>
                             </div>
@@ -527,7 +547,7 @@ export default function CardCitas({ data, filtros }) {
                   <CardContent
                     sx={{
                       display: "flex",
-                      gap: "20px",
+                      gap: "2vh",
                       justifyContent: "center",
                       flexDirection: "column",
                       alignItems: "center",
@@ -535,10 +555,15 @@ export default function CardCitas({ data, filtros }) {
                   >
                     <Paddock />
                     {/* <LockOutlinedIcon sx={{color:'blue', height:'200px'}}/> */}
-                    <h1 style={{ fontWeight: "700", fontFamily: "Poppins" }}>
-                      Desbloquea más citas mejorando tu plan
+                    <h1 style={{ fontWeight: "700", fontFamily: "Poppins", color:'rgb(40 39 39)', textAlign:'center' }}>
+                      <b>Desbloquea más citas mejorando tu plan</b>
                     </h1>
-                    <Button variant="contained">Ver planes</Button>
+                    <Button
+                      sx={{ fontWeight: "600", fontFamily: "Poppins" }}
+                      variant="contained"
+                    >
+                      Ver planes
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
@@ -591,28 +616,37 @@ export default function CardCitas({ data, filtros }) {
                                   })}
                               </div>
 
+                              <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column-reverse",
+                              }}
+                            >
                               <div className={style.itemDiv}>
-                                <div className={style.itemDiv}>
-                                  <AccessTimeIcon
-                                    style={{
-                                      width: "20px",
-                                      height: "20px",
-                                      color: "grey",
-                                    }}
-                                  />
-                                  <p>{cita.hora_cita}</p>
-                                </div>{" "}
-                                <div className={style.itemDiv}>
-                                  <EventIcon
-                                    style={{
-                                      width: "20px",
-                                      height: "20px",
-                                      color: "grey",
-                                    }}
-                                  />{" "}
-                                  <p>{cita.fecha_cita}</p>
-                                </div>
+                                <AccessTimeIcon
+                                  style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    color: "grey",
+                                  }}
+                                />
+                                <p>
+                                  {" "}
+                                  {cita.hora_cita} {""}
+                                  {es_AM_PM(cita.hora_cita)}
+                                </p>
+                              </div>{" "}
+                              <div className={style.itemDiv}>
+                                <EventIcon
+                                  style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    color: "grey",
+                                  }}
+                                />{" "}
+                                <p>{fechaFormat(cita.fecha_cita)}</p>
                               </div>
+                            </div>
                             </div>
                           </div>
                         </div>
@@ -1091,7 +1125,12 @@ export default function CardCitas({ data, filtros }) {
                                 })}
                             </div>
 
-                            <div className={style.itemDiv}>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column-reverse",
+                              }}
+                            >
                               <div className={style.itemDiv}>
                                 <AccessTimeIcon
                                   style={{
@@ -1100,7 +1139,11 @@ export default function CardCitas({ data, filtros }) {
                                     color: "grey",
                                   }}
                                 />
-                                <p>{cita.hora_cita}</p>
+                                <p>
+                                  {" "}
+                                  {cita.hora_cita} {""}
+                                  {es_AM_PM(cita.hora_cita)}
+                                </p>
                               </div>{" "}
                               <div className={style.itemDiv}>
                                 <EventIcon
@@ -1110,7 +1153,7 @@ export default function CardCitas({ data, filtros }) {
                                     color: "grey",
                                   }}
                                 />{" "}
-                                <p>{cita.fecha_cita}</p>
+                                <p>{fechaFormat(cita.fecha_cita)}</p>
                               </div>
                             </div>
                           </div>
@@ -1202,4 +1245,4 @@ export default function CardCitas({ data, filtros }) {
       <div className={style.layout}></div>
     </>
   );
-};
+}

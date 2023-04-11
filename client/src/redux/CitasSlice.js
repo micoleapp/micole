@@ -7,6 +7,7 @@ export const citasSlice = createSlice({
     success: null,
     error: "",
     loading: false,
+    citasUsuario:null,
     columns: {
       "column-1": {
         id: "column-1",
@@ -141,6 +142,10 @@ export const citasSlice = createSlice({
     isLoading: (state) => {
       state.loading = true;
     },
+    getCitasUsuario: (state,action) => {
+      state.citasUsuario = action.payload,
+      state.loading = false
+    },
   },
 });
 
@@ -152,5 +157,6 @@ export const {
   isLoading,
   getSuccess,
   cleanSuccess,
+  getCitasUsuario
 } = citasSlice.actions;
 export default citasSlice.reducer;

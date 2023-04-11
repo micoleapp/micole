@@ -9,15 +9,21 @@ import Hamburger from "hamburger-react";
 
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { getAllSchools } from "../../redux/SchoolsActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CitasUser from "./pegeCitas/CitasUser";
+import { getCitaUsuario } from "../../redux/CitasActions";
+import EventosUsuario from "./pageEventos/EventosUsuario";
+import UserConfig from "./Config-usuario/UserConfig";
+import { logout } from "../../redux/AuthActions";
 
 export default function MainUser() {
   const [page, setPage] = React.useState(0);
   const [isOpen, setOpen] = useState(false);
+  const { citasUsuario, loading } = useSelector((state) => state.citas);
+
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllSchools());
+    dispatch(getCitaUsuario());
   }, []);
 
   return (
@@ -109,10 +115,7 @@ export default function MainUser() {
               className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
                 page == 3 ? "bg-[#0061dd] text-white" : null
               } `}
-              onClick={() => {
-                setOpen();
-                setPage(3);
-              }}
+              onClick={() => dispatch(logout())}
             >
               <AiOutlineLogout
                 className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
@@ -130,18 +133,18 @@ export default function MainUser() {
           </ul>
         </section>
         {/* Renderizado de componentes  */}
-        <section className="right w-full bg-[#f6f7f8] p-5 lg:px-31 lg:py-12">
+        <section className="right w-full bg-[#EEEE]  lg:px-31 lg:py-12">
           {page === 0 ? (
-            <div className="min-h-screen">
-            <CitasUser/>
+            <div className="min-h-screen ">
+              <CitasUser data={citasUsuario&&citasUsuario}/>
             </div>
           ) : page === 1 ? (
-            <div className="min-h-screen">
-              <p>Eventos</p>
+            <div className="min-h-screen flex    flex-col ">
+              <EventosUsuario />
             </div>
           ) : page === 2 ? (
             <div className="min-h-screen">
-              <p>Config</p>
+              <UserConfig/>
             </div>
           ) : page === 3 ? (
             <div className="min-h-screen">

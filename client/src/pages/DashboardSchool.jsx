@@ -43,7 +43,7 @@ import { steps } from "../MockupInfo/Pasos";
 import {
   getVacantes,
   postHorariosVacantes,
-  getCitaAgendadas,
+  getCitaAgendadas
 } from "../redux/SchoolsActions";
 import { CiUser, CiClock1 } from "react-icons/ci";
 import { BsWindowDock } from "react-icons/bs";
@@ -52,7 +52,7 @@ import { RiImageAddLine } from "react-icons/ri";
 import { GiHexagonalNut } from "react-icons/gi";
 import { BsCalendarCheck } from "react-icons/bs";
 import { useEffect } from "react";
-import { logout, getSchoolDetail } from "../redux/AuthActions";
+import { logout, getSchoolDetail , setVacantesRedux} from "../redux/AuthActions";
 import { useState } from "react";
 import { useRef } from "react";
 import axios from "axios";
@@ -183,7 +183,7 @@ function DashboardSchool() {
       Swal.fire("warning", "Las nuevas contraseñas no coinciden", "error");
       return;
     }
-    if (password) {
+    if (!user.password) {
       Swal.fire(
         "Error",
         "Ingrese su contraseña para modificar algun campo",
@@ -520,8 +520,7 @@ function DashboardSchool() {
       evento.tipoEvento !== "" &&
       evento.capacidadEvento !== 0 &&
       evento.fechaEvento !== "" &&
-      evento.horaEvento !== "" &&
-      evento.image !== ""
+      evento.horaEvento !== ""
     ) {
       return false;
     } else {
@@ -1118,6 +1117,12 @@ function DashboardSchool() {
     });
   };
 
+  useEffect(()=>{
+    if(activeStep === 3){
+      dispatch(setVacantesRedux(id))
+    }
+  },[activeStep])
+
   return (
     <div className="flex lg:flex-row flex-col">
       <section
@@ -1302,7 +1307,7 @@ function DashboardSchool() {
           </button>
         </ul>
       </section>
-      <section className="right w-full bg-[#f6f7f8] p-5 lg:px-31 lg:py-12">
+      <section className="right w-full bg-[#EEEE] p-5 lg:px-31 lg:py-12">
         {page === 0 ? (
           <Box sx={{ width: "100%", height: "100%" }}>
             <Stepper
@@ -2004,7 +2009,7 @@ function DashboardSchool() {
                           sx={{ mr: 1 }}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
-                          Back
+                          Atrás
                         </button>
                         <Box sx={{ flex: "1 1 auto" }} />
                         <button
@@ -2014,7 +2019,7 @@ function DashboardSchool() {
                           disabled={datosPrincipalesCompleted()}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
-                          Next
+                          Guardar y continuar
                         </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
@@ -2291,7 +2296,7 @@ function DashboardSchool() {
                           sx={{ mr: 1 }}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
-                          Back
+                          Atrás
                         </button>
                         <Box sx={{ flex: "1 1 auto" }} />
                         <button
@@ -2299,7 +2304,7 @@ function DashboardSchool() {
                           sx={{ mr: 1 }}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
-                          Next
+                          Guardar y continuar
                         </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
@@ -2529,7 +2534,7 @@ function DashboardSchool() {
                           sx={{ mr: 1 }}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
-                          Back
+                          Atrás
                         </button>
                         <Box sx={{ flex: "1 1 auto" }} />
                         <button
@@ -2537,7 +2542,7 @@ function DashboardSchool() {
                           sx={{ mr: 1 }}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
-                          Next
+                          Guardar y continuar
                         </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
@@ -2634,7 +2639,7 @@ function DashboardSchool() {
                           sx={{ mr: 1 }}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
-                          Back
+                          Atrás
                         </button>
                         <Box sx={{ flex: "1 1 auto" }} />
                         <button
@@ -2645,7 +2650,7 @@ function DashboardSchool() {
                           sx={{ mr: 1 }}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
-                          Next
+                          Guardar y continuar
                         </button>
                         {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
@@ -2947,7 +2952,7 @@ function DashboardSchool() {
                           sx={{ mr: 1 }}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
-                          Back
+                          Atrás
                         </button>
                         <Box sx={{ flex: "1 1 auto" }} />
                         <button
@@ -2956,7 +2961,7 @@ function DashboardSchool() {
                           disabled={multimediaCompleted()}
                           className="p-2 bg-[#0061dd] text-white rounded-md px-4 disabled:bg-[#0061dd]/40"
                         >
-                          Next
+                          Guardar y continuar
                         </button>
                         {/* {activeStep !== steps.length &&
                                         (completed[activeStep] ? (
@@ -3309,6 +3314,7 @@ function DashboardSchool() {
         ) : page === 6 ? (
           <div className="min-h-screen p-10 flex flex-col gap-5">
             <h1 className="text-xl font-medium">Crear nuevo evento</h1>
+            <p>Si no agregas una imagen se crea una plantilla por default</p>
             <div className="flex flex-col lg:flex-row gap-5">
               <form
                 onSubmit={handleFilesSubmitEvento}
@@ -3461,11 +3467,17 @@ function DashboardSchool() {
                   <div className="flex flex-col mx-10 gap-5">
                     {oneSchool?.Eventos?.map((evento) => (
                       <div className="flex lg:flex-row flex-col w-full items-center p-3 justify-around shadow-md bg-white rounded-md gap-2">
-                        <img
-                          src={evento.imagen_evento}
-                          alt={evento.nombre_evento}
-                          className="rounded-full w-24 h-24 object-cover"
-                        />
+                        {evento.imagen_evento !== "" ? (
+                          <img
+                            src={evento.imagen_evento }
+                            alt={evento.nombre_evento}
+                            className="rounded-full w-24 h-24 object-cover"
+                          />
+                        ) : oneSchool.logo !== null ? (<img
+                        src={oneSchool.logo }
+                        alt={oneSchool.nombre_colegio}
+                        className="rounded-full w-24 h-24 object-cover"
+                      />) : null }
                         <div className="flex flex-col text-center lg:text-start gap-2">
                           <h2 className="font-semibold">
                             {evento.nombre_evento}

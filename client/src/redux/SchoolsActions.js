@@ -24,7 +24,16 @@ import {
   getMetodos,
   getDificultades,
   getNombreColegios,
+  getPrecios
 } from "./SchoolsSlice";
+
+export const setPrecios = () => (dispatch) => {
+  try {
+    axios.get('/precios').then(res=>dispatch(getPrecios(res.data))).catch(err=>console.log(err))
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 export const getVacantes = (niveles) => (dispatch) => {
   dispatch(isLoading());
@@ -101,10 +110,14 @@ export const getAllPaises = () => (dispatch) => {
 
 export const getAllCategories = () => (dispatch) => {
   dispatch(isLoading());
-  axios
-    .get("/categorias")
-    .then((res) => dispatch(getCategories(res.data)))
-    .catch((err) => dispatch(getError(err.message)));
+  try {
+    axios
+      .get("/categorias")
+      .then((res) => dispatch(getCategories(res.data)))
+      .catch((err) => dispatch(getError(err.message)));
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const getAllInfraestructura = () => (dispatch) => {
@@ -262,25 +275,28 @@ export const postCita = (cita) => (dispatch) => {
 export const getCitaAgendadas = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
-  token &&
-    axios
-      .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
-      .then((res) => dispatch(getCitasAgendado(res.data)))
-      .catch((err) => {
-        Swal.fire({
-          icon: "error",
-          title: "Algo salio mal",
-          text: err.response.data.error,
+  try {
+    token &&
+      axios
+        .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
+        .then((res) => dispatch(getCitasAgendado(res.data)))
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: err.response.data.error,
+          });
         });
-      });
+    
+  } catch (error) {
+    console.log(error)
+  }
 };
 
-export const getHorariosSchool = () => (dispatch) => {
+export const getHorariosSchool = (id) => (dispatch) => {
   dispatch(isLoading());
-  const idColegio = localStorage.getItem("ColegioId");
-  console.log(idColegio);
   axios
-    .get(`/horarios/${idColegio}`)
+    .get(`/horarios/${id}`)
     .then((res) => dispatch(getHorarios(res.data)))
     .catch((err) => {
       Swal.fire({
