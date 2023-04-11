@@ -12,8 +12,8 @@ import store from "./redux/store";
 //podemos hacerlo directo directo axios('/review').then(etc...)
 
 import.meta.env.MODE === "development"
-  ? (axios.defaults.baseURL = "https://micole-production.up.railway.app")
-  : (axios.defaults.baseURL = "https://micole-production.up.railway.app");
+  ? (axios.defaults.baseURL = " http://localhost:3001/")
+  : (axios.defaults.baseURL = " http://localhost:3001/");
 
 let previusTitle = document.title
 
