@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const { ListaDeEspera, User, Grado, Colegio } = require("../db.js");
+const { ListaDeEspera, User, Grado, Colegio,Auth} = require("../db.js");
 
 //------- PEDIR TODOS LOSREGISTROS DE LA LISTA--------
 router.get("/", async (req, res) => {
@@ -18,12 +18,16 @@ router.get("/", async (req, res) => {
         },
         {
           model: User,
+          include:[
+            {
+              model: Auth,
+              attributes: ["email"],
+            },
+          ],
           attributes: ["nombre_responsable", "apellidos_responsable","telefono"],
         },
-        {
-          model:Auth,
-          attributes: ["email"],
-        },
+        
+
       ],
       attributes: ["id", "año"],
     });
@@ -41,6 +45,31 @@ router.get("/usuario/:id", async (req, res) => {
     let lista;
     lista = await ListaDeEspera.findAll({
       where: { UserId: id },
+      attributes:{
+        exclude:["ColegioId","GradoId","UserId"],
+      },
+      include: [
+        {
+          model: Colegio,
+          attributes: ["id", "nombre_colegio"],
+        },
+        {
+          model: Grado,
+          attributes: ["id", "nombre_grado"],
+        },
+        {
+          model: User,
+          include:[
+            {
+              model: Auth,
+              attributes: ["email"],
+            },
+          ],
+          attributes: ["id","nombre_responsable", "apellidos_responsable","telefono"],
+          
+        },
+     
+      ],     
     });
 
     res.json(lista);
@@ -56,8 +85,32 @@ router.get("/colegio/:id", async (req, res) => {
     let lista;
     lista = await ListaDeEspera.findAll({
       where: { ColegioId: id },
+      attributes:{
+        exclude:["ColegioId","GradoId","UserId"],
+      },
+      include: [
+        {
+          model: Colegio,
+          attributes: ["id", "nombre_colegio"],
+        },
+        {
+          model: Grado,
+          attributes: ["id", "nombre_grado"],
+        },
+        {
+          model: User,
+          include:[
+            {
+              model: Auth,
+              attributes: ["email"],
+            },
+          ],
+          attributes: ["id","nombre_responsable", "apellidos_responsable","telefono"],
+          
+        },
+     
+      ],     
     });
-
     res.json(lista);
   } catch (err) {
     res.json({ err });
@@ -67,6 +120,7 @@ router.get("/colegio/:id", async (req, res) => {
 //------- POST EN LA LISTA--------
 router.post("/", async (req, res) => {
   try {
+    var today = new Date();
     const { año, colegioId, usuarioId, gradoId } = req.body;
     const validacion = await Colegio.findOne({
       where: { id: usuarioId },
@@ -82,6 +136,7 @@ router.post("/", async (req, res) => {
         ColegioId: colegioId,
         UserId: usuarioId,
         GradoId: gradoId,
+        createdAt:today,
       },
     });
     if (created) {
