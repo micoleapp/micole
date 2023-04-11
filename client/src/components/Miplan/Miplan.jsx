@@ -182,7 +182,6 @@ export default function Miplan() {
 
             {/* </Card> */}
           </div>
-        </div>
 
         )}
         {/* // Historial */}
