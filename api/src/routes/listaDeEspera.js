@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const { ListaDeEspera, User, Grado, Colegio,Auth} = require("../db.js");
+const { ListaDeEspera, User, Grado, Colegio, Auth } = require("../db.js");
 
 //------- PEDIR TODOS LOSREGISTROS DE LA LISTA--------
 router.get("/", async (req, res) => {
@@ -18,16 +18,18 @@ router.get("/", async (req, res) => {
         },
         {
           model: User,
-          include:[
+          include: [
             {
               model: Auth,
               attributes: ["email"],
             },
           ],
-          attributes: ["nombre_responsable", "apellidos_responsable","telefono"],
+          attributes: [
+            "nombre_responsable",
+            "apellidos_responsable",
+            "telefono",
+          ],
         },
-        
-
       ],
       attributes: ["id", "año"],
     });
@@ -45,8 +47,8 @@ router.get("/usuario/:id", async (req, res) => {
     let lista;
     lista = await ListaDeEspera.findAll({
       where: { UserId: id },
-      attributes:{
-        exclude:["ColegioId","GradoId","UserId"],
+      attributes: {
+        exclude: ["ColegioId", "GradoId", "UserId"],
       },
       include: [
         {
@@ -59,22 +61,76 @@ router.get("/usuario/:id", async (req, res) => {
         },
         {
           model: User,
-          include:[
+          include: [
             {
               model: Auth,
               attributes: ["email"],
             },
           ],
-          attributes: ["id","nombre_responsable", "apellidos_responsable","telefono"],
-          
+          attributes: [
+            "id",
+            "nombre_responsable",
+            "apellidos_responsable",
+            "telefono",
+          ],
         },
-     
-      ],     
+      ],
     });
 
     res.json(lista);
   } catch (err) {
     res.json({ err });
+  }
+});
+
+//------- PEDIR POR FILTRADO DE FECHA O GRADO DE LA LISTA--------
+router.get("/filtro", async (req, res) => {
+  try {
+    const { gradoId, fecha } = req.body;
+    let lista;
+    lista = await ListaDeEspera.findAll({
+      where: {
+        ...(gradoId && { GradoId: gradoId }),
+        ...(fecha && { createdAt: fecha }),
+      },
+      attributes: {
+        exclude: ["ColegioId", "GradoId", "UserId"],
+      },
+      include: [
+        {
+          model: Colegio,
+          attributes: ["id", "nombre_colegio"],
+        },
+        {
+          model: Grado,
+          attributes: ["id", "nombre_grado"],
+        },
+        {
+          model: User,
+          include: [
+            {
+              model: Auth,
+              attributes: ["email"],
+            },
+          ],
+          attributes: [
+            "id",
+            "nombre_responsable",
+            "apellidos_responsable",
+            "telefono",
+          ],
+        },
+      ],
+    });
+    lista.length !== 0
+      ? res.json(lista)
+      : res.status(500).send({
+          message: "No existen registros con esos parametros",
+        });
+  } catch (err) {
+    res.status(500).send({
+      message: "Tu consulta no pudo ser procesada",
+    });
   }
 });
 
@@ -85,8 +141,8 @@ router.get("/colegio/:id", async (req, res) => {
     let lista;
     lista = await ListaDeEspera.findAll({
       where: { ColegioId: id },
-      attributes:{
-        exclude:["ColegioId","GradoId","UserId"],
+      attributes: {
+        exclude: ["ColegioId", "GradoId", "UserId"],
       },
       include: [
         {
@@ -99,17 +155,20 @@ router.get("/colegio/:id", async (req, res) => {
         },
         {
           model: User,
-          include:[
+          include: [
             {
               model: Auth,
               attributes: ["email"],
             },
           ],
-          attributes: ["id","nombre_responsable", "apellidos_responsable","telefono"],
-          
+          attributes: [
+            "id",
+            "nombre_responsable",
+            "apellidos_responsable",
+            "telefono",
+          ],
         },
-     
-      ],     
+      ],
     });
     res.json(lista);
   } catch (err) {
@@ -126,7 +185,7 @@ router.post("/", async (req, res) => {
       where: { id: usuarioId },
     });
     if (validacion) {
-        return res.status(501).json({
+      return res.status(501).json({
         message: "Un Colegio no puede inscribirse en lista de Espera",
       });
     }
@@ -136,7 +195,7 @@ router.post("/", async (req, res) => {
         ColegioId: colegioId,
         UserId: usuarioId,
         GradoId: gradoId,
-        createdAt:today,
+        createdAt: today,
       },
     });
     if (created) {
