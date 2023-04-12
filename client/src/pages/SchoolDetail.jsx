@@ -8,6 +8,8 @@ import {
   getSchoolDetail,
   postCita,
 } from "../redux/SchoolsActions";
+import CircularProgress from '@mui/material/CircularProgress'
+
 import banner from "../assets/ejemplobanner.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logo from "../assets/premium.png";
@@ -52,7 +54,8 @@ import SwiperEventos from "../components/SwiperEventos/SwiperEventos";
 import es_AM_PM from "../components/SwiperEventos/utils/horaFormat";
 import ModalLogin from "../components/ModalLogin/ModalLogin";
 import { setVacantesRedux } from "../redux/AuthActions";
-function QuiltedImageList({ firstImage, gallery, setImage }) {
+import SliderC from "../components/SliderC";
+function QuiltedImageList({ firstImage, gallery, setImage,setImages }) {
   return (
     <div className="w-full px-4">
       <img
@@ -67,7 +70,7 @@ function QuiltedImageList({ firstImage, gallery, setImage }) {
             key={index}
             src={item}
             className="cursor-pointer z-25 object-cover h-24 rounded-md"
-            onClick={() => setImage(item)}
+            onClick={() => setImages({open:true,src:gallery})}
           />
         ))}
       </div>
@@ -80,6 +83,10 @@ function SchoolDetail() {
   const { oneSchool, grados, horariosColegio } = useSelector(
     (state) => state.schools
   );
+  const [images,setImages] = useState({
+    open:false,
+    src:[]
+  })
 
   const { user, isAuth, vacantes } = useSelector((state) => state.auth);
   console.log(horariosColegio);
@@ -367,6 +374,8 @@ setCita({
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
 
+    document.title = oneSchool?.nombre_colegio?.length > 0 ? oneSchool.nombre_colegio : "MiCole"
+
   useEffect(() => {
     if (oneSchool.ubicacion) {
       setLat(JSON.parse(oneSchool?.ubicacion)?.lat);
@@ -430,11 +439,18 @@ setCita({
 
   return (
     <div className="bg-[#f6f7f8]">
-      <img
+      {images.open && <SliderC setImages={setImages} images={images.src}></SliderC>}
+      {oneSchool?.primera_imagen?.length > 0 ?      <img
         src={oneSchool.primera_imagen}
         alt="banner"
         className="object-cover w-full h-[500px]"
-      />
+      /> : <div className="w-full h-[500px] flex justify-center items-center">
+                    <CircularProgress
+              size="5rem"
+              style={{ color: '#0061dd'}}
+            />
+      </div> }
+
       <div
         className="p-8 px-5 lg:px-[100px]"
         data-aos-mirror={false}
@@ -1558,6 +1574,7 @@ setCita({
                     firstImage={oneSchool.primera_imagen}
                     gallery={JSON.parse(oneSchool.galeria_fotos)}
                     setImage={setImage}
+                    setImages={setImages}
                   />
                 )}
               <div
