@@ -112,7 +112,7 @@ function SchoolDetail() {
 
   useEffect(() => {
     dispatch(setVacantesRedux(id));
-  }, [isAuth]);
+  }, []);
   useEffect(() => {
     if (vacantes.length > 0) {
       setCurrentVacante(

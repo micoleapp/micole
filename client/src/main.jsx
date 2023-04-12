@@ -11,20 +11,20 @@ import store from "./redux/store";
 //con este comando podemos hacer las peticion con axios sin poner localhost...
 //podemos hacerlo directo directo axios('/review').then(etc...)
 
-// import.meta.env.MODE === "development"
-//   ? (axios.defaults.baseURL = "http://localhost:3001/")
-//   : (axios.defaults.baseURL = "https://micole-production.up.railway.app");
-axios.defaults.baseURL = "https://micole-production.up.railway.app"
-let previusTitle = document.title
+import.meta.env.MODE === "development"
+  ? (axios.defaults.baseURL = "http://localhost:3001/")
+  : (axios.defaults.baseURL = "https://micole-production.up.railway.app");
 
-window.addEventListener('blur',()=>{
-  previusTitle = document.title
-  document.title = "No te vayas aún, Vuelve!!!"
-})
+// let previusTitle = document.title
 
-window.addEventListener('focus',()=>{
-  document.title = previusTitle
-})
+// window.addEventListener('blur',()=>{
+//   previusTitle = document.title
+//   document.title = "No te vayas aún, Vuelve!!!"
+// })
+
+// window.addEventListener('focus',()=>{
+//   document.title = previusTitle
+// })
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
