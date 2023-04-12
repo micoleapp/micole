@@ -19,7 +19,7 @@ import Paddock from "./svg/Paddock";
 import { getCitaAgendadas } from "../../redux/SchoolsActions";
 import fechaFormat from "../SwiperEventos/utils/fechaFormat";
 import es_AM_PM from "../SwiperEventos/utils/horaFormat";
-// import sliceIntoChunks from "../"
+
 
 export default function CardCitas({ data, filtros }) {
   const { oneSchool } = useSelector((state) => state.auth);
@@ -89,7 +89,7 @@ export default function CardCitas({ data, filtros }) {
   }, []);
 
   const putStateCita = (id, setLoading) => {
-    console.log(id);
+  
     setLoading(true);
 
     try {
@@ -117,7 +117,7 @@ export default function CardCitas({ data, filtros }) {
   };
 
   function BtnPutCitas({ id }) {
-    console.log(id);
+
     const [Toggle, setToggle] = useState(false);
     const [loading, setLoading] = useState(false);
     const toggleBtn = () => {
@@ -374,7 +374,7 @@ export default function CardCitas({ data, filtros }) {
                 </>
               )}
               {data &&
-                Inactivas[page]?.map((cita, i) => {
+                Inactivas[page]?.map((cita) => {
                   return (
                     <>
                       <div className={style.container}>
@@ -705,337 +705,8 @@ export default function CardCitas({ data, filtros }) {
           </>
         )}
 
-        {/*PLAN */}
-        {filtros === "SinConfirmar" &&
-          oneSchool.Plan_Pago.nombre_plan_pago === "Premium" && (
-            <>
-              {/* solo lo correspondiente al plan */}
-              <div className={style.layout}>
-                {data && Inactivas?.length === 0 && (
-                  <>
-                    <div
-                      data-aos="flip-up"
-                      style={{
-                        width: "60%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                        padding: "20px",
-                        minHeight: "100%",
-                        boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
-                      }}
-                    >
-                      <NotFound />
-                      <h1>No hay solicitudes pendientes</h1>
-                    </div>
-                  </>
-                )}
-                {data &&
-                  Inactivas[page]?.map((cita, i) => {
-                    return (
-                      <>
-                        <div className={style.container}>
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "5px",
-                              flexDirection: "column",
-                              width: "100%",
-                              fontSize: "1.8vh",
-                            }}
-                          >
-                            <div
-                              style={{
-                                display: "flex",
-                                gap: "10px",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                fontSize: "1.8vh",
-                              }}
-                            >
-                              <img
-                                style={{ width: "50px", height: "50px" }}
-                                src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
-                                alt=""
-                              />
-                              <div>
-                                <div className={style.divNombreGrado}>
-                                  <p>{cita.nombre}</p>
-                                  {grados &&
-                                    grados.map((ele) => {
-                                      console.log(ele.id === cita.GradoId);
-                                      if (ele.id === cita.GradoId) {
-                                        return (
-                                          <Chip
-                                            sx={{ height: "20px" }}
-                                            color="primary"
-                                            label={ele.nombre_grado}
-                                          />
-                                        );
-                                      }
-                                    })}
-                                </div>
-
-                                <div className={style.itemDiv}>
-                                  <div className={style.itemDiv}>
-                                    <AccessTimeIcon
-                                      style={{
-                                        width: "20px",
-                                        height: "20px",
-                                        color: "grey",
-                                      }}
-                                    />
-                                    <p>{cita.hora_cita}</p>
-                                  </div>{" "}
-                                  <div className={style.itemDiv}>
-                                    <EventIcon
-                                      style={{
-                                        width: "20px",
-                                        height: "20px",
-                                        color: "grey",
-                                      }}
-                                    />{" "}
-                                    <p>{cita.fecha_cita}</p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "5px",
-                              width: "100%",
-                              justifyContent: "center",
-                            }}
-                          >
-                            {cita.modalidad === "Virtual" && (
-                              <LaptopWindowsIcon
-                                style={{
-                                  width: "20px",
-                                  height: "20px",
-                                  color: "grey",
-                                }}
-                              />
-                            )}
-                            {cita.modalidad === "Presencial" && (
-                              <PersonPinIcon
-                                style={{
-                                  width: "20px",
-                                  height: "20px",
-                                  color: "grey",
-                                }}
-                              />
-                            )}
-                            <p>{cita.modalidad}</p>
-                          </div>
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "5px",
-                              width: "100%",
-                              justifyContent: "center",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <div className={style.itemDiv}>
-                              <PhoneIcon
-                                style={{
-                                  width: "20px",
-                                  height: "20px",
-                                  color: "grey",
-                                }}
-                              />
-                              <p>{cita.telefono}</p>
-                            </div>
-
-                            <p>{cita.email}</p>
-                          </div>
-                          <div>
-                            <Button
-                              onClick={() => {
-                                handlerPutStateCita(cita.id);
-                              }}
-                              variant="contained"
-                            >
-                              Confirmar{" "}
-                            </Button>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })}
-              </div>
-              {/* blur + promocion de planes  */}
-              <div className={style.promoPlan}>
-                <Card
-                  sx={{
-                    position: "absolute",
-                    top: "50%",
-                    right: "40%",
-
-                    backgroundColor: "#FFF",
-                    maxWidth: "30vh",
-                  }}
-                >
-                  <CardContent
-                    sx={{
-                      display: "flex",
-                      gap: "20px",
-                      justifyContent: "center",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Paddock />
-                    {/* <LockOutlinedIcon sx={{color:'blue', height:'200px'}}/> */}
-                    <h1 style={{ fontWeight: "700", fontFamily: "Poppins" }}>
-                      Desbloquea más citas mejorando tu plan
-                    </h1>
-                    <Button variant="contained">Ver planes</Button>
-                  </CardContent>
-                </Card>
-              </div>
-              <div className="blur-sm  z-10">
-                {data &&
-                  Inactivas[page]?.map((cita, i) => {
-                    return (
-                      <>
-                        <div className={style.container}>
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "5px",
-                              flexDirection: "column",
-                              width: "100%",
-                              fontSize: "1.8vh",
-                            }}
-                          >
-                            <div
-                              style={{
-                                display: "flex",
-                                gap: "10px",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                fontSize: "1.8vh",
-                              }}
-                            >
-                              <img
-                                style={{ width: "50px", height: "50px" }}
-                                src="https://res.cloudinary.com/dj8p0rdxn/image/upload/v1676414550/xuj9waxpejcnongvhk9o.png"
-                                alt=""
-                              />
-                              <div>
-                                <div className={style.divNombreGrado}>
-                                  <p>{cita.nombre}</p>
-                                  {grados &&
-                                    grados.map((ele) => {
-                                      console.log(ele.id === cita.GradoId);
-                                      if (ele.id === cita.GradoId) {
-                                        return (
-                                          <Chip
-                                            sx={{ height: "20px" }}
-                                            color="primary"
-                                            label={ele.nombre_grado}
-                                          />
-                                        );
-                                      }
-                                    })}
-                                </div>
-
-                                <div className={style.itemDiv}>
-                                  <div className={style.itemDiv}>
-                                    <AccessTimeIcon
-                                      style={{
-                                        width: "20px",
-                                        height: "20px",
-                                        color: "grey",
-                                      }}
-                                    />
-                                    <p>{cita.hora_cita}</p>
-                                  </div>{" "}
-                                  <div className={style.itemDiv}>
-                                    <EventIcon
-                                      style={{
-                                        width: "20px",
-                                        height: "20px",
-                                        color: "grey",
-                                      }}
-                                    />{" "}
-                                    <p>{cita.fecha_cita}</p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "5px",
-                              width: "100%",
-                              justifyContent: "center",
-                            }}
-                          >
-                            {cita.modalidad === "Virtual" && (
-                              <LaptopWindowsIcon
-                                style={{
-                                  width: "20px",
-                                  height: "20px",
-                                  color: "grey",
-                                }}
-                              />
-                            )}
-                            {cita.modalidad === "Presencial" && (
-                              <PersonPinIcon
-                                style={{
-                                  width: "20px",
-                                  height: "20px",
-                                  color: "grey",
-                                }}
-                              />
-                            )}
-                            <p>{cita.modalidad}</p>
-                          </div>
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "5px",
-                              width: "100%",
-                              justifyContent: "center",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <div className={style.itemDiv}>
-                              <PhoneIcon
-                                style={{
-                                  width: "20px",
-                                  height: "20px",
-                                  color: "grey",
-                                }}
-                              />
-                              <p>{cita.telefono}</p>
-                            </div>
-
-                            <p>{cita.email}</p>
-                          </div>
-                          <div>
-                            <Button
-                              onClick={() => {
-                                handlerPutStateCita(cita.id);
-                              }}
-                              variant="contained"
-                            >
-                              Confirmar{" "}
-                            </Button>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })}
-              </div>
-            </>
-          )}
+    
+   
         {/*--------------------  FIN  ------------------------------*/}
         {/* citas ya confirmadas */}
         {filtros === "Confirmados" && (
