@@ -77,7 +77,7 @@ useEffect(() => {
             className={`${style.p} hover-underline-animation`}
             to={"/?categorias=1"}
           >
-            Categorias
+            Categorías
           </Link>
           <p className={`${style.p} hover-underline-animation`}>BLOG</p>
           <p
@@ -176,7 +176,7 @@ useEffect(() => {
             to={"/?categorias=1"}
             onClick={() => setOpen(!isOpen)}
           >
-            Categorias
+            Categorías
           </Link>
           <p
             className={`${style.p} hover-underline-animation`}

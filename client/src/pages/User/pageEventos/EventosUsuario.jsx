@@ -98,7 +98,7 @@ export default function EventosUsuario() {
       {/* Proximo EVENTO */}
       {ProximoEvento && ProximoEvento?.length > 0 ? (
         <>
-          <div style={{ padding: "1vh",paddingLeft:'2vh', maxWidth:'80%' }}>
+          <div style={{ padding: "1vh", paddingLeft: "2vh", maxWidth: "80%" }}>
             <Typography
               variant="h6"
               sx={{
@@ -129,31 +129,37 @@ export default function EventosUsuario() {
                           width: "30vh",
                           height: "30vh",
                         }}
-                        src={ ele.imagen_evento?ele.imagen_evento : "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"}
+                        src={
+                          ele.imagen_evento
+                            ? ele.imagen_evento
+                            : "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"
+                        }
                         alt="Logo"
                       />
-                    {  !ele.imagen_evento&&<div className={style.card}>
-                        <div className={style.imgDiv}>
-                          <img
-                            style={{ display: "flex", zIndex: "2" }}
-                            src={ele.imagen_evento}
-                            alt="Logo"
-                          />
-                        </div>
-                        <h1 className={style.title}>{ele.nombre_evento}</h1>
-                        <div style={{ display: "flex", gap: "2vh" }}>
-                          <div className={style.divDetalles}>
-                            <p className={style.pTittle}>Tipo Evento</p>
-
-                            <p className={style.p}>{ele.tipo_evento}</p>
+                      {!ele.imagen_evento && (
+                        <div className={style.card}>
+                          <div className={style.imgDiv}>
+                            <img
+                              style={{ display: "flex", zIndex: "2" }}
+                              src={ele.imagen_evento}
+                              alt="Logo"
+                            />
                           </div>
+                          <h1 className={style.title}>{ele.nombre_evento}</h1>
+                          <div style={{ display: "flex", gap: "2vh" }}>
+                            <div className={style.divDetalles}>
+                              <p className={style.pTittle}>Tipo Evento</p>
 
-                          <div className={style.divDetalles}>
-                            <p className={style.pTittle}>Capacidad</p>
-                            <p className={style.p}>{ele.capacidad}</p>
+                              <p className={style.p}>{ele.tipo_evento}</p>
+                            </div>
+
+                            <div className={style.divDetalles}>
+                              <p className={style.pTittle}>Capacidad</p>
+                              <p className={style.p}>{ele.capacidad}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>}
+                      )}
                     </div>
                     <div className={style.infoDiv}>
                       <h1 className={style.titleK}>{ele.nombre_evento}</h1>
@@ -161,7 +167,7 @@ export default function EventosUsuario() {
                         <p className={style.pK}>
                           {fechaFormat(ele.fecha_evento)} -
                         </p>
-                        <p className={style.pK}>{es_AM_PM(ele.hora_evento)}</p>
+                        <p className={style.pK}>{ele.hora_evento +" "+ es_AM_PM(ele.hora_evento)}</p>
                       </div>
 
                       <div className={style.divDescripcion}>
@@ -204,24 +210,26 @@ export default function EventosUsuario() {
         ))
       ) : ProximoEvento?.length === 0 && isLoading === false ? (
         <>
-          <Typography
-            variant="h6"
-            sx={{
-              color: "#0D263B",
-              fontFamily: "Poppins",
-              fontWeight: "700",
-            }}
-          >
-            Próximo Evento
-          </Typography>
-        
-          <Divider
+          <div style={{ padding: "1vh", paddingLeft: "2vh", maxWidth: "80%" }}>
+            <Typography
+              variant="h6"
+              sx={{
+                color: "#0D263B",
+                fontFamily: "Poppins",
+                fontWeight: "700",
+              }}
+            >
+              Próximo Evento
+            </Typography>
+            <Divider
               sx={{
                 color: "blue",
                 border: "1px solid #0061DF",
                 width: "20vh",
               }}
             />
+          </div>
+
           <div
             // data-aos="zoom-up"
             style={{
@@ -236,7 +244,7 @@ export default function EventosUsuario() {
               minHeight: "100%",
               boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
               fontWeight: "600",
-              backgroundColor: "#fff",
+              backgroundColor: "transparent",
             }}
           >
             <ContentPasteSearchOutlinedIcon style={{ color: "#0061DF" }} />
@@ -277,13 +285,12 @@ export default function EventosUsuario() {
             <InputLabel id="demo-select-small">Fecha</InputLabel>
 
             <Select
-              sx={{ border: "none", outline: "none"  , fontSize:'2vh'}}
+              sx={{ border: "none", outline: "none", fontSize: "2vh" }}
               labelId="demo-select-small"
               id="demo-select-small"
               // value={orderSelected}
               label={"Fecha"}
               onChange={handleChangeState}
-
             >
               <MenuItem value="ASC">
                 {" "}
@@ -315,25 +322,35 @@ export default function EventosUsuario() {
                               width: "20vh",
                               height: "20vh",
                             }}
-                            src={ ele.imagen_evento?ele.imagen_evento : "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"}
+                            src={
+                              ele.imagen_evento
+                                ? ele.imagen_evento
+                                : "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"
+                            }
                             alt="Logo"
                           />
-                        {!ele.imagen_evento&&  <div className={style.card2}>
-                            <div className={style.imgDiv}>
-                              <img
-                                style={{
-                                  display: "flex",
-                                  zIndex: "2",
-                                  width: "5vh",
-                                  height: "5vh",
-                                }}
-                                src={ele.imagen_evento}
-                                alt="Logo"
-                              />
+                          {!ele.imagen_evento && (
+                            <div className={style.card2}>
+                              <div className={style.imgDiv}>
+                                <img
+                                  style={{
+                                    display: "flex",
+                                    zIndex: "2",
+                                    width: "5vh",
+                                    height: "5vh",
+                                  }}
+                                  src={ele.imagen_evento}
+                                  alt="Logo"
+                                />
+                              </div>
+                              <h1 className={style.title}>
+                                {ele.nombre_evento}
+                              </h1>
+                              <div
+                                style={{ display: "flex", gap: "2vh" }}
+                              ></div>
                             </div>
-                            <h1 className={style.title}>{ele.nombre_evento}</h1>
-                            <div style={{ display: "flex", gap: "2vh" }}></div>
-                          </div>}
+                          )}
                         </div>
                         <div className={style.infoDiv}>
                           <h1 className={style.titleK}>{ele.nombre_evento}</h1>
@@ -342,7 +359,7 @@ export default function EventosUsuario() {
                               {fechaFormat(ele.fecha_evento)} -
                             </p>
                             <p className={style.pK}>
-                              {es_AM_PM(ele.hora_evento)}
+                            {ele.hora_evento +" "+ es_AM_PM(ele.hora_evento)}
                             </p>
                           </div>
 
@@ -424,25 +441,31 @@ export default function EventosUsuario() {
                             width: "20vh",
                             height: "20vh",
                           }}
-                          src={ ele.imagen_evento?ele.imagen_evento : "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"}
+                          src={
+                            ele.imagen_evento
+                              ? ele.imagen_evento
+                              : "https://res.cloudinary.com/dj8p0rdxn/image/upload/v1680731885/to472cbnrflzyqjrelgi.png"
+                          }
                           alt="Logo"
                         />
-                       {  !ele.imagen_evento&&<div className={style.card2}>
-                          <div className={style.imgDiv}>
-                            <img
-                              style={{
-                                display: "flex",
-                                zIndex: "2",
-                                width: "5vh",
-                                height: "5vh",
-                              }}
-                              src={ele.imagen_evento}
-                              alt="Logo"
-                            />
+                        {!ele.imagen_evento && (
+                          <div className={style.card2}>
+                            <div className={style.imgDiv}>
+                              <img
+                                style={{
+                                  display: "flex",
+                                  zIndex: "2",
+                                  width: "5vh",
+                                  height: "5vh",
+                                }}
+                                src={ele.imagen_evento}
+                                alt="Logo"
+                              />
+                            </div>
+                            <h1 className={style.title}>{ele.nombre_evento}</h1>
+                            <div style={{ display: "flex", gap: "2vh" }}></div>
                           </div>
-                          <h1 className={style.title}>{ele.nombre_evento}</h1>
-                          <div style={{ display: "flex", gap: "2vh" }}></div>
-                        </div>}
+                        )}
                       </div>
                       <div className={style.infoDiv}>
                         <h1 className={style.titleK}>{ele.nombre_evento}</h1>
@@ -451,7 +474,7 @@ export default function EventosUsuario() {
                             {fechaFormat(ele.fecha_evento)} -
                           </p>
                           <p className={style.pK}>
-                            {es_AM_PM(ele.hora_evento)}
+                          {ele.hora_evento +" "+ es_AM_PM(ele.hora_evento)}
                           </p>
                         </div>
 
@@ -497,7 +520,7 @@ export default function EventosUsuario() {
           <div
             // data-aos="zoom-up"
             style={{
-              width: "80%",
+              width: "100%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -508,7 +531,7 @@ export default function EventosUsuario() {
               minHeight: "100%",
               boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
               fontWeight: "600",
-              backgroundColor: "#fff",
+              backgroundColor: "transparent",
             }}
           >
             <ContentPasteSearchOutlinedIcon style={{ color: "#0061DF" }} />

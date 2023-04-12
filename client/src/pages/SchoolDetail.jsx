@@ -80,6 +80,7 @@ function SchoolDetail() {
   const { oneSchool, grados, horariosColegio } = useSelector(
     (state) => state.schools
   );
+
   const { user, isAuth, vacantes } = useSelector((state) => state.auth);
   console.log(horariosColegio);
 
@@ -88,15 +89,15 @@ function SchoolDetail() {
   const params = new URLSearchParams(location.search);
 
   const [gradoParams, setGradoParams] = React.useState(params.get("grado"));
-
+  console.log(gradoParams);
   const [ingresoParams, setIngresoParams] = React.useState(
     params.get("ingreso")
   );
 
   const [listaParams, setListaParams] = React.useState(params.get("lista"));
 
-  console.log(listaParams);
-
+  console.log(gradoParams);
+  console.log(grados);
   const nombre_grado = grados?.find(
     (grado) => grado.id == gradoParams
   )?.nombre_grado;
@@ -160,7 +161,6 @@ function SchoolDetail() {
     });
   };
   const handleChangeTime = (newValue) => {
-
     setTime(dayjs(newValue));
     setCita({
       ...cita,
@@ -172,7 +172,7 @@ function SchoolDetail() {
   };
   const [modo, setModo] = React.useState(true);
   const [openLogin, setOpenLogin] = useState(false);
-  const gradosCita=nombre_grado
+
   const [cita, setCita] = React.useState({
     date: [
       stringyDate(dayjs(new Date()).$D).toString(),
@@ -185,15 +185,31 @@ function SchoolDetail() {
     ].join(":"),
 
     modo: modo ? "Presencial" : "Virtual",
-    nombre: isAuth ? user.nombre_responsable : "",
+    nombre: isAuth ? user.nombre_responsable +" "+ user?.apellidos_responsable: "",
+    
     celular: isAuth ? user.telefono : "",
     correo: isAuth ? user.email : "",
     añoIngreso: ingresoParams,
-    grado:  gradosCita,
+    grado: nombre_grado
   });
+
+  console.log(cita);
+  // console.log( nombre_grado);
+
+
+useEffect(() => {
+setCita({
+  ...cita,
+  grado: nombre_grado
+})
+}, [nombre_grado])
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+  
+
     if (
       e.target["nombre"].value === "" ||
       e.target["cel"].value === "" ||
@@ -207,27 +223,28 @@ function SchoolDetail() {
       return;
     }
     if (isAuth) {
-      console.log(cita);
-      console.log(gradosCita);
       
+      console.log(cita);
+
       dispatch(postCita(cita));
     } else {
-      Swal.fire({
-        icon: "info",
-        title: "Inicia Sesion",
-        text: "Debes iniciar sesion o registrarte para sacar una cita",
 
-        confirmButtonAriaLabel: "Iniciar Sesion",
-      });
-      setOpenLogin(true);
-      return;
+        Swal.fire({
+          icon: "info",
+          title: "Inicia Sesion",
+          text: "Debes iniciar sesion o registrarte",
+  
+          confirmButtonText: "Iniciar Sesion",
+          
+        }).then(res=>{
+          if(res.isConfirmed){
+            setOpenLogin(true);
+          }
+        });
+          // setOpenLogin(true);
+        return;
+      
     }
-
-    // Swal.fire({
-    //   icon: "success",
-    //   title: "Cita realizada exitosamente!",
-    //   text: "Cita Agendada",
-    // });
   };
 
   const handleModo = () => {
@@ -407,6 +424,7 @@ function SchoolDetail() {
   useEffect(()=>{
     if(isAuth){
       setComentario({...comentario, nombre: user.nombre_responsable + " " + user.apellidos_responsable, email: user.email})
+      setCita({...cita, nombre: user?.nombre_responsable + " " + user?.apellidos_responsable, correo: user?.email, celular:user?.telefono})
     }
   },[isAuth])
 
@@ -1295,7 +1313,7 @@ function SchoolDetail() {
                               <>
                                 <div
                                   // si vacantes estan agotadas deberia aparecer todo en gris
-                     
+
                                   className={style.cardTable}
                                 >
                                   <Card
@@ -1345,7 +1363,7 @@ function SchoolDetail() {
                               <>
                                 <div
                                   // si vacantes estan agotadas deberia aparecer todo en gris
-                         
+
                                   className={style.cardTable}
                                 >
                                   {/* <Card
@@ -1439,10 +1457,12 @@ function SchoolDetail() {
                     />
                   </div>
                   <div className="flex w-full gap-5 justify-between">
-                    <input
+                  {
+                    isAuth?  
+                     <input
                       name="nombre"
                       type="text"
-                      value={user?.nombre_responsable}
+                      value={user?.nombre_responsable + " " + user?.apellidos_responsable }
                       className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
                       placeholder="Nombre"
                       onChange={(e) => {
@@ -1450,6 +1470,19 @@ function SchoolDetail() {
                       }}
                       required
                     />
+                    :
+                    <input
+                    name="nombre"
+                    type="text"
+            
+                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    placeholder="Nombre"
+                    onChange={(e) => {
+                      setCita({ ...cita, nombre: e.target.value });
+                    }}
+                    required
+                  />
+                  } 
                     <input
                       name="cel"
                       type="number"
