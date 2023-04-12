@@ -119,7 +119,6 @@ export default function Miplan() {
           //         alignItems: "center",
           //       }}
           //     >
-              
           //       <Typography
           //         sx={{
           //           fontSize: "1.3rem",
@@ -146,41 +145,43 @@ export default function Miplan() {
           // </div>
 
           <div>
-          <div className={style.divCard}>
-            {/* <Card sx={{boxShadow: '0px 4px 40px rgba(31, 95, 175, 0.15)', padding:'10px',display:'flex',justifyContent:'space-between', alignItems:'center',flexDirection:'row'}}> */}
-            <div className={style.divItem}>
-              <p className={style.ItemTitle}> Nº de venta </p>
-              <p>-</p>
-            </div>
-            <div className={style.divItem}>
-              <p className={style.ItemTitle}> Tipo de plan </p>
-              <p>Free</p>
-            </div>
-            <div className={style.divItem}>
-              <p className={style.ItemTitle}> Fecha de Compra </p>
-              <p>-</p>
-            </div>
-            <div className={style.divItem}>
-              <p className={style.ItemTitle}> Fecha de Vencimiento </p>
-              <p> - </p>
-            </div>
-            <div className={style.divItem}>
-              <p className={style.ItemTitle}>Monto</p>
-              <p> S/ - </p>
-            </div>
-            <div className={style.divBtn}>
-              <Button
-                variant="contained"
-                onClick={toggleInscripcion}
-                color="primary"
-              >
-                Cambiar Plan
-              </Button>
+            <div className={style.divCard}>
+              {/* <Card sx={{boxShadow: '0px 4px 40px rgba(31, 95, 175, 0.15)', padding:'10px',display:'flex',justifyContent:'space-between', alignItems:'center',flexDirection:'row'}}> */}
+              <div className={style.divItem}>
+                <p className={style.ItemTitle}> Nº de venta </p>
+                <p>-</p>
+              </div>
+              <div className={style.divItem}>
+                <p className={style.ItemTitle}> Tipo de plan </p>
+                <p>Free</p>
+              </div>
+              <div className={style.divItem}>
+                <p className={style.ItemTitle}> Fecha de Compra </p>
+                <p>-</p>
+              </div>
+              <div className={style.divItem}>
+                <p className={style.ItemTitle}> Fecha de Vencimiento </p>
+                <p> - </p>
+              </div>
+              <div className={style.divItem}>
+                <p className={style.ItemTitle}>Monto</p>
+                <p> S/ - </p>
+              </div>
+              <div className={style.divBtn}>
+                <Button
+                  variant="contained"
+                  onClick={toggleInscripcion}
+                  color="primary"
+                >
+                  Cambiar Plan
+                </Button>
+              </div>
+
+              {/* </Card> */}
             </div>
 
             {/* </Card> */}
           </div>
-        </div>
 
         )}
         {/* // Historial */}
@@ -215,7 +216,7 @@ export default function Miplan() {
                         </div>
                         <div className={style.divItem}>
                           <p className={style.ItemTitle}> Fecha de Compra </p>
-                          <p>{  fechaFormat(ele.InicioPlan)}</p>
+                          <p>{fechaFormat(ele.InicioPlan)}</p>
                         </div>
                         <div className={style.divItem}>
                           <p className={style.ItemTitle}>
@@ -246,42 +247,40 @@ export default function Miplan() {
           </div>
         )}
 
-{planPago?.length === 0 && (
-         <>
+        {planPago?.length === 0 && (
+          <>
             <Typography
-            sx={{
-              fontSize: "1.2rem",
-              fontWeight: "600",
-              color: "#0D263B",
-              paddingBottom: "10px",
-              fontFamily: "Poppins",
-            }}
-          >
-            Historial
-          </Typography>
-         <div
-          
-           style={{
-             width: "80%",
-             display: "flex",
-             alignItems: "center",
-             justifyContent: "center",
-             flexDirection: "row",
-             color: "#0C2B42",
-             gap: "10px",
-             padding: "20px",
-             minHeight: "40%",
-             boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
-             fontWeight: "600",
-             backgroundColor: "#fff",
-           }}
-         >
-           <ContentPasteSearchOutlinedIcon
-             style={{ color: "#0061DF" }}
-           />
-           <h1  style={{fontSize:'1.5vh'}}>No hay historial disponible</h1>
-         </div>
-       </>
+              sx={{
+                fontSize: "1.2rem",
+                fontWeight: "600",
+                color: "#0D263B",
+                paddingBottom: "10px",
+                fontFamily: "Poppins",
+              }}
+            >
+              Historial
+            </Typography>
+            <div
+              style={{
+                width: "90%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+                color: "#0C2B42",
+                gap: "10px",
+                padding: "20px",
+                minHeight: "40%",
+                boxShadow: "0px 4px 10px rgba(31, 95, 175, 0.15)",
+                fontWeight: "600",
+                backgroundColor: "#fff",
+              }}
+            >
+              <ContentPasteSearchOutlinedIcon style={{ color: "#0061DF" }} />
+              <h1 style={{ fontSize: "1.6vh" }}>No hay historial disponible</h1>
+            </div>
+          </>
+
         )}
         {OpenRegister && (
           <ModalInscripcion

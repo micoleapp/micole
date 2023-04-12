@@ -64,7 +64,7 @@ function EnrollSchool() {
   
   return (
     <div>
-      <marquee
+      {/* <marquee
         scrollamount={10}
         direction=""
         className="flex bg-transparent absolute text-white"
@@ -72,13 +72,13 @@ function EnrollSchool() {
         Tenemos los mejores planes para ofrecerte - Haz que tu colegio brille
         frente a las familias - Completa tus vacantes disponibles - Cuenta con
         un proceso de admisión simple y eficiente
-      </marquee>
+      </marquee> */}
       <header className="bg-[url('./assets/enroll.png')] h-[700px] flex justify-center items-center flex-col gap-10">
-        <h1 className="text-white text-center text-4xl font-bold" data-aos="fade-up" data-aos-delay="0"  data-aos-mirror={false}>
+        <h1 className="text-white text-center text-4xl font-semibold" data-aos="fade-up" data-aos-delay="0"  data-aos-mirror={false}>
           Publica tu colegio. Concreta citas con familias interesadas. <br />
           Gestiona todo en línea. Obtén nuevos estudiantes
         </h1>
-        <h2 className="text-white text-center text-3xl font-bold" data-aos="fade-up" data-aos-delay="100"  data-aos-mirror={false}>
+        <h2 className="text-white text-center text-3xl font-normal" data-aos="fade-up" data-aos-delay="100"  data-aos-mirror={false}>
           Todo en un solo lugar, de forma simple y a bajo costo
         </h2>
         <div onClick={toggleInscripcion} data-aos="fade-up"  data-aos-mirror={false} data-aos-delay="200">
@@ -133,7 +133,7 @@ admisión simple y eficiente"
       )}
       <section className="bg-[#0061dd] flex flex-col justify-around p-10 gap-10">
         <h1 className="text-center text-2xl font-semibold text-white">
-          Elije el plan que más se acomode a tus necesidades
+          Elige el plan que más se acomode a tus necesidades
         </h1>
         <div className="flex flex-col xl:flex-row items-center sm:gap-5 gap-10 justify-evenly mx-5">
           <CardsTwo

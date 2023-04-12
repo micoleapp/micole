@@ -12,19 +12,19 @@ import store from "./redux/store";
 //podemos hacerlo directo directo axios('/review').then(etc...)
 
 import.meta.env.MODE === "development"
-  ? (axios.defaults.baseURL = "https://micole-production.up.railway.app")
+  ? (axios.defaults.baseURL = "http://localhost:3001/")
   : (axios.defaults.baseURL = "https://micole-production.up.railway.app");
 
-let previusTitle = document.title
+// let previusTitle = document.title
 
-window.addEventListener('blur',()=>{
-  previusTitle = document.title
-  document.title = "No te vayas aún, Vuelve!!!"
-})
+// window.addEventListener('blur',()=>{
+//   previusTitle = document.title
+//   document.title = "No te vayas aún, Vuelve!!!"
+// })
 
-window.addEventListener('focus',()=>{
-  document.title = previusTitle
-})
+// window.addEventListener('focus',()=>{
+//   document.title = previusTitle
+// })
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>

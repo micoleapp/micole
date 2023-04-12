@@ -156,7 +156,7 @@ export default function CardCitas({ data, filtros }) {
   return (
     <>
       <div
-        data-aos="fade-up"
+
         style={{ height: "70vh", overflowY: "scroll", padding: "10px" }}
       >
         {filtros === "" && (
@@ -164,7 +164,7 @@ export default function CardCitas({ data, filtros }) {
             {data && arrCita?.length === 0 && (
               <>
                 <div
-                  data-aos="flip-up"
+               
                   style={{
                     width: "100%",
                     display: "flex",
@@ -718,7 +718,7 @@ export default function CardCitas({ data, filtros }) {
           </>
         )}
 
-        {/*PLAN PREMIUM*/}
+        {/*PLAN */}
         {filtros === "SinConfirmar" &&
           oneSchool.Plan_Pago.nombre_plan_pago === "Premium" && (
             <>

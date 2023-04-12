@@ -7,18 +7,19 @@ module.exports = (sequelize) => {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        allowNull: false, 
+        allowNull: false,
         primaryKey: true,
       },
       año: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      createdAt: {
+        type: DataTypes.DATEONLY
+      },
     },
     {
- 
-      createdAt: true,
-      updatedAt: false
+      timestamps: false,
     }
   );
 };

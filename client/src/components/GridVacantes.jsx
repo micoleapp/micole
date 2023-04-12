@@ -20,6 +20,21 @@ export default function GridVacantes({ año, setVacantesOff }) {
 
   React.useEffect(() => {
     setDefaultVacantes(vacantes)
+    setDatos({
+      ...datos,
+      ...vacantes?.reduce((acc, el) => {
+        if (el.año === año) {
+          acc[el.GradoId] = {
+            capacidad: el.capacidad,
+            alumnos: el.alumnos_matriculados,
+            cuota_ingreso: el.cuota_ingreso,
+            matricula: el.matricula,
+            cuota_pension: el.cuota_pension,
+          };
+        }
+        return acc;
+      }, {}),
+    })
   }, [vacantes])
   
 

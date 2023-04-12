@@ -53,8 +53,9 @@ function CardsTwo({
         <button
           onClick={handlerPlan}
           className="px-4 my-5 mx-auto py-3 rounded-lg hover:animate-bounce duration-500 group-hover:bg-[#0061dd] group-hover:text-white text-[#0061dd] bg-white font-medium"
-        >
-          ¡Quiero el plan {plan}!
+        > 
+          {plan === "estandar" ? <>¡Quiero el plan estándar!</> : <>¡Quiero el plan {plan}!</> }
+          
         </button>
       </div>
     </div>
