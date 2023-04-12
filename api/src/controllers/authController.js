@@ -157,8 +157,8 @@ const signUp = async (req, res, next) => {
       await colegioValidation.validate();
     } else {
       const userValidation = User.build({
-        nombre_responsable:nombre,
-        apellidos_responsable:apellidos,
+        nombre_responsable: nombre,
+        apellidos_responsable: apellidos,
         telefono,
       });
       await userValidation.validate();
@@ -218,6 +218,7 @@ const signUp = async (req, res, next) => {
     //mailer.sendMailSignUp(sanitizedUser, "User"); //Enviamos el mail de Confirmación de Registro para el Usuario Normal
     return res.status(201).send(sanitizedUser);
   } catch (error) {
+    console.log(error);
     return next(error);
   }
 };
@@ -249,13 +250,13 @@ const putAuth = async (req, res, next) => {
 
     if (authInstance.rol === 'Colegio') {
       const colegio = await Colegio.findOne({
-        where: { idAuth: authInstance.id },
+        where: { AuthId: authInstance.id },
       });
       colegio.telefono = telefono;
       await colegio.save();
       sanitizedAuth.nombre = colegio.nombre_colegio;
     } else {
-      const user = await User.findOne({ where: { idAuth: authInstance.id } });
+      const user = await User.findOne({ where: { AuthId: authInstance.id } });
       user.telefono = telefono;
       await user.save();
       sanitizedAuth.nombre = user.nombre_responsable;
