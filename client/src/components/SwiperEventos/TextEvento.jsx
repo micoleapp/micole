@@ -22,7 +22,7 @@ export default function TextEvento({
   const handleOpen = () => setOpen(true);
   return (
     <>
-      {plantilla ? (
+      {plantilla === true  ? (
         <div className={style.card}>
           <div className={style.imgDiv}>
             <img style={{ display: "flex" }} src={logo} alt="Logo" />
@@ -67,6 +67,7 @@ export default function TextEvento({
             />
           )}
         </div>
+     
       ) : (
         <div className={style.cardPubli }>
             <Button onClick={handleOpen}   variant="contained">

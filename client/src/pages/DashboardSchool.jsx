@@ -1002,7 +1002,7 @@ function DashboardSchool() {
             capacidadEvento: 0,
             fechaEvento: dayjs(new Date()),
             horaEvento: "08:00",
-            image: "",
+            image: "plantilla",
           });
           setFileEvento(null);
           setPreviewEvento(null);
