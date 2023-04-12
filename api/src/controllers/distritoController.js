@@ -2,7 +2,9 @@ const { Distrito } = require('../db');
 
 const getDistritos = async (req, res, next) => {
   try {
-    const distritos = await Distrito.findAll();
+    const distritos = await Distrito.findAll(
+      {order:[["nombre_distrito","ASC"]]}
+    );
     res.status(200).send(distritos);
   } catch (error) {
     return next(error);
