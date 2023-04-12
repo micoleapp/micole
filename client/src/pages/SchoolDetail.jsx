@@ -112,7 +112,7 @@ function SchoolDetail() {
 
   useEffect(() => {
     dispatch(setVacantesRedux(id));
-  }, []);
+  }, [isAuth]);
   useEffect(() => {
     if (vacantes.length > 0) {
       setCurrentVacante(
@@ -286,13 +286,31 @@ function SchoolDetail() {
 
   const comentarioSubmit = (e) => {
     e.preventDefault();
+    if(!isAuth){
+      Swal.fire({
+        icon: "info",
+        title: "Inicia Sesion",
+        text: "Debes iniciar sesion o registrarte para comentar",
+
+        confirmButtonText: "Iniciar Sesion",
+        
+      }).then(res=>{
+        if(res.isConfirmed){
+          setOpenLogin(true);
+        }
+      });
+        // setOpenLogin(true);
+      return;
+    }
     if (
-      e.target["name"].value === "" ||
-      e.target["email"].value === "" ||
-      e.target["comentario"].value === "" ||
       comentario.rating === 0.0
     ) {
-      return alert("Llena todos los campos para poder continuar");
+      Swal.fire({
+        icon: "info",
+        title: "Ups!...",
+        text: "Debes calificar el colegio para poder comentar",
+      })
+      return
     }
     if (localStorage.getItem("id") === id) {
       Swal.fire("Error!", "No puedes comentar mas de una vez", "error");
@@ -345,7 +363,14 @@ function SchoolDetail() {
       Swal.fire({
         icon: "info",
         title: "Inicia Sesion",
-        text: "Debes iniciar sesion o registrarte para inscribirte a una lista",
+        text: "Debes iniciar sesion o registrarte para comentar",
+
+        confirmButtonText: "Iniciar Sesion",
+        
+      }).then(res=>{
+        if(res.isConfirmed){
+          setOpenLogin(true);
+        }
       });
       return;
     } else {
@@ -378,6 +403,12 @@ function SchoolDetail() {
       }
     }
   };
+
+  useEffect(()=>{
+    if(isAuth){
+      setComentario({...comentario, nombre: user.nombre_responsable + " " + user.apellidos_responsable, email: user.email})
+    }
+  },[isAuth])
 
   return (
     <div className="bg-[#f6f7f8]">
@@ -1358,7 +1389,7 @@ function SchoolDetail() {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <div className="flex w-full justify-between flex-col gap-4 lg:flex-row">
                     <MobileDatePicker
-                      label="Elejir fecha"
+                      label="Elegir fecha"
                       inputFormat="DD/MM/YYYY"
                       value={date}
                       shouldDisableDate={disableWeekends}
@@ -1368,7 +1399,7 @@ function SchoolDetail() {
                     />
                     <div className="flex flex-col gap-2">
                       <MobileTimePicker
-                        label="Elejir hora"
+                        label="Elegir hora"
                         value={time}
                         onChange={handleChangeTime}
                         renderInput={(params) => <TextField {...params} />}
@@ -1486,7 +1517,7 @@ function SchoolDetail() {
             )}
 
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
-              <h2 className="font-semibold text-xl">Galeria</h2>
+              <h2 className="font-semibold text-xl">Galería</h2>
               {oneSchool.hasOwnProperty("galeria_fotos") &&
                 oneSchool.galeria_fotos !== null &&
                 JSON.parse(oneSchool.galeria_fotos).length > 0 && (
@@ -1538,7 +1569,7 @@ function SchoolDetail() {
                   <Rating
                     name="simple-controlled"
                     value={ratingNivel}
-                    max={10}
+                    max={5}
                     precision={0.5}
                     onChange={(event, newValue) => {
                       setRatingNivel(newValue);
@@ -1550,7 +1581,7 @@ function SchoolDetail() {
                   <Rating
                     name="simple-controlled"
                     value={ratingAtencion}
-                    max={10}
+                    max={5}
                     precision={0.5}
                     onChange={(event, newValue) => {
                       setRatingAtencion(newValue);
@@ -1562,7 +1593,7 @@ function SchoolDetail() {
                   <Rating
                     name="simple-controlled"
                     value={ratingInfraestructura}
-                    max={10}
+                    max={5}
                     precision={0.5}
                     onChange={(event, newValue) => {
                       setRatingInfraestructura(newValue);
@@ -1574,7 +1605,7 @@ function SchoolDetail() {
                   <Rating
                     name="simple-controlled"
                     value={ratingUbicacion}
-                    max={10}
+                    max={5}
                     precision={0.5}
                     onChange={(event, newValue) => {
                       setRatingUbicacion(newValue);
@@ -1586,7 +1617,7 @@ function SchoolDetail() {
                   <Rating
                     name="simple-controlled"
                     value={ratingLimpieza}
-                    max={10}
+                    max={5}
                     precision={0.5}
                     onChange={(event, newValue) => {
                       setRatingLimpieza(newValue);
@@ -1598,7 +1629,7 @@ function SchoolDetail() {
                   <Rating
                     name="simple-controlled"
                     value={ratingPrecio}
-                    max={10}
+                    max={5}
                     precision={0.5}
                     onChange={(event, newValue) => {
                       setRatingPrecio(newValue);
@@ -1606,8 +1637,8 @@ function SchoolDetail() {
                   />
                 </div>
               </div>
-              <div className="flex items-center">
-                <h2>Total: </h2>
+              <div className="flex flex-col items-center border py-1">
+                <h2>Calificación promedio: </h2>
                 <Rating
                   id="rating"
                   name="simple-controlled"
@@ -1620,25 +1651,59 @@ function SchoolDetail() {
                       ratingPrecio) /
                     6
                   }
-                  max={10}
+                  max={5}
                   precision={0.5}
                   readOnly
                 />
               </div>
               <div className="flex w-full gap-5 justify-between">
+                {isAuth ? (
+                  <input
+                    name="nameComentario"
+                    type="text"
+                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    placeholder="Nombre"
+                    value={user?.nombre_responsable + " " + user?.apellidos_responsable}
+                    required
+                    onChange={(e) => {
+                      setComentario({
+                        ...comentario,
+                        nombre: e.target.value,
+                      });
+                    }}
+                  />
+                ) : (
+                  <input
+                    name="nameComentario"
+                    type="text"
+                    className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                    placeholder="Nombre y apellido"
+                    required
+                    onChange={(e) => {
+                      setComentario({
+                        ...comentario,
+                        nombre: e.target.value,
+                      });
+                    }}
+                  />
+                )}
+                {isAuth ? (
                 <input
-                  name="name"
-                  type="text"
-                  className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
-                  placeholder="Nombre"
-                  required
-                  onChange={(e) => {
-                    setComentario({
-                      ...comentario,
-                      nombre: e.target.value,
-                    });
-                  }}
-                />
+                name="email"
+                type="email"
+                required
+                value={user?.email}
+                className="p-3 border-b-2 border-[#0061dd3a] text-base outline-0 w-full"
+                placeholder="Email"
+                onChange={(e) => {
+                  setComentario({
+                    ...comentario,
+                    email: e.target.value,
+                  });
+                }}
+              />
+                ) : (
+
                 <input
                   name="email"
                   type="email"
@@ -1652,6 +1717,7 @@ function SchoolDetail() {
                     });
                   }}
                 />
+                )}
               </div>
               <textarea
                 name="comentario"

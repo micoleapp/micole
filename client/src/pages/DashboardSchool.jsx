@@ -742,14 +742,17 @@ function DashboardSchool() {
     });
   };
   useEffect(() => {
-    if (files !== null) {
+    if (files !== null && files !== undefined) {
       Object.values(files).map((file) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
           setPreview((prev) => [...prev, reader.result]);
         };
-      });
+        setActiveUpTwo(true)
+        setSpanTwo(true)
+      }
+      );
     }
   }, [files]);
 
@@ -759,16 +762,18 @@ function DashboardSchool() {
   // }, []);
 
   useEffect(() => {
-    if (file !== null) {
+    if (file !== null && file !== undefined) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         setPreviewOne(reader.result);
       };
+      setActiveUpOne(true)
+      setSpanOne(true)
     }
   }, [file]);
   useEffect(() => {
-    if (fileEvento !== null) {
+    if (fileEvento !== null && fileEvento !== undefined) {
       const reader = new FileReader();
       reader.readAsDataURL(fileEvento);
       reader.onloadend = () => {
@@ -778,7 +783,7 @@ function DashboardSchool() {
   }, [fileEvento]);
 
   useEffect(() => {
-    if (fileEditEvento !== null) {
+    if (fileEditEvento !== null && fileEditEvento !== undefined) {
       const reader = new FileReader();
       reader.readAsDataURL(fileEditEvento);
       reader.onloadend = () => {
@@ -789,29 +794,47 @@ function DashboardSchool() {
   }, [fileEditEvento]);
   
   useEffect(() => {
-    if (fileLogo !== null) {
+    if (fileLogo !== null && fileLogo !== undefined) {
       const reader = new FileReader();
       reader.readAsDataURL(fileLogo);
       reader.onloadend = () => {
         setPreviewLogo(reader.result);
       };
+      setActiveUpLogo(true)
+      setSpanLogo(true)
+      
     }
   }, [fileLogo]);
+  
 
   const eliminarImagenDePreview = (img) => {
-    setPreview(preview.filter((image) => image !== img));
+    let newPreview = preview.filter((image) => image !== img)
+    setPreview(newPreview);
+    setMultimedia({...multimedia,images:newPreview})
   };
+  useEffect(()=>{
+    if(multimedia.images.length === 0){
+      setSpanTwo(false)
+      setActiveUpTwo(false)
+    }
+  },[multimedia.images])
   const eliminarImagenDePreviewOne = (img) => {
     setPreviewOne("");
+    setMultimedia({...multimedia,image:""})
+    setSpanOne(false)
+    setActiveUpOne(false)
   };
   const eliminarImagenDePreviewLogo = (img) => {
     setPreviewLogo("");
+    setMultimedia({...multimedia,logo:""})
+    setActiveUpLogo(false)
+    setSpanLogo(false)
   };
   const [image, setImage] = useState(null);
   const [imageLogo, setImageLogo] = useState(null);
 
   const multimediaCompleted = () => {
-    if (multimedia.image !== "" && multimedia.images.length !== 0) {
+    if (multimedia.image !== "" && multimedia.images.length !== 0 && multimedia.logo !== "") {
       return false;
     } else {
       return true;
@@ -1123,6 +1146,8 @@ function DashboardSchool() {
       dispatch(setVacantesRedux(id))
     }
   },[activeStep])
+
+
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -2727,7 +2752,6 @@ function DashboardSchool() {
                               name="image"
                               accept="image/png,image/jpeg"
                               onChange={(e) => {
-                                setSpanOne(true);
                                 setFile(e.target.files[0]);
                               }}
                               className="hidden"
@@ -2886,7 +2910,6 @@ function DashboardSchool() {
                               name="imageLogo"
                               accept="image/png,image/jpeg"
                               onChange={(e) => {
-                                setSpanLogo(true);
                                 setFileLogo(e.target.files[0]);
                               }}
                               className="hidden"
@@ -3449,7 +3472,7 @@ function DashboardSchool() {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <div className="flex w-full items-center justify-between mt-4  flex-col gap-4 lg:flex-row">
                       <MobileDatePicker
-                        label="Elejir fecha"
+                        label="Elegir fecha"
                         value={dateEvento}
                         inputFormat="DD/MM/YYYY"
                         renderInput={(params) => <TextField {...params} />}
@@ -3458,7 +3481,7 @@ function DashboardSchool() {
                         className="bg-white"
                       />
                       <MobileTimePicker
-                        label="Elejir hora"
+                        label="Elegir hora"
                         renderInput={(params) => <TextField {...params} />}
                         ampm={false}
                         value={timeEvento}
@@ -3685,7 +3708,7 @@ function DashboardSchool() {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <div className="flex w-full items-center justify-between mt-4  flex-col gap-4 lg:flex-row">
                           <MobileDatePicker
-                            label="Elejir fecha"
+                            label="Elegir fecha"
                             value={dateEditEvento}
                             inputFormat="DD/MM/YYYY"
                             renderInput={(params) => <TextField {...params} />}
@@ -3694,7 +3717,7 @@ function DashboardSchool() {
                             className="bg-white"
                           />
                           <MobileTimePicker
-                            label="Elejir hora"
+                            label="Elegir hora"
                             renderInput={(params) => <TextField {...params} />}
                             ampm={false}
                             value={timeEditEvento}
