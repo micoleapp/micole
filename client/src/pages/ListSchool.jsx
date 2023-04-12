@@ -295,7 +295,7 @@ function ListSchool() {
   return (
     <div
       className="flex flex-col py-5 px-0 lg:p-5 bg-[#f6f7f8] "
-      data-aos="fade-up"
+
       data-aos-duration="1000"
       data-aos-mirror={false}
     >

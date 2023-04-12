@@ -3,7 +3,7 @@ import Tilt from 'react-parallax-tilt';
 function CardsOne({img,title,parrafe,duration}) {
   return (
     <Tilt glareEnable={true} glareBorderRadius='1rem'>
-    <div className="bg-white text-black shadow-md w-[350px] p-5 h-[350px] rounded-md flex flex-col items-center justify-evenly text-center"             data-aos="zoom-in"
+    <div className="bg-white text-black shadow-md w-[350px] p-5 h-[350px] rounded-md flex flex-col items-center justify-evenly text-center"           
             data-aos-mirror={false} data-aos-delay={duration}>
       <img src={img} alt={title} className='w-16'/>
       <h2 className='font-semibold text-[#0d263b]'>{title}</h2>

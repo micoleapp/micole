@@ -6,9 +6,10 @@ import Chip from "@mui/material/Chip";
 import { useDispatch, useSelector } from "react-redux";
 const yearNow = new Date().getFullYear();
 import ModalCita from "./Tabs/ModalCita/ModalCita";
-
+import Badge from "@mui/material/Badge";
+import MailIcon from "@mui/icons-material/Mail";
 const Column = ({ column, tasksArr }) => {
-  const { success } = useSelector((state) => state.citas);
+  const { success} = useSelector((state) => state.citas);
   const dispatch = useDispatch();
 
   const { grados } = useSelector((state) => state.schools);
@@ -19,21 +20,24 @@ const Column = ({ column, tasksArr }) => {
     console.log(event.target.value);
   };
   const handleClose = () => setOpen(false);
-
+  console.log(tasksArr);
   // useEffect(() => {}, [success]);
   const añoActual = yearNow;
   const añoSig = yearNow + 1;
   const añoDsdelSig = yearNow + 2;
   return (
     <>
-      <div className="rounded-md  bg-[#FFFF] bg-[#FFFF]shadow-md border max-w-xs h-min-screen min-w-max w-full flex flex-col">
-        <div className="flex items-center   bg-[#0061dd] justify-center text-center rounded-t-md py-3">
+      <div className="rounded-md  bg-[#FFFF] bg-[#FFFF]shadow-md border  max-w-xs min-h-20 max-h-30 overflow-y-scroll min-w-max w-full flex flex-col">
+        <div className="flex items-center gap-3  bg-[#0061dd]  justify-center text-center rounded-t-md py-3">
           <h1 className="text-[1.4vh] text-white">{column.title}</h1>
+          <Badge badgeContent={column.taskIds.length} sx={{background:'#0061dd', color:'#fff'}} >
+            {/* <MailIcon color="action" /> */}
+          </Badge>
         </div>
         <Droppable droppableId={column.id}>
           {(droppableProvided, droppableSnapshot) => (
             <div
-              // className="flex p-4 flex-1 flex-col gap-2"
+              className="flex p-2 flex-1 flex-col gap-2"
 
               ref={droppableProvided.innerRef}
               {...droppableProvided.droppableProps}
@@ -64,7 +68,7 @@ const Column = ({ column, tasksArr }) => {
                           justifyContent: "space-around",
                         }}
                       >
-                        <h2 className="text-[1.7vh]" >{task.nombre}</h2>
+                        <h2 className="text-[1.7vh]">{task.nombre}</h2>
                         <div>
                           <Chip
                             onClick={() => {
@@ -91,24 +95,60 @@ const Column = ({ column, tasksArr }) => {
                         {grados &&
                           grados.map((ele) => {
                             if (ele.id === task.grado) {
-                              return <Chip  sx={{fontSize:'1.3vh',color:'#000',fontWeight:'500',width:'90%', height:'50%',fontFamily:'Poppins' }}  label={ele.nombre_grado}  />;
+                              return (
+                                <Chip
+                                  sx={{
+                                    fontSize: "1.3vh",
+                                    color: "#000",
+                                    fontWeight: "500",
+                                    width: "90%",
+                                    height: "50%",
+                                    fontFamily: "Poppins",
+                                  }}
+                                  label={ele.nombre_grado}
+                                />
+                              );
                             }
                           })}
                         {task.añoIngreso === añoActual.toString() ? (
                           <Chip
                             label={task.añoIngreso}
                             small
-                            sx={{ fontSize:'1.3vh', backgroundColor: "#F44428",color:'#ffff',fontWeight:'600',width:'50%', height:'50%',fontFamily:'Poppins' }}
+                            sx={{
+                              fontSize: "1.3vh",
+                              backgroundColor: "#F44428",
+                              color: "#ffff",
+                              fontWeight: "600",
+                              width: "50%",
+                              height: "50%",
+                              fontFamily: "Poppins",
+                            }}
                           />
                         ) : task.añoIngreso === añoSig.toString() ? (
                           <Chip
                             label={task.añoIngreso}
-                            sx={{ fontSize:'1.3vh', backgroundColor: "#FBBC04",color:'#ffff',fontWeight:'600',width:'50%', height:'50%',fontFamily:'Poppins' }}
+                            sx={{
+                              fontSize: "1.3vh",
+                              backgroundColor: "#FBBC04",
+                              color: "#ffff",
+                              fontWeight: "600",
+                              width: "50%",
+                              height: "50%",
+                              fontFamily: "Poppins",
+                            }}
                           />
                         ) : (
                           <Chip
                             label={task.añoIngreso}
-                            sx={{fontSize:'1.3vh', backgroundColor: "#48C740",color:'#ffff',fontWeight:'600',width:'50%', height:'50%',fontFamily:'Poppins' }}
+                            sx={{
+                              fontSize: "1.3vh",
+                              backgroundColor: "#48C740",
+                              color: "#ffff",
+                              fontWeight: "600",
+                              width: "50%",
+                              height: "50%",
+                              fontFamily: "Poppins",
+                            }}
                           />
                         )}
                       </div>

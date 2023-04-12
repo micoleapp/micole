@@ -61,7 +61,7 @@ export default function ListadeEspera() {
     try {
       setIsLoading(true);
       const token = localStorage.getItem("token");
-      const ColegioId = localStorage.getItem("ColegioId");
+      const ColegioId = localStorage.getItem("id");
       console.log(ColegioId);
       // ?order=${state}
       axios
@@ -154,7 +154,7 @@ export default function ListadeEspera() {
           </div>
         ) : (
           <div style={{display:'flex', gap:'2vh',flexDirection:'column',width:'100%'}}>
-            {dataFiltrada.map((ele) => {
+            {dataFiltrada&&dataFiltrada?.map((ele) => {
               // const gradoDeEspera = grados?.find((g) => g.id === ele.GradoId);
               // console.log(gradoDeEspera);
               return (

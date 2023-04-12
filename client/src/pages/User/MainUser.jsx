@@ -20,12 +20,10 @@ import { logout } from "../../redux/AuthActions";
 export default function MainUser() {
   const [page, setPage] = React.useState(0);
   const [isOpen, setOpen] = useState(false);
-  const { citasUsuario, loading } = useSelector((state) => state.citas);
+ 
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getCitaUsuario());
-  }, []);
+
+
 
   return (
     <>
@@ -140,7 +138,7 @@ export default function MainUser() {
         <section className="right w-full bg-[#EEEE]  lg:px-31 lg:py-12">
           {page === 0 ? (
             <div className="min-h-screen ">
-              <CitasUser data={citasUsuario && citasUsuario} />
+              <CitasUser  />
             </div>
           ) : page === 1 ? (
             <div className="min-h-screen flex    flex-col ">
