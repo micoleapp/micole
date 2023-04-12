@@ -1,5 +1,5 @@
 const { Cita, Colegio, Grado, Plan_Pago, User, Auth } = require('../db');
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 const moment = require('moment');
 const mailer = require('../utils/sendMails/mailer');
 const getPagination = require('../utils/getPagination');
@@ -93,7 +93,7 @@ const getCitas = async (req, res, next) => {
       order: [['fecha_cita', 'ASC']],
       limit: cantidadCitasPermitidasMesActual,
     });
-
+    console.log(CitasPermitidasMesActual);
     if (CitasActivasMesActual.length >= plan_pago.cantidad_familias) {
       CitasPermitidasMesActual = [];
     }
@@ -169,6 +169,9 @@ const getCitasUser = async (req, res, next) => {
       where: {
         email: user.email,
         activo: true,
+        estado: {
+          [Op.notIn]: ['Cancelado', 'Finalizado']
+        }
       },
       ...include,
       order: orderBy || [['fecha_cita', 'ASC']],
@@ -179,6 +182,9 @@ const getCitasUser = async (req, res, next) => {
       where: {
         email: user.email,
         activo: true,
+        estado: {
+          [Op.notIn]: ['Cancelado', 'Finalizado']
+        }
       },
     });
     const pagination = getPagination(url, page, limit, totalCitas);
@@ -234,9 +240,10 @@ const createCita = async (req, res, next) => {
     ColegioId,
   } = req.body;
   try {
+    const gradoId = await Grado.findOne({ where: { nombre_grado: grado } });
     const fechaCita = moment(date, ['DD/MM/YYYY', 'YYYY-MM-DD']);
     const ifExists = await Cita.findOne({
-      where: { email: correo, fecha_cita: fechaCita, ColegioId },
+      where: { email: correo, GradoId: gradoId.id, fecha_cita: fechaCita, ColegioId },
     });
     if (ifExists) {
       return next({
@@ -244,7 +251,7 @@ const createCita = async (req, res, next) => {
         message: 'El email ya cuenta con una cita con este Colegio.',
       });
     }
-    const gradoId = await Grado.findOne({ where: { nombre_grado: grado } });
+
     const newCita = await Cita.create({
       fecha_cita: fechaCita,
       hora_cita: time,
