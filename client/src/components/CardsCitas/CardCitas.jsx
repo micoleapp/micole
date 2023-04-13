@@ -130,20 +130,13 @@ export default function CardCitas({ data, filtros }) {
     return (
       <>
         <div>
-          {/* {state === true && (
-            <Button
-              // onClick={toggleBtn}
-              variant="contained"
-              disabled
-            >
-              Confirmada
-            </Button>
-          )} */}
+        
 
           <Button
             variant="contained"
             onClick={toggleBtn}
             disabled={Toggle === true && true}
+            sx={{fontFamily:'Poppins', fontWeight:'600',fontSize:'1.5vh'}}
           >
             {Toggle === false ? "Confirmar" : "Confirmada"}
             {loading === true && <div className={style.loader}></div>}
@@ -156,7 +149,7 @@ export default function CardCitas({ data, filtros }) {
   return (
     <>
       <div
-        data-aos="fade-up"
+
         style={{ height: "70vh", overflowY: "scroll", padding: "10px" }}
       >
         {filtros === "" && (
@@ -164,7 +157,7 @@ export default function CardCitas({ data, filtros }) {
             {data && arrCita?.length === 0 && (
               <>
                 <div
-                  data-aos="flip-up"
+               
                   style={{
                     width: "100%",
                     display: "flex",
@@ -319,25 +312,19 @@ export default function CardCitas({ data, filtros }) {
                         <p>{cita.email}</p>
                       </div>
                       {/*ACA BOTON CONFIRMAR  */}
-                      {cita.activo === false && <BtnPutCitas id={cita.id} />}
+                      
+                  
+                         {cita.activo === false && <BtnPutCitas id={cita.id} />}
+                   
+                      
+                    
 
-                      {/* {cita.activo === false && (
-                        <div>
-                          <Button
-                            onClick={() => {
-                              handlerPutStateCita(cita.id);
-                            }}
-                            variant="contained"
-                          >
-                            Confirmar{" "}
-                          </Button>
-                        </div>
-                      )} */}
+                   
 
                       {cita.activo === true && (
                         <div>
                           <Button
-                            // onClick={toggleBtn}
+                        
                             variant="contained"
                             disabled
                           >
@@ -718,7 +705,7 @@ export default function CardCitas({ data, filtros }) {
           </>
         )}
 
-        {/*PLAN PREMIUM*/}
+        {/*PLAN */}
         {filtros === "SinConfirmar" &&
           oneSchool.Plan_Pago.nombre_plan_pago === "Premium" && (
             <>

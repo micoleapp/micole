@@ -18,7 +18,7 @@ export default function BurguerMenuU({ handlerClose }) {
           <p className={style.Pages}>Inicio</p>
         </div>
         <div className={style.divPages}>
-          <p className={style.Pages}>Categorias</p>
+          <p className={style.Pages}>Categorías</p>
         </div>
 
         <div className={style.divPages}>

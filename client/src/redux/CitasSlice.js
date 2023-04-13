@@ -8,6 +8,7 @@ export const citasSlice = createSlice({
     error: "",
     loading: false,
     citasUsuario:null,
+    pagination:{},
     columns: {
       "column-1": {
         id: "column-1",
@@ -29,7 +30,7 @@ export const citasSlice = createSlice({
       },
       "column-4": {
         id: "column-4",
-        title: "Entrevista con el director",
+        title: "Entrevista con director",
         estado: "Entrevista",
         taskIds: [],
       },
@@ -146,6 +147,11 @@ export const citasSlice = createSlice({
       state.citasUsuario = action.payload,
       state.loading = false
     },
+    getPagination: (state, action) => {
+      (state.pagination = action.payload),
+        (state.loading = false),
+        (state.error = "");
+    }
   },
 });
 
@@ -157,6 +163,7 @@ export const {
   isLoading,
   getSuccess,
   cleanSuccess,
-  getCitasUsuario
+  getCitasUsuario,
+  getPagination
 } = citasSlice.actions;
 export default citasSlice.reducer;

@@ -1,5 +1,5 @@
 import TimeLine from "./TimeLine";
-import { Button, Card, Typography } from "@mui/material";
+import { Box, Button, Card, Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -14,20 +14,24 @@ import sliceIntoChunks from "../../../components/CardsCitas/Paginacion/utils/Sli
 import PaginationCitas from "../../../components/CardsCitas/Paginacion/PaginationCitas";
 import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
 import { getCitaUsuario } from "../../../redux/CitasActions";
-export default function CitasUser({data}) {
-  const [citasUser, setCitasUser] = useState([]);
-  const { citasUsuario, loading } = useSelector((state) => state.citas);
+export default function CitasUser() {
+  const { citasUsuario, loading, pagination } = useSelector(
+    (state) => state.citas
+  );
+  // const [citasUser, setCitasUser] = useState(citasUsuario);
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
   const items = [1, 2, 3, 4, 5];
- const  dispatch= useDispatch()
-  const [page, setPage] = React.useState(0);
+  const dispatch = useDispatch();
+  const [page, setPage] = React.useState(1);
   useEffect(() => {
-   
-    const citasPaginadas = sliceIntoChunks(citasUsuario&&citasUsuario, 10);
+    dispatch(getCitaUsuario(page));
 
-    setCitasUser(citasPaginadas);
-  }, []);
 
-  console.log(citasUser);
+  }, [page]);
+
 
   return (
     <>
@@ -38,22 +42,22 @@ export default function CitasUser({data}) {
           fontSize: "2.4vh",
           fontWeight: "700",
           padding: "1vh",
-          paddingLeft:'5vh'
+          paddingLeft: "5vh",
         }}
       >
         Listado de Citas
       </Typography>
 
       <>
-        <div className={style.divLayout}> 
-          {citasUser && citasUser[page]?.length > 0 && loading === false ? (
-           citasUser &&
-            citasUser[page]?.map((ele) => {
+        <div className={style.divLayout}>
+          { citasUsuario &&  citasUsuario?.length > 0 && loading === false ? (
+             citasUsuario &&
+             citasUsuario?.map((ele) => {
               let str = ele.Colegio?.direccion;
 
-              console.log(str);
+            
               let str2 = str?.slice(0, 60);
-              console.log(str2);
+         
               return (
                 <div className={style.layout}>
                   {/* foto mas info */}
@@ -200,7 +204,7 @@ export default function CitasUser({data}) {
                 </div>
               );
             })
-          ) : citasUser && citasUser?.length === 0 && loading === true ? (
+          ) :  citasUsuario &&  citasUsuario?.length === 0 && loading === true ? (
             items.map((item, key) => (
               <ContentLoader
                 key={key}
@@ -220,7 +224,7 @@ export default function CitasUser({data}) {
                 <rect width="100" height="100" />
               </ContentLoader>
             ))
-          ) : citasUser  && citasUser?.length === 0 && loading === false ? (
+          ) :  citasUsuario &&  citasUsuario?.length === 0 && loading === false ? (
             <div
               // data-aos="zoom-up"
               style={{
@@ -244,11 +248,19 @@ export default function CitasUser({data}) {
           ) : null}
         </div>
       </>
-      <PaginationCitas
-        page={page}
-        setPage={setPage}
-        nroPaginas={citasUser?.length}
-      />
+      <Box
+        justifyContent={"start"}
+        alignItems={"center"}
+        display={"flex"}
+        sx={{ margin: "20px 0px" }}
+      >
+        <Pagination
+          count={pagination.pages}
+          onChange={handlePageChange}
+          page={page}
+          color="primary"
+        />
+      </Box>
     </>
   );
 }

@@ -161,7 +161,7 @@ function Footer() {
             </Link>
             <li className="hover-underline-animation w-min cursor-default">
               {" "}
-              <Link to={"/?categorias=1"}>Categorias</Link>
+              <Link to={"/?categorias=1"}>Categorías</Link>
             </li>
             <li className="hover-underline-animation w-min cursor-default">
               Blog
