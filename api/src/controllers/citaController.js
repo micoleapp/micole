@@ -6,6 +6,7 @@ const getPagination = require('../utils/getPagination');
 
 const getCitas = async (req, res, next) => {
   const tokenUser = req.user;
+  const { año, grado } = req.query;
   try {
     const user = await Colegio.findOne({ where: { idAuth: tokenUser.id } });
     if (!user) {
@@ -24,11 +25,22 @@ const getCitas = async (req, res, next) => {
       where: { id: user.PlanPagoId },
     });
 
+    const where = {
+      ColegioId: user.id,
+      activo: true,
+    };
+
+    if (año && grado) {
+      where.añoIngreso = año;
+      where.GradoId = grado;
+    } else if (año) {
+      where.añoIngreso = año;
+    } else if (grado) {
+      where.GradoId = grado;
+    }
+
     const CitasActivas = await Cita.findAll({
-      where: {
-        ColegioId: user.id,
-        activo: true,
-      },
+      where,
       ...include,
       order: [['fecha_cita', 'ASC']],
     });
@@ -170,8 +182,8 @@ const getCitasUser = async (req, res, next) => {
         email: user.email,
         activo: true,
         estado: {
-          [Op.notIn]: ['Cancelado', 'Finalizado']
-        }
+          [Op.notIn]: ['Cancelado', 'Finalizado'],
+        },
       },
       ...include,
       order: orderBy || [['fecha_cita', 'ASC']],
@@ -183,8 +195,8 @@ const getCitasUser = async (req, res, next) => {
         email: user.email,
         activo: true,
         estado: {
-          [Op.notIn]: ['Cancelado', 'Finalizado']
-        }
+          [Op.notIn]: ['Cancelado', 'Finalizado'],
+        },
       },
     });
     const pagination = getPagination(url, page, limit, totalCitas);
@@ -243,7 +255,12 @@ const createCita = async (req, res, next) => {
     const gradoId = await Grado.findOne({ where: { nombre_grado: grado } });
     const fechaCita = moment(date, ['DD/MM/YYYY', 'YYYY-MM-DD']);
     const ifExists = await Cita.findOne({
-      where: { email: correo, GradoId: gradoId.id, fecha_cita: fechaCita, ColegioId },
+      where: {
+        email: correo,
+        GradoId: gradoId.id,
+        fecha_cita: fechaCita,
+        ColegioId,
+      },
     });
     if (ifExists) {
       return next({
