@@ -55,6 +55,7 @@ import es_AM_PM from "../components/SwiperEventos/utils/horaFormat";
 import ModalLogin from "../components/ModalLogin/ModalLogin";
 import { setVacantesRedux } from "../redux/AuthActions";
 import SliderC from "../components/SliderC";
+import IconError from "../svg/IconError";
 function QuiltedImageList({ firstImage, gallery, setImage,setImages }) {
   return (
     <div className="w-full px-4">

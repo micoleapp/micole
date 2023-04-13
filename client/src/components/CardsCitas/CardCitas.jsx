@@ -211,7 +211,7 @@ export default function CardCitas({ data, filtros }) {
                           />
                           <div>
                             <div className={style.divNombreGrado}>
-                              <p>{cita.nombre}</p>
+                              <p>{cita?.nombre}</p>
                               {grados &&
                                 grados.map((ele) => {
                                   console.log(ele.id === cita.GradoId);

@@ -1,11 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Column from "./Column";
 import SelectCRM from "./CardsDrgAndDrp/SelectsCRM/SelectsCRM";
 import { useDispatch, useSelector } from "react-redux";
 
-import { updateTask, updateColumn, getCita } from "../redux/CitasActions";
-
+import {
+  updateTask,
+  updateColumn,
+  getCita,
+  getCitaDnD_filtros,
+} from "../redux/CitasActions";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import RotateLeftIcon from "@mui/icons-material/RotateLeft";
+import Button from "@mui/material/Button";
 // const reorderColumnList = (sourceCol, startIndex, endIndex) => {
 //   const newTaskIds = Array.from(sourceCol.taskIds);
 
@@ -37,12 +44,15 @@ const reorderColumnList = (sourceCol, startIndex, endIndex) => {
 };
 
 function DragAndDrop() {
-   const { citasAgendadas } = useSelector((state) => state.schools);
-  const { tasks, columns, columnOrder, success} = useSelector((state) => state.citas);
+  const { citasAgendadas, grados } = useSelector((state) => state.schools);
+
+  const { tasks, columns, columnOrder, success } = useSelector(
+    (state) => state.citas
+  );
   const [state, setState] = React.useState({ tasks, columns, columnOrder });
   const dispatch = useDispatch();
- console.log(success)
- 
+  console.log(success);
+
   const onDragEnd = (result) => {
     const { destination, source } = result;
 
@@ -106,8 +116,8 @@ function DragAndDrop() {
     };
     dispatch(updateColumn(newState.columns));
     // const taskId = tasks[removed]
-    // const NuevoEstado = destinationCol.estado 
-   dispatch(updateTask(tasks[removed],destinationCol.estado ));
+    // const NuevoEstado = destinationCol.estado
+    dispatch(updateTask(tasks[removed], destinationCol.estado));
     setState(newState);
 
     // alert(
@@ -115,27 +125,85 @@ function DragAndDrop() {
     //     destinationCol.title
     //   }! \nTu tarea es ${JSON.stringify(tasks[removed])}`
     // );
-
   };
+  const [filterAño, setfilterAño] = useState("");
+  const [filterGrado, setfilterGrado] = useState("");
+  useEffect(() => {
+    // dispatch(getCita());
+    dispatch(getCitaDnD_filtros({ filterGrado, filterAño }));
+  }, [citasAgendadas.CitasActivas?.length, success, tasks]);
+
+  const handleChangeState = (event) => {
+    // let state = event.target.value;
+    // dispatch(filterAdminState(state, page));
+
+    setfilterAño(event.target.value);
+    dispatch(getCitaDnD_filtros({ filterGrado, filterAño }));
+  };
+  const handleChangeStateGrado = (event) => {
+    // let state = event.target.value;
+
+    setfilterGrado(event.target.value);
+    console.log(filterGrado, filterAño);
+    dispatch(getCitaDnD_filtros({ filterGrado, filterAño }));
+  };
+  const  handlerResetFiltros = () => {
+    setfilterGrado('');
+    setfilterAño('');
+    dispatch(getCitaDnD_filtros({ filterGrado, filterAño }));
+  }
 
 
-useEffect(() => {
-    dispatch(getCita());
-    
-  }, [citasAgendadas.CitasActivas?.length, success ]);
-
+  const yearNow = new Date().getFullYear();
 
   return (
     <DragDropContext Scrollable onDragEnd={onDragEnd}>
-      <div className="flex flex-col text-base py-2 w-full min-h-screen gap-5 duration-300  mb-6 bg-[#f6f7f8] text-[#0061dd]">
+      <div className="flex flex-col text-base py-2 w-full min-h-max   gap-5 duration-300  mb-6 bg-[#f6f7f8] text-[#0061dd]">
         <div className="flex items-center flex-col my-5 ">
           {/* aca van los select de año de ingreso y grado*/}
-          {/* <div style={{ display: "flex", width: "100%" }}>
-            <SelectCRM label="Grado" />
-            <SelectCRM label="Año" />
-          </div> */}
+          <div style={{ display: "flex", width: "100%" }}>
+            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+              <InputLabel id="demo-select-small">Grado</InputLabel>
+
+              <Select
+                sx={{ border: "none", outline: "none" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                value={filterGrado}
+                label={"Grado"}
+                onChange={handleChangeStateGrado}
+              >
+                {grados?.map((g) => (
+                  <MenuItem value={g.id}>{g.nombre_grado} </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+              <InputLabel id="demo-select-small">Año</InputLabel>
+
+              <Select
+                sx={{ border: "none", outline: "none" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                value={filterAño}
+                label={"Año"}
+                onChange={handleChangeState}
+              >
+                <MenuItem value={yearNow}>{yearNow} </MenuItem>
+                <MenuItem value={yearNow + 1}>{yearNow + 1} </MenuItem>
+                <MenuItem value={yearNow + 2}>{yearNow + 2} </MenuItem>
+              </Select>
+            </FormControl>
+            {filterGrado != ""|| filterAño != "" ? (
+              <Button
+              onClick={handlerResetFiltros}
+              >
+                <RotateLeftIcon />
+              </Button>
+           ) : null} 
+          </div>
         </div>
-        <div className="flex flex-col text-base lg:flex-row justify-between gap-5 px-4">
+        <div className="flex flex-col text-base lg:flex-row justify-between  gap-5 px-4">
           {columnOrder?.map((columnId) => {
             const column = columns[columnId];
 
