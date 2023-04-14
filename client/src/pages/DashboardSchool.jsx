@@ -3356,7 +3356,7 @@ function DashboardSchool() {
               <div>{/* <SelectCitasAg/> */}</div>
             </div>
             <div>
-              <CardCitas  data={citasAgendadas&&citasAgendadas} filtros={Filtro} />
+              <CardCitas  data={citasAgendadas&&citasAgendadas}  setPlan={setPage} filtros={Filtro} />
             </div>
           </div>
         ) : page === 6 ? (
