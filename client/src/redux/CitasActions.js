@@ -26,7 +26,28 @@ export const getCita = () => (dispatch) => {
       // });
     });
 };
-
+export const getCitaDnD_filtros = ({filterGrado, filterAño}) => (dispatch) => {
+  dispatch(isLoading());
+  console.log(filterGrado, filterAño);
+  console.log(filterAño);
+  const token = localStorage.getItem("token");
+  axios
+    .get(`/citas?grado=${filterGrado}&año=${filterAño}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((res) => {
+      console.log(res.data);
+      dispatch(getCitas(res.data));
+    })
+    .catch((err) => {
+      dispatch(getError(err.response.data.error));
+      // Swal.fire({
+      //   icon: "error",
+      //   title: "Oops...",
+      //   text: err.response.data.error,
+      // });
+    });
+};
 export const updateTask = (taskId, NuevoEstado) => (dispatch) => {
   const idCita = taskId.idCita;
 
@@ -94,10 +115,12 @@ export const cleanSuccessState = () => (dispatch) => {
 
 export const getCitaUsuario = (page) => (dispatch) => {
   dispatch(isLoading());
-  console.log(page)
+  console.log(page);
   const token = localStorage.getItem("token");
   axios
-    .get(`/citas/users?limit=5&page=${page}`, { headers: { Authorization: `Bearer ${token}` } })
+    .get(`/citas/users?limit=5&page=${page}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
     .then((res) => {
       dispatch(getPagination(res.data));
       dispatch(getCitasUsuario(res.data.CitasUsuario));

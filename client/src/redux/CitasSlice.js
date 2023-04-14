@@ -7,8 +7,9 @@ export const citasSlice = createSlice({
     success: null,
     error: "",
     loading: false,
-    citasUsuario:null,
-    pagination:{},
+    citasUsuario: null,
+    pagination: {},
+  
     columns: {
       "column-1": {
         id: "column-1",
@@ -143,15 +144,15 @@ export const citasSlice = createSlice({
     isLoading: (state) => {
       state.loading = true;
     },
-    getCitasUsuario: (state,action) => {
-      state.citasUsuario = action.payload,
-      state.loading = false
+    getCitasUsuario: (state, action) => {
+      (state.citasUsuario = action.payload), (state.loading = false);
     },
     getPagination: (state, action) => {
       (state.pagination = action.payload),
         (state.loading = false),
         (state.error = "");
-    }
+    },
+ 
   },
 });
 
@@ -164,6 +165,7 @@ export const {
   getSuccess,
   cleanSuccess,
   getCitasUsuario,
-  getPagination
+  getPagination,
+
 } = citasSlice.actions;
 export default citasSlice.reducer;
