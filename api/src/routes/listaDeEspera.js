@@ -85,11 +85,30 @@ router.get("/usuario/:id", async (req, res) => {
 
 //------- PEDIR POR FILTRADO DE FECHA O GRADO DE LA LISTA--------
 router.get("/filtro", async (req, res) => {
+  const { gradoId, fecha, colegioId, order } = req.body;
+  let orderBy = null;
+  let lista;
+  if (order) {
+    switch (order) {
+      case "gradoASC":
+        orderBy = [["GradoId", "ASC"]];
+        break;
+      case "gradoDESC":
+        orderBy = [["GradoId", "DESC"]];
+        break;
+      case "fechaASC":
+        orderBy = [["createdAt", "ASC"]];
+        break;
+      case "fechaDESC":
+        orderBy = [["createdAt", "DESC"]];
+        break;
+    }
+  }
+
   try {
-    const { gradoId, fecha } = req.body;
-    let lista;
     lista = await ListaDeEspera.findAll({
       where: {
+        ColegioId: colegioId,
         ...(gradoId && { GradoId: gradoId }),
         ...(fecha && { createdAt: fecha }),
       },
@@ -121,6 +140,7 @@ router.get("/filtro", async (req, res) => {
           ],
         },
       ],
+      order: orderBy,
     });
     lista.length !== 0
       ? res.json(lista)

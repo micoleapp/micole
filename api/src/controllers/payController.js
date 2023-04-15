@@ -32,19 +32,22 @@ const payController = async (req, res) => {
         title: nombre_plan_pago,
         unit_price: precio,
         quantity: data.cantidad,
-        // currency_id: "PEN",
       },
     ],
     external_reference: id_colegio,
     additional_info: email,
     back_urls: {
       //definir las verdaderas aca
-      success: " https://bc48-177-246-245-112.ngrok.io/payments/success",
+      success: " https://micole.vercel.app/#/dashboardschool",
       failure:
         "https://www.microsoft.com/es-mx/download/internet-explorer.aspx",
-      pending: "https://tupcideal.vercel.app/",
+      pending: "https://micole.vercel.app/#/dashboardschool",
     },
-    notification_url: `${NGROK_URL}/payments/notification`,
+    // notification_url: `${NGROK_URL}/payments/notification`,
+    notification_url:
+      process.env.NODE_ENV === "production"
+        ? "https://micole.vercel.app/#/payment/notification"
+        : `${NGROK_URL}/payments/notification`,
   };
   console.log(preference.payer);
   console.log(preference.items);

@@ -73,31 +73,32 @@ export default function FormLogin({ handlerClose, OpenLogin, setOpenLogin }) {
         </button>
       </form>
       <div className="text-center mb-3">
-        <p>¿Has olvidado tu contraseña?</p>
-        <p className="text-[#0061dd]">Recuperar contraseña</p>
+        <p  className="  text-base">¿Has olvidado tu contraseña?</p>
+        <p className="text-[#0061dd]  text-sm  ">Recuperar contraseña</p>
       </div>
-      <div className="text-center mb-3">
-        <p>¿No tienes una cuenta?</p>
-        <p
-          className="text-[#0061dd] cursor-pointer"
-          onClick={() => setOpenLogin(!OpenLogin)}
-        >
-          Registrate Aqui
-        </p>
-      </div>
+      
       <div className={style.socialMedia}>
-        <p>Prefiero iniciar sesion con:</p>
+        <p className="  text-base">Prefiero iniciar sesion con:</p>
         <div
           style={{
             display: "flex",
-            gap: "20px",
-            padding: "20px",
+            gap: "2vh",
+            padding: "1vh",
             alignItems: "center",
           }}
         >
           <FB />
           <Gmail />
         </div>
+      </div>
+      <div className="text-center mb-3  p-2">
+        <p className="  text-base">¿No tienes una cuenta?</p>
+        <p
+          className="text-[#0061dd] text-sm  cursor-pointer"
+          onClick={() => setOpenLogin(!OpenLogin)}
+        >
+          Registrate Aqui
+        </p>
       </div>
     </>
   );

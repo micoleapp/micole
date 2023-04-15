@@ -25,9 +25,10 @@ const Column = ({ column, tasksArr }) => {
   const añoActual = yearNow;
   const añoSig = yearNow + 1;
   const añoDsdelSig = yearNow + 2;
+  // className="  max-h-12 overflow-y-scroll " 
   return (
     <>
-      <div className="rounded-md  bg-[#FFFF] bg-[#FFFF]shadow-md border  max-w-xs min-h-20 max-h-30 overflow-y-scroll min-w-max w-full flex flex-col">
+      <div className="rounded-md  bg-[#FFFF] bg-[#FFFF]shadow-md border  max-w-xs min-h-20 min-w-max w-full flex flex-col">
         <div className="flex items-center gap-3  bg-[#0061dd]  justify-center text-center rounded-t-md py-3">
           <h1 className="text-[1.4vh] text-white">{column.title}</h1>
           <Badge badgeContent={column.taskIds.length} sx={{background:'#0061dd', color:'#fff'}} >
@@ -37,7 +38,7 @@ const Column = ({ column, tasksArr }) => {
         <Droppable droppableId={column.id}>
           {(droppableProvided, droppableSnapshot) => (
             <div
-              className="flex p-2 flex-1 flex-col gap-2"
+              className="flex p-2 flex-1 flex-col gap-2 max-h-96 overflow-y-scroll "
 
               ref={droppableProvided.innerRef}
               {...droppableProvided.droppableProps}

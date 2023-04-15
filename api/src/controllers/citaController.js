@@ -262,10 +262,13 @@ const createCita = async (req, res, next) => {
         ColegioId,
       },
     });
+
+    const colegioNombre = await Colegio.findByPk(ColegioId);
+console.log( colegioNombre.nombre_colegio)
     if (ifExists) {
       return next({
         statusCode: 400,
-        message: 'El email ya cuenta con una cita con este Colegio.',
+        message: `Ya hemos reservado una cita para ti en ${colegioNombre.nombre_colegio}.`,
       });
     }
 

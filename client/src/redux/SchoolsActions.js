@@ -262,7 +262,7 @@ export const postCita = (cita) => (dispatch) => {
       // .then((res) => dispatch(getVacantesGrados(res.data)))
       .catch((err) => {
         Swal.fire({
-          icon: "error",
+          icon: "info",
           title: "Algo salio mal",
           text: err.response.data.error,
         });
