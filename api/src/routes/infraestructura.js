@@ -19,6 +19,7 @@ router.get("/", async (req, res) => {
         "imagen",
         "InfraestructuraTipoId",
       ],
+      order: [["nombre_infraestructura", "ASC"]],
     });
 
     res.json(infraestructura);
