@@ -76,7 +76,8 @@ import SelectCitasAg from "../components/CardsCitas/SelectCitasAgendadas/SelectC
 import { getCita } from "../redux/CitasActions";
 import Miplan from "../components/Miplan/Miplan";
 import Modal from "@mui/material/Modal";
-
+import ListadeEspera from "./ListaEspera/ListadeEspera";
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 const styleModal = {
   position: "absolute",
   top: "50%",
@@ -741,14 +742,17 @@ function DashboardSchool() {
     });
   };
   useEffect(() => {
-    if (files !== null) {
+    if (files !== null && files !== undefined) {
       Object.values(files).map((file) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
           setPreview((prev) => [...prev, reader.result]);
         };
-      });
+        setActiveUpTwo(true)
+        setSpanTwo(true)
+      }
+      );
     }
   }, [files]);
 
@@ -758,16 +762,18 @@ function DashboardSchool() {
   // }, []);
 
   useEffect(() => {
-    if (file !== null) {
+    if (file !== null && file !== undefined) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         setPreviewOne(reader.result);
       };
+      setActiveUpOne(true)
+      setSpanOne(true)
     }
   }, [file]);
   useEffect(() => {
-    if (fileEvento !== null) {
+    if (fileEvento !== null && fileEvento !== undefined) {
       const reader = new FileReader();
       reader.readAsDataURL(fileEvento);
       reader.onloadend = () => {
@@ -777,7 +783,7 @@ function DashboardSchool() {
   }, [fileEvento]);
 
   useEffect(() => {
-    if (fileEditEvento !== null) {
+    if (fileEditEvento !== null && fileEditEvento !== undefined) {
       const reader = new FileReader();
       reader.readAsDataURL(fileEditEvento);
       reader.onloadend = () => {
@@ -788,29 +794,47 @@ function DashboardSchool() {
   }, [fileEditEvento]);
   
   useEffect(() => {
-    if (fileLogo !== null) {
+    if (fileLogo !== null && fileLogo !== undefined) {
       const reader = new FileReader();
       reader.readAsDataURL(fileLogo);
       reader.onloadend = () => {
         setPreviewLogo(reader.result);
       };
+      setActiveUpLogo(true)
+      setSpanLogo(true)
+      
     }
   }, [fileLogo]);
+  
 
   const eliminarImagenDePreview = (img) => {
-    setPreview(preview.filter((image) => image !== img));
+    let newPreview = preview.filter((image) => image !== img)
+    setPreview(newPreview);
+    setMultimedia({...multimedia,images:newPreview})
   };
+  useEffect(()=>{
+    if(multimedia.images.length === 0){
+      setSpanTwo(false)
+      setActiveUpTwo(false)
+    }
+  },[multimedia.images])
   const eliminarImagenDePreviewOne = (img) => {
     setPreviewOne("");
+    setMultimedia({...multimedia,image:""})
+    setSpanOne(false)
+    setActiveUpOne(false)
   };
   const eliminarImagenDePreviewLogo = (img) => {
     setPreviewLogo("");
+    setMultimedia({...multimedia,logo:""})
+    setActiveUpLogo(false)
+    setSpanLogo(false)
   };
   const [image, setImage] = useState(null);
   const [imageLogo, setImageLogo] = useState(null);
 
   const multimediaCompleted = () => {
-    if (multimedia.image !== "" && multimedia.images.length !== 0) {
+    if (multimedia.image !== "" && multimedia.images.length !== 0 && multimedia.logo !== "") {
       return false;
     } else {
       return true;
@@ -978,7 +1002,7 @@ function DashboardSchool() {
             capacidadEvento: 0,
             fechaEvento: dayjs(new Date()),
             horaEvento: "08:00",
-            image: "",
+            image: "plantilla",
           });
           setFileEvento(null);
           setPreviewEvento(null);
@@ -1122,6 +1146,8 @@ function DashboardSchool() {
       dispatch(setVacantesRedux(id))
     }
   },[activeStep])
+
+
 
   return (
     <div className="flex lg:flex-row flex-col">
@@ -1273,6 +1299,30 @@ function DashboardSchool() {
               Mi plan
             </span>
           </button>
+
+
+          <button
+              className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
+                page == 7 ? "bg-[#0061dd] text-white" : null
+              } `}
+              onClick={() => {
+                setOpen();
+                setPage(7);
+              }}
+            >
+              <FormatListBulletedIcon
+                className={`text-xl text-[#0061dd] group-focus:text-white group-hover:text-white ${
+                  page == 7 ? "text-white" : null
+                }`}
+              />
+              <span
+                className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
+                  page == 7 ? "text-white" : null
+                }`}
+              >
+                Lista de Espera
+              </span>
+            </button>
 
           <button
             className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
@@ -2702,7 +2752,6 @@ function DashboardSchool() {
                               name="image"
                               accept="image/png,image/jpeg"
                               onChange={(e) => {
-                                setSpanOne(true);
                                 setFile(e.target.files[0]);
                               }}
                               className="hidden"
@@ -2861,7 +2910,6 @@ function DashboardSchool() {
                               name="imageLogo"
                               accept="image/png,image/jpeg"
                               onChange={(e) => {
-                                setSpanLogo(true);
                                 setFileLogo(e.target.files[0]);
                               }}
                               className="hidden"
@@ -3308,7 +3356,7 @@ function DashboardSchool() {
               <div>{/* <SelectCitasAg/> */}</div>
             </div>
             <div>
-              <CardCitas  data={citasAgendadas&&citasAgendadas} filtros={Filtro} />
+              <CardCitas  data={citasAgendadas&&citasAgendadas}  setPlan={setPage} filtros={Filtro} />
             </div>
           </div>
         ) : page === 6 ? (
@@ -3424,7 +3472,7 @@ function DashboardSchool() {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <div className="flex w-full items-center justify-between mt-4  flex-col gap-4 lg:flex-row">
                       <MobileDatePicker
-                        label="Elejir fecha"
+                        label="Elegir fecha"
                         value={dateEvento}
                         inputFormat="DD/MM/YYYY"
                         renderInput={(params) => <TextField {...params} />}
@@ -3433,7 +3481,7 @@ function DashboardSchool() {
                         className="bg-white"
                       />
                       <MobileTimePicker
-                        label="Elejir hora"
+                        label="Elegir hora"
                         renderInput={(params) => <TextField {...params} />}
                         ampm={false}
                         value={timeEvento}
@@ -3660,7 +3708,7 @@ function DashboardSchool() {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <div className="flex w-full items-center justify-between mt-4  flex-col gap-4 lg:flex-row">
                           <MobileDatePicker
-                            label="Elejir fecha"
+                            label="Elegir fecha"
                             value={dateEditEvento}
                             inputFormat="DD/MM/YYYY"
                             renderInput={(params) => <TextField {...params} />}
@@ -3669,7 +3717,7 @@ function DashboardSchool() {
                             className="bg-white"
                           />
                           <MobileTimePicker
-                            label="Elejir hora"
+                            label="Elegir hora"
                             renderInput={(params) => <TextField {...params} />}
                             ampm={false}
                             value={timeEditEvento}
@@ -3693,7 +3741,12 @@ function DashboardSchool() {
               </Box>
             </Modal>
           </div>
-        ) : null}
+        ) :  page === 7 ? (
+          <div className=" min-h-screen">
+             <ListadeEspera/>
+          </div>
+         
+        ):null}
       </section>
     </div>
   );

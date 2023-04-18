@@ -3,7 +3,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-
+const yearNow = new Date().getFullYear();
 export default function SelectCRM({ label, filtro,setState }) {
   const [age, setAge] = React.useState("");
 
@@ -25,8 +25,11 @@ export default function SelectCRM({ label, filtro,setState }) {
       >
      
           <>
-            <MenuItem value={false}>Inactivos</MenuItem>
-            <MenuItem value={true}>Activo</MenuItem>
+            <MenuItem value={yearNow}>{yearNow} </MenuItem>
+            <MenuItem value={yearNow+1}>{yearNow +1} </MenuItem>
+            <MenuItem value={yearNow+2}>{yearNow+2} </MenuItem>
+      
+         
           </>
   
           {/* {filtro === "fecha" && (

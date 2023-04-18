@@ -187,9 +187,11 @@ mercado pago
       email: user.email,
     }
     Swal.fire({
-      icon: "success",
-      title: "¡Email enviado!",
-      text: "Espere a que un asesor se ponga en contacto con usted.",
+      imageUrl: 'https://c7.alamy.com/compes/j54064/ejemplo-de-codigo-qr-en-la-forma-de-una-cara-sonriente-aislado-sobre-fondo-blanco-j54064.jpg',
+      imageWidth: 300,
+      imageHeight: 300,
+      title: "¡Escanea el QR!",
+      text: "Al apretar OK, revise su correo y espere a que un asesor se ponga en contacto con usted.",
     })
   }
 
@@ -327,14 +329,14 @@ mercado pago
                 size="small"
               >
                 <InputLabel id="demo-simple-select-standard-label">
-                  Cuantos meses quieres pagar?
+                  Cuántos meses quieres pagar?
                 </InputLabel>
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-type-select-standard"
                   value={months}
                   onChange={handleChangeMonths}
-                  label="Cuantos meses quieres pagar?"
+                  label="Cuántos meses quieres pagar?"
                 >
                   {meses.map((type, index) => (
                     <MenuItem value={type.value} key={index}>
@@ -354,16 +356,16 @@ mercado pago
               style={{ color: '#fff', marginTop: '5px' }}
             />
           ) : (
-            'Generar boton de pago'
+            'GENERAR LINK DE PAGO'
           )}</button>
               </div>
             ) : buttonMp == null && selectedMethod === "yape" ? (
               <div className={style.divButton}>
-                <button onClick={handleYape}>Enviar email</button>
+                <button onClick={handleYape}>GENERAR QR</button>
               </div>
             ) : null}
             {buttonMp &&               <div className={style.divButton}>
-                <a className="text-white bg-[#0061df] rounded-md px-3 py-2" href={buttonMp} onClick={()=>setButtonMp(null)}>FINALIZAR PEDIDO</a>
+                <a className="text-white bg-[#0061df] rounded-md px-3 py-2" href={buttonMp} onClick={()=>setButtonMp(null)}>PAGAR</a>
               </div>}
           </div>
         </div>

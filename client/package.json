@@ -45,10 +45,12 @@
     "react-parallax-tilt": "^1.7.101",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.1",
+    "react-slick": "^0.29.0",
     "react-slideshow-image": "4.2.1",
     "react-use-window-size": "^1.0.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.2",
+    "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.7.2",
     "swiper": "^9.1.1"
   },

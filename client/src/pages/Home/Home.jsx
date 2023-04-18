@@ -32,7 +32,7 @@ function Home() {
         {/* <img className={style.img} src={fondoHome} alt="home" /> */}
         <div className={style.landingText}>
           <h1 className={style.h1}> Tu búsqueda de colegios comienza aquí</h1>
-          <p className={style.p}>¡Qué Emoción!</p>
+
         </div>
         <div className={style.container_filtros}>
           <FiltrosHome />
@@ -81,7 +81,7 @@ function Home() {
           <h1>Inscribe tu colegio en nuestra plataforma</h1>
           <p>Únete a la mayor comunidad de colegios en el Perú</p>
           <Link to={"/enroll"}  className="p-2 bg-white text-[#0061dd] px-4 rounded-md">
-            Registrar
+          Registrar mi colegio
           </Link>
         </div>
       </div>

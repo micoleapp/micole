@@ -15,11 +15,10 @@ export default function GridVacantesAdmin({ año, setVacantesOff, oneSchool }) {
 
   const dispatch = useDispatch();
 
-  console.log(vacantesGrados);
-  console.log(oneSchool);
+
   const [datos, setDatos] = React.useState({ 
     año, 
-    idColegio: oneSchool?.id });
+    idColegio: oneSchool.id });
 
   const handleChange = (e) => {
     setDatos({
@@ -29,6 +28,7 @@ export default function GridVacantesAdmin({ año, setVacantesOff, oneSchool }) {
   };
 
   const handleSubmit = (e) => {
+  
     e.preventDefault();
     setVacantesOff(false);
     try {
@@ -61,9 +61,7 @@ export default function GridVacantesAdmin({ año, setVacantesOff, oneSchool }) {
     };
   }, []);
 
-  // useEffect(() => {
 
-  //   }, [vacantesGrados]);
 
   return (
     <>

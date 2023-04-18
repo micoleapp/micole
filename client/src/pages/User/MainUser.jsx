@@ -16,15 +16,14 @@ import EventosUsuario from "./pageEventos/EventosUsuario";
 import UserConfig from "./Config-usuario/UserConfig";
 import { logout } from "../../redux/AuthActions";
 
+
 export default function MainUser() {
   const [page, setPage] = React.useState(0);
   const [isOpen, setOpen] = useState(false);
-  const { citasUsuario, loading } = useSelector((state) => state.citas);
+ 
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getCitaUsuario());
-  }, []);
+
+
 
   return (
     <>
@@ -89,9 +88,11 @@ export default function MainUser() {
                 Eventos{" "}
               </span>
             </button>
+       
+
             <button
               className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
-                page == 2 ? "bg-[#0061dd] text-white" : null
+                page == 3 ? "bg-[#0061dd] text-white" : null
               } `}
               onClick={() => {
                 setOpen();
@@ -105,12 +106,13 @@ export default function MainUser() {
               />
               <span
                 className={`text-sm text-black/80 group-focus:text-white group-hover:text-white ${
-                  page == 2 ? "text-white" : null
+                  page == 2? "text-white" : null
                 }`}
               >
                 Configuracion{" "}
               </span>
             </button>
+
             <button
               className={`flex items-center duration-300 focus:bg-[#0061dd] focus:text-white cursor-pointer gap-2 group p-3 rounded-md hover:bg-[#0060dd97] hover:text-white ${
                 page == 3 ? "bg-[#0061dd] text-white" : null
@@ -136,15 +138,16 @@ export default function MainUser() {
         <section className="right w-full bg-[#EEEE]  lg:px-31 lg:py-12">
           {page === 0 ? (
             <div className="min-h-screen ">
-              <CitasUser data={citasUsuario&&citasUsuario}/>
+              <CitasUser  />
             </div>
           ) : page === 1 ? (
             <div className="min-h-screen flex    flex-col ">
               <EventosUsuario />
             </div>
-          ) : page === 2 ? (
+          )
+           : page === 2 ? (
             <div className="min-h-screen">
-              <UserConfig/>
+              <UserConfig />
             </div>
           ) : page === 3 ? (
             <div className="min-h-screen">

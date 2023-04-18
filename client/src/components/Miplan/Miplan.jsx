@@ -262,7 +262,7 @@ export default function Miplan() {
          <div
           
            style={{
-             width: "80%",
+             width: "90%",
              display: "flex",
              alignItems: "center",
              justifyContent: "center",
@@ -279,7 +279,7 @@ export default function Miplan() {
            <ContentPasteSearchOutlinedIcon
              style={{ color: "#0061DF" }}
            />
-           <h1  style={{fontSize:'1.5vh'}}>No hay historial disponible</h1>
+           <h1  style={{fontSize:'1.6vh'}}>No hay historial disponible</h1>
          </div>
        </>
         )}

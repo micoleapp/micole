@@ -7,9 +7,10 @@ import {
   isLoading,
   getSuccess,
   cleanSuccess,
-  getCitasUsuario
+  getCitasUsuario,
+  getPagination,
 } from "./CitasSlice";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 export const getCita = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
@@ -25,7 +26,28 @@ export const getCita = () => (dispatch) => {
       // });
     });
 };
-
+export const getCitaDnD_filtros = ({filterGrado, filterAño}) => (dispatch) => {
+  dispatch(isLoading());
+  console.log(filterGrado, filterAño);
+  console.log(filterAño);
+  const token = localStorage.getItem("token");
+  axios
+    .get(`/citas?grado=${filterGrado}&año=${filterAño}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((res) => {
+      console.log(res.data);
+      dispatch(getCitas(res.data));
+    })
+    .catch((err) => {
+      dispatch(getError(err.response.data.error));
+      // Swal.fire({
+      //   icon: "error",
+      //   title: "Oops...",
+      //   text: err.response.data.error,
+      // });
+    });
+};
 export const updateTask = (taskId, NuevoEstado) => (dispatch) => {
   const idCita = taskId.idCita;
 
@@ -42,11 +64,9 @@ export const updateTask = (taskId, NuevoEstado) => (dispatch) => {
     });
 };
 export const updateColumn = (newColumn) => (dispatch) => {
-
   dispatch(updateColumns(newColumn));
 };
 export const putCita = (idCita) => (dispatch) => {
-
   dispatch(isLoading());
   axios
     .put(`/citas/activo/${idCita}`, { activo: true })
@@ -67,12 +87,12 @@ export const deleteCita = (idCita) => (dispatch) => {
   console.log(idCita);
   axios
     .delete(`/citas/${idCita}`)
-    .then((res) =>{ 
-      dispatch(getSuccess(res.data))
+    .then((res) => {
+      dispatch(getSuccess(res.data));
       Swal.fire({
         icon: "success",
         title: "Cita cancelada con exito",
-        text: 'Se notificará a la familia interesada',
+        text: "Se notificará a la familia interesada",
       });
     })
     .catch((err) => {
@@ -86,7 +106,6 @@ export const deleteCita = (idCita) => (dispatch) => {
 };
 
 export const cleanSuccessState = () => (dispatch) => {
-
   try {
     dispatch(cleanSuccess());
   } catch (err) {
@@ -94,13 +113,18 @@ export const cleanSuccessState = () => (dispatch) => {
   }
 };
 
-
-export const getCitaUsuario = () => (dispatch) => {
+export const getCitaUsuario = (page) => (dispatch) => {
   dispatch(isLoading());
+  console.log(page);
   const token = localStorage.getItem("token");
   axios
-    .get(`/citas/users`, { headers: { Authorization: `Bearer ${token}` } })
-    .then((res) => dispatch(getCitasUsuario(res.data)))
+    .get(`/citas/users?limit=5&page=${page}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((res) => {
+      dispatch(getPagination(res.data));
+      dispatch(getCitasUsuario(res.data.CitasUsuario));
+    })
     .catch((err) => {
       dispatch(getError(err.response.data.error));
       Swal.fire({
