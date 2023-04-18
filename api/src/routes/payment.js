@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const payController = require("../controllers/payController");
-const payControllerUpdate = require("../controllers/payControllerUpdate.js");
 const { Colegio, Ventas, Plan_Pago } = require("../db.js");
 const mailer = require("../utils/sendMails/mailer");
 const mercadopago = require("mercadopago");
@@ -51,8 +50,6 @@ router.post("/notification", async (req, res) => {
           const email = merchantOrder.body.additional_info;
           //caso 1 compra por primera vez
           // caso 2 compra el mismo plan
-         
-
 
           planVencido = await Ventas.findOne({
             where: {
@@ -61,9 +58,8 @@ router.post("/notification", async (req, res) => {
             },
           });
           console.log(planVencido);
-          
-          if(planVencido===null){
 
+          if (planVencido === null) {
           }
           if (planVencido && fechaHoy <= planVencido.vencimientoPlan) {
             fecha = new Date(planVencido.vencimientoPlan);
@@ -78,8 +74,8 @@ router.post("/notification", async (req, res) => {
               fecha.getMonth() + Number(merchantOrder.body.items[0].quantity)
             );
           }
-          
-          planVencido.activo?planVencido = false:planVencido=true;
+
+          planVencido.activo ? (planVencido = false) : (planVencido = true);
 
           await ventas.setPlan_Pago(plan);
           await ventas.setColegio(idColegio);
@@ -141,8 +137,7 @@ router.post("/notification", async (req, res) => {
       break;
   }
 });
-          // nuevo endpoint para caso 4 bajar a free 
+// nuevo endpoint para caso 4 bajar a free
 router.post("/", payController);
-router.post("/update", payControllerUpdate);
 
 module.exports = router;
