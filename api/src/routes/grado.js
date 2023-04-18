@@ -9,6 +9,7 @@ router.get("/", async (req, res) => {
     let grado;
     grado = await Grado.findAll({
       attributes: ["id", "nombre_grado"],
+      order:[["id", "ASC"]]
     });
 
     res.json(grado);
