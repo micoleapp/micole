@@ -98,7 +98,7 @@ router.get("/filtro", async (req, res) => {
         break;
       case "fechaASC":
         orderBy = [["createdAt", "ASC"]];
-        break;
+          break;
       case "fechaDESC":
         orderBy = [["createdAt", "DESC"]];
         break;
