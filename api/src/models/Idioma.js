@@ -7,7 +7,7 @@ module.exports = (sequelize) => {
     "Idioma",
     {
       id: {
-        type: DataTypes.INTEGER, //alfanumerico random
+        type: DataTypes.INTEGER, 
         allowNull: false,
         primaryKey: true,
       },
