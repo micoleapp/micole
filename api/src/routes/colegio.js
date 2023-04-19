@@ -34,10 +34,9 @@ router.get("/", async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
   const skip = (page - 1) * limit;
-  const { search, order,active } = req.query;
+  const { search, order, active } = req.query;
   let where = {};
   let orderBy = null;
- 
 
   if (search) {
     where = {
@@ -47,7 +46,7 @@ router.get("/", async (req, res) => {
     };
   }
   if (active) {
-    let bool=active.toLocaleLowerCase()=="true"?true:false;
+    let bool = active.toLocaleLowerCase() == "true" ? true : false;
     where = {
       isActive: {
         [Op.is]: bool,
@@ -132,122 +131,165 @@ router.get("/", async (req, res) => {
   }
 });
 
-//------- PEDIR UNO DE LOS COLEGIOS POR ID--------
-router.get("/:Colegio_id", async (req, res) => {
-  const { Colegio_id } = req.params;
-  const tokenUser = req.user;
-  const fechaActual = moment().format("YYYY-MM-DD");
+//------- PEDIR LAS INFRAESTRUCTURAS DE UNO DE LOS COLEGIOS POR ID--------
+router.get("/infraestructuras/:Colegio_id", async (req, res) => {
   try {
-    // if (!tokenUser) {
-    //   const addVisualizacion = await Colegio.findByPk(Colegio_id);
-    //   addVisualizacion.visualizaciones =
-    //     Number(addVisualizacion.visualizaciones) + 1;
-    //   await addVisualizacion.save();
-    // }
-    // const [trafico, created] = await Trafico.findOrCreate({
-    //   where: { fecha: fechaActual, ColegioId: Colegio_id },
-    //   defaults: { visitas: 1 },
-    // });
-
-    // if (!created) {
-    //   trafico.visitas += 1;
-    //   await trafico.save();
-    // }  
-
+    const { Colegio_id } = req.params;
+    console.log(Colegio_id);
     const cole = await Colegio.findAll({
       where: { id: [Colegio_id] },
+      attributes:["nombre_colegio"],
       include: [
-        {
-          model: Nivel,
-          attributes: ["nombre_nivel", "id"],
-        },
-        // {
-        //   model: Vacante,
-        //   include: [{ model: Grado, attributes: ["nombre_grado"] }],
-        // },
-        {
-          model: Idioma,
-          attributes: ["nombre_idioma", "id"],
-          through: {
-            attributes: [],
-          },
-        },
-        {
-          model: Pais,
-          attributes: ["id", "nombre_pais"],
-        },
-        {
-          model: Departamento,
-          attributes: ["id", "nombre_departamento"],
-        },
-        {
-          model: Provincia,
-          attributes: ["id", "nombre_provincia"],
-        },
-        {
-          model: Distrito,
-          attributes: ["id", "nombre_distrito", "ProvinciaId"],
-        },
-        {
-          model: Plan_Pago,
-          attributes: ["id", "nombre_plan_pago"],
-        },
-        {
-          model: Metodos,
-          attributes: ["id_metodo", "nombre_metodo"],
-        },
-        {
-          model: Dificultades,
-          attributes: ["id_dificultad", "nombre_dificultad"],
-        },
-        {
-          model: Horario,
-          attributes: ["id", "dia", "horarios"],
-        },
-        {
-          model: Review,
-        },
-        {
-          model: Evento,
-        },
-        {
-          model: Categoria,
-          attributes: [
-            "id",
-            "nombre_categoria",
-            "imagen_categoria",
-            "logo_categoria",
-          ],
-          through: {
-            attributes: [],
-          },
-        },
         {
           model: Infraestructura,
           attributes: [
             "id",
             "nombre_infraestructura",
             "InfraestructuraTipoId",
-            "imagen",
           ],
           through: {
             attributes: [],
           },
         },
+      ],
+      
+    });
+    console.log(cole);
+    res.json(cole);
+  } catch (err) {
+    res.json({ err });
+  }
+}),
+
+//------- PEDIR LAS AFILIACIONES DE UNO DE LOS COLEGIOS POR ID--------
+router.get("/afiliacion/:Colegio_id", async (req, res) => {
+  try {
+    const { Colegio_id } = req.params;
+    console.log(Colegio_id);
+    const cole = await Colegio.findAll({
+      where: { id: [Colegio_id] },
+      attributes:["nombre_colegio"],
+      include: [
+    
         {
           model: Afiliacion,
-          attributes: ["id", "nombre_afiliacion", "Afiliacion_tipo_Id", "logo"],
+          attributes: [
+            "id",
+            "nombre_afiliacion",
+            "Afiliacion_tipo_Id",
+            "logo",
+          ],
           through: {
             attributes: [],
           },
         },
       ],
+      
     });
+    console.log(cole);
     res.json(cole);
   } catch (err) {
     res.json({ err });
   }
-});
+}),
+  //------- PEDIR UNO DE LOS COLEGIOS POR ID--------
+  router.get("/:Colegio_id", async (req, res) => {
+    const { Colegio_id } = req.params;
+    const tokenUser = req.user;
+    const fechaActual = moment().format("YYYY-MM-DD");
+    try {
+      // if (!tokenUser) {
+      //   const addVisualizacion = await Colegio.findByPk(Colegio_id);
+      //   addVisualizacion.visualizaciones =
+      //     Number(addVisualizacion.visualizaciones) + 1;
+      //   await addVisualizacion.save();
+      // }
+      // const [trafico, created] = await Trafico.findOrCreate({
+      //   where: { fecha: fechaActual, ColegioId: Colegio_id },
+      //   defaults: { visitas: 1 },
+      // });
+
+      // if (!created) {
+      //   trafico.visitas += 1;
+      //   await trafico.save();
+      // }
+
+      const cole = await Colegio.findAll({
+        where: { id: [Colegio_id] },
+        include: [
+          {
+            model: Nivel,
+            attributes: ["nombre_nivel", "id"],
+          },
+          // {
+          //   model: Vacante,
+          //   include: [{ model: Grado, attributes: ["nombre_grado"] }],
+          // },
+          {
+            model: Idioma,
+            attributes: ["nombre_idioma", "id"],
+            through: {
+              attributes: [],
+            },
+          },
+          {
+            model: Pais,
+            attributes: ["id", "nombre_pais"],
+          },
+          {
+            model: Departamento,
+            attributes: ["id", "nombre_departamento"],
+          },
+          {
+            model: Provincia,
+            attributes: ["id", "nombre_provincia"],
+          },
+          {
+            model: Distrito,
+            attributes: ["id", "nombre_distrito", "ProvinciaId"],
+          },
+          {
+            model: Plan_Pago,
+            attributes: ["id", "nombre_plan_pago"],
+          },
+          {
+            model: Metodos,
+            attributes: ["id_metodo", "nombre_metodo"],
+          },
+          {
+            model: Dificultades,
+            attributes: ["id_dificultad", "nombre_dificultad"],
+          },
+          {
+            model: Horario,
+            attributes: ["id", "dia", "horarios"],
+          },
+          {
+            model: Review,
+          },
+          {
+            model: Evento,
+          },
+          {
+            model: Categoria,
+            attributes: [
+              "id",
+              "nombre_categoria",
+              "imagen_categoria",
+              "logo_categoria",
+            ],
+            through: {
+              attributes: [],
+            },
+          },
+
+        ],
+      });
+      res.json(cole);
+    } catch (err) {
+      res.json({ err });
+    }
+  });
 router.post("/filter", async (req, res) => {
   const {
     distrits,
@@ -261,7 +303,7 @@ router.post("/filter", async (req, res) => {
     order,
     metodos,
     dificultades,
-    search
+    search,
   } = req.body;
   console.log(req.body);
   let orderBy = null;
