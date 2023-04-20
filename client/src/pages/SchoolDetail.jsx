@@ -582,16 +582,16 @@ setCita({
         <main className="flex gap-5 flex-col lg:flex-row">
           <section className="left mt-5 flex flex-col gap-8 w-full">
             <div className="p-5 bg-white flex flex-col gap-2 rounded-md shadow-md">
-              <h2 className="font-semibold text-xl">Descripcion</h2>
+              <h2 className="font-semibold text-xl">Descripción</h2>
               <p className="text-black/60 text-base">{oneSchool.descripcion}</p>
             </div>
             <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md">
-              <h2 className="font-semibold text-xl">Ubicacion</h2>
+              <h2 className="font-semibold text-xl">Ubicación</h2>
               <div className="flex text-xs w-full justify-between">
                 <ul className="flex flex-col gap-3">
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
-                      Direccion:{" "}
+                      Dirección:{" "}
                     </span>
                     {oneSchool.direccion}
                   </li>
@@ -643,7 +643,7 @@ setCita({
                   </li>
                   <li className="text-black/60">
                     <span className="font-semibold text-black ">
-                      Fundacion:{" "}
+                      Fundación:{" "}
                     </span>
                     {oneSchool.fecha_fundacion}
                   </li>

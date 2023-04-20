@@ -2,8 +2,8 @@
 display: flex;
 flex-direction: column;
 align-items: center;
-padding: 2vh;
-gap: 20px;
+padding: 3vh;
+gap: 1vh;
 }
 
 .Form input{
@@ -19,7 +19,7 @@ gap: 20px;
     display: flex;
     width: 100%;
     justify-content: center;
-    padding: 20px;
+    padding: 2vh;
   }
   .img_div img {
     width: 200px;
@@ -36,8 +36,8 @@ gap: 20px;
     background-color: #0061DF;
   }
   .p {
-    font-size: 14px;
-    color: #b10000;
+    font-size: 1.3vh;
+    color: #d19494;
   }
 
   .socialMedia{
@@ -78,3 +78,4 @@ gap: 20px;
   top: 19px;
   right: 20px;
   }
+
