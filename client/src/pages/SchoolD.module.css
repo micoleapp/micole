@@ -57,11 +57,40 @@
   justify-content: flex-start;
   height: 30vh;
 }
+.divBox{
+  padding-top: 10vh;
+  width: 90vh;
+}
+.responsiveHead{
+  padding-top: 2vh;
+}
+.divIconsHead{
+  display: flex;
+  flex-direction: column;
+  gap: 3vh;
+}
 @media (max-width: 900px) {
   .divSwipperCitas{
     /* width:'100%',display:'flex', justifyContent:'center' */
-    width: 40%;
+    width: 100%;
     display: flex;
     justify-content: center;
+  }
+  .divBox{
+    width: auto;
+  }
+  .responsiveHead{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+   padding: 2vh;
+  }
+  .divIconsHead{
+  padding-left: 2vh;
+
+
+    
+
   }
 }
