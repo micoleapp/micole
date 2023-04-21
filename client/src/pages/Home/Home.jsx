@@ -31,6 +31,8 @@ function Home() {
   return (
     <>
       <div className={style.container}>
+        <button onClick={()=>setTest(!test)}>CLICK TEST</button>
+        {test && <SwalProp status={false} title={"BIENVENIDO"} text={"COMO SETAS"} />}
         {/* <img className={style.img} src={fondoHome} alt="home" /> */}
         <div className={style.landingText}>
           <h1 className={style.h1}> Tu búsqueda de colegios comienza aquí</h1>
