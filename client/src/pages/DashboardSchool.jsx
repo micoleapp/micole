@@ -52,7 +52,7 @@ import { RiImageAddLine } from "react-icons/ri";
 import { GiHexagonalNut } from "react-icons/gi";
 import { BsCalendarCheck } from "react-icons/bs";
 import { useEffect } from "react";
-import { logout, getSchoolDetail , setVacantesRedux} from "../redux/AuthActions";
+import { logout, getSchoolDetail , setVacantesRedux, getInfraestructuraSchool, getAfiliacionSchool} from "../redux/AuthActions";
 import { useState } from "react";
 import { useRef } from "react";
 import axios from "axios";
@@ -160,7 +160,7 @@ function DashboardSchool() {
     dificultades,
     metodos,
   } = useSelector((state) => state.schools);
-  const { user, oneSchool, loading } = useSelector((state) => state.auth);
+  const { user, oneSchool, loading,infraestructura:oneInfra,afiliacion:oneAfiliacion } = useSelector((state) => state.auth);
 
   const id = user.id;
 
@@ -265,6 +265,7 @@ function DashboardSchool() {
         .put(`/colegios/${user.id}`, datosPrincipales)
         .then((res) => {
           console.log(res);
+          dispatch(getSchoolDetail(id));
         })
         .catch((err) => {
           console.log(err);
@@ -438,20 +439,28 @@ function DashboardSchool() {
       oneSchool?.ubicacion?.length > 0
         ? JSON.parse(oneSchool.ubicacion).lng
         : 0,
-    infraestructura: oneSchool?.Infraestructuras
-      ? oneSchool.Infraestructuras
+    infraestructura: oneInfra?.Infraestructuras
+      ? oneInfra.Infraestructuras
       : [],
     afiliaciones:
-      oneSchool?.Afiliacions.length > 0 ? oneSchool.Afiliacions : [],
+      oneAfiliacion?.Afiliacions ? oneAfiliacion.Afiliacions : [],
     dificultades: oneSchool?.Dificultades ? oneSchool.Dificultades : [],
     metodos: oneSchool?.Metodos ? oneSchool.Metodos : [],
   };
+  
+  
 
   const [datosPrincipales, setDatosPrincipales] = useState(
     initialDatosPrincipales
-  );
-  console.log(datosPrincipales);
-  const datosPrincipalesCompleted = () => {
+    );  
+    console.log(initialDatosPrincipales)
+    console.log(datosPrincipales)
+    console.log(oneAfiliacion)
+    console.log(oneInfra)
+    useEffect(()=>{
+      setDatosPrincipales(initialDatosPrincipales)
+    },[oneInfra,oneAfiliacion])
+    const datosPrincipalesCompleted = () => {
     if (
       datosPrincipales.nombreColegio !== "" &&
       datosPrincipales.descripcion !== "" &&
@@ -869,7 +878,7 @@ function DashboardSchool() {
       ],
     },
     {
-      Miercoles: [
+      Miércoles : [
         dayjs("2014-08-18T08:00:00"),
         dayjs("2014-08-18T17:00:00"),
         true,
@@ -935,7 +944,7 @@ function DashboardSchool() {
     }));
 
     console.log(newDays);
-    dispatch(postHorariosVacantes(newDays,user.id));
+    dispatch(postHorariosVacantes(newDays));
     console.log(user.id)
     try {
       axios
@@ -1144,6 +1153,12 @@ function DashboardSchool() {
   useEffect(()=>{
     if(activeStep === 3){
       dispatch(setVacantesRedux(id))
+    }
+    if(activeStep === 1){
+      dispatch(getInfraestructuraSchool(id))
+    }
+    if(activeStep === 2){
+      dispatch(getAfiliacionSchool(id))
     }
   },[activeStep])
 
@@ -2116,9 +2131,9 @@ function DashboardSchool() {
                                     <FormControlLabel
                                       control={
                                         <Checkbox
-                                          checked={datosPrincipales.infraestructura.some(
-                                            (inf) => inf.id === infra.id
-                                          )}
+                                        checked={datosPrincipales.infraestructura.some(
+                                          (inf) => inf.id === infra.id
+                                        )}
                                           onChange={(event, target) => {
                                             if (target) {
                                               setDatosPrincipales({
@@ -2163,9 +2178,9 @@ function DashboardSchool() {
                                     <FormControlLabel
                                       control={
                                         <Checkbox
-                                          checked={datosPrincipales.infraestructura.some(
-                                            (inf) => inf.id === infra.id
-                                          )}
+                                        checked={datosPrincipales.infraestructura.some(
+                                          (inf) => inf.id === infra.id
+                                        )}
                                           onChange={(event, target) => {
                                             if (target) {
                                               setDatosPrincipales({
@@ -2210,9 +2225,9 @@ function DashboardSchool() {
                                     <FormControlLabel
                                       control={
                                         <Checkbox
-                                          checked={datosPrincipales.infraestructura.some(
-                                            (inf) => inf.id === infra.id
-                                          )}
+                                        checked={datosPrincipales.infraestructura.some(
+                                          (inf) => inf.id === infra.id
+                                        )}
                                           onChange={(event, target) => {
                                             if (target) {
                                               setDatosPrincipales({
@@ -2257,9 +2272,9 @@ function DashboardSchool() {
                                     <FormControlLabel
                                       control={
                                         <Checkbox
-                                          checked={datosPrincipales.infraestructura.some(
-                                            (inf) => inf.id === infra.id
-                                          )}
+                                        checked={datosPrincipales.infraestructura.some(
+                                          (inf) => inf.id === infra.id
+                                        )}
                                           onChange={(event, target) => {
                                             if (target) {
                                               setDatosPrincipales({
@@ -2304,9 +2319,9 @@ function DashboardSchool() {
                                     <FormControlLabel
                                       control={
                                         <Checkbox
-                                          checked={datosPrincipales.infraestructura.some(
-                                            (inf) => inf.id === infra.id
-                                          )}
+                                        checked={datosPrincipales.infraestructura.some(
+                                          (inf) => inf.id === infra.id
+                                        )}
                                           onChange={(event, target) => {
                                             if (target) {
                                               setDatosPrincipales({
@@ -3042,6 +3057,7 @@ function DashboardSchool() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <div className="grid lg:grid-cols-3 w-full grid-cols-2">
                 {daysWithTime.map((day, index) => (
+                  
                   <div className="my-3">
                     <FormControlLabel
                       label={Object.keys(day)}

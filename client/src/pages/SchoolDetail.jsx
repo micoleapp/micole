@@ -56,6 +56,7 @@ import ModalLogin from "../components/ModalLogin/ModalLogin";
 import { setVacantesRedux } from "../redux/AuthActions";
 import SliderC from "../components/SliderC";
 import IconError from "../svg/IconError";
+import SecCitas from "../components/SchoolDetail-CITAS/SecCitas";
 function QuiltedImageList({ firstImage, gallery, setImage,setImages }) {
   return (
     <div className="w-full px-4">
@@ -90,10 +91,10 @@ function SchoolDetail() {
   })
 
   const { user, isAuth, vacantes } = useSelector((state) => state.auth);
-  console.log(horariosColegio);
+ 
 
   const location = useLocation();
-  console.log();
+
   const params = new URLSearchParams(location.search);
 
   const [gradoParams, setGradoParams] = React.useState(params.get("grado"));
@@ -159,27 +160,40 @@ function SchoolDetail() {
   const [time, setTime] = React.useState(dayjs("2014-08-18T08:00:00"));
   const handleChangeDate = (newValue) => {
     setDate(dayjs(newValue));
-    setCita({
-      ...cita,
-      date: [
-        stringyDate(newValue["$D"]).toString(),
-        stringyDate(newValue["$M"] + 1).toString(),
-        newValue["$y"].toString(),
-      ].join("/"),
-    });
+    // setCita({
+    //   ...cita,
+    //   date: [
+    //     stringyDate(newValue["$D"]).toString(),
+    //     stringyDate(newValue["$M"] + 1).toString(),
+    //     newValue["$y"].toString(),
+    //   ].join("/"),
+    // });
   };
   const handleChangeTime = (newValue) => {
     setTime(dayjs(newValue));
-    setCita({
-      ...cita,
-      time: [
-        stringyDate(newValue["$H"]).toString(),
-        stringyDate(newValue["$m"]).toString(),
-      ].join(":"),
-    });
+    // setCita({
+    //   ...cita,
+    //   time: [
+    //     stringyDate(newValue["$H"]).toString(),
+    //     stringyDate(newValue["$m"]).toString(),
+    //   ].join(":"),
+    // });
   };
   const [modo, setModo] = React.useState(true);
   const [openLogin, setOpenLogin] = useState(false);
+
+
+  const [horarioDia, setHorarioDia] = useState(null)
+  function handleChangeDateHS(data) {
+    setHorarioDia(date);
+    setCita({
+      ...cita,
+      date: data.date,
+      time:data.time
+    });
+  }
+  console.log(horarioDia);
+
 
   const [cita, setCita] = React.useState({
     date: [
@@ -191,7 +205,8 @@ function SchoolDetail() {
       stringyDate(dayjs(new Date()).$H).toString(),
       stringyDate(dayjs(new Date()).$m).toString(),
     ].join(":"),
-
+    // date:horarioDia?.date,
+    // time:horarioDia?.time,
     modo: modo ? "Presencial" : "Virtual",
     nombre: isAuth ? user.nombre_responsable +" "+ user?.apellidos_responsable: "",
     
@@ -200,7 +215,8 @@ function SchoolDetail() {
     añoIngreso: ingresoParams,
     grado: nombre_grado
   });
-
+  // setHorarioDia(horarioDia)
+  // console.log(horarioDia);
   console.log(cita);
   // console.log( nombre_grado);
 
@@ -437,6 +453,8 @@ setCita({
       setCita({...cita, nombre: user?.nombre_responsable + " " + user?.apellidos_responsable, correo: user?.email, celular:user?.telefono})
     }
   },[isAuth])
+
+
 
   return (
     <div className="bg-[#f6f7f8]">
@@ -1189,6 +1207,9 @@ setCita({
             </div> */}
           </section>
           <section className="right mt-5  flex flex-col gap-8 w-full">
+           
+         
+            
             {listaParams === "true" ? (
               <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
                 <h2 className="font-semibold text-xl">Lista de espera</h2>
@@ -1293,135 +1314,11 @@ setCita({
             ) : (
               <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
                 <h2 className="font-semibold text-xl">Solicitar una visita</h2>
-                <div
-                  onClick={toggleHorarios}
-                  style={{ display: "flex", gap: "10px", alignItems: "center" }}
-                >
-                  {Horarios && (
-                    <>
-                      <p>Ver la disponibilidad horaria de este colegio </p>
-                      <HiChevronDown
-                        data-aos-duration="400"
-                        data-aos="flip-down"
-                      />
-                    </>
-                  )}
-                  {Horarios === false && (
-                    <>
-                      <p>Ver la disponibilidad horaria de este colegio </p>
-                      <HiChevronLeft
-                        data-aos-duration="400"
-                        data-aos="flip-left"
-                      />
-                    </>
-                  )}
-                </div>
-                {Horarios && (
-                  <>
-                    <div className={style.Layout}>
-                      {horariosColegio &&
-                        horariosColegio?.map((ele) => {
-                          console.log(ele.horarios[0]);
-                          if (
-                            ele.horarios[0]?.desde != undefined &&
-                            ele.horarios[0]?.hasta != undefined
-                          ) {
-                            return (
-                              <>
-                                <div
-                                  // si vacantes estan agotadas deberia aparecer todo en gris
+                <div className={style.divSwipperCitas}>
+                 <SecCitas sendDateHs={handleChangeDateHS}  />
+            </div>
 
-                                  className={style.cardTable}
-                                >
-                                  <Card
-                                    sx={{
-                                      display: "flex",
-                                      gap: "10px",
-                                      flexDirection: "column",
-                                      alignItems: "center",
-                                      padding: "10px",
-                                    }}
-                                  >
-                                    <p
-                                      style={{
-                                        fontSize: "14px",
-                                        color: "#515151",
-                                        fontWeight: "700",
-                                      }}
-                                    >
-                                      {ele.dia}
-                                    </p>
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        gap: "10px",
-                                        fontSize: "12px",
-                                        flexDirection: "column",
-                                      }}
-                                    >
-                                      <p>
-                                        {ele.horarios[0]?.desde +
-                                          " " +
-                                          es_AM_PM(ele.horarios[0]?.desde)}{" "}
-                                      </p>
-
-                                      <p>
-                                        {ele.horarios[0]?.hasta +
-                                          " " +
-                                          es_AM_PM(ele.horarios[0]?.hasta)}{" "}
-                                      </p>
-                                    </div>
-                                  </Card>
-                                </div>
-                              </>
-                            );
-                          } else {
-                            return (
-                              <>
-                                <div
-                                  // si vacantes estan agotadas deberia aparecer todo en gris
-
-                                  className={style.cardTable}
-                                >
-                                  {/* <Card
-                                    sx={{
-                                      display: "flex",
-                                      gap: "10px",
-                                      flexDirection: "column",
-                                      alignItems: "center",
-                                      padding: "10px",
-                                    }}
-                                  >
-                                    <p
-                                      style={{
-                                        fontSize: "14px",
-                                        color: "#515151",
-                                        fontWeight: "700",
-                                      }}
-                                    >
-                                      {ele.dia}
-                                    </p>
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        gap: "10px",
-                                        fontSize: "12px",
-                                        flexDirection: "column",
-                                      }}
-                                    >
-                                      No disponible
-                                    </div>
-                                  </Card> */}
-                                </div>
-                              </>
-                            );
-                          }
-                        })}
-                    </div>
-                  </>
-                )}
-
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <div className="flex w-full justify-between flex-col gap-4 lg:flex-row">
                     <MobileDatePicker
                       label="Elegir fecha"
@@ -1448,7 +1345,7 @@ setCita({
                       </small>
                     </div>
                   </div>
-                </LocalizationProvider>
+                </LocalizationProvider> */}
                 <form
                   onSubmit={handleSubmit}
                   className="w-full flex flex-col gap-7"

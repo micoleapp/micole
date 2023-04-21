@@ -16,6 +16,9 @@ const payController = async (req, res) => {
   const id_plan = data.planPagoId;
   const nombre_plan_pago = plan.nombre_plan_pago;
   const precio = plan.precio;
+ 
+  // caso 3 compra un diferente plan supperior con el plan anterior vigente
+ 
 
   let preference = {
     binary_mode: true,
@@ -38,16 +41,13 @@ const payController = async (req, res) => {
     additional_info: email,
     back_urls: {
       //definir las verdaderas aca
-      success: " https://micole.vercel.app/#/dashboardschool",
+      success: "https://micole.vercel.app/#/dashboardschool",
       failure:
-        "https://www.microsoft.com/es-mx/download/internet-explorer.aspx",
+        "https://micole.vercel.app/#/dashboardschool",
       pending: "https://micole.vercel.app/#/dashboardschool",
     },
+    notification_url:`${NGROK_URL}/payments/notification`,
     // notification_url: `${NGROK_URL}/payments/notification`,
-    notification_url:
-      process.env.NODE_ENV === "production"
-        ? "https://micole.vercel.app/#/payment/notification"
-        : `${NGROK_URL}/payments/notification`,
   };
   console.log(preference.payer);
   console.log(preference.items);

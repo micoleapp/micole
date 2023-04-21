@@ -7,7 +7,9 @@ import {
   isLoading,
   updateUser,
   getSchool,
-  getVacantes
+  getVacantes,
+  getInfraestructura,
+  getAfiliacion
 } from "./AuthSlice";
 import axios from "axios";
 import Swal from 'sweetalert2'
@@ -172,5 +174,19 @@ export const getSchoolDetail = (id) => (dispatch) => {
   const token = localStorage.getItem("token");
   axios.get(`/colegios/${id}`,{headers:{'Authorization': `Bearer ${token}`}})
   .then(res=>dispatch(getSchool(res.data[0])))
+  .catch(err=>dispatch(getError(err.message)))
+}
+
+export const getInfraestructuraSchool = (id) => (dispatch) => {
+  dispatch(isLoading())
+  axios.get(`/colegios/infraestructuras/${id}`)
+  .then(res=>dispatch(getInfraestructura(res.data[0])))
+  .catch(err=>dispatch(getError(err.message)))
+}
+
+export const getAfiliacionSchool = (id) => (dispatch) => {
+  dispatch(isLoading())
+  axios.get(`/colegios/afiliacion/${id}`)
+  .then(res=>dispatch(getAfiliacion(res.data[0])))
   .catch(err=>dispatch(getError(err.message)))
 }

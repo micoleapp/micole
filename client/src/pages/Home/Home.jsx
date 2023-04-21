@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./Home.module.css";
 import CardsOne from "../../components/CardsOne";
 import GroupSchool from "../../assets/GroupSchool.png";
@@ -8,6 +8,7 @@ import Carrusel from "../../components/Carrusel/Carrusel";
 import FiltrosHome from "../../components/FiltrosHome/FiltrosHome";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useRef } from 'react';
+import SwalProp from "../../exports/SwalProp";
 
 function Home() {
 
@@ -25,6 +26,7 @@ function Home() {
     }
   },[params])
   
+  const [test,setTest] = useState(false)
 
   return (
     <>

@@ -49,3 +49,19 @@
   border: 0.2px solid #38383856;
   justify-content: center;
 }
+
+.divSwipperCitas{
+  /* width:'100%',display:'flex', justifyContent:'center' */
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  height: 30vh;
+}
+@media (max-width: 900px) {
+  .divSwipperCitas{
+    /* width:'100%',display:'flex', justifyContent:'center' */
+    width: 40%;
+    display: flex;
+    justify-content: center;
+  }
+}

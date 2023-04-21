@@ -1,9 +1,9 @@
 const { Router } = require("express");
+const payController = require("../controllers/payController");
+const { Colegio, Ventas, Plan_Pago } = require("../db.js");
+const mailer = require("../utils/sendMails/mailer");
 const mercadopago = require("mercadopago");
 const router = Router();
-const { Colegio, Ventas, Plan_Pago } = require("../db.js");
-const payController = require("../controllers/payController");
-const mailer = require("../utils/sendMails/mailer");
 
 router.get("/success", (req, res) => {
   res.send("Todo bien al 100");
@@ -48,6 +48,8 @@ router.post("/notification", async (req, res) => {
           const planNombre = merchantOrder.body.items[0].title;
           const idColegio = merchantOrder.body.external_reference;
           const email = merchantOrder.body.additional_info;
+          //caso 1 compra por primera vez
+          // caso 2 compra el mismo plan
 
           planVencido = await Ventas.findOne({
             where: {
@@ -55,8 +57,11 @@ router.post("/notification", async (req, res) => {
               activo: true,
             },
           });
+          console.log(planVencido);
 
-          if (fechaHoy <= planVencido.vencimientoPlan) {
+          if (planVencido === null) {
+          }
+          if (planVencido && fechaHoy <= planVencido.vencimientoPlan) {
             fecha = new Date(planVencido.vencimientoPlan);
             fecha.setMonth(
               fecha.getMonth() + Number(merchantOrder.body.items[0].quantity)
@@ -69,7 +74,9 @@ router.post("/notification", async (req, res) => {
               fecha.getMonth() + Number(merchantOrder.body.items[0].quantity)
             );
           }
-          planVencido.activo = false;
+
+          planVencido.activo ? (planVencido = false) : (planVencido = true);
+
           await ventas.setPlan_Pago(plan);
           await ventas.setColegio(idColegio);
 
@@ -130,7 +137,7 @@ router.post("/notification", async (req, res) => {
       break;
   }
 });
-
+// nuevo endpoint para caso 4 bajar a free
 router.post("/", payController);
 
 module.exports = router;
