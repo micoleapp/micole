@@ -12,7 +12,7 @@ export default function Acreditaciones() {
     useEffect(() => {
         dispatch( getAcreditaciones(oneSchool?.id))
     }, [])
-console.log(Acre[0].Afiliacions)
+
     return (
         <div className=" bg-white flex flex-col gap-5 rounded-md ">
             <h2 className="font-semibold  text-[#0D263B] text-[2.4vh]">

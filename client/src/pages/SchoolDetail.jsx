@@ -155,12 +155,6 @@ function SchoolDetail() {
 
   document.title = oneSchool?.nombre_colegio?.length > 0 ? oneSchool.nombre_colegio : "MiCole"
 
-  useEffect(() => {
-    if (isAuth) {
-      setCita({ ...cita, nombre: user?.nombre_responsable + " " + user?.apellidos_responsable, correo: user?.email, celular: user?.telefono })
-    }
-  }, [isAuth])
-
   const [value, setValue] = useState("1");
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -184,7 +178,7 @@ function SchoolDetail() {
           </div>}
         {/* BODY DETAIL-----------------------*/}
         <div
-          className='flex flex-col sm:flex-row lg:px-[100px] pb-10 justify-between' >
+          className='flex flex-col sm:flex-row lg:px-[100px] pb-10 justify-around' >
           {/* Header */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {/* compartir en redes */}
