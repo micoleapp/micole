@@ -15,9 +15,9 @@ export default function InfoGeneral() {
 
 
     return (
-        <section className="left flex flex-col gap-8 w-full">
+        <section className=" p-5 left flex flex-col gap-8 w-full shadow-md">
 
-            <div className=" bg-white flex flex-col gap-2 rounded-md ">
+            <div className="  bg-white flex flex-col gap-2 rounded-md ">
                 <h2 className="font-semibold text-[#0D263B] text-[2.4vh] text-xl">Descripción</h2>
                 <p className=" text-[#696969] text-[1.8vh] ">{oneSchool.descripcion}</p>
             </div>

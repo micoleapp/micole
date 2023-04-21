@@ -182,7 +182,7 @@ function SchoolDetail() {
           {/* Header */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {/* compartir en redes */}
-            <div className="flex pt-20  pb-2 flex-row ">
+            <div className="pl-1 flex pt-20  pb-2 flex-row ">
               <span className="flex items-center gap-0">
              
              
@@ -365,6 +365,7 @@ function SchoolDetail() {
                         alignItems: "center",
                         flexDirection: "column",
                         gap: "10px",
+                        padding:' 1.25rem'
                       }}
                     >
                       <div

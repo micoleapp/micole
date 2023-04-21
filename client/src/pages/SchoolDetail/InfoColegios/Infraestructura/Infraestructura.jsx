@@ -30,8 +30,8 @@ export default function Infraestructura() {
     }, [])
 console.log(infraColegio?.Infraestructuras)
     return (
-        <div className=" bg-white flex flex-col gap-5 rounded-md ">
-            <h2 className="font-semibold  text-[#0D263B] text-[2.4vh]">Infraestructura</h2>
+        <div className=" p-5 bg-white flex flex-col gap-5 shadow-md rounded-md ">
+            <h2 className=" pl-5 font-semibold  text-[#0D263B] text-[2.4vh]">Infraestructura</h2>
 
             <Tabs
                 value={value}
