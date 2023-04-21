@@ -24,7 +24,9 @@ import {
   getMetodos,
   getDificultades,
   getNombreColegios,
-  getPrecios
+  getPrecios,
+  getInfraestructuraSH,
+  getAcre
 } from "./SchoolsSlice";
 
 export const setPrecios = () => (dispatch) => {
@@ -364,3 +366,33 @@ export const filterAdminState = (state, page) => (dispatch) => {
     console.log(error);
   }
 };
+export const getInfra = (id) => (dispatch) => {
+  try {
+    axios
+
+      .get(`/colegios/infraestructuras/${id}`)
+      .then((res) => {
+        console.log(res.data)
+        dispatch(getInfraestructuraSH(res.data));
+      })
+      .catch((err) => console.log(err.message));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAcreditaciones = (id) => (dispatch) => {
+  try {
+    axios
+
+      .get(`/colegios/afiliacion/${id}`)
+      .then((res) => {
+        console.log(res.data)
+        dispatch(getAcre(res.data));
+      })
+      .catch((err) => console.log(err.message));
+  } catch (error) {
+    console.log(error);
+  }
+};
+// /infraestructuras/:Colegio_id /afiliacion/:Colegio_id

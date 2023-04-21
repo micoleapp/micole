@@ -10,14 +10,17 @@ import {
 
 function HorariosColegio ({ diaSelecionado , sendDateHs}) {
     const [horarioColegio, setHorarioColegio] = useState('')
-  
+    // const [validacion, setValidacion] = useState(false)
     const handleChangeHora = (event) => {
       setHorarioColegio(event.target.value)
     }
-    const handlerInfo = (e, date, time) => {
+    const handlerInfo = (e, date, time,validacion) => {
+      // setValidacion(true)
+
       let infoDiaHora = {
         time: time,
-        date: date
+        date: date,
+        select:validacion
       }
       sendDateHs(infoDiaHora)
     }
@@ -39,7 +42,7 @@ function HorariosColegio ({ diaSelecionado , sendDateHs}) {
           >
             {diaSelecionado?.map((ele) => {
               return (
-                <MenuItem key={ele.time.desde} onClick={(e) => handlerInfo(e, ele.date, ele.time.desde)} value={ele.time.desde}>
+                <MenuItem key={ele.time.desde} onClick={(e) => handlerInfo(e, ele.date, ele.time.desde,true)} value={ele.time.desde}>
                   {ele.time.desde}/{ele.time.hasta}
                 </MenuItem>
               )

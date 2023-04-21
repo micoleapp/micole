@@ -40,113 +40,228 @@ export default function SecCitas({ sendDateHs }) {
 
   return (
     <>
-      <div className={style.slider_container}>
-        <Swiper
-          modules={[Navigation, Pagination, Scrollbar, A11y]}
-          spaceBetween={0}
-          slidesPerView={5}
-          grabCursor={true}
-          rewind={true}
-          pagination={{ clickable: true }}
-          className={style.swiper}
-        >
-          {arrLimpio?.map((d) => {
-            return (
-              <>
-                <SwiperSlide className={style.swiper_slide}>
+      <div className={style.divResponsiveDesktop}>
+        <div className={style.slider_container}>
+          <Swiper
+            modules={[Navigation, Pagination, Scrollbar, A11y]}
+            spaceBetween={0}
+            slidesPerView={6}
+            grabCursor={true}
+            rewind={true}
+            pagination={{ clickable: true }}
+            className={style.swiper}
+          >
+            {arrLimpio?.map((d) => {
+              return (
+                <>
+                  <SwiperSlide className={style.swiper_slide}>
 
-                  {d.dia != "" &&
-                    <div className={style.cardDia}>
-                      {d.diaSemana === "Sáb" && (
-                        <>
-                          <p
-                            style={{
-                              fontSize: "1.9vh",
-                              fontWeight: "400",
-                              color: "#9E9999",
-                              padding: '2px'
-                            }}
-                          >
-                            {d.diaSemana}
-                          </p>
-                          <p
-                            style={{
-                              fontSize: "1.9vh",
-                              fontWeight: "400",
-                              color: "#9E9999",
-                              padding: '2px'
-                            }}
-                          >
-                            {d.dia}
-                          </p>
-                          <p
-                            style={{
-                              fontSize: "1.9vh",
-                              fontWeight: "400",
-                              color: "#9E9999",
-                              padding: '2px'
-                            }}
-                          >
-                            {d.mes}
-                          </p>
-                        </>
-                      )}
-                      {d.diaSemana === "Dom" && (
-                        <>
-                          <p
-                            style={{
-                              fontSize: "1.9vh",
-                              fontWeight: "400",
-                              color: "#9E9999",
-                              padding: '2px'
-                            }}
-                          >
-                            {d.diaSemana}
-                          </p>
-                          <p
-                            style={{
-                              fontSize: "1.9vh",
-                              fontWeight: "400",
-                              color: "#9E9999",
-                              padding: '2px'
-                            }}
-                          >
-                            {d.dia}
-                          </p>
-                          <p
-                            style={{
-                              fontSize: "1.9vh",
-                              fontWeight: "400",
-                              color: "#9E9999",
-                              padding: '2px'
-                            }}
-                          >
-                            {d.mes}
-                          </p>
-                        </>
-                      )}
+                    {d.dia != "" &&
+                      <div className={style.cardDia}>
+                        {d.diaSemana === "Sáb" && (
+                          <>
+                            <p
+                              style={{
+                                fontSize: "1.9vh",
+                                fontWeight: "400",
+                                color: "#9E9999",
+                                padding: '2px'
+                              }}
+                            >
+                              {d.diaSemana}
+                            </p>
+                            <p
+                              style={{
+                                fontSize: "1.9vh",
+                                fontWeight: "400",
+                                color: "#9E9999",
+                                padding: '2px'
+                              }}
+                            >
+                              {d.dia}
+                            </p>
+                            <p
+                              style={{
+                                fontSize: "1.9vh",
+                                fontWeight: "400",
+                                color: "#9E9999",
+                                padding: '2px'
+                              }}
+                            >
+                              {d.mes}
+                            </p>
+                          </>
+                        )}
+                        {d.diaSemana === "Dom" && (
+                          <>
+                            <p
+                              style={{
+                                fontSize: "1.9vh",
+                                fontWeight: "400",
+                                color: "#9E9999",
+                                padding: '2px'
+                              }}
+                            >
+                              {d.diaSemana}
+                            </p>
+                            <p
+                              style={{
+                                fontSize: "1.9vh",
+                                fontWeight: "400",
+                                color: "#9E9999",
+                                padding: '2px'
+                              }}
+                            >
+                              {d.dia}
+                            </p>
+                            <p
+                              style={{
+                                fontSize: "1.9vh",
+                                fontWeight: "400",
+                                color: "#9E9999",
+                                padding: '2px'
+                              }}
+                            >
+                              {d.mes}
+                            </p>
+                          </>
+                        )}
 
-                      {d.diaSemana != "Sáb" && d.diaSemana != "Dom" && (
-                        <>
-                          <CardsDia onCardSelect={handleCardSelect} diasSemana={d.diaSemana} fechadelDia={d.dia} mesdelDia={d.mes} />
-                        </>
+                        {d.diaSemana != "Sáb" && d.diaSemana != "Dom" && (
+                          <>
+                            <CardsDia onCardSelect={handleCardSelect} diasSemana={d.diaSemana} fechadelDia={d.dia} mesdelDia={d.mes} />
+                          </>
 
-                      )}
+                        )}
 
-                    </div>
-                  }
+                      </div>
+                    }
 
-                </SwiperSlide>
+                  </SwiperSlide>
 
-              </>
-            );
-          })
-          }
-        </Swiper>
-        <div className={style.divDropHorarios}>
-          {/* <p className={style.pSig}>Horarios </p> */}
-          <HorariosColegio diaSelecionado={selectedCard} sendDateHs={sendDateHs} />
+                </>
+              );
+            })
+            }
+          </Swiper>
+          <div className={style.divDropHorarios}>
+            {/* <p className={style.pSig}>Horarios </p> */}
+            <HorariosColegio diaSelecionado={selectedCard} sendDateHs={sendDateHs} />
 
+          </div>
+        </div>
+      </div>
+
+
+      <div className={style.divResponsiveMobile}>
+        <div className={style.slider_container}>
+          <Swiper
+            modules={[Navigation, Pagination, Scrollbar, A11y]}
+            spaceBetween={0}
+            slidesPerView={3}
+            grabCursor={true}
+            rewind={true}
+            pagination={{ clickable: true }}
+            className={style.swiper}
+          >
+            {arrLimpio?.map((d) => {
+              return (
+                <>
+                  <SwiperSlide className={style.swiper_slide}>
+
+                    {d.dia != "" &&
+                      <div className={style.cardDia}>
+                        {d.diaSemana === "Sáb" && (
+                          <>
+                            <p
+                              style={{
+                                fontSize: "1.9vh",
+                                fontWeight: "400",
+                                color: "#9E9999",
+                                padding: '2px'
+                              }}
+                            >
+                              {d.diaSemana}
+                            </p>
+                            <p
+                              style={{
+                                fontSize: "1.9vh",
+                                fontWeight: "400",
+                                color: "#9E9999",
+                                padding: '2px'
+                              }}
+                            >
+                              {d.dia}
+                            </p>
+                            <p
+                              style={{
+                                fontSize: "1.9vh",
+                                fontWeight: "400",
+                                color: "#9E9999",
+                                padding: '2px'
+                              }}
+                            >
+                              {d.mes}
+                            </p>
+                          </>
+                        )}
+                        {d.diaSemana === "Dom" && (
+                          <>
+                            <p
+                              style={{
+                                fontSize: "1.9vh",
+                                fontWeight: "400",
+                                color: "#9E9999",
+                                padding: '2px'
+                              }}
+                            >
+                              {d.diaSemana}
+                            </p>
+                            <p
+                              style={{
+                                fontSize: "1.9vh",
+                                fontWeight: "400",
+                                color: "#9E9999",
+                                padding: '2px'
+                              }}
+                            >
+                              {d.dia}
+                            </p>
+                            <p
+                              style={{
+                                fontSize: "1.9vh",
+                                fontWeight: "400",
+                                color: "#9E9999",
+                                padding: '2px'
+                              }}
+                            >
+                              {d.mes}
+                            </p>
+                          </>
+                        )}
+
+                        {d.diaSemana != "Sáb" && d.diaSemana != "Dom" && (
+                          <>
+                            <CardsDia onCardSelect={handleCardSelect} diasSemana={d.diaSemana} fechadelDia={d.dia} mesdelDia={d.mes} />
+                          </>
+
+                        )}
+
+                      </div>
+                    }
+
+                  </SwiperSlide>
+
+                </>
+              );
+            })
+            }
+          </Swiper>
+          <div className={style.divDropHorarios}>
+            {/* <p className={style.pSig}>Horarios </p> */}
+            <HorariosColegio diaSelecionado={selectedCard} sendDateHs={sendDateHs} />
+
+          </div>
         </div>
       </div>
     </>
