@@ -14,11 +14,11 @@ export default function Acreditaciones() {
     }, [])
 
     return (
-        <div className=" bg-white flex flex-col gap-5 rounded-md ">
-            <h2 className="font-semibold  text-[#0D263B] text-[2.4vh]">
+        <div className="p-5 bg-white flex flex-col gap-5  shadow-md rounded-md ">
+            <h2 className="pl-1  font-semibold  text-[#0D263B] text-[2.3vh]">
                 Acreditaciones / Certificaciones / Asosiaciones
             </h2>
-            <div className="flex text-xs w-full gap-5">
+            <div className=" p-5  flex text-xs w-full gap-5">
                 <ul className="grid grid-cols-2 gap-y-5 gap-x-3">
                     {Acre[0]?.Afiliacions?.map((ac) => (
                         <li className="text-black/60 flex items-center gap-3">
