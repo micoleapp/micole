@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const { Infraestructura, Infraestructura_tipo } = require("../db.js");
+const { Infraestructura, Infraestructura_tipo,Colegio } = require("../db.js");
 
 //------- PEDIR TODOS LAS INFRAESTRUCTURAS A LA BD--------
 router.get("/", async (req, res) => {
@@ -19,6 +19,7 @@ router.get("/", async (req, res) => {
         "imagen",
         "InfraestructuraTipoId",
       ],
+      order: [["nombre_infraestructura", "ASC"]],
     });
 
     res.json(infraestructura);

@@ -14,7 +14,11 @@ const getHorarioByIdColegio = async (req, res, next) => {
 
 const createHorario = async (req, res, next) => {
   const { horarios, ColegioId } = req.body;
+  console.log(horarios)
+  console.log(ColegioId)
   try {
+    await Horario.destroy({ where: { ColegioId } });
+
     await Promise.all(
       horarios.map(async (horario) => {
         const horarioExistente = await Horario.findOne({

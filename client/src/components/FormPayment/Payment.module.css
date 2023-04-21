@@ -5,7 +5,18 @@
   padding: 20px;
   /* justify-content: space-evenly; */
   max-height: 80vh;
-  overflow-y: scroll;
+  gap:5vh;
+  /* overflow-y: ; */
+}
+.PaymentLayoutSingap {
+  display: flex;
+  flex-direction: row;
+  align-items: first baseline;
+  padding: 20px;
+  /* justify-content: space-evenly; */
+  max-height: 80vh;
+  /* gap:5vh; */
+  /* overflow-y: ; */
 }
 .container {
   display: flex;
@@ -55,7 +66,7 @@
   align-content: flex-start;
   border-radius: 10.6667px;
 }
-.divBeneficios h1 {
+.divBeneficiosh1 {
   font-size: 16px;
   color: #0061df;
   font-weight: 600;
@@ -85,7 +96,7 @@
   justify-content: center;
   align-items: center;
 flex-direction: column;
-  padding: 20px;
+
   width: 100%;
 }
 .divButton button {
@@ -108,10 +119,15 @@ flex-direction: column;
   alignItems: center,
   gap:20px, */
 }
+.responsiveBtnMobile{
+  display: none;
+}
 @media (max-width: 700px) {
   .PaymentLayout {
     flex-direction: column-reverse;
     align-items: center;
+    overflow-y: scroll;
+    gap:1vh;
   }
   .container {
     flex-direction: column;
@@ -126,6 +142,12 @@ flex-direction: column;
   .Divdetalle {
     align-items: flex-start;
     padding: 0px;
+  }
+  .responsiveBtnMobile{
+    display: flex;
+  }
+  .responsiveBtnDesktop{
+    display: none;
   }
 }
 @media (max-width: 500px) {

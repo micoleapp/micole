@@ -124,7 +124,9 @@ export const getAllInfraestructura = () => (dispatch) => {
   dispatch(isLoading());
   axios
     .get("/infraestructuras")
-    .then((res) => dispatch(getInfraestructura(res.data)))
+    .then((res) => 
+    dispatch(getInfraestructura(res.data))
+    )
     .catch((err) => dispatch(getError(err.message)));
 };
 
@@ -212,7 +214,8 @@ export const clannDetailid = () => (dispatch) => {
   }
 };
 
-export const postHorariosVacantes = (horarios, ColegioId) => (dispatch) => {
+export const postHorariosVacantes = (horarios) => (dispatch) => {
+  const ColegioId = localStorage.getItem('ColegioId')
   console.log(ColegioId);
   console.log(horarios);
   dispatch(isLoading());

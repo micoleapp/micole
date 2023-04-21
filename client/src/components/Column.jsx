@@ -44,7 +44,7 @@ const Column = ({ column, tasksArr }) => {
               {...droppableProvided.droppableProps}
               // className="p-2"
             >
-              {tasksArr.map((task, index) => (
+              {tasksArr?.map((task, index) => (
                 <Draggable
                   key={task.id}
                   draggableId={`${task.id}`}

@@ -19,7 +19,63 @@ import Paddock from "./svg/Paddock";
 import { getCitaAgendadas } from "../../redux/SchoolsActions";
 import fechaFormat from "../SwiperEventos/utils/fechaFormat";
 import es_AM_PM from "../SwiperEventos/utils/horaFormat";
+const putStateCita = (id, setLoading) => {
+  
+  setLoading(true);
 
+  try {
+    axios
+      .put(`/citas/activo/${id}`, { activo: true })
+      .then((res) => {
+        // dispatch(getCitaAgendadas());
+        setLoading(false);
+        Swal.fire("Exito", "Datos actualizados", "success");
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Algo salio mal",
+          text: err,
+        });
+      });
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Algo salio mal",
+      text: error,
+    });
+  }
+};
+
+function BtnPutCitas({ id }) {
+
+  const [Toggle, setToggle] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const toggleBtn = () => {
+    setToggle(true);
+
+    putStateCita(id, setLoading);
+  };
+  console.log(Toggle);
+
+  return (
+    <>
+      <div>
+      
+
+        <Button
+          variant="contained"
+          onClick={toggleBtn}
+          disabled={Toggle === true && true}
+          sx={{fontFamily:'Poppins', fontWeight:'600',fontSize:'1.5vh'}}
+        >
+          {Toggle === false ? "Confirmar" : "Confirmada"}
+          {loading === true && <div className={style.loader}></div>}
+        </Button>
+      </div>
+    </>
+  );
+}
 
 export default function CardCitas({ data, filtros,setPlan }) {
   const { oneSchool } = useSelector((state) => state.auth);
@@ -31,6 +87,8 @@ export default function CardCitas({ data, filtros,setPlan }) {
   const [Inactivas, setInactivas] = useState([]);
   const [Activas, setActivas] = useState([]);
   //LOGICA CONFIRMACION DE CITAS
+
+
 const handlerPageDashboard=()=>{
   setPlan(5)
 }
@@ -90,63 +148,7 @@ const handlerPageDashboard=()=>{
     setArrCitas(resultadoAllCitas);
   }, []);
 
-  const putStateCita = (id, setLoading) => {
-  
-    setLoading(true);
 
-    try {
-      axios
-        .put(`/citas/activo/${id}`, { activo: true })
-        .then((res) => {
-          // dispatch(getCitaAgendadas());
-          setLoading(false);
-          Swal.fire("Exito", "Datos actualizados", "success");
-        })
-        .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
-            text: err,
-          });
-        });
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
-        text: error,
-      });
-    }
-  };
-
-  function BtnPutCitas({ id }) {
-
-    const [Toggle, setToggle] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const toggleBtn = () => {
-      setToggle(true);
-
-      putStateCita(id, setLoading);
-    };
-    console.log(Toggle);
-
-    return (
-      <>
-        <div>
-        
-
-          <Button
-            variant="contained"
-            onClick={toggleBtn}
-            disabled={Toggle === true && true}
-            sx={{fontFamily:'Poppins', fontWeight:'600',fontSize:'1.5vh'}}
-          >
-            {Toggle === false ? "Confirmar" : "Confirmada"}
-            {loading === true && <div className={style.loader}></div>}
-          </Button>
-        </div>
-      </>
-    );
-  }
 
   return (
     <>

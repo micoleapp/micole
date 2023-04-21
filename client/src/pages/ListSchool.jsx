@@ -170,7 +170,7 @@ function ListSchool() {
   );
   const [order, setOrder] = React.useState([]);
   const [categorias, setCategorias] = React.useState([]);
-  const [english, setEnglish] = React.useState(200);
+  const [english, setEnglish] = React.useState(40);
 
   const handleChangeEnglish = (event, newValue) => {
     setEnglish(newValue);
@@ -678,7 +678,7 @@ function ListSchool() {
               <Rating
                 name="simple-controlled"
                 value={rating}
-                max={10}
+                max={5}
                 precision={0.5}
                 onChange={(event, newValue) => {
                   setRating(newValue);
@@ -692,13 +692,14 @@ function ListSchool() {
               <Slider
                 aria-label="English"
                 min={0}
-                max={200}
+                max={100}
                 value={english}
                 onChange={handleChangeEnglish}
                 valueLabelDisplay="auto"
               />
               <div className="bg-[#edf4fe] rounded-sm shadow-md p-2 text-[#0061dd] w-full text-center">
-                {english} (Hrs/semana)
+                {english > 40 ? <>Colegios Bilingües</> : <>{english} (Hrs/semana)</>}
+                
               </div>
             </div>
             <button
@@ -776,7 +777,7 @@ function ListSchool() {
                         <img
                           src={school.primera_imagen}
                           alt={school.title}
-                          className="h-full w-[400px] object-cover"
+                          className="h-full max-h-[255px] w-[400px] object-cover"
                         />
                         {/* <span className="absolute bg-[#0061dd] text-white p-1 px-2 rounded-md top-3 left-3">
                           DESTACADO
@@ -1030,9 +1031,9 @@ function ListSchool() {
                           <div className="flex gap-5">
                             <Rating
                               name="simple-controlled"
-                              value={school.rating}
+                              value={school.rating/2}
                               readOnly
-                              max={10}
+                              max={5}
                             />
                           </div>
                           <FavoritoButton />
