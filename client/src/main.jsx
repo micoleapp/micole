@@ -11,7 +11,7 @@ import store from "./redux/store";
 //con este comando podemos hacer las peticion con axios sin poner localhost...
 //podemos hacerlo directo directo axios('/review').then(etc...)
 
-import.meta.env.MODE === "development" ? (axios.defaults.baseURL = "http://localhost:3001/") : (axios.defaults.baseURL = "http://3.133.89.63:3001/");
+import.meta.env.MODE === "development" ? (axios.defaults.baseURL = "http://localhost:3001/") : (axios.defaults.baseURL = "https://3.133.89.63:3001/");
 
 
 // let previusTitle = document.title
