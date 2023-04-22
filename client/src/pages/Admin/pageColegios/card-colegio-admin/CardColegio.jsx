@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import HeadTable from "./headTable/HeadTable";
 import style from "./cardColegio.module.css";
 import Swal from "sweetalert2";
+import SwalProp from "../../../../exports/SwalProp";
 import axios from "axios";
 import { getAllSchoolsPageAdmin } from "../../../../redux/SchoolsActions";
 
@@ -23,19 +24,24 @@ export default function CardColegio({ input, data, isLoading, page }) {
         .then((res) => {
           // dispatch(getAllSchoolsPageAdmin(pages));
           setLoading(false);
-          Swal.fire("Exito", "Datos actualizados", "success");
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text: "Datos actualizados!",
+          });
+         
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err,
           });
         });
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: error,
       });
     }
@@ -49,19 +55,24 @@ export default function CardColegio({ input, data, isLoading, page }) {
         .then((res) => {
           // dispatch(getAllSchoolsPageAdmin(pages));
           setLoading(false);
-          Swal.fire("Exito", "Datos actualizados", "success");
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text: "Datos actualizados!",
+          });
+          
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err,
           });
         });
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: error,
       });
     }

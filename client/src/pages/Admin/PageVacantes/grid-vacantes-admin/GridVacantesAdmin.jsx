@@ -1,10 +1,16 @@
 import axios from "axios";
+
+
+
+import SwalProp from "../../../../exports/SwalProp";
+
 import * as React from "react";
 import { useSelector,useDispatch } from "react-redux";
-import Swal from "sweetalert2";
+
 import { MdDeleteForever } from "react-icons/md";
 
 import { setVacantesRedux } from "../../../../redux/AuthActions";
+
 import {
   getNombresColegios,
   getVacantes,
@@ -57,14 +63,20 @@ console.log(oneSchool.id)
           { headers: { Authorization: `Bearer ${token}` } }
         )
         .then((res) => {
-          Swal.fire("Success", "Formulario enviado correctamente", "success");
-          dispatch(setVacantesRedux(oneSchool.id))
-        }
-        )
+
+          dispatch(getNombresColegios());
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text: "Formulario enviado!" ,
+          });
+          
+        })
+
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err.response.data.error,
           });
         });

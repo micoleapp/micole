@@ -11,6 +11,7 @@ import ModalInscripcion from "../components/ModalInscripcion/ModalInscripcion";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import Swal from "sweetalert2";
+import SwalProp from "../exports/SwalProp";
 import { useRef } from 'react';
 
 function EnrollSchool() {
@@ -46,12 +47,16 @@ function EnrollSchool() {
     try {
       axios.post('/informes', data)
       .then(res=>{
-        Swal.fire("Exito", "Datos enviados exitosamente", "success");
+        SwalProp({
+          status: true,
+          title: "Éxito",
+          text:"Datos enviados exitosamente",
+        });
       })
       .catch(err=>{
-        Swal.fire({
-          icon: "error",
-          title: "Algo salio mal",
+        SwalProp({
+          status: false,
+          title: "Algo salió mal",
           text: err.response.data.error,
         });
       })

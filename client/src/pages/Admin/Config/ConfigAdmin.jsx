@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import SwalProp from "../../../exports/SwalProp";
 import { useSelector } from "react-redux";
 export default function ConfigAdmin() {
   const { user } = useSelector((state) => state.auth);
@@ -37,15 +38,20 @@ export default function ConfigAdmin() {
 
   const OnSubmit = async (user) => {
     if (user.newPassword !== user.repitPassword) {
-      Swal.fire("warning", "Las nuevas contraseñas no coinciden", "error");
+      SwalProp({
+        status: false,
+        text: "Las nuevas contraseñas no coinciden",
+        title: "Ups!..."
+    });
+     
       return;
     }
     if (!user?.password ) {
-      Swal.fire(
-        "Error",
-        "Ingrese su contraseña para modificar algun campo",
-        "warning"
-      );
+      SwalProp({
+        status: false,
+        text: "Ingrese su contraseña para modificar algun campo",
+        title: "Ups!..."
+    });
       return;
     }
     const data = {
@@ -59,19 +65,24 @@ export default function ConfigAdmin() {
       axios
         .put(`/auth/${ idUser}`, data)
         .then((res) => {
-          Swal.fire("Exito", "Datos actualizados", "success");
+          SwalProp({
+            icon: true,
+            title: "Éxito",
+            text: "Datos actualizados!",
+          });
+         
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            icon: false,
+            title: "Algo salió mal",
             text: err.response.data.error,
           });
         });
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        icon: false,
+        title: "Algo salió mal",
         text: error.response,
       });
     }

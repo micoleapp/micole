@@ -11,7 +11,7 @@ import { cleanSuccessState, getCita, putCita } from "../../redux/CitasActions";
 import Chip from "@mui/material/node/Chip";
 import NotFound from "./svg/notFound";
 import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
-import Swal from "sweetalert2";
+import SwalProp from "../../exports/SwalProp";
 import sliceIntoChunks from "./Paginacion/utils/SliceCitas";
 import PaginationCitas from "./Paginacion/PaginationCitas";
 import axios from "axios";
@@ -29,19 +29,23 @@ const putStateCita = (id, setLoading) => {
       .then((res) => {
         // dispatch(getCitaAgendadas());
         setLoading(false);
-        Swal.fire("Exito", "Datos actualizados", "success");
+        SwalProp({
+          status: true,
+          title: "Éxito",
+          text: "Datos actualizados!",
+        });
       })
       .catch((err) => {
-        Swal.fire({
-          icon: "error",
-          title: "Algo salio mal",
+        SwalProp({
+          status: false,
+          title: "Algo salió mal",
           text: err,
         });
       });
   } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "Algo salio mal",
+    SwalProp({
+      status: false,
+      title: "Algo salió mal",
       text: error,
     });
   }
@@ -107,20 +111,23 @@ const handlerPageDashboard=()=>{
         .put(`/citas/activo/${iD}`, { activo: true })
         .then((res) => {
           dispatch(getCitaAgendadas());
-
-          Swal.fire("Exito", "Cita Confirmada", "success");
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text: "Cita Confirmada!",
+          });
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err,
           });
         });
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: error,
       });
     }

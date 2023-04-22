@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
+import SwalProp from "../../../exports/SwalProp";
 import NorthIcon from "@mui/icons-material/North";
 import ContentPasteSearchOutlinedIcon from "@mui/icons-material/ContentPasteSearchOutlined";
 import SouthIcon from "@mui/icons-material/South";
@@ -46,16 +46,16 @@ export default function EventosUsuario() {
           setIsLoading(false);
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err.response.data.error,
           });
         });
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: err.message,
       });
     }
@@ -79,16 +79,16 @@ export default function EventosUsuario() {
           setIsLoading(false);
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err.response.data.error,
           });
         });
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: err.message,
       });
     }
