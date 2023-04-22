@@ -21,7 +21,7 @@ export default function Acreditaciones() {
             <div className=" p-5  flex text-xs w-full gap-5">
                 <ul className="grid grid-cols-2 gap-y-5 gap-x-3">
                     {Acre[0]?.Afiliacions?.map((ac) => (
-                        <li className="text-black/60 flex items-center gap-3">
+                        <li className="text-[#696969] text-[1.8vh]  flex items-center gap-3">
                             <img src={ac.logo} alt="" className="w-6" />
                             {ac.nombre_afiliacion}
                         </li>

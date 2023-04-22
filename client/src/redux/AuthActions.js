@@ -12,7 +12,8 @@ import {
   getAfiliacion
 } from "./AuthSlice";
 import axios from "axios";
-import Swal from 'sweetalert2'
+
+import SwalProp from "../exports/SwalProp";
 
 export const setVacantesRedux = (id) => (dispatch) => {
   try {
@@ -33,9 +34,9 @@ export const getUserByToken = () => (dispatch) => {
       .then((res) => dispatch(loginUser(res.data.user)))
       .catch((err) => {
         dispatch(getError(err.response.data.error)) 
-        Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
+        SwalProp({
+        status: false,
+        title: 'Algo salió mal',
         text: err.response.data.error
       })
     localStorage.removeItem("token");
@@ -101,8 +102,8 @@ export const register = (user) => (dispatch) => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("id", res.data.user.id);
         dispatch(loginUser(res.data.user));
-        Swal.fire({
-          icon: 'success',
+        SwalProp({
+          status: true,
           title: "Bienvenido a MiCole",
           text: 'Usuario creado exitosamente!'
         })
@@ -110,9 +111,9 @@ export const register = (user) => (dispatch) => {
     })
     .catch((err) => {
       dispatch(getError(err.response.data.error));
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
+      SwalProp({
+        status: false,
+        title:'Algo salió mal',
         text: err.response.data.error
       })
     });
@@ -128,16 +129,16 @@ export const login = (user) => (dispatch) => {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("id", res.data.user.id);
       dispatch(loginUser(res.data.user));
-      Swal.fire({
-        icon: 'success',
+      SwalProp({
+        status : true,
         title: "Bienvenido a MiCole",
         text: 'Inicio de sesion exitoso'
       })
 
     })
     .catch((err) => {dispatch(getError(err.response.data.error))
-      Swal.fire({
-        icon: 'error',
+      SwalProp({
+        status: false,
         title: 'Oops...',
         text: err.response.data.error
       })});
@@ -159,8 +160,8 @@ export const logout = () => (dispatch) => {
     dispatch(logoutUser());
     localStorage.removeItem("token");
     localStorage.removeItem("id");
-    Swal.fire({
-      icon: 'success',
+    SwalProp({
+      status: true,
       title: "Cerrando sesión!",
       text: 'Hasta pronto!!'
     })

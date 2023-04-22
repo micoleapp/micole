@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import SwalProp from "../../../exports/SwalProp";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getAllPaises,
@@ -43,17 +44,18 @@ function Departamentos() {
           nombre_departamento: departamento,
         })
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Departamento creado",
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text: "Departamento creado!"
           });
           dispatch(getAllDepartaments());
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Algo salio mal!",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
+            text: "Algo salió mal!",
           });
         });
     } catch (error) {
@@ -74,18 +76,19 @@ function Departamentos() {
           id_pais: paisId,
         })
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Departamento editado",
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text:"Departamento editado!"
           });
           dispatch(getAllDepartaments());
           handleCloseModal();
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Algo salio mal!",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
+            text: "Algo salió mal!",
           });
         });
     } catch (error) {
@@ -99,16 +102,17 @@ function Departamentos() {
       axios
         .delete(`/departamentos/${id}`)
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Pais eliminado",
+          SwalProp({
+            status: true,
+            title: "Éxito" ,
+            text:"Pais eliminado!"
           });
           dispatch(getAllDepartaments());
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
             text: err.response.data.message,
           });
         });

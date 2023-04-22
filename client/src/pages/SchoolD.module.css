@@ -60,7 +60,8 @@
 }
 .divBox{
   padding-top: 10vh;
-  width: 90vh;
+  width: 120vh;
+  /* min-width: 100vh; */
 }
 .responsiveHead{
   padding-top: 2vh;
@@ -79,6 +80,7 @@
   }
   .divBox{
     width: auto;
+    min-width: none;
   }
   .responsiveHead{
     display: flex;

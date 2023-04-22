@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
+import SwalProp from "../../../exports/SwalProp";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllPaises, getAllDepartaments,getAllProvincias } from "../../../redux/SchoolsActions";
 import Modal from "@mui/material/Modal";
@@ -30,17 +30,18 @@ function Provincias() {
       axios
         .post("/provincias", { nombre_provincia:provincia, departamentoId: departamento })
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Provincia creada",
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text:"Provincia creada!"
           });
           dispatch(getAllProvincias());
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Algo salio mal!",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
+            text: "Algo salió mal!",
           });
         });
     } catch (error) {
@@ -61,18 +62,19 @@ function Provincias() {
       axios
         .put(`/provincias/${id}`, { nombre_provincia: name,departamentoId:depId })
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Provincia editada",
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text:"Provincia editada!"
           });
           dispatch(getAllProvincias());
           handleCloseModal()
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Algo salio mal!",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
+            text: "Algo salió mal!",
           });
         });
     } catch (error) {
@@ -86,16 +88,17 @@ function Provincias() {
       axios
         .delete(`/provincias/${id}`)
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Provincia eliminada",
+          SwalProp({
+            status: true,
+            title: "Éxito" ,
+            text:"Provincia eliminada!"
           });
           dispatch(getAllProvincias());
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
             text: err.response.data.message,
           });
         });
