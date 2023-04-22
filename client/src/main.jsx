@@ -13,8 +13,8 @@ import store from "./redux/store";
 
 import.meta.env.MODE === "development"
 
-//  ? (axios.defaults.baseURL = "https://micole-production.up.railway.app")
-//  : (axios.defaults.baseURL = "https://micole-production.up.railway.app");
+ ? (axios.defaults.baseURL = "https://micole-production.up.railway.app")
+ : (axios.defaults.baseURL = "https://micole-production.up.railway.app");
 
 
 // import.meta.env.MODE === "development"
