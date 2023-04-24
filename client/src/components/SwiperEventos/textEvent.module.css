@@ -9,6 +9,7 @@
   height: 100%;
   align-items: center;
   justify-content: center;
+  padding: 1vh;
   gap: 2vh;
 }
 .imgDiv {
@@ -61,13 +62,22 @@
 .pTittle {
   color: #156baa;
   font-weight: 700;
-  font-size: 1.8vh;
+  font-size: 1.7vh;
 }
 @media (max-width: 800px) {
   .card {
     gap: 1rem;
   }
   .imgDiv {
-    max-height: 10vh;
+    max-height: 5vh;
+  }
+  .pTittle{
+    font-size: 1.2vh;
+  }
+  .p {
+    font-size: 1.2vh;
+  }
+  .descripcion{
+    font-size: 1.3vh;
   }
 }

@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RiImageAddLine } from "react-icons/ri";
 import axios from "axios";
 import Swal from "sweetalert2";
+import SwalProp from "../../../exports/SwalProp";
 import { AiOutlineSearch } from "react-icons/ai";
 import Pagination from "@mui/material/Pagination";
 import Modal from "@mui/material/Modal";
@@ -84,15 +85,16 @@ export default function PageInfraestructura() {
       });
     } catch (error) {
       console.log(error);
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: "Intenta nuevamente",
       });
     }
-    Swal.fire({
-      icon: "success",
-      title: "Imagen subida correctamente",
+    SwalProp({
+      status: true,
+      title: "Éxito",
+      text: "Imagen subida!"
     });
     setSpanOne(false);
   };
@@ -102,9 +104,10 @@ export default function PageInfraestructura() {
       axios
         .post("/infraestructuras", newInfraestructura)
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Infraestructura creada correctamente",
+          SwalProp({
+            status: true,
+            title: "Éxito" ,
+            text: "Infraestructura creada!"
           });
           setNewInfraestructura({
             nombre_infraestructura: "",
@@ -118,9 +121,9 @@ export default function PageInfraestructura() {
           setPreviewImage(null);
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false ,
+            title: "Algo salió mal",
             text: err.response.data.message,
           });
         });
@@ -154,16 +157,17 @@ export default function PageInfraestructura() {
           axios
             .delete("/infraestructuras/" + id)
             .then((res) => {
-              Swal.fire({
-                icon: "success",
-                title: "Infraestructura eliminada correctamente",
+              SwalProp({
+                status: true,
+                title: "Éxito",
+                text:"Infraestructura eliminada!"
               });
               dispatch(getAllInfraestructura());
             })
             .catch((err) => {
-              Swal.fire({
-                icon: "error",
-                title: "Algo salio mal",
+              SwalProp({
+                status: false,
+                title: "Algo salió mal",
                 text: err.response.data.message,
               });
             });
@@ -276,9 +280,10 @@ export default function PageInfraestructura() {
       axios
         .put("/infraestructuras/" + editedInfra.id, editedInfra)
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Infraestructura editada correctamente",
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text:"Infraestructura editada!"
           });
           dispatch(getAllInfraestructura());
           setHand(false);
@@ -287,9 +292,9 @@ export default function PageInfraestructura() {
           handleCloseModal();
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err.response.data.message,
           });
         });

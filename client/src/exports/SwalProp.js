@@ -8,7 +8,7 @@ function SwalProp ({status,title,text}) {
     imageUrl: status === true ? Icon : Error,
     text: text,
     confirmButtonClass: "buttonprop",
-    confirmButtonText: 'Okey'
+    confirmButtonText: 'Confirmar'
   })
 }
 

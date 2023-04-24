@@ -38,6 +38,7 @@ export default function SwiperEventos({ data }) {
           grabCursor={true}
           rewind={true}
           // Scrollbar={true}
+          navigation={true}
           pagination={{ clickable: true }}
           autoplay={{
             delay: 2000,

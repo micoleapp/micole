@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as React from "react";
 import { useSelector,useDispatch } from "react-redux";
-import Swal from "sweetalert2";
+import SwalProp from "../exports/SwalProp";
 import { MdDeleteForever } from "react-icons/md";
 import { setVacantesRedux } from "../redux/AuthActions";
 
@@ -49,14 +49,18 @@ export default function GridVacantes({ año, setVacantesOff }) {
           { headers: { Authorization: `Bearer ${token}` } }
         )
         .then((res) => {
-          Swal.fire("Success", "Formulario enviado correctamente", "success");
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text: "Formulario enviado!",
+          });
           dispatch(setVacantesRedux(oneSchool.id))
         }
         )
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err.response.data.error,
           });
         });

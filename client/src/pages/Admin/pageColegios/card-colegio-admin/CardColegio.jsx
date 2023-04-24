@@ -1,9 +1,10 @@
 import { Button, Card, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import HeadTable from "./headTable/HeadTable";
 import style from "./cardColegio.module.css";
 import Swal from "sweetalert2";
+import SwalProp from "../../../../exports/SwalProp";
 import axios from "axios";
 import { getAllSchoolsPageAdmin } from "../../../../redux/SchoolsActions";
 
@@ -12,7 +13,8 @@ import fechaFormat from "../../../../components/SwiperEventos/utils/fechaFormat"
 export default function CardColegio({ input, data, isLoading, page }) {
   const dispatch = useDispatch();
   const items = [1, 2, 3, 4, 5];
-
+  const pages= useRef(page);
+  
   const putActiveColegio = (id, setLoading) => {
     console.log(id);
     setLoading(true);
@@ -20,21 +22,26 @@ export default function CardColegio({ input, data, isLoading, page }) {
       axios
         .put(`/colegios/activo/${id}`, { isActive: true })
         .then((res) => {
-          dispatch(getAllSchoolsPageAdmin(page));
+          // dispatch(getAllSchoolsPageAdmin(pages));
           setLoading(false);
-          Swal.fire("Exito", "Datos actualizados", "success");
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text: "Datos actualizados!",
+          });
+         
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err,
           });
         });
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: error,
       });
     }
@@ -46,21 +53,26 @@ export default function CardColegio({ input, data, isLoading, page }) {
       axios
         .put(`/colegios/activo/${id}`, { isActive: false })
         .then((res) => {
-          dispatch(getAllSchoolsPageAdmin(page));
+          // dispatch(getAllSchoolsPageAdmin(pages));
           setLoading(false);
-          Swal.fire("Exito", "Datos actualizados", "success");
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text: "Datos actualizados!",
+          });
+          
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err,
           });
         });
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: error,
       });
     }

@@ -22,7 +22,7 @@ export default function TextEvento({
   const handleOpen = () => setOpen(true);
   return (
     <>
-      {plantilla === true  ? (
+      {plantilla === true ? (
         <div className={style.card}>
           <div className={style.imgDiv}>
             <img style={{ display: "flex" }} src={logo} alt="Logo" />
@@ -67,27 +67,23 @@ export default function TextEvento({
             />
           )}
         </div>
-     
       ) : (
-        <div className={style.cardPubli }>
-            <Button onClick={handleOpen}   variant="contained">
+        <div className={style.cardPubli}>
+          <Button onClick={handleOpen} variant="contained">
             Inscribirme
           </Button>
         </div>
-        
-      
-      )
-      }
-          {open && (
-            <InscripcionModal
-              open={open}
-              idEvento={idEvento}
-              fechaEvento={fecha}
-              horaEvento={hora}
-              nombreEvento={nombreEvento}
-              setOpen={setOpen}
-            />
-          )}
+      )}
+      {open && (
+        <InscripcionModal
+          open={open}
+          idEvento={idEvento}
+          fechaEvento={fecha}
+          horaEvento={hora}
+          nombreEvento={nombreEvento}
+          setOpen={setOpen}
+        />
+      )}
     </>
   );
 }

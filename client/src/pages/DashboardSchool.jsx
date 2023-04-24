@@ -24,6 +24,7 @@ import Logo from "../assets/logoPayment.png";
 import Confetti from "react-confetti";
 import DragAndDrop from "../components/DragAndDrop";
 import GridVacantes from "../components/GridVacantes";
+import SwalProp from "../exports/SwalProp";
 import Swal from "sweetalert2";
 import MoveToInboxOutlinedIcon from "@mui/icons-material/MoveToInboxOutlined";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -181,15 +182,20 @@ function DashboardSchool() {
   });
   const OnSubmit = async (user) => {
     if (user.newPassword !== user.repitPassword) {
-      Swal.fire("warning", "Las nuevas contraseñas no coinciden", "error");
+      SwalProp({
+        status: false,
+        title: "Ups!...",
+        text: "Las nuevas contraseñas no coinciden",
+      });
+     
       return;
     }
     if (!user.password) {
-      Swal.fire(
-        "Error",
-        "Ingrese su contraseña para modificar algun campo",
-        "warning"
-      );
+      SwalProp({
+       status:false,
+        title: "Ups!...",
+        text: "Ingrese su contraseña para modificar algun campo"
+    });
       return;
     }
     const data = {
@@ -203,19 +209,24 @@ function DashboardSchool() {
       axios
         .put(`/auth/${id}`, data)
         .then((res) => {
-          Swal.fire("Exito", "Datos actualizados", "success");
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text: "Datos actualizados!",
+          });
+          
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err.response.data.error,
           });
         });
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: error.response,
       });
     }
@@ -551,15 +562,16 @@ function DashboardSchool() {
       setMultimedia({ ...multimedia, image: res.data.secure_url });
     } catch (error) {
       console.log(error);
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: "Intenta nuevamente",
       });
     }
-    Swal.fire({
-      icon: "success",
-      title: "Imagen subida correctamente",
+    SwalProp({
+      status: true,
+      title: "Éxito" ,
+      text:"Imagen subida!"
     });
     setSpanOne(false);
     setActiveUpOne(false);
@@ -577,15 +589,16 @@ function DashboardSchool() {
       setMultimedia({ ...multimedia, logo: res.data.secure_url });
     } catch (error) {
       console.log(error);
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: "Intenta nuevamente",
       });
     }
-    Swal.fire({
-      icon: "success",
-      title: "Imagen subida correctamente",
+    SwalProp({
+      status: true,
+      title: "Éxito",
+      text:"Imagen subida!"
     });
     setSpanLogo(false);
     setActiveUpLogo(false);
@@ -603,15 +616,16 @@ function DashboardSchool() {
       setEvento({ ...evento, image: res.data.secure_url });
     } catch (error) {
       console.log(error);
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: "Intenta nuevamente",
       });
     }
-    Swal.fire({
-      icon: "success",
-      title: "Imagen subida correctamente",
+    SwalProp({
+      status: true,
+      title: "Éxito",
+      text:"Imagen subida!"
     });
     setSpanOne(false);
     setActiveUpOne(false);
@@ -656,16 +670,17 @@ function DashboardSchool() {
         });
       } catch (error) {
         console.log(error);
-        Swal.fire({
-          icon: "error",
-          title: "Algo salio mal",
+        SwalProp({
+          status: false,
+          title: "Algo salió mal",
           text: "Intenta nuevamente",
         });
       }
     });
-    Swal.fire({
-      icon: "success",
-      title: "Imagenes subidas correctamente",
+    SwalProp({
+      status: true,
+      title: "Éxito",
+      text:"Imagenes subidas!"
     });
     setSpanTwo(false);
     setActiveUpTwo(false);
@@ -854,7 +869,7 @@ function DashboardSchool() {
     e.preventDefault();
     Swal.fire({
       icon: "success",
-      title: "Felicidades ya estas a un paso de publicar tu colegio",
+      title: "Felicidades, ya estas a un paso de publicar tu colegio",
       confirmButtonText: "Continuar",
     }).then((res) => {
       if (res.isConfirmed) {
@@ -950,8 +965,8 @@ function DashboardSchool() {
       axios
         .put(`/colegios/activo/${user.id}`, { isActive: true })
         .then((res) => {
-          Swal.fire({
-            icon: "success",
+          SwalProp({
+            status: true,
             title: "Felicitaciones!",
             text: "Colegio listo para mostrarse en nuestra pagina!",
           });
@@ -998,9 +1013,10 @@ function DashboardSchool() {
       axios
         .post("/eventos", evento)
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Evento creado exitosamente!",
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text:"Evento creado!"
           });
           dispatch(getSchoolDetail(id));
           setEvento({
@@ -1017,10 +1033,10 @@ function DashboardSchool() {
           setPreviewEvento(null);
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Algo salio mal!",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
+            text: "Algo salió mal!",
           });
         });
     } catch (error) {
@@ -1043,16 +1059,17 @@ function DashboardSchool() {
             .delete(`/eventos/${id}`)
             .then((res) => {
               dispatch(getSchoolDetail(user.id));
-              Swal.fire({
-                icon: "success",
-                title: "Evento eliminado exitosamente!",
+              SwalProp({
+                status: true,
+                title: "Éxito",
+                text:"Evento eliminado!"
               });
             })
             .catch((err) => {
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Algo salio mal!",
+              SwalProp({
+                status: false,
+                title: "Ups!...",
+                text: "Algo salió mal!",
               });
             });
         }
@@ -1067,17 +1084,18 @@ function DashboardSchool() {
         axios
           .put(`/eventos/${id}`, editEvento)
           .then((res) => {
-            Swal.fire({
-              icon: "success",
-              title: "Evento editado exitosamente!",
+            SwalProp({
+              status: true,
+              title: "Éxito",
+              text: "Evento editado!"
             });
             dispatch(getSchoolDetail(user.id));
           })
           .catch((err) => {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Algo salio mal!",
+            SwalProp({
+              status: false,
+              title: "Ups!...",
+              text: "Algo salió mal!",
             });
           });
       } catch (error) {
@@ -1099,17 +1117,18 @@ function DashboardSchool() {
         axios
           .put(`/eventos/${id}`, newEvent)
           .then((res) => {
-            Swal.fire({
-              icon: "success",
-              title: "Evento editado exitosamente!",
+            SwalProp({
+              status: true,
+              title: "Éxito",
+              text: "Evento editado!"
             });
             dispatch(getSchoolDetail(user.id));
           })
           .catch((err) => {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Algo salio mal!",
+            SwalProp({
+              status: false,
+              title: "Ups!...",
+              text: "Algo salió mal!",
             });
           });
       } catch (error) {

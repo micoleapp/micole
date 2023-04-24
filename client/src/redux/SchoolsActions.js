@@ -1,5 +1,6 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import SwalProp from "../exports/SwalProp";
 import {
   getVacantesGrados,
   getNiveles,
@@ -225,10 +226,10 @@ export const postHorariosVacantes = (horarios) => (dispatch) => {
     axios
       .post("/horarios", { horarios, ColegioId })
       .then((res) =>
-        Swal.fire({
-          icon: "success",
-          title: "Horarios actualizados exitosamente!",
-          text: "Cambios guardados",
+        SwalProp({
+          status: true,
+          title: "Éxito",
+          text:"Horarios actualizados!" ,
         })
       )
       .catch((err) => console.log(err));
@@ -258,17 +259,17 @@ export const postCita = (cita) => (dispatch) => {
         ColegioId,
       })
       .then((res) => {
-        Swal.fire({
-          icon: "success",
-          title: "Perfecto !",
-          text: "Tu colegio recibio tu cita espera a ser confirmada",
+        SwalProp({
+          status: true,
+          title: "Éxito",
+          text: "Tu colegio recibió tu cita, espera a ser confirmada",
         });
       })
       // .then((res) => dispatch(getVacantesGrados(res.data)))
       .catch((err) => {
-        Swal.fire({
-          icon: "info",
-          title: "Algo salio mal",
+        SwalProp({
+          status: false,
+          title: "Algo salió mal",
           text: err.response.data.error,
         });
       });
@@ -286,9 +287,9 @@ export const getCitaAgendadas = () => (dispatch) => {
         .get(`/citas`, { headers: { Authorization: `Bearer ${token}` } })
         .then((res) => dispatch(getCitasAgendado(res.data)))
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err.response.data.error,
           });
         });
@@ -304,9 +305,9 @@ export const getHorariosSchool = (id) => (dispatch) => {
     .get(`/horarios/${id}`)
     .then((res) => dispatch(getHorarios(res.data)))
     .catch((err) => {
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: err.response.data.error,
       });
     });

@@ -3,6 +3,7 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import SwalProp from '../../../exports/SwalProp';
 
 export default function FormListaEspera({ gradoId, año }) {
 
@@ -37,17 +38,17 @@ export default function FormListaEspera({ gradoId, año }) {
         axios
           .post("/lista", data)
           .then((res) => {
-            Swal.fire({
-              icon: "success",
-              title: "Lista creada exitosamente!",
-              text: "Lista Agendada",
+            SwalProp({
+              status: true,
+              title: "Éxito",
+              text: "Lista creada!",
             });
           })
           .catch((err) => {
             console.log(err);
-            Swal.fire({
-              icon: "error",
-              title: "Algo salio mal",
+            SwalProp({
+              status: false,
+              title: "Algo salió mal",
               text: err.response.data.message,
             });
           });

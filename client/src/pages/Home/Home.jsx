@@ -8,7 +8,7 @@ import Carrusel from "../../components/Carrusel/Carrusel";
 import FiltrosHome from "../../components/FiltrosHome/FiltrosHome";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useRef } from 'react';
-import SwalProp from "../../exports/SwalProp";
+
 
 function Home() {
 
@@ -31,6 +31,7 @@ function Home() {
   return (
     <>
       <div className={style.container}>
+        
         {/* <img className={style.img} src={fondoHome} alt="home" /> */}
         <div className={style.landingText}>
           <h1 className={style.h1}> Tu búsqueda de colegios comienza aquí</h1>

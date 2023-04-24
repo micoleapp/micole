@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RiImageAddLine } from "react-icons/ri";
 import axios from "axios";
+import SwalProp from "../../../exports/SwalProp";
 import Swal from "sweetalert2";
 import { AiOutlineSearch } from "react-icons/ai";
 import Pagination from "@mui/material/Pagination";
@@ -82,15 +83,16 @@ export default function PageAfiliaciones() {
       });
     } catch (error) {
       console.log(error);
-      Swal.fire({
-        icon: "error",
-        title: "Algo salio mal",
+      SwalProp({
+        status: false,
+        title: "Algo salió mal",
         text: "Intenta nuevamente",
       });
     }
-    Swal.fire({
-      icon: "success",
-      title: "Imagen subida correctamente",
+    SwalProp({
+      status: true,
+      title: "Éxito",
+      text: "Imagen subida!",
     });
     setSpanOne(false);
   };
@@ -100,9 +102,10 @@ export default function PageAfiliaciones() {
       axios
         .post("/afiliaciones", newInfraestructura)
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Afiliacion creada correctamente",
+          SwalProp({
+            status: true,
+            text:"Afiliacion creada!",
+            title: "Éxito",
           });
           setNewInfraestructura({
             nombre_afiliacion: "",
@@ -116,9 +119,9 @@ export default function PageAfiliaciones() {
           setPreviewImage(null);
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err.response.data.message,
           });
         });
@@ -152,16 +155,17 @@ export default function PageAfiliaciones() {
           axios
             .delete("/afiliaciones/" + id)
             .then((res) => {
-              Swal.fire({
-                icon: "success",
-                title: "Infraestructura eliminada correctamente",
+              SwalProp({
+                status: true,
+                title: "Éxito",
+                text:"Infraestructura eliminada!"
               });
               dispatch(getAllAfiliaciones());
             })
             .catch((err) => {
-              Swal.fire({
-                icon: "error",
-                title: "Algo salio mal",
+              SwalProp({
+                status: false,
+                title: "Algo salió mal",
                 text: err.response.data.message,
               });
             });
@@ -275,9 +279,10 @@ export default function PageAfiliaciones() {
       axios
         .put("/afiliaciones/" + editedInfra.id, editedInfra)
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Infraestructura editada correctamente",
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text: "Infraestructura editada!"
           });
           dispatch(getAllAfiliaciones());
           setHand(false);
@@ -286,9 +291,9 @@ export default function PageAfiliaciones() {
           handleCloseModal();
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Algo salio mal",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err.response.data.message,
           });
         });

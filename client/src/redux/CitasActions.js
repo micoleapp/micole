@@ -10,7 +10,8 @@ import {
   getCitasUsuario,
   getPagination,
 } from "./CitasSlice";
-import Swal from "sweetalert2";
+import SwalProp from "../exports/SwalProp";
+
 export const getCita = () => (dispatch) => {
   dispatch(isLoading());
   const token = localStorage.getItem("token");
@@ -56,9 +57,9 @@ export const updateTask = (taskId, NuevoEstado) => (dispatch) => {
     .then((res) => console.log(res.data))
     .catch((err) => {
       dispatch(getError(err.response.data.error));
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
+      SwalProp({
+        status: false,
+        title: 'Algo salió mal',
         text: err.response.data.error,
       });
     });
@@ -73,9 +74,9 @@ export const putCita = (idCita) => (dispatch) => {
     .then((res) => dispatch(getSuccess(res.data)))
     .catch((err) => {
       dispatch(getError(err.response.data.error));
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
+      SwalProp({
+        status: false,
+        title: 'Algo salió mal',
         text: err.response.data.error,
       });
     });
@@ -89,17 +90,17 @@ export const deleteCita = (idCita) => (dispatch) => {
     .delete(`/citas/${idCita}`)
     .then((res) => {
       dispatch(getSuccess(res.data));
-      Swal.fire({
-        icon: "success",
-        title: "Cita cancelada con exito",
+      SwalProp({
+        status: true,
+        title: "Cita cancelada con éxito",
         text: "Se notificará a la familia interesada",
       });
     })
     .catch((err) => {
       dispatch(getError(err.response.data.error));
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
+      SwalProp({
+        status: false,
+        title: 'Algo salió mal',
         text: err.response.data.error,
       });
     });
@@ -127,9 +128,9 @@ export const getCitaUsuario = (page) => (dispatch) => {
     })
     .catch((err) => {
       dispatch(getError(err.response.data.error));
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
+      SwalProp({
+        status: false,
+        title: 'Algo salió mal',
         text: err.response.data.error,
       });
     });

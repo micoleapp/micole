@@ -9,7 +9,7 @@ import { Rating, Typography, Pagination, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import SwalProp from "../exports/SwalProp";
 import {
   faCamera,
   faPlayCircle,
@@ -255,9 +255,9 @@ function ListSchool() {
   };
   const goToDetails = (id,lista) => {
     if (gradoName.length === 0 || ingresoName.length === 0) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
+      SwalProp({
+        status: false,
+        title: "Ups!...",
         text: "Debes seleccionar un grado y un año de ingreso",
       });
       return;

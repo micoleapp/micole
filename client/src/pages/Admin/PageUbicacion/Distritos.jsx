@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
+import SwalProp from "../../../exports/SwalProp";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllPaises, getAllDepartaments,getAllProvincias,getAllDistrits } from "../../../redux/SchoolsActions";
 import Modal from "@mui/material/Modal";
@@ -31,17 +31,18 @@ function Distritos() {
       axios
         .post("/distritos", { nombre_distrito:distrito, ProvinciaId: provincia })
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Distrito creado",
+          SwalProp({
+            status: true,
+            title: "Éxito" ,
+            text:"Distrito creado!"
           });
           dispatch(getAllDistrits());
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Algo salio mal!",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
+            text: "Algo salió mal!",
           });
         });
     } catch (error) {
@@ -63,18 +64,19 @@ function Distritos() {
       axios
         .put(`/distritos/${id}`, { nombre_distrito: name,ProvinciaId:depId })
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Distrito editado",
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text:"Distrito editado!"
           });
           dispatch(getAllDistrits());
           handleCloseModal()
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Algo salio mal!",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
+            text: "Algo salió mal!",
           });
         });
     } catch (error) {
@@ -88,16 +90,17 @@ function Distritos() {
       axios
         .delete(`/distritos/${id}`)
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Distrito eliminado",
+          SwalProp({
+            status: true,
+            title: "Éxito" ,
+            text:"Distrito eliminado!"
           });
           dispatch(getAllDistrits());
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
             text: err.response.data.message,
           });
         });

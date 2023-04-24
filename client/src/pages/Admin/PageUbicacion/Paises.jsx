@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
+import SwalProp from "../../../exports/SwalProp";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllPaises } from "../../../redux/SchoolsActions";
 import Modal from "@mui/material/Modal";
@@ -27,17 +27,18 @@ function Paises() {
       axios
         .post("/paises", { nombre_pais: pais })
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Pais creado",
+          SwalProp({
+            status: true,
+            title: "Éxito" ,
+            text:"País creado!"
           });
           dispatch(getAllPaises());
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Algo salio mal!",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
+            text: "Algo salió mal!",
           });
         });
     } catch (error) {
@@ -54,18 +55,19 @@ function Paises() {
       axios
         .put(`/paises/${id}`, { nombre_pais: name })
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Pais editado",
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text:"País editado!"
           });
           dispatch(getAllPaises());
           handleCloseModal()
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Algo salio mal!",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
+            text: "Algo salió mal!",
           });
         });
     } catch (error) {
@@ -79,16 +81,17 @@ function Paises() {
       axios
         .delete(`/paises/${id}`)
         .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Pais eliminado",
+          SwalProp({
+            status: true,
+            title: "Éxito",
+            text: "País eliminado!"
           });
           dispatch(getAllPaises());
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
+          SwalProp({
+            status: false,
+            title: "Ups!...",
             text: err.response.data.message,
           });
         });

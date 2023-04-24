@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
+import SwalProp from '../../../exports/SwalProp';
 import { Card, Rating } from "@mui/material";
 export default function Comentarios({id}) {
     const { user, isAuth } = useSelector((state) => state.auth);
@@ -75,30 +76,37 @@ export default function Comentarios({id}) {
         if (
             comentario.rating === 0.0
         ) {
-            Swal.fire({
-                icon: "info",
+            SwalProp({
+                status: false,
                 title: "Ups!...",
                 text: "Debes calificar el colegio para poder comentar",
             })
             return
         }
         if (localStorage.getItem("id") === id) {
-            Swal.fire("Error!", "No puedes comentar mas de una vez", "error");
+            SwalProp({
+                status: false,
+                title: "Error!",
+                text: "No puedes comentar mas de una vez"});
             return;
         }
         try {
             axios
                 .post("/reviews", { ...comentario, ColegioId: id })
                 .then((res) => {
-                    Swal.fire(
-                        "Gracias por tu comentario!",
-                        "Tu comentario ha sido enviado",
-                        "success"
+                    SwalProp({
+                        status: true,
+                        title: "Gracias por tu comentario!",
+                        text: "Tu comentario ha sido enviado",
+                        }
                     );
                     localStorage.setItem("id", id);
                 })
                 .catch((err) => {
-                    Swal.fire("Error!", "Ha ocurrido un error", "error");
+                    SwalProp({
+                        status: false,
+                        title:"Ups!..." ,
+                        text: "Algo salió mal"});
                 });
         } catch (error) {
             console.log(error);

@@ -9,6 +9,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import SwalProp from "../../../exports/SwalProp";
 import FormLogin from "../../FormLogin/FormLogin";
 import ModalLogin from "../../ModalLogin/ModalLogin";
 // solo enviar id evento y usuario
@@ -30,17 +31,17 @@ export default function InscripcionEvento({
         .post(`/eventos/registration`, { idEvento, idUser })
         .then((res) => {
           handleClose();
-          Swal.fire({
-            icon: "success",
-            title: "Inscripcion Exitosa",
+          SwalProp({
+            status: true,
+            title: "Inscripcion Exitosa!",
             text: "",
           });
 
         })
         .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
+          SwalProp({
+            status: false,
+            title: "Algo salió mal",
             text: err.response.data.error,
           });
         });
