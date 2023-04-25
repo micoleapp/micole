@@ -103,8 +103,8 @@ export default function CitasD({ ingresoParams, nombre_grado }) {
     //   }, [nombre_grado])
     return (
         <>
-            <div className="p-5 bg-white flex flex-col gap-5 rounded-md shadow-md w-full">
-                <h2 className=" p-5 font-semibold  text-[#0D263B] text-[2.4vh]">Solicitar una visita</h2>
+            <div className=" bg-white flex flex-col gap-5 rounded-md  w-full">
+                <h2 className="font-semibold  text-[#0D263B] text-[2.4vh]">Solicitar una visita</h2>
                 <div className={style.divSwipperCitas}>
                     <SecCitas sendDateHs={handleChangeDateHS} />
                 </div>
@@ -112,7 +112,7 @@ export default function CitasD({ ingresoParams, nombre_grado }) {
                 {/* FORMULARIO DE LA CITA */}
                 <form
                     onSubmit={handleSubmit}
-                    className="p-5 w-full flex flex-col gap-7"
+                    className="w-full flex flex-col gap-7"
                 >
                     <div className="flex gap-5">
                         <input

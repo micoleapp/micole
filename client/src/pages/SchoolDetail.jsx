@@ -149,11 +149,15 @@ function SchoolDetail() {
     };
   }, []);
 
-
-
   const [openLogin, setOpenLogin] = useState(false);
 
   document.title = oneSchool?.nombre_colegio?.length > 0 ? oneSchool.nombre_colegio : "MiCole"
+
+  useEffect(() => {
+    if (isAuth) {
+      setCita({ ...cita, nombre: user?.nombre_responsable + " " + user?.apellidos_responsable, correo: user?.email, celular: user?.telefono })
+    }
+  }, [isAuth])
 
   const [value, setValue] = useState("1");
   const handleChange = (event, newValue) => {
@@ -176,13 +180,13 @@ function SchoolDetail() {
               style={{ color: '#0061dd' }}
             />
           </div>}
-        {/* BODY DETAIL----------------lg:px-[100px]-------*/}
+        {/* BODY DETAIL-----------------------*/}
         <div
-          className='flex flex-col  sm:flex-row  pl-1 pb-20 justify-around' >
+          className='flex flex-col sm:flex-row lg:px-[100px] pb-10 justify-between' >
           {/* Header */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {/* compartir en redes */}
-            <div className="pl-1 flex pt-10  pb-2 flex-row ">
+            <div className="flex pt-20  pb-2 flex-row ">
               <span className="flex items-center gap-0">
              
              
@@ -200,10 +204,10 @@ function SchoolDetail() {
               </span>
             </div>
             {/*nombre colegio */}
-            <h1 className="pl-3 lg:pl-0 font-semibold m-0  text-[#0D263B] text-[3.2vh]">
+            <h1 className="pl-3 lg:pl-0 font-semibold m-0  text-[#0D263B] text-[2.9vh]">
               {oneSchool.nombre_colegio}
             </h1>
-            <h2 className='pl-3 lg:pl-0 text-[#696969] text-[2vh]'>
+            <h2 className='pl-3 lg:pl-0 text-[#696969] text-[1.5vh]'>
               {oneSchool.direccion}{" "}
             </h2>
             <div>
@@ -212,16 +216,16 @@ function SchoolDetail() {
 
                   {/* divs negro */}
                   <div className="flex gap-2 lg:flex-row  pb-1 ">
-                    <span className="bg-[#0D263B] text-[1.6vh] min-w-fit m-0 px-3 p-0 text-white rounded-sm  flex items-center">
+                    <span className="bg-[#0D263B] text-[1.3vh] min-w-fit m-0 px-2 p-0 text-white rounded-sm  flex items-center">
                       {currentVacante &&
                         Number(currentVacante[0]?.capacidad) -
                         Number(currentVacante[0]?.alumnos_matriculados)}{" "}
                       Vacantes
                     </span>
-                    <span className="bg-[#0D263B] text-[1.6vh] min-w-fit m-0 px-3 p-0 text-white rounded-sm flex items-center">
+                    <span className="bg-[#0D263B] text-[1.3vh] min-w-fit m-0 px-2 p-0 text-white rounded-sm flex items-center">
                       {nombre_grado}
                     </span>
-                    <span className="bg-[#0D263B] text-[1.6vh] min-w-fit m-0 px-3 p-0 rounded-sm text-white  flex items-center">
+                    <span className="bg-[#0D263B] text-[1.3vh] min-w-fit m-0 px-2 p-0 rounded-sm text-white  flex items-center">
                       {ingresoParams}
                     </span>
                   </div>
@@ -231,18 +235,18 @@ function SchoolDetail() {
                 {currentVacante && (
                   <div className="flex flex-col w-full ">
                     <small>
-                      <p className="font-semibold  text-[#0D263B] text-[2.5vh]"> Pensión: S/   {currentVacante.length > 0 && currentVacante[0].cuota_pension} mes </p>
+                      <p className="font-semibold  text-[#0D263B] text-[2.2vh]"> Pensión: S/   {currentVacante.length > 0 && currentVacante[0].cuota_pension} mes </p>
 
                     </small>
                     <small>
-                      <p className="text-[#696969] text-[1.9vh]">  Cuota de ingreso: S/{" "}
+                      <p className="text-[#696969] text-[1.5vh]">  Cuota de ingreso: S/{" "}
                         {currentVacante.length > 0 && currentVacante[0].cuota_ingreso}{" "}
                       </p>
 
                     </small>
 
                     <small>
-                      <p className="text-[#696969] text-[1.9vh]">
+                      <p className="text-[#696969] text-[1.5vh]">
                         Cuota de matricula: S/{" "}
                         {currentVacante.length > 0 && currentVacante[0].matricula}
                       </p>
@@ -262,10 +266,10 @@ function SchoolDetail() {
                 <div className="flex  flex-row  gap-3 text-center">
                   <FontAwesomeIcon
                     size="sm"
-                    color="#696969"
+                    color="rgb(156 163 175)"
                     icon={faUsers}
                   />
-                  <span className="text-[1.9vh] text-[#696969] ">
+                  <span className="text-[1.5vh] text-gray-400">
                     {oneSchool.numero_estudiantes} Alumnos
                   </span>
                 </div>
@@ -274,9 +278,9 @@ function SchoolDetail() {
                     <img
                       src={cat.logo_categoria}
                       alt="logo_categoria"
-                      className="w-4 object-cover  invert-[40%]"
+                      className="w-4 object-cover invert-[40%]"
                     />
-                    <span className="text-[1.9vh] text-[#696969]">
+                    <span className="text-[1.8vh] text-gray-400">
                       {cat.nombre_categoria}{" "}
                     </span>
                   </div>
@@ -285,20 +289,20 @@ function SchoolDetail() {
                 <div className="flex flex-row gap-3 text-center">
                   <FontAwesomeIcon
                     size="sm"
-                    color="#696969"
+                    color="rgb(156 163 175)"
                     icon={faCalendar}
                   />
-                  <span className="text-[1.9vh] text-[#696969]">
+                  <span className="text-[1.8vh]  text-gray-400">
                     Fundación: {oneSchool.fecha_fundacion}{" "}
                   </span>
                 </div>
                 <div className="flex flex-row gap-3 text-center">
                   <FontAwesomeIcon
                     size="sm"
-                    color="#696969"
+                    color="rgb(156 163 175)"
                     icon={faSchool}
                   />
-                  <span className="text-[1.9vh] text-[#696969]">
+                  <span className="text-[1.8vh] text-gray-400">
                     UGEL: {oneSchool.ugel}{" "}
                   </span>
                 </div>
@@ -308,7 +312,6 @@ function SchoolDetail() {
 
             </div>
           </div>
-
           {/* TABS DETAIL */}
           <main className="flex gap-5 flex-col lg:flex-row">
 
@@ -365,7 +368,6 @@ function SchoolDetail() {
                         alignItems: "center",
                         flexDirection: "column",
                         gap: "10px",
-                        padding:' 1.25rem'
                       }}
                     >
                       <div

@@ -56,12 +56,10 @@
   display: flex;
   justify-content: flex-start;
   height: 30vh;
-  padding: 1.25rem;
 }
 .divBox{
   padding-top: 10vh;
-  width: 120vh;
-  /* min-width: 100vh; */
+  width: 90vh;
 }
 .responsiveHead{
   padding-top: 2vh;
@@ -80,7 +78,6 @@
   }
   .divBox{
     width: auto;
-    min-width: none;
   }
   .responsiveHead{
     display: flex;

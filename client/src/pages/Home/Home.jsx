@@ -8,6 +8,7 @@ import Carrusel from "../../components/Carrusel/Carrusel";
 import FiltrosHome from "../../components/FiltrosHome/FiltrosHome";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useRef } from 'react';
+import SwalProp from "../../exports/SwalProp";
 
 
 function Home() {

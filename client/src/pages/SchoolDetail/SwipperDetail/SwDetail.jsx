@@ -43,9 +43,8 @@ export default function SwDetail() {
                     effect={"fade"}
                     grabCursor={true}
                     rewind={true}
-                    
                     autoplay={{
-                        delay: 2600,
+                        delay: 3600,
                         disableOnInteraction: false,
                     }}
                     pagination={{ clickable: true }}
